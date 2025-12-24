@@ -3,68 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nicksoler Chinese Hub - Skyreign Vibrant</title>
+    <title>Nicksoler Chinese Hub - 3D Music Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Noto+Sans+SC:wght@500;900&display=swap" rel="stylesheet">
+    <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+    
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
             width: 100vw;
-            height: 100vh;
-            /* --- CẬP NHẬT NỀN MÀU ĐẬM HƠN --- */
             background: linear-gradient(-45deg, #818cf8, #c084fc, #f472b6, #2dd4bf);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
+            overflow-x: hidden;
             cursor: none;
+            scroll-behavior: smooth;
         }
 
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        main {
-            width: 100%; display: flex; justify-content: center; align-items: center; z-index: 10; padding-bottom: 80px; /* Thêm padding để không bị nav che */
-        }
+        /* Scrollbar ẩn */
+        ::-webkit-scrollbar { width: 0; }
 
-        .tab-content {
-            display: none; opacity: 0; transform: translateY(20px) scale(0.95); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); width: 90%; max-width: 380px;
-        }
-        .tab-content.active { display: block; opacity: 1; transform: translateY(0) scale(1); }
-
-        /* --- CẬP NHẬT HIỆU ỨNG KÍNH (Đục hơn để nổi trên nền đậm) --- */
+        /* Hiệu ứng kính */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.85); /* Tăng độ đục */
-            backdrop-filter: blur(40px); /* Tăng độ mờ */
-            border: 2px solid rgba(255, 255, 255, 0.7); /* Viền rõ hơn */
-            border-radius: 40px;
-            padding: 40px 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); /* Bóng đổ sâu hơn */
-            text-align: center;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
         }
 
-        /* --- NAVIGATION --- */
+        /* Phần trang chính */
+        section {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* 3D Model Center */
+        model-viewer {
+            width: 100%;
+            height: 60vh;
+            --poster-color: transparent;
+            outline: none;
+        }
+
+        /* Music Tabs */
+        .music-list {
+            height: 350px;
+            width: 280px;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .song-item {
+            padding: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: 0.3s;
+            cursor: pointer;
+            border-radius: 12px;
+        }
+        .song-item:hover { background: rgba(255,255,255,0.1); }
+
+        /* Navigation */
         nav {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            display: flex;
-            background: rgba(255, 255, 255, 0.9); /* Nav đục hơn nữa */
-            backdrop-filter: blur(30px);
-            border-radius: 20px; padding: 8px; width: 80%; max-width: 320px; z-index: 100;
-            border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex; background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(20px); border-radius: 20px; padding: 6px; z-index: 100;
         }
-        .nav-item { flex: 1; text-align: center; padding: 12px 0; font-size: 9px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; border-radius: 14px; }
-        .nav-item.active { color: #ffffff; background: #6366f1; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+        .nav-item { padding: 10px 20px; font-size: 10px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
+        .nav-item.active { color: #fff; background: #6366f1; border-radius: 14px; }
 
-        /* --- CURSOR & INPUT --- */
-        #custom-cursor { position: fixed; width: 12px; height: 12px; background: #ffffff; border-radius: 50%; pointer-events: none; z-index: 10000; transition: transform 0.1s, background 0.2s; box-shadow: 0 0 10px rgba(255,255,255,0.8); mix-blend-mode: difference;}
-        .click-ripple { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.3); transform: translate(-50%, -50%); pointer-events: none; animation: ripple 0.6s ease-out; }
-        @keyframes ripple { from { width: 0; height: 0; opacity: 1; } to { width: 120px; height: 120px; opacity: 0; } }
-        input { background: transparent; border-bottom: 3px solid #e2e8f0; width: 100%; text-align: center; padding: 12px; outline: none; transition: 0.3s; font-weight: 900; font-size: 1.5rem; color: #1e293b; }
-        input:focus { border-color: #6366f1; }
+        #custom-cursor { position: fixed; width: 12px; height: 12px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 10000; mix-blend-mode: difference; transition: transform 0.1s; }
     </style>
 </head>
 <body onclick="handleGlobalClick(event)">
@@ -72,60 +89,65 @@
 <div id="custom-cursor"></div>
 
 <nav>
-    <button onclick="switchTab('home')" id="btn-home" class="nav-item active">Sảnh</button>
-    <button onclick="switchTab('vocab')" id="btn-vocab" class="nav-item">Từ vựng</button>
-    <button onclick="switchTab('practice')" id="btn-practice" class="nav-item">Nói</button>
+    <a href="#learning-zone" class="nav-item active">Học tập</a>
+    <a href="#music-zone" class="nav-item">Âm nhạc 3D</a>
 </nav>
 
-<main>
-    <section id="home" class="tab-content active">
-        <div class="glass-panel">
-            <h2 class="text-4xl font-black text-gray-900 tracking-tighter mb-4">Skyreign</h2>
-            <p class="text-indigo-600 text-[9px] font-bold uppercase tracking-[0.3em] mb-12">Nicksoler Protocol v3.7</p>
-            <div class="h-1 w-20 bg-indigo-100 mx-auto mb-12 rounded-full"></div>
-            <button onclick="switchTab('vocab')" class="text-[10px] font-black text-gray-900 tracking-widest hover:text-indigo-600 transition border-b-2 border-gray-900 hover:border-indigo-600 pb-1">KHỞI ĐỘNG HÀNH TRÌNH →</button>
-        </div>
-    </section>
-
-    <section id="vocab" class="tab-content">
-        <div class="glass-panel relative">
-            <div class="flex justify-between items-center mb-10">
-                 <button onclick="resetVocab()" class="text-[9px] font-bold text-gray-400 uppercase tracking-widest hover:text-indigo-500 transition">Reset</button>
-                 <div id="level-indicator" class="text-[9px] font-black text-indigo-500 uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full">Level 1</div>
-            </div>
-           
-            <div id="quiz-question" class="text-8xl font-black text-gray-900 mb-8 tracking-tighter drop-shadow-sm">我</div>
+<section id="learning-zone">
+    <div class="main-hub flex flex-col items-center gap-6">
+        <div id="practice-tab" class="glass-panel p-10 text-center max-w-[400px]">
+            <h2 class="text-3xl font-black text-white mb-2">Skyreign Hub</h2>
+            <p class="text-white/70 text-[10px] uppercase tracking-widest mb-8">Cuộn xuống để mở Music Pod</p>
             
-            <div class="flex items-center gap-4 mb-8 relative">
-                <input type="text" id="quiz-input" placeholder="Pinyin..." autocomplete="off">
-                <button onclick="showHint()" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-gray-300 hover:text-indigo-500 transition font-bold text-xl">?</button>
-            </div>
-
-            <button onclick="checkQuiz()" class="w-full py-5 bg-indigo-600 text-white rounded-3xl font-bold text-[11px] uppercase tracking-[0.2em] active:scale-95 transition shadow-xl hover:bg-indigo-700 hover:shadow-indigo-200/50">Xác nhận</button>
-            <p id="quiz-feedback" class="mt-6 h-4 text-[9px] font-black uppercase tracking-widest text-indigo-600"></p>
+            <div id="display-hz" class="text-8xl font-black text-white mb-4 tracking-tighter">我</div>
+            <div id="display-py" class="text-2xl text-white/60 font-bold mb-4">wǒ</div>
+            
+            <button id="mic-btn" class="w-20 h-20 bg-white text-indigo-600 rounded-full flex items-center justify-center shadow-2xl mx-auto mb-6 active:scale-90 transition">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" /></svg>
+            </button>
+            <button onclick="speakTarget()" class="text-white/80 font-bold uppercase text-[10px] tracking-widest border-b border-white/20 pb-1">Phát âm mẫu</button>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section id="practice" class="tab-content">
-        <div class="glass-panel">
-            <div class="mb-12">
-                <div id="display-hz" class="text-8xl font-black text-gray-900 mb-3 tracking-tighter">我</div>
-                <div id="display-py" class="text-2xl text-gray-500 font-bold mb-2">wǒ</div>
-                <div id="display-mn" class="text-[9px] font-bold text-white bg-indigo-500 px-4 py-1.5 rounded-full uppercase tracking-widest inline-block shadow-sm">Tôi</div>
+<section id="music-zone">
+    <div class="container flex items-center justify-between w-full px-10 gap-4">
+        
+        <div class="glass-panel music-list animate-slide-in-left">
+            <h3 class="text-white font-black text-xs uppercase tracking-widest mb-4 border-b border-white/20 pb-2">Chinese Hits</h3>
+            <div class="song-item text-white/80 text-sm">1. Biệt Khúc Chờ Nhau</div>
+            <div class="song-item text-white/80 text-sm">2. Sứ Thanh Hoa</div>
+            <div class="song-item text-white/80 text-sm">3. Đáy Biển (CEN)</div>
+            <div class="song-item text-white/80 text-sm">4. Ánh Trăng Nói Hộ Lòng Tôi</div>
+        </div>
+
+        <div class="flex-1 flex flex-col items-center">
+            <div class="text-white text-center mb-4">
+                <h4 class="text-4xl font-black tracking-tighter">360 MUSIC POD</h4>
+                <p class="text-[10px] uppercase tracking-[0.5em] text-white/50">Skyreign Audio Engine</p>
             </div>
             
-            <div class="flex items-center justify-center gap-8 mb-10">
-                <button onclick="changeWord(-1)" class="w-12 h-12 rounded-2xl bg-white/50 flex items-center justify-center text-gray-500 hover:bg-white hover:text-indigo-600 transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg></button>
-                <button id="mic-btn" class="w-20 h-20 bg-indigo-600 text-white rounded-[2rem] flex items-center justify-center shadow-xl shadow-indigo-200/50 active:scale-90 transition relative overflow-hidden">
-                    <span id="mic-wave" class="absolute inset-0 bg-white/20 hidden animate-ping"></span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" /></svg>
-                </button>
-                <button onclick="changeWord(1)" class="w-12 h-12 rounded-2xl bg-white/50 flex items-center justify-center text-gray-500 hover:bg-white hover:text-indigo-600 transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg></button>
-            </div>
-            <button onclick="speakTarget()" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:text-indigo-600 transition border-b border-transparent hover:border-indigo-600">Nghe phát âm mẫu</button>
+            <model-viewer 
+                src="airpods.glb" 
+                alt="Airpods Pro 3D" 
+                auto-rotate 
+                camera-controls 
+                shadow-intensity="2" 
+                exposure="1"
+                disable-zoom>
+            </model-viewer>
         </div>
-    </section>
-</main>
+
+        <div class="glass-panel music-list animate-slide-in-right">
+            <h3 class="text-white font-black text-xs uppercase tracking-widest mb-4 border-b border-white/20 pb-2">V-Pop Vibes</h3>
+            <div class="song-item text-white/80 text-sm">1. Sau Lời Từ Khước</div>
+            <div class="song-item text-white/80 text-sm">2. Đừng Làm Nó Phức Tạp</div>
+            <div class="song-item text-white/80 text-sm">3. Nấu Ăn Cho Em</div>
+            <div class="song-item text-white/80 text-sm">4. Waiting For You</div>
+        </div>
+        
+    </div>
+</section>
 
 <script>
     // --- AUDIO & CURSOR ---
@@ -133,87 +155,51 @@
     function playClick() {
         if (audioCtx.state === 'suspended') audioCtx.resume();
         const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
-        osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
-        g.gain.setValueAtTime(0.08, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.25);
-        osc.connect(g); g.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.25);
+        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+        g.gain.setValueAtTime(0.05, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
+        osc.connect(g); g.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.2);
     }
+
     const cursor = document.getElementById('custom-cursor');
-    document.addEventListener('mousemove', (e) => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+    document.addEventListener('mousemove', (e) => {
+        cursor.style.left = e.clientX + 'px';
+        cursor.style.top = e.clientY + 'px';
+    });
+
     function handleGlobalClick(e) {
         playClick();
-        const r = document.createElement('div'); r.className = 'click-ripple';
-        r.style.left = `${e.pageX}px`; r.style.top = `${e.pageY}px`;
-        document.body.appendChild(r); setTimeout(() => r.remove(), 600);
-        cursor.style.transform = "scale(1.5)"; setTimeout(() => cursor.style.transform = "scale(1)", 100);
+        cursor.style.transform = "scale(2)";
+        setTimeout(() => cursor.style.transform = "scale(1)", 150);
     }
 
-    // --- TABS ---
-    function switchTab(id) {
-        const current = document.querySelector('.tab-content.active');
-        const target = document.getElementById(id);
-        if (current === target) return;
-        current.style.opacity = '0'; current.style.transform = 'translateY(20px) scale(0.95)';
-        setTimeout(() => {
-            current.classList.remove('active'); target.classList.add('active');
-            target.offsetHeight; target.style.opacity = '1'; target.style.transform = 'translateY(0) scale(1)';
-        }, 350);
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById('btn-' + id).classList.add('active');
+    // --- VOCABULARY LOGIC ---
+    const vocabulary = [{ hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "老师", py: "lǎoshī", mn: "thầy giáo" }];
+    let wordIdx = 0;
+
+    function speakTarget() {
+        const msg = new SpeechSynthesisUtterance(vocabulary[wordIdx].hz);
+        msg.lang = 'zh-CN';
+        window.speechSynthesis.speak(msg);
     }
 
-    // --- LOGIC ---
-    const vocabulary = [
-        { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" },
-        { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" },
-        { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" },
-        { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" },
-        { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" },
-        { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" },
-        { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" },
-        { hz: "人", py: "rén", mn: "người" }
-    ];
-    let quizIdx = 0, quizLevel = 1, wordIdx = 0;
-
-    function updateQuiz() {
-        const item = vocabulary[quizIdx];
-        document.getElementById('quiz-input').value = ""; document.getElementById('quiz-feedback').innerText = "";
-        document.getElementById('level-indicator').innerText = "Level " + quizLevel;
-        if (quizLevel === 1) document.getElementById('quiz-question').innerText = item.hz;
-        else if (quizLevel === 2) document.getElementById('quiz-question').innerText = item.mn;
-        else document.getElementById('quiz-question').innerText = item.hz;
-    }
-    function checkQuiz() {
-        const item = vocabulary[quizIdx]; const val = document.getElementById('quiz-input').value.trim().toLowerCase();
-        const ok = (quizLevel === 1 && val === item.py) || (quizLevel === 2 && val === item.hz) || (quizLevel === 3 && val === item.mn);
-        if (ok) {
-            document.getElementById('quiz-feedback').innerText = "CORRECT!";
-            setTimeout(() => { if (quizLevel < 3) quizLevel++; else { quizLevel = 1; quizIdx = (quizIdx + 1) % vocabulary.length; } updateQuiz(); }, 800);
-        } else document.getElementById('quiz-feedback').innerText = "TRY AGAIN";
-    }
-    function showHint() {
-        const item = vocabulary[quizIdx];
-        document.getElementById('quiz-input').value = (quizLevel === 1) ? item.py : (quizLevel === 2 ? item.hz : item.mn);
-    }
-    function resetVocab() { quizIdx = 0; quizLevel = 1; updateQuiz(); }
-
-    // Speech
+    // Speech Recognition
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    let recognition;
     if (SpeechRecognition) {
-        recognition = new SpeechRecognition(); recognition.lang = 'zh-CN';
-        recognition.onstart = () => document.getElementById('mic-wave').classList.remove('hidden');
-        recognition.onresult = (e) => { if (e.results[0][0].transcript.includes(vocabulary[wordIdx].hz)) alert("Đúng rồi!"); };
-        recognition.onend = () => document.getElementById('mic-wave').classList.add('hidden');
+        const rec = new SpeechRecognition();
+        rec.lang = 'zh-CN';
+        rec.onresult = (e) => { if (e.results[0][0].transcript.includes(vocabulary[wordIdx].hz)) alert("Chuẩn!"); };
+        document.getElementById('mic-btn').onclick = () => rec.start();
     }
-    document.getElementById('mic-btn').onclick = (e) => { e.stopPropagation(); recognition.start(); };
-    function changeWord(dir) {
-        wordIdx = (wordIdx + dir + vocabulary.length) % vocabulary.length;
-        document.getElementById('display-hz').innerText = vocabulary[wordIdx].hz;
-        document.getElementById('display-py').innerText = vocabulary[wordIdx].py;
-        document.getElementById('display-mn').innerText = vocabulary[wordIdx].mn;
-    }
-    function speakTarget() { const msg = new SpeechSynthesisUtterance(vocabulary[wordIdx].hz); msg.lang = 'zh-CN'; window.speechSynthesis.speak(msg); }
-    window.onload = updateQuiz;
+
+    // Hiệu ứng Nav
+    window.addEventListener('scroll', () => {
+        const navItems = document.querySelectorAll('.nav-item');
+        if (window.scrollY > window.innerHeight / 2) {
+            navItems[0].classList.remove('active'); navItems[1].classList.add('active');
+        } else {
+            navItems[1].classList.remove('active'); navItems[0].classList.add('active');
+        }
+    });
 </script>
 </body>
 </html>
