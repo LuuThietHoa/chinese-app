@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nicksoler Chinese Hub - Skyreign Pro</title>
+    <title>Nicksoler Chinese Hub - Youtube Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Noto+Sans+SC:wght@500;900&display=swap" rel="stylesheet">
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
@@ -11,57 +11,32 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* --- 1. SETUP CUỘN MƯỢT 3D (SCROLL SNAP) --- */
-        html {
-            scroll-behavior: smooth;
-            height: 100%;
-            overflow: hidden; /* Ẩn thanh cuộn mặc định của trình duyệt */
-        }
-        
+        /* SCROLL SETUP */
+        html { scroll-behavior: smooth; height: 100%; overflow: hidden; }
         body {
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
             background: linear-gradient(-45deg, #818cf8, #c084fc, #f472b6, #2dd4bf);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
-            color: #1e293b;
-            height: 100%;
-            overflow-y: scroll; /* Cho phép cuộn dọc */
-            scroll-snap-type: y mandatory; /* Bắt buộc dính vào từng section */
-            cursor: none;
+            color: #1e293b; height: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; cursor: none;
         }
-
-        /* Ẩn thanh cuộn nhưng vẫn cuộn được */
         body::-webkit-scrollbar { width: 0; }
-
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        /* Mỗi Section là 1 màn hình */
-        section {
-            height: 100vh;
-            width: 100vw;
-            scroll-snap-align: start; /* Điểm dính */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
+        section { height: 100vh; width: 100vw; scroll-snap-align: start; display: flex; align-items: center; justify-content: center; position: relative; }
 
-        /* Glassmorphism */
         .glass-panel {
             background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
+            backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
             border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 35px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            border-radius: 35px; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
         }
 
-        /* Tabs Logic */
+        /* TAB & NAV */
         .tab-wrapper { display: none; width: 100%; }
         .tab-wrapper.active { display: block; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Navigation */
         nav {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             display: flex; background: rgba(255, 255, 255, 0.9);
@@ -71,11 +46,33 @@
         .nav-item { padding: 12px 25px; font-size: 9px; font-weight: 900; color: #64748b; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
         .nav-item.active { color: #fff; background: #6366f1; border-radius: 15px; }
 
-        /* Cursor & 3D */
-        #custom-cursor { position: fixed; width: 12px; height: 12px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 10001; mix-blend-mode: difference; transition: transform 0.1s; }
-        model-viewer { width: 100%; height: 500px; --poster-color: transparent; outline: none; }
+        /* SONG CARD (NEW) */
+        .song-card {
+            display: flex; align-items: center; gap: 12px;
+            padding: 10px; margin-bottom: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 16px; cursor: pointer; transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .song-card:hover { background: rgba(255,255,255,0.3); transform: translateX(5px); border-color: rgba(255,255,255,0.5); }
+        .song-card img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; }
+        .song-info h4 { font-size: 10px; font-weight: 900; color: #1e293b; text-transform: uppercase; }
+        .song-info p { font-size: 9px; color: #475569; }
 
-        /* Trạng thái nút Next khi bị khóa */
+        /* YOUTUBE SCREEN */
+        #yt-screen {
+            width: 100%; max-width: 300px; height: 170px;
+            background: black; border-radius: 20px; overflow: hidden;
+            margin-top: -20px; /* Đẩy lên gần tai nghe */
+            border: 2px solid rgba(255,255,255,0.5);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+            position: relative; z-index: 10;
+        }
+        iframe { width: 100%; height: 100%; border: none; }
+
+        /* OTHER */
+        #custom-cursor { position: fixed; width: 12px; height: 12px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 10001; mix-blend-mode: difference; transition: transform 0.1s; }
+        model-viewer { width: 100%; height: 350px; --poster-color: transparent; outline: none; }
         button:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
     </style>
 </head>
@@ -93,7 +90,7 @@
     <section>
         <div class="glass-panel p-12 text-center max-w-sm">
             <h2 class="text-5xl font-black text-gray-900 mb-2 italic tracking-tighter">Skyreign</h2>
-            <p class="text-indigo-700 text-[10px] font-bold uppercase tracking-[0.4em] mb-10">Nicksoler Protocol v6.0</p>
+            <p class="text-indigo-700 text-[10px] font-bold uppercase tracking-[0.4em] mb-10">Nicksoler Protocol v7.0</p>
             <button onclick="switchTab('practice')" class="px-8 py-4 bg-gray-900 text-white font-bold rounded-2xl text-xs uppercase tracking-widest hover:scale-105 transition">Start Training</button>
         </div>
     </section>
@@ -127,73 +124,47 @@
                 <div id="display-mn" class="text-[10px] font-bold text-white bg-indigo-500 px-4 py-1.5 rounded-full uppercase tracking-widest inline-block shadow-sm">Tôi</div>
             </div>
 
-            <div id="mic-status" class="h-6 mb-4 text-[11px] font-bold text-indigo-600 uppercase tracking-widest animate-pulse hidden">
-                Đang lắng nghe bạn nói...
-            </div>
+            <div id="mic-status" class="h-6 mb-4 text-[11px] font-bold text-indigo-600 uppercase tracking-widest animate-pulse hidden">Đang lắng nghe bạn nói...</div>
 
             <div class="flex items-center justify-center gap-8 mb-6">
-                <button onclick="changeWord(-1)" class="w-12 h-12 rounded-2xl bg-white/40 hover:bg-white text-gray-600 flex items-center justify-center transition shadow-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
-                </button>
-                
+                <button onclick="changeWord(-1)" class="w-12 h-12 rounded-2xl bg-white/40 hover:bg-white text-gray-600 flex items-center justify-center transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg></button>
                 <button id="mic-btn" class="w-24 h-24 bg-gray-900 text-white rounded-[2.5rem] flex items-center justify-center shadow-2xl active:scale-90 transition relative">
                     <span id="mic-wave" class="absolute inset-0 bg-indigo-500/50 rounded-[2.5rem] hidden animate-ping"></span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" /></svg>
                 </button>
-
-                <button id="btn-next" onclick="changeWord(1)" disabled class="w-12 h-12 rounded-2xl bg-white/40 hover:bg-white text-gray-600 flex items-center justify-center transition shadow-sm relative group">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
-                    <span class="absolute -top-10 text-[9px] bg-black text-white px-2 py-1 rounded hidden group-hover:block w-24">Nói đúng để mở</span>
-                </button>
+                <button id="btn-next" onclick="changeWord(1)" disabled class="w-12 h-12 rounded-2xl bg-white/40 hover:bg-white text-gray-600 flex items-center justify-center transition shadow-sm relative group"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg></button>
             </div>
             
             <button onclick="speakTarget()" class="text-[9px] font-bold text-gray-500 hover:text-indigo-600 uppercase tracking-widest border-b border-transparent hover:border-indigo-600 transition mb-4">Nghe phát âm mẫu</button>
-
-            <button onclick="forceNext()" class="text-[9px] font-bold text-gray-300 hover:text-red-400 uppercase tracking-widest block mx-auto">Skip (Bỏ qua)</button>
+            <button onclick="forceNext()" class="text-[9px] font-bold text-gray-300 hover:text-red-400 uppercase tracking-widest block mx-auto">Skip</button>
         </div>
-
-        <div class="absolute bottom-10 animate-bounce cursor-pointer opacity-50 hover:opacity-100 transition" onclick="document.getElementById('music-zone').scrollIntoView()">
-            <p class="text-[9px] font-black text-white uppercase tracking-widest mb-2 text-center">Music Pod</p>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" class="w-6 h-6 mx-auto"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg>
-        </div>
+        <div class="absolute bottom-10 animate-bounce cursor-pointer opacity-50 hover:opacity-100 transition" onclick="document.getElementById('music-zone').scrollIntoView()"><p class="text-[9px] font-black text-white uppercase tracking-widest mb-2 text-center">Music Pod</p><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" class="w-6 h-6 mx-auto"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg></div>
     </section>
 
     <section id="music-zone">
         <div class="w-full flex flex-col items-center justify-center">
-            <div class="text-center mb-6">
-                <h4 class="text-5xl font-black text-white tracking-tighter uppercase drop-shadow-lg">360 POD</h4>
-                <p class="text-[10px] font-bold text-white/60 tracking-[0.6em] bg-black/20 px-4 py-1 rounded-full inline-block mt-2">Skyreign Audio Engine</p>
-            </div>
-
-            <div class="flex flex-col md:flex-row items-center justify-center gap-12 w-full px-4 max-w-6xl">
-                <div class="glass-panel p-6 w-full md:w-64 h-64 overflow-y-auto">
+            
+            <div class="flex flex-col md:flex-row items-center justify-center gap-8 w-full px-4 max-w-6xl">
+                
+                <div class="glass-panel p-6 w-full md:w-64 h-80 overflow-y-auto">
                     <h3 class="text-gray-900 font-black text-xs uppercase tracking-widest mb-4 border-b border-gray-900/10 pb-2">Chinese Hits</h3>
-                    <div class="space-y-3">
-                        <p class="text-gray-700 text-xs font-bold p-2 hover:bg-white/40 rounded-lg cursor-pointer transition">1. Ánh trăng nói hộ lòng tôi</p>
-                        <p class="text-gray-700 text-xs font-bold p-2 hover:bg-white/40 rounded-lg cursor-pointer transition">2. Sứ Thanh Hoa</p>
-                        <p class="text-gray-700 text-xs font-bold p-2 hover:bg-white/40 rounded-lg cursor-pointer transition">3. Đáy Biển</p>
-                    </div>
+                    <div id="c-list" class="space-y-2">
+                        </div>
                 </div>
 
-                <div class="w-full max-w-lg relative">
-                    <model-viewer 
-                        src="./airpods.glb" 
-                        alt="Airpods" 
-                        auto-rotate 
-                        camera-controls 
-                        shadow-intensity="1" 
-                        exposure="1.2"
-                        loading="eager">
-                    </model-viewer>
+                <div class="w-full max-w-md flex flex-col items-center">
+                    <h4 class="text-3xl font-black text-white tracking-tighter uppercase drop-shadow-lg mb-2">360 POD</h4>
+                    
+                    <model-viewer src="./airpods.glb" alt="Airpods" auto-rotate camera-controls shadow-intensity="1" exposure="1.2" loading="eager" style="height: 300px;"></model-viewer>
+                    
+                    <div id="yt-screen">
+                        <div id="player"></div> </div>
                 </div>
 
-                <div class="glass-panel p-6 w-full md:w-64 h-64 overflow-y-auto">
+                <div class="glass-panel p-6 w-full md:w-64 h-80 overflow-y-auto">
                     <h3 class="text-gray-900 font-black text-xs uppercase tracking-widest mb-4 border-b border-gray-900/10 pb-2">V-Pop Hits</h3>
-                    <div class="space-y-3">
-                        <p class="text-gray-700 text-xs font-bold p-2 hover:bg-white/40 rounded-lg cursor-pointer transition">1. Sau Lời Từ Khước</p>
-                        <p class="text-gray-700 text-xs font-bold p-2 hover:bg-white/40 rounded-lg cursor-pointer transition">2. Waiting For You</p>
-                        <p class="text-gray-700 text-xs font-bold p-2 hover:bg-white/40 rounded-lg cursor-pointer transition">3. Nấu Ăn Cho Em</p>
-                    </div>
+                    <div id="v-list" class="space-y-2">
+                        </div>
                 </div>
             </div>
         </div>
@@ -201,113 +172,97 @@
 </div>
 
 <script>
-    // --- DATA ---
-    const vocabulary = [
-        { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" },
-        { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" },
-        { hz: "老师", py: "lǎoshī", mn: "giáo viên" }
+    // --- YOUTUBE API ---
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+            height: '100%',
+            width: '100%',
+            videoId: 'vs-hsW6I63I', // Bài hát mặc định (Hôn vào đây)
+            playerVars: { 'playsinline': 1, 'controls': 1 },
+            events: { 'onReady': onPlayerReady }
+        });
+    }
+    function onPlayerReady(event) { /* Player sẵn sàng */ }
+    
+    function playVideo(id) {
+        if(player && player.loadVideoById) {
+            player.loadVideoById(id);
+            document.getElementById('yt-screen').scrollIntoView({behavior: "smooth", block: "center"});
+        }
+    }
+
+    // --- DANH SÁCH NHẠC (Dữ liệu thật) ---
+    const vPop = [
+        { name: "Hôn vào đây", id: "vs-hsW6I63I" },
+        { name: "Sau Lời Từ Khước", id: "5sJ1b_7n6qU" },
+        { name: "Waiting For You", id: "U7Y2bJd5K2s" }
     ];
-    let quizIdx = 0, quizLevel = 1, wordIdx = 0;
-    let isCorrect = false; // Biến kiểm tra trạng thái phát âm
 
-    // --- LOGIC LUYỆN NÓI (QUAN TRỌNG) ---
+    const cPop = [
+        { name: "Sứ Thanh Hoa", id: "Z7vlR53_qNM" },
+        { name: "Đáy Biển", id: "rJjQ4w-B3cE" },
+        { name: "Biệt Khúc Chờ Nhau", id: "s1sN8b4r0j0" }
+    ];
+
+    // Render danh sách nhạc
+    function renderMusic() {
+        const renderItem = (song) => `
+            <div class="song-card" onclick="playVideo('${song.id}')">
+                <img src="https://img.youtube.com/vi/${song.id}/mqdefault.jpg" alt="thumb">
+                <div class="song-info">
+                    <h4>${song.name}</h4>
+                    <p>Click to Play</p>
+                </div>
+            </div>
+        `;
+        document.getElementById('v-list').innerHTML = vPop.map(renderItem).join('');
+        document.getElementById('c-list').innerHTML = cPop.map(renderItem).join('');
+    }
+
+    // --- LOGIC HỌC TẬP (GIỮ NGUYÊN) ---
+    const vocabulary = [{ hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "老师", py: "lǎoshī", mn: "giáo viên" }];
+    let quizIdx = 0, quizLevel = 1, wordIdx = 0, isCorrect = false;
+
     function changeWord(dir) {
-        // Chỉ cho phép Next nếu đã phát âm đúng hoặc đi lùi
-        if (dir === 1 && !isCorrect) return alert("Bạn chưa phát âm đúng từ này!");
-        
+        if (dir === 1 && !isCorrect) return alert("Bạn chưa phát âm đúng!");
         wordIdx = (wordIdx + dir + vocabulary.length) % vocabulary.length;
-        updateDisplay();
-        
-        // Reset trạng thái sau khi chuyển từ
-        isCorrect = false;
-        document.getElementById('btn-next').disabled = true; // Khóa nút Next
-        document.getElementById('mic-status').innerText = "";
-        document.getElementById('mic-status').classList.add('hidden');
-    }
-
-    function forceNext() {
-        // Hàm Cheat: Bỏ qua
-        isCorrect = true;
-        changeWord(1);
-    }
-
-    function updateDisplay() {
         document.getElementById('display-hz').innerText = vocabulary[wordIdx].hz;
         document.getElementById('display-py').innerText = vocabulary[wordIdx].py;
         document.getElementById('display-mn').innerText = vocabulary[wordIdx].mn;
+        isCorrect = false;
+        document.getElementById('btn-next').disabled = true;
+        document.getElementById('mic-status').classList.add('hidden');
     }
+    function forceNext() { isCorrect = true; changeWord(1); }
+    function speakTarget() { const msg = new SpeechSynthesisUtterance(vocabulary[wordIdx].hz); msg.lang = 'zh-CN'; window.speechSynthesis.speak(msg); }
 
-    function speakTarget() {
-        const msg = new SpeechSynthesisUtterance(vocabulary[wordIdx].hz);
-        msg.lang = 'zh-CN'; window.speechSynthesis.speak(msg);
-    }
-
-    // --- SPEECH RECOGNITION ---
+    // Speech
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
-        const rec = new SpeechRecognition(); 
-        rec.lang = 'zh-CN';
-        
-        rec.onstart = () => {
-            document.getElementById('mic-wave').classList.remove('hidden');
-            const status = document.getElementById('mic-status');
-            status.innerText = "Đang lắng nghe bạn nói..."; // YÊU CẦU 1
-            status.classList.remove('hidden');
-            status.classList.remove('text-green-600', 'text-red-500');
-            status.classList.add('text-indigo-600');
-        };
-
+        const rec = new SpeechRecognition(); rec.lang = 'zh-CN';
+        rec.onstart = () => { document.getElementById('mic-wave').classList.remove('hidden'); document.getElementById('mic-status').innerText = "Đang lắng nghe bạn nói..."; document.getElementById('mic-status').classList.remove('hidden', 'text-green-600', 'text-red-500'); document.getElementById('mic-status').classList.add('text-indigo-600'); };
         rec.onend = () => document.getElementById('mic-wave').classList.add('hidden');
-
         rec.onresult = (e) => {
             const spoken = e.results[0][0].transcript;
-            const target = vocabulary[wordIdx].hz;
-            const status = document.getElementById('mic-status');
-
-            if (spoken.includes(target)) {
-                // ĐÚNG
-                status.innerText = "CHÍNH XÁC! ĐÃ MỞ KHÓA.";
-                status.classList.remove('text-indigo-600', 'text-red-500');
-                status.classList.add('text-green-600');
-                
-                isCorrect = true;
-                document.getElementById('btn-next').disabled = false; // Mở khóa nút Next
-                document.getElementById('btn-next').classList.add('animate-bounce'); // Hiệu ứng mời gọi
-                playTing();
+            if (spoken.includes(vocabulary[wordIdx].hz)) {
+                document.getElementById('mic-status').innerText = "CHÍNH XÁC! ĐÃ MỞ KHÓA.";
+                document.getElementById('mic-status').classList.replace('text-indigo-600', 'text-green-600');
+                isCorrect = true; document.getElementById('btn-next').disabled = false;
             } else {
-                // SAI
-                status.innerText = `Chưa đúng. Bạn nói: "${spoken}"`;
-                status.classList.remove('text-indigo-600', 'text-green-600');
-                status.classList.add('text-red-500');
+                document.getElementById('mic-status').innerText = `Chưa đúng: "${spoken}"`;
+                document.getElementById('mic-status').classList.replace('text-indigo-600', 'text-red-500');
             }
         };
         document.getElementById('mic-btn').onclick = () => rec.start();
     }
 
-    // --- HỆ THỐNG TAB & UI ---
-    function switchTab(id) {
-        document.querySelectorAll('.tab-wrapper').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        document.getElementById('btn-' + id).classList.add('active');
-        if(id === 'vocab') updateQuiz();
-    }
-
-    const cursor = document.getElementById('custom-cursor');
-    document.addEventListener('mousemove', (e) => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
-    
-    // Audio Effect
-    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    function playTing() {
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
-        osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
-        g.gain.setValueAtTime(0.05, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.2);
-        osc.connect(g); g.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.2);
-    }
-    function handleGlobalClick(e) { playTing(); cursor.style.transform = "scale(2)"; setTimeout(() => cursor.style.transform = "scale(1)", 150); }
-
-    // Logic Vocab (Giữ nguyên)
+    // Logic Vocab
     function updateQuiz() {
         const item = vocabulary[quizIdx];
         document.getElementById('quiz-input').value = ""; document.getElementById('quiz-feedback').innerText = "";
@@ -326,7 +281,18 @@
     function showHint() { document.getElementById('quiz-input').value = (quizLevel === 1) ? vocabulary[quizIdx].py : (quizLevel === 2 ? vocabulary[quizIdx].hz : vocabulary[quizIdx].mn); }
     function resetVocab() { quizIdx = 0; quizLevel = 1; updateQuiz(); }
 
-    window.onload = updateQuiz;
+    function switchTab(id) {
+        document.querySelectorAll('.tab-wrapper').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.getElementById('btn-' + id).classList.add('active');
+        if(id === 'vocab') updateQuiz();
+    }
+    const cursor = document.getElementById('custom-cursor');
+    document.addEventListener('mousemove', (e) => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+    function handleGlobalClick(e) { cursor.style.transform = "scale(2)"; setTimeout(() => cursor.style.transform = "scale(1)", 150); }
+
+    window.onload = () => { updateQuiz(); renderMusic(); };
 </script>
 </body>
 </html>
