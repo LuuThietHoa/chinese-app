@@ -2,175 +2,218 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chinese Master - Nicksoler Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nicksoler Chinese Hub - Skyreign Vibrant</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Noto+Sans+SC:wght@500;900&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;500;700&display=swap');
-        body { font-family: 'Noto Sans SC', sans-serif; background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%); }
-        .glass-morphism { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); }
-        
-        /* Hiệu ứng sóng âm khi nói */
-        .recording-pulse { animation: pulse 1.5s infinite; background-color: #ef4444 !important; }
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', 'Noto Sans SC', sans-serif;
+            width: 100vw;
+            height: 100vh;
+            /* --- CẬP NHẬT NỀN MÀU ĐẬM HƠN --- */
+            background: linear-gradient(-45deg, #818cf8, #c084fc, #f472b6, #2dd4bf);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            cursor: none;
         }
+
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+
+        main {
+            width: 100%; display: flex; justify-content: center; align-items: center; z-index: 10; padding-bottom: 80px; /* Thêm padding để không bị nav che */
+        }
+
+        .tab-content {
+            display: none; opacity: 0; transform: translateY(20px) scale(0.95); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); width: 90%; max-width: 380px;
+        }
+        .tab-content.active { display: block; opacity: 1; transform: translateY(0) scale(1); }
+
+        /* --- CẬP NHẬT HIỆU ỨNG KÍNH (Đục hơn để nổi trên nền đậm) --- */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85); /* Tăng độ đục */
+            backdrop-filter: blur(40px); /* Tăng độ mờ */
+            border: 2px solid rgba(255, 255, 255, 0.7); /* Viền rõ hơn */
+            border-radius: 40px;
+            padding: 40px 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1); /* Bóng đổ sâu hơn */
+            text-align: center;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            display: flex;
+            background: rgba(255, 255, 255, 0.9); /* Nav đục hơn nữa */
+            backdrop-filter: blur(30px);
+            border-radius: 20px; padding: 8px; width: 80%; max-width: 320px; z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        .nav-item { flex: 1; text-align: center; padding: 12px 0; font-size: 9px; font-weight: 800; color: #64748b; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; border-radius: 14px; }
+        .nav-item.active { color: #ffffff; background: #6366f1; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3); }
+
+        /* --- CURSOR & INPUT --- */
+        #custom-cursor { position: fixed; width: 12px; height: 12px; background: #ffffff; border-radius: 50%; pointer-events: none; z-index: 10000; transition: transform 0.1s, background 0.2s; box-shadow: 0 0 10px rgba(255,255,255,0.8); mix-blend-mode: difference;}
+        .click-ripple { position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.3); transform: translate(-50%, -50%); pointer-events: none; animation: ripple 0.6s ease-out; }
+        @keyframes ripple { from { width: 0; height: 0; opacity: 1; } to { width: 120px; height: 120px; opacity: 0; } }
+        input { background: transparent; border-bottom: 3px solid #e2e8f0; width: 100%; text-align: center; padding: 12px; outline: none; transition: 0.3s; font-weight: 900; font-size: 1.5rem; color: #1e293b; }
+        input:focus { border-color: #6366f1; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4">
+<body onclick="handleGlobalClick(event)">
 
-<div class="glass-morphism p-8 rounded-[2.5rem] shadow-2xl w-full max-w-md transition-all">
-    <div class="flex justify-between items-center mb-10">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-800">AI Pronunciation</h1>
-            <p class="text-xs text-gray-400 uppercase tracking-widest">Master Chinese</p>
+<div id="custom-cursor"></div>
+
+<nav>
+    <button onclick="switchTab('home')" id="btn-home" class="nav-item active">Sảnh</button>
+    <button onclick="switchTab('vocab')" id="btn-vocab" class="nav-item">Từ vựng</button>
+    <button onclick="switchTab('practice')" id="btn-practice" class="nav-item">Nói</button>
+</nav>
+
+<main>
+    <section id="home" class="tab-content active">
+        <div class="glass-panel">
+            <h2 class="text-4xl font-black text-gray-900 tracking-tighter mb-4">Skyreign</h2>
+            <p class="text-indigo-600 text-[9px] font-bold uppercase tracking-[0.3em] mb-12">Nicksoler Protocol v3.7</p>
+            <div class="h-1 w-20 bg-indigo-100 mx-auto mb-12 rounded-full"></div>
+            <button onclick="switchTab('vocab')" class="text-[10px] font-black text-gray-900 tracking-widest hover:text-indigo-600 transition border-b-2 border-gray-900 hover:border-indigo-600 pb-1">KHỞI ĐỘNG HÀNH TRÌNH →</button>
         </div>
-        <div id="connection-status" class="flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase">
+    </section>
+
+    <section id="vocab" class="tab-content">
+        <div class="glass-panel relative">
+            <div class="flex justify-between items-center mb-10">
+                 <button onclick="resetVocab()" class="text-[9px] font-bold text-gray-400 uppercase tracking-widest hover:text-indigo-500 transition">Reset</button>
+                 <div id="level-indicator" class="text-[9px] font-black text-indigo-500 uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full">Level 1</div>
             </div>
-    </div>
+           
+            <div id="quiz-question" class="text-8xl font-black text-gray-900 mb-8 tracking-tighter drop-shadow-sm">我</div>
+            
+            <div class="flex items-center gap-4 mb-8 relative">
+                <input type="text" id="quiz-input" placeholder="Pinyin..." autocomplete="off">
+                <button onclick="showHint()" class="absolute right-0 top-1/2 -translate-y-1/2 p-2 text-gray-300 hover:text-indigo-500 transition font-bold text-xl">?</button>
+            </div>
 
-    <div class="text-center mb-12">
-        <div id="display-hz" class="text-8xl font-bold text-blue-600 mb-4 drop-shadow-sm">你好</div>
-        <div id="display-py" class="text-2xl text-gray-400 font-light mb-2">nǐ hǎo</div>
-        <div id="display-mn" class="inline-block px-4 py-1 rounded-lg bg-blue-50 text-blue-500 text-sm italic">Xin chào</div>
-    </div>
-
-    <div class="h-20 flex flex-col items-center justify-center mb-8">
-        <div id="feedback-text" class="text-center text-lg font-medium transition-all duration-300">
-            Sẵn sàng để bắt đầu?
+            <button onclick="checkQuiz()" class="w-full py-5 bg-indigo-600 text-white rounded-3xl font-bold text-[11px] uppercase tracking-[0.2em] active:scale-95 transition shadow-xl hover:bg-indigo-700 hover:shadow-indigo-200/50">Xác nhận</button>
+            <p id="quiz-feedback" class="mt-6 h-4 text-[9px] font-black uppercase tracking-widest text-indigo-600"></p>
         </div>
-    </div>
+    </section>
 
-    <div class="flex items-center justify-between gap-4 mb-8">
-        <button onclick="changeWord(-1)" class="w-12 h-12 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-500 transition">
-            <i class="fas fa-arrow-left"></i>
-        </button>
-
-        <button id="mic-btn" class="w-24 h-24 rounded-full bg-blue-600 text-white shadow-xl flex items-center justify-center text-3xl hover:bg-blue-700 transition-all active:scale-95">
-            <i class="fas fa-microphone"></i>
-        </button>
-
-        <button onclick="changeWord(1)" class="w-12 h-12 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-500 transition">
-            <i class="fas fa-arrow-right"></i>
-        </button>
-    </div>
-
-    <button onclick="speakTarget()" class="w-full py-4 rounded-2xl bg-white border-2 border-blue-500 text-blue-600 font-bold hover:bg-blue-50 transition flex items-center justify-center gap-3">
-        <i class="fas fa-volume-up text-xl"></i> Nghe phát âm chuẩn
-    </button>
-</div>
+    <section id="practice" class="tab-content">
+        <div class="glass-panel">
+            <div class="mb-12">
+                <div id="display-hz" class="text-8xl font-black text-gray-900 mb-3 tracking-tighter">我</div>
+                <div id="display-py" class="text-2xl text-gray-500 font-bold mb-2">wǒ</div>
+                <div id="display-mn" class="text-[9px] font-bold text-white bg-indigo-500 px-4 py-1.5 rounded-full uppercase tracking-widest inline-block shadow-sm">Tôi</div>
+            </div>
+            
+            <div class="flex items-center justify-center gap-8 mb-10">
+                <button onclick="changeWord(-1)" class="w-12 h-12 rounded-2xl bg-white/50 flex items-center justify-center text-gray-500 hover:bg-white hover:text-indigo-600 transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg></button>
+                <button id="mic-btn" class="w-20 h-20 bg-indigo-600 text-white rounded-[2rem] flex items-center justify-center shadow-xl shadow-indigo-200/50 active:scale-90 transition relative overflow-hidden">
+                    <span id="mic-wave" class="absolute inset-0 bg-white/20 hidden animate-ping"></span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" /></svg>
+                </button>
+                <button onclick="changeWord(1)" class="w-12 h-12 rounded-2xl bg-white/50 flex items-center justify-center text-gray-500 hover:bg-white hover:text-indigo-600 transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg></button>
+            </div>
+            <button onclick="speakTarget()" class="text-[10px] font-bold text-gray-400 uppercase tracking-widest hover:text-indigo-600 transition border-b border-transparent hover:border-indigo-600">Nghe phát âm mẫu</button>
+        </div>
+    </section>
+</main>
 
 <script>
-    // 1. Dữ liệu từ vựng
+    // --- AUDIO & CURSOR ---
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playClick() {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator(); const g = audioCtx.createGain();
+        osc.frequency.setValueAtTime(1000, audioCtx.currentTime);
+        g.gain.setValueAtTime(0.08, audioCtx.currentTime); g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.25);
+        osc.connect(g); g.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.25);
+    }
+    const cursor = document.getElementById('custom-cursor');
+    document.addEventListener('mousemove', (e) => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+    function handleGlobalClick(e) {
+        playClick();
+        const r = document.createElement('div'); r.className = 'click-ripple';
+        r.style.left = `${e.pageX}px`; r.style.top = `${e.pageY}px`;
+        document.body.appendChild(r); setTimeout(() => r.remove(), 600);
+        cursor.style.transform = "scale(1.5)"; setTimeout(() => cursor.style.transform = "scale(1)", 100);
+    }
+
+    // --- TABS ---
+    function switchTab(id) {
+        const current = document.querySelector('.tab-content.active');
+        const target = document.getElementById(id);
+        if (current === target) return;
+        current.style.opacity = '0'; current.style.transform = 'translateY(20px) scale(0.95)';
+        setTimeout(() => {
+            current.classList.remove('active'); target.classList.add('active');
+            target.offsetHeight; target.style.opacity = '1'; target.style.transform = 'translateY(0) scale(1)';
+        }, 350);
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        document.getElementById('btn-' + id).classList.add('active');
+    }
+
+    // --- LOGIC ---
     const vocabulary = [
-        { hz: "你好", py: "nǐ hǎo", mn: "Xin chào" },
-        { hz: "谢谢", py: "xiè xiè", mn: "Cảm ơn" },
-        { hz: "对不起", py: "duì bù qǐ", mn: "Xin lỗi" },
-        { hz: "再见", py: "zài jiàn", mn: "Tạm biệt" },
-        { hz: "我想吃饭", py: "wǒ xiǎng chī fàn", mn: "Tôi muốn ăn cơm" }
+        { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" },
+        { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" },
+        { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" },
+        { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" },
+        { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" },
+        { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" },
+        { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" },
+        { hz: "人", py: "rén", mn: "người" }
     ];
+    let quizIdx = 0, quizLevel = 1, wordIdx = 0;
 
-    let currentIndex = 0;
-    const micBtn = document.getElementById('mic-btn');
-    const feedback = document.getElementById('feedback-text');
-    const statusLabel = document.getElementById('connection-status');
+    function updateQuiz() {
+        const item = vocabulary[quizIdx];
+        document.getElementById('quiz-input').value = ""; document.getElementById('quiz-feedback').innerText = "";
+        document.getElementById('level-indicator').innerText = "Level " + quizLevel;
+        if (quizLevel === 1) document.getElementById('quiz-question').innerText = item.hz;
+        else if (quizLevel === 2) document.getElementById('quiz-question').innerText = item.mn;
+        else document.getElementById('quiz-question').innerText = item.hz;
+    }
+    function checkQuiz() {
+        const item = vocabulary[quizIdx]; const val = document.getElementById('quiz-input').value.trim().toLowerCase();
+        const ok = (quizLevel === 1 && val === item.py) || (quizLevel === 2 && val === item.hz) || (quizLevel === 3 && val === item.mn);
+        if (ok) {
+            document.getElementById('quiz-feedback').innerText = "CORRECT!";
+            setTimeout(() => { if (quizLevel < 3) quizLevel++; else { quizLevel = 1; quizIdx = (quizIdx + 1) % vocabulary.length; } updateQuiz(); }, 800);
+        } else document.getElementById('quiz-feedback').innerText = "TRY AGAIN";
+    }
+    function showHint() {
+        const item = vocabulary[quizIdx];
+        document.getElementById('quiz-input').value = (quizLevel === 1) ? item.py : (quizLevel === 2 ? item.hz : item.mn);
+    }
+    function resetVocab() { quizIdx = 0; quizLevel = 1; updateQuiz(); }
 
-    // 2. Kiểm tra môi trường & Khởi tạo Recognition
+    // Speech
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     let recognition;
-
-    function initSystem() {
-        // Kiểm tra Protocol
-        if (location.protocol === 'file:') {
-            statusLabel.innerHTML = `<i class="fas fa-exclamation-triangle"></i> Lỗi: Local File`;
-            statusLabel.className = "flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-orange-100 text-orange-600";
-            feedback.innerHTML = "Vui lòng dùng <b>Live Server</b> hoặc chạy qua <b>https</b> để dùng Mic!";
-        } else {
-            statusLabel.innerHTML = `<i class="fas fa-check-circle"></i> Online / Secure`;
-            statusLabel.className = "flex items-center gap-2 px-3 py-1 rounded-full text-[10px] font-bold uppercase bg-green-100 text-green-600";
-        }
-
-        if (!SpeechRecognition) {
-            feedback.innerHTML = "Trình duyệt của bạn không hỗ trợ nhận diện giọng nói.";
-            return;
-        }
-
-        recognition = new SpeechRecognition();
-        recognition.lang = 'zh-CN';
-        recognition.interimResults = false;
-
-        recognition.onstart = () => {
-            micBtn.classList.add('recording-pulse');
-            feedback.innerHTML = `<span class="text-blue-500">Đang nghe... Mời bạn nói!</span>`;
-        };
-
-        recognition.onresult = (event) => {
-            const transcript = event.results[0][0].transcript;
-            processResult(transcript);
-        };
-
-        recognition.onerror = (event) => {
-            micBtn.classList.remove('recording-pulse');
-            if (event.error === 'not-allowed') {
-                feedback.innerHTML = `<span class="text-red-500 font-bold">LỖI: Trình duyệt chặn Mic. Hãy bấm biểu tượng Khóa trên thanh địa chỉ và chọn 'Allow'.</span>`;
-            } else {
-                feedback.innerHTML = `<span class="text-gray-400 text-sm">Lỗi: ${event.error}</span>`;
-            }
-        };
-
-        recognition.onend = () => {
-            micBtn.classList.remove('recording-pulse');
-        };
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition(); recognition.lang = 'zh-CN';
+        recognition.onstart = () => document.getElementById('mic-wave').classList.remove('hidden');
+        recognition.onresult = (e) => { if (e.results[0][0].transcript.includes(vocabulary[wordIdx].hz)) alert("Đúng rồi!"); };
+        recognition.onend = () => document.getElementById('mic-wave').classList.add('hidden');
     }
-
-    // 3. Logic xử lý kết quả
-    function processResult(spoken) {
-        const target = vocabulary[currentIndex].hz;
-        // Loại bỏ dấu câu để so sánh chính xác
-        const cleanTarget = target.replace(/[^\u4e00-\u9fa5]/g, "");
-        const cleanSpoken = spoken.replace(/[^\u4e00-\u9fa5]/g, "");
-
-        if (cleanSpoken === cleanTarget) {
-            feedback.innerHTML = `<div class="text-green-500 animate-bounce"><i class="fas fa-check-circle"></i> Tuyệt vời!</div><div class="text-sm text-gray-500">Bạn đã nói: ${spoken}</div>`;
-            // Tự động phát âm chuẩn lại khi nói đúng để củng cố
-            setTimeout(speakTarget, 500);
-        } else {
-            feedback.innerHTML = `<div class="text-red-500"><i class="fas fa-times-circle"></i> Chưa chính xác</div><div class="text-sm text-gray-500">Kết quả nhận diện: "${spoken}"</div>`;
-        }
+    document.getElementById('mic-btn').onclick = (e) => { e.stopPropagation(); recognition.start(); };
+    function changeWord(dir) {
+        wordIdx = (wordIdx + dir + vocabulary.length) % vocabulary.length;
+        document.getElementById('display-hz').innerText = vocabulary[wordIdx].hz;
+        document.getElementById('display-py').innerText = vocabulary[wordIdx].py;
+        document.getElementById('display-mn').innerText = vocabulary[wordIdx].mn;
     }
-
-    // 4. Các hàm điều khiển
-    micBtn.onclick = () => {
-        if (!recognition) return;
-        try {
-            recognition.start();
-        } catch (e) {
-            // Nếu đang chạy thì stop để có thể bấm lại
-            recognition.stop();
-        }
-    };
-
-    function speakTarget() {
-        const msg = new SpeechSynthesisUtterance(vocabulary[currentIndex].hz);
-        msg.lang = 'zh-CN';
-        msg.rate = 0.8;
-        window.speechSynthesis.speak(msg);
-    }
-
-    function changeWord(direction) {
-        currentIndex = (currentIndex + direction + vocabulary.length) % vocabulary.length;
-        document.getElementById('display-hz').innerText = vocabulary[currentIndex].hz;
-        document.getElementById('display-py').innerText = vocabulary[currentIndex].py;
-        document.getElementById('display-mn').innerText = vocabulary[currentIndex].mn;
-        feedback.innerHTML = "Sẵn sàng!";
-    }
-
-    // Khởi chạy hệ thống
-    window.onload = initSystem;
+    function speakTarget() { const msg = new SpeechSynthesisUtterance(vocabulary[wordIdx].hz); msg.lang = 'zh-CN'; window.speechSynthesis.speak(msg); }
+    window.onload = updateQuiz;
 </script>
-
 </body>
 </html>
