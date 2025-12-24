@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nicksoler Chinese Hub - Youtube Edition</title>
+    <title>Nicksoler Chinese Hub - Hybrid Engine</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Noto+Sans+SC:wght@500;900&display=swap" rel="stylesheet">
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
@@ -11,7 +11,7 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
-        /* SCROLL SETUP */
+        /* CORE SETUP */
         html { scroll-behavior: smooth; height: 100%; overflow: hidden; }
         body {
             font-family: 'Inter', 'Noto Sans SC', sans-serif;
@@ -32,11 +32,7 @@
             border-radius: 35px; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
         }
 
-        /* TAB & NAV */
-        .tab-wrapper { display: none; width: 100%; }
-        .tab-wrapper.active { display: block; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
+        /* NAVIGATION */
         nav {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             display: flex; background: rgba(255, 255, 255, 0.9);
@@ -46,7 +42,7 @@
         .nav-item { padding: 12px 25px; font-size: 9px; font-weight: 900; color: #64748b; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
         .nav-item.active { color: #fff; background: #6366f1; border-radius: 15px; }
 
-        /* SONG CARD (NEW) */
+        /* SONG CARD */
         .song-card {
             display: flex; align-items: center; gap: 12px;
             padding: 10px; margin-bottom: 8px;
@@ -59,7 +55,7 @@
         .song-info h4 { font-size: 10px; font-weight: 900; color: #1e293b; text-transform: uppercase; }
         .song-info p { font-size: 9px; color: #475569; }
 
-        /* YOUTUBE SCREEN */
+        /* MEDIA SCREEN (HOLOGRAM) */
         #yt-screen {
             width: 100%; max-width: 300px; height: 170px;
             background: black; border-radius: 20px; overflow: hidden;
@@ -68,12 +64,15 @@
             box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
             position: relative; z-index: 10;
         }
-        iframe { width: 100%; height: 100%; border: none; }
+        iframe, video { width: 100%; height: 100%; border: none; object-fit: cover; }
 
         /* OTHER */
         #custom-cursor { position: fixed; width: 12px; height: 12px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 10001; mix-blend-mode: difference; transition: transform 0.1s; }
         model-viewer { width: 100%; height: 350px; --poster-color: transparent; outline: none; }
         button:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+        .tab-wrapper { display: none; width: 100%; }
+        .tab-wrapper.active { display: block; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body onclick="handleGlobalClick(event)">
@@ -90,7 +89,7 @@
     <section>
         <div class="glass-panel p-12 text-center max-w-sm">
             <h2 class="text-5xl font-black text-gray-900 mb-2 italic tracking-tighter">Skyreign</h2>
-            <p class="text-indigo-700 text-[10px] font-bold uppercase tracking-[0.4em] mb-10">Nicksoler Protocol v7.0</p>
+            <p class="text-indigo-700 text-[10px] font-bold uppercase tracking-[0.4em] mb-10">Nicksoler Protocol v8.0</p>
             <button onclick="switchTab('practice')" class="px-8 py-4 bg-gray-900 text-white font-bold rounded-2xl text-xs uppercase tracking-widest hover:scale-105 transition">Start Training</button>
         </div>
     </section>
@@ -148,8 +147,7 @@
                 
                 <div class="glass-panel p-6 w-full md:w-64 h-80 overflow-y-auto">
                     <h3 class="text-gray-900 font-black text-xs uppercase tracking-widest mb-4 border-b border-gray-900/10 pb-2">Chinese Hits</h3>
-                    <div id="c-list" class="space-y-2">
-                        </div>
+                    <div id="c-list" class="space-y-2"></div>
                 </div>
 
                 <div class="w-full max-w-md flex flex-col items-center">
@@ -158,13 +156,14 @@
                     <model-viewer src="./airpods.glb" alt="Airpods" auto-rotate camera-controls shadow-intensity="1" exposure="1.2" loading="eager" style="height: 300px;"></model-viewer>
                     
                     <div id="yt-screen">
-                        <div id="player"></div> </div>
+                        <div id="player"></div> 
+                        <video id="mp4-player" controls playsinline class="hidden"></video>
+                    </div>
                 </div>
 
                 <div class="glass-panel p-6 w-full md:w-64 h-80 overflow-y-auto">
                     <h3 class="text-gray-900 font-black text-xs uppercase tracking-widest mb-4 border-b border-gray-900/10 pb-2">V-Pop Hits</h3>
-                    <div id="v-list" class="space-y-2">
-                        </div>
+                    <div id="v-list" class="space-y-2"></div>
                 </div>
             </div>
         </div>
@@ -172,52 +171,76 @@
 </div>
 
 <script>
-    // --- YOUTUBE API ---
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    var player;
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-            height: '100%',
-            width: '100%',
-            videoId: 'vs-hsW6I63I', // Bài hát mặc định (Hôn vào đây)
-            playerVars: { 'playsinline': 1, 'controls': 1 },
-            events: { 'onReady': onPlayerReady }
-        });
-    }
-    function onPlayerReady(event) { /* Player sẵn sàng */ }
-    
-    function playVideo(id) {
-        if(player && player.loadVideoById) {
-            player.loadVideoById(id);
-            document.getElementById('yt-screen').scrollIntoView({behavior: "smooth", block: "center"});
-        }
-    }
-
-    // --- DANH SÁCH NHẠC (Dữ liệu thật) ---
+    // --- 1. DATA NHẠC (HYBRID) ---
+    // type: 'mp4' (file trực tiếp) hoặc 'yt' (youtube)
     const vPop = [
-        { name: "Hôn vào đây", id: "vs-hsW6I63I" },
-        { name: "Sau Lời Từ Khước", id: "5sJ1b_7n6qU" },
-        { name: "Waiting For You", id: "U7Y2bJd5K2s" }
+        { 
+            name: "Hôn vào đây", 
+            type: "mp4", 
+            id: "https://files.catbox.moe/kos9gw.mp4", 
+            thumb: "https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg" // Giữ hình nền cũ
+        },
+        { 
+            name: "Sau Lời Từ Khước", 
+            type: "yt", 
+            id: "5sJ1b_7n6qU", 
+            thumb: "https://img.youtube.com/vi/5sJ1b_7n6qU/mqdefault.jpg" 
+        },
+        { 
+            name: "Waiting For You", 
+            type: "yt", 
+            id: "U7Y2bJd5K2s", 
+            thumb: "https://img.youtube.com/vi/U7Y2bJd5K2s/mqdefault.jpg" 
+        }
     ];
 
     const cPop = [
-        { name: "Sứ Thanh Hoa", id: "Z7vlR53_qNM" },
-        { name: "Đáy Biển", id: "rJjQ4w-B3cE" },
-        { name: "Biệt Khúc Chờ Nhau", id: "s1sN8b4r0j0" }
+        { name: "Sứ Thanh Hoa", type: "yt", id: "Z7vlR53_qNM", thumb: "https://img.youtube.com/vi/Z7vlR53_qNM/mqdefault.jpg" },
+        { name: "Đáy Biển", type: "yt", id: "rJjQ4w-B3cE", thumb: "https://img.youtube.com/vi/rJjQ4w-B3cE/mqdefault.jpg" },
+        { name: "Biệt Khúc Chờ Nhau", type: "yt", id: "s1sN8b4r0j0", thumb: "https://img.youtube.com/vi/s1sN8b4r0j0/mqdefault.jpg" }
     ];
 
-    // Render danh sách nhạc
+    // --- 2. LOGIC TRÌNH PHÁT NHẠC (HYBRID) ---
+    var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    var player;
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', { height: '100%', width: '100%', videoId: '', playerVars: { 'playsinline': 1 } });
+    }
+
+    function playMedia(source, type) {
+        const ytDiv = document.getElementById('player');
+        const mp4Div = document.getElementById('mp4-player');
+        
+        // Dừng tất cả trước khi phát mới
+        if(player && player.stopVideo) player.stopVideo();
+        mp4Div.pause();
+
+        if (type === 'mp4') {
+            // Chế độ File MP4
+            ytDiv.style.display = 'none';
+            mp4Div.src = source;
+            mp4Div.style.display = 'block';
+            mp4Div.play();
+        } else {
+            // Chế độ Youtube
+            mp4Div.style.display = 'none';
+            ytDiv.style.display = 'block';
+            player.loadVideoById(source);
+        }
+        
+        // Cuộn xuống
+        document.getElementById('yt-screen').scrollIntoView({behavior: "smooth", block: "center"});
+    }
+
     function renderMusic() {
         const renderItem = (song) => `
-            <div class="song-card" onclick="playVideo('${song.id}')">
-                <img src="https://img.youtube.com/vi/${song.id}/mqdefault.jpg" alt="thumb">
+            <div class="song-card" onclick="playMedia('${song.id}', '${song.type}')">
+                <img src="${song.thumb}" alt="thumb">
                 <div class="song-info">
                     <h4>${song.name}</h4>
-                    <p>Click to Play</p>
+                    <p>${song.type === 'mp4' ? 'NO ADS ✨' : 'Youtube'}</p>
                 </div>
             </div>
         `;
@@ -225,9 +248,9 @@
         document.getElementById('c-list').innerHTML = cPop.map(renderItem).join('');
     }
 
-    // --- LOGIC HỌC TẬP (GIỮ NGUYÊN) ---
-    const vocabulary = [{ hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "老师", py: "lǎoshī", mn: "giáo viên" }];
-    let quizIdx = 0, quizLevel = 1, wordIdx = 0, isCorrect = false;
+    // --- 3. LOGIC HỌC TẬP & SYSTEM ---
+    const vocabulary = [{ hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }];
+    let quizIdx=0, quizLevel=1, wordIdx=0, isCorrect=false;
 
     function changeWord(dir) {
         if (dir === 1 && !isCorrect) return alert("Bạn chưa phát âm đúng!");
@@ -235,34 +258,26 @@
         document.getElementById('display-hz').innerText = vocabulary[wordIdx].hz;
         document.getElementById('display-py').innerText = vocabulary[wordIdx].py;
         document.getElementById('display-mn').innerText = vocabulary[wordIdx].mn;
-        isCorrect = false;
-        document.getElementById('btn-next').disabled = true;
+        isCorrect = false; document.getElementById('btn-next').disabled = true;
         document.getElementById('mic-status').classList.add('hidden');
     }
     function forceNext() { isCorrect = true; changeWord(1); }
     function speakTarget() { const msg = new SpeechSynthesisUtterance(vocabulary[wordIdx].hz); msg.lang = 'zh-CN'; window.speechSynthesis.speak(msg); }
 
-    // Speech
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (SpeechRecognition) {
         const rec = new SpeechRecognition(); rec.lang = 'zh-CN';
-        rec.onstart = () => { document.getElementById('mic-wave').classList.remove('hidden'); document.getElementById('mic-status').innerText = "Đang lắng nghe bạn nói..."; document.getElementById('mic-status').classList.remove('hidden', 'text-green-600', 'text-red-500'); document.getElementById('mic-status').classList.add('text-indigo-600'); };
+        rec.onstart = () => { document.getElementById('mic-wave').classList.remove('hidden'); document.getElementById('mic-status').classList.remove('hidden'); };
         rec.onend = () => document.getElementById('mic-wave').classList.add('hidden');
         rec.onresult = (e) => {
-            const spoken = e.results[0][0].transcript;
-            if (spoken.includes(vocabulary[wordIdx].hz)) {
-                document.getElementById('mic-status').innerText = "CHÍNH XÁC! ĐÃ MỞ KHÓA.";
-                document.getElementById('mic-status').classList.replace('text-indigo-600', 'text-green-600');
+            if (e.results[0][0].transcript.includes(vocabulary[wordIdx].hz)) {
                 isCorrect = true; document.getElementById('btn-next').disabled = false;
-            } else {
-                document.getElementById('mic-status').innerText = `Chưa đúng: "${spoken}"`;
-                document.getElementById('mic-status').classList.replace('text-indigo-600', 'text-red-500');
+                document.getElementById('mic-status').innerText = "CHUẨN!";
             }
         };
         document.getElementById('mic-btn').onclick = () => rec.start();
     }
 
-    // Logic Vocab
     function updateQuiz() {
         const item = vocabulary[quizIdx];
         document.getElementById('quiz-input').value = ""; document.getElementById('quiz-feedback').innerText = "";
