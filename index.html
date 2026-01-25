@@ -2,317 +2,408 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nicksoler Chinese Hub - Update Playlist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skyreign Chinese Hub | Audio Core v13.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Noto+Sans+SC:wght@500;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
     
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        
-        /* CORE SETUP */
-        html { scroll-behavior: smooth; height: 100%; overflow: hidden; }
+        /* --- VISUAL CORE --- */
+        :root { --primary: #6366f1; --accent: #f472b6; }
         body {
-            font-family: 'Inter', 'Noto Sans SC', sans-serif;
-            background: linear-gradient(-45deg, #818cf8, #c084fc, #f472b6, #2dd4bf);
+            font-family: 'Space Grotesk', 'Noto Sans SC', sans-serif;
+            background: linear-gradient(-45deg, #020617, #312e81, #be185d, #0f766e);
             background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: #1e293b; height: 100%; overflow-y: scroll; scroll-snap-type: y mandatory; cursor: none;
+            animation: gradientBG 20s ease infinite;
+            color: #fff; min-height: 100vh; overflow-x: hidden; cursor: none;
         }
-        body::-webkit-scrollbar { width: 0; }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        section { height: 100vh; width: 100vw; scroll-snap-align: start; display: flex; align-items: center; justify-content: center; position: relative; }
-
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 35px; box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+        /* Custom Cursor */
+        #cursor {
+            position: fixed; width: 20px; height: 20px; background: white; border-radius: 50%;
+            pointer-events: none; z-index: 9999; mix-blend-mode: difference; transition: transform 0.1s;
         }
 
-        /* NAVIGATION */
+        /* Glass Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
+            transition: transform 0.3s;
+        }
+        .glass-card:hover { transform: translateY(-5px); }
+
+        /* Nav */
         nav {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            display: flex; background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(20px); border-radius: 20px; padding: 6px; z-index: 1000;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            z-index: 1000; display: flex; gap: 8px;
+            background: rgba(0,0,0,0.6); padding: 8px; border-radius: 25px;
+            backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1);
         }
-        .nav-item { padding: 12px 25px; font-size: 9px; font-weight: 900; color: #64748b; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; }
-        .nav-item.active { color: #fff; background: #6366f1; border-radius: 15px; }
-
-        /* SONG CARD */
-        .song-card {
-            display: flex; align-items: center; gap: 12px;
-            padding: 10px; margin-bottom: 8px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 16px; cursor: pointer; transition: all 0.2s;
-            border: 1px solid transparent;
+        .nav-btn {
+            padding: 12px 24px; border-radius: 18px; font-size: 10px; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; color: #94a3b8;
         }
-        .song-card:hover { background: rgba(255,255,255,0.3); transform: translateX(5px); border-color: rgba(255,255,255,0.5); }
-        .song-card img { width: 50px; height: 50px; border-radius: 10px; object-fit: cover; }
-        .song-info h4 { font-size: 10px; font-weight: 900; color: #1e293b; text-transform: uppercase; }
-        .song-info p { font-size: 9px; color: #475569; }
+        .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); }
 
-        /* MEDIA SCREEN (HOLOGRAM) */
-        #yt-screen {
-            width: 100%; max-width: 300px; height: 170px;
-            background: black; border-radius: 20px; overflow: hidden;
-            margin-top: -20px; /* Đẩy lên gần tai nghe */
-            border: 2px solid rgba(255,255,255,0.5);
-            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
-            position: relative; z-index: 10;
-        }
-        iframe, video { width: 100%; height: 100%; border: none; object-fit: cover; }
+        /* Content */
+        .tab-content { display: none; opacity: 0; animation: fadeIn 0.5s forwards; padding-bottom: 100px; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* OTHER */
-        #custom-cursor { position: fixed; width: 12px; height: 12px; background: #fff; border-radius: 50%; pointer-events: none; z-index: 10001; mix-blend-mode: difference; transition: transform 0.1s; }
-        model-viewer { width: 100%; height: 350px; --poster-color: transparent; outline: none; }
-        button:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
-        .tab-wrapper { display: none; width: 100%; }
-        .tab-wrapper.active { display: block; animation: fadeIn 0.5s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* Feedback States */
+        .glow-green { box-shadow: 0 0 40px #22c55e !important; border-color: #22c55e !important; }
+        .glow-red { box-shadow: 0 0 40px #ef4444 !important; border-color: #ef4444 !important; }
+        
+        /* Music List */
+        .song-item { display: flex; gap: 12px; padding: 10px; border-radius: 12px; background: rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; align-items: center; }
+        .song-item:hover { background: rgba(255,255,255,0.15); }
+        .song-item img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
     </style>
 </head>
 <body onclick="handleGlobalClick(event)">
 
-<div id="custom-cursor"></div>
+<div id="cursor"></div>
 
 <nav>
-    <button onclick="switchTab('home')" id="btn-home" class="nav-item active">Sảnh</button>
-    <button onclick="switchTab('vocab')" id="btn-vocab" class="nav-item">Học Từ</button>
-    <button onclick="switchTab('practice')" id="btn-practice" class="nav-item">Luyện Nói</button>
+    <button onclick="switchTab('home')" class="nav-btn active" id="n-home">Sảnh</button>
+    <button onclick="switchTab('vocab')" class="nav-btn" id="n-vocab">Học Từ</button>
+    <button onclick="switchTab('speaking')" class="nav-btn" id="n-speaking">Luyện Nói</button>
+    <button onclick="switchTab('grammar')" class="nav-btn" id="n-grammar">Ngữ Pháp</button>
+    <button onclick="switchTab('music')" class="nav-btn" id="n-music">Nhạc</button>
 </nav>
 
-<div id="home" class="tab-wrapper active">
-    <section>
-        <div class="glass-panel p-12 text-center max-w-sm">
-            <h2 class="text-5xl font-black text-gray-900 mb-2 italic tracking-tighter">Skyreign</h2>
-            <p class="text-indigo-700 text-[10px] font-bold uppercase tracking-[0.4em] mb-10">Nicksoler Protocol v9.0</p>
-            <button onclick="switchTab('practice')" class="px-8 py-4 bg-gray-900 text-white font-bold rounded-2xl text-xs uppercase tracking-widest hover:scale-105 transition">Start Training</button>
+<div id="home" class="tab-content active">
+    <div class="h-screen flex items-center justify-center">
+        <div class="glass-card p-12 text-center max-w-md mx-4">
+            <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN</h1>
+            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Audio Core v13.0</p>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="switchTab('vocab')" class="py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-xs uppercase tracking-widest transition">Luyện Từ</button>
+                <button onclick="switchTab('grammar')" class="py-4 bg-pink-600 hover:bg-pink-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-pink-500/30">Ngữ Pháp</button>
+            </div>
         </div>
-    </section>
+    </div>
 </div>
 
-<div id="vocab" class="tab-wrapper">
-    <section>
-        <div class="glass-panel p-10 text-center w-[90%] max-w-md relative">
+<div id="vocab" class="tab-content">
+    <div class="min-h-screen flex items-center justify-center pt-20">
+        <div class="glass-card p-10 w-full max-w-lg mx-4 relative" id="vocab-card">
             <div class="flex justify-between items-center mb-8">
-                <button onclick="resetVocab()" class="text-[9px] font-bold text-gray-500 hover:text-indigo-600 uppercase tracking-widest">↺ Reset</button>
-                <div id="level-indicator" class="text-[9px] font-black text-white bg-indigo-500 px-3 py-1 rounded-full uppercase tracking-widest">Level 1</div>
+                <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[10px] font-black bg-pink-500 px-3 py-1 rounded-full uppercase tracking-widest hover:scale-105 transition">Mode: Hán ➔ Việt</button>
+                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Sinh Tồn 6 Tháng</div>
             </div>
-            <div id="quiz-question" class="text-8xl font-black text-gray-900 mb-8 tracking-tighter">我</div>
-            <div class="relative w-full mb-8">
-                <input type="text" id="quiz-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b-2 border-gray-400 py-3 text-center font-bold text-2xl outline-none focus:border-indigo-600 transition text-gray-800" autocomplete="off">
-                <button onclick="showHint()" class="absolute right-2 top-2 text-gray-400 hover:text-indigo-600 font-bold text-xl">?</button>
+            <div id="v-question" class="text-7xl font-black text-center mb-8 tracking-tighter min-h-[100px] flex items-center justify-center">?</div>
+            <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b-2 border-white/20 py-3 text-center font-bold text-2xl outline-none focus:border-indigo-500 transition text-white placeholder-gray-600 mb-8" autocomplete="off">
+            <button onclick="checkVocab()" class="w-full py-4 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-gray-200 transition mb-4">Kiểm Tra</button>
+            <div id="v-feedback" class="text-center h-10">
+                <p id="v-msg" class="text-[11px] font-bold uppercase tracking-widest"></p>
+                <p id="v-hint" class="text-[10px] text-gray-400 mt-1"></p>
             </div>
-            <button onclick="checkQuiz()" class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-bold text-xs uppercase tracking-[0.2em] shadow-lg hover:bg-indigo-700 active:scale-95 transition">Xác nhận</button>
-            <p id="quiz-feedback" class="mt-6 h-6 text-[10px] font-black uppercase tracking-widest text-indigo-700"></p>
         </div>
-    </section>
+    </div>
 </div>
 
-<div id="practice" class="tab-wrapper">
-    
-    <section id="speaking-zone">
-        <div class="glass-panel p-10 text-center w-[90%] max-w-md">
-            <div class="mb-4">
-                <div id="display-hz" class="text-8xl font-black text-gray-900 mb-3 tracking-tighter">我</div>
-                <div id="display-py" class="text-2xl text-gray-500 font-bold mb-2">wǒ</div>
-                <div id="display-mn" class="text-[10px] font-bold text-white bg-indigo-500 px-4 py-1.5 rounded-full uppercase tracking-widest inline-block shadow-sm">Tôi</div>
+<div id="speaking" class="tab-content">
+    <div class="min-h-screen flex items-center justify-center pt-20">
+        <div class="glass-card p-10 w-full max-w-md mx-4 text-center" id="speak-card">
+            <div class="text-[10px] uppercase tracking-widest text-indigo-400 font-black mb-8">AI Voice Analyzer</div>
+            <div class="mb-8 relative group">
+                <div id="s-hz" class="text-9xl font-black mb-2 tracking-tighter cursor-pointer transition hover:text-indigo-400" onclick="speakText(document.getElementById('s-hz').innerText)">我</div>
+                <div id="s-py" class="text-2xl text-gray-500 mb-1">wǒ</div>
+                <div id="s-mn" class="text-xs font-bold bg-white/10 px-3 py-1 rounded-full inline-block">TÔI</div>
+                <div class="absolute top-0 right-0 opacity-0 group-hover:opacity-100 transition text-[9px] text-gray-500">Click để nghe</div>
             </div>
-
-            <div id="mic-status" class="h-6 mb-4 text-[11px] font-bold text-indigo-600 uppercase tracking-widest animate-pulse hidden">Đang lắng nghe bạn nói...</div>
-
-            <div class="flex items-center justify-center gap-8 mb-6">
-                <button onclick="changeWord(-1)" class="w-12 h-12 rounded-2xl bg-white/40 hover:bg-white text-gray-600 flex items-center justify-center transition shadow-sm"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg></button>
-                <button id="mic-btn" class="w-24 h-24 bg-gray-900 text-white rounded-[2.5rem] flex items-center justify-center shadow-2xl active:scale-90 transition relative">
-                    <span id="mic-wave" class="absolute inset-0 bg-indigo-500/50 rounded-[2.5rem] hidden animate-ping"></span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" /></svg>
-                </button>
-                <button id="btn-next" onclick="changeWord(1)" disabled class="w-12 h-12 rounded-2xl bg-white/40 hover:bg-white text-gray-600 flex items-center justify-center transition shadow-sm relative group"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg></button>
+            <div class="flex justify-center items-center gap-6 mb-8">
+                <button onclick="changeSpeakWord(-1)" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition">←</button>
+                <div class="relative">
+                    <div id="mic-ring" class="hidden mic-ripple"></div>
+                    <button id="mic-btn" class="w-20 h-20 bg-indigo-600 rounded-full flex items-center justify-center shadow-2xl relative z-10 transition hover:scale-110 active:scale-90 text-white">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg>
+                    </button>
+                </div>
+                <button onclick="changeSpeakWord(1)" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition">→</button>
             </div>
-            
-            <button onclick="speakTarget()" class="text-[9px] font-bold text-gray-500 hover:text-indigo-600 uppercase tracking-widest border-b border-transparent hover:border-indigo-600 transition mb-4">Nghe phát âm mẫu</button>
-            <button onclick="forceNext()" class="text-[9px] font-bold text-gray-300 hover:text-red-400 uppercase tracking-widest block mx-auto">Skip</button>
+            <div id="s-feedback" class="text-[11px] font-bold uppercase tracking-widest text-gray-400 h-12 flex items-center justify-center px-4">
+                Bấm nút micro để bắt đầu...
+            </div>
         </div>
-        <div class="absolute bottom-10 animate-bounce cursor-pointer opacity-50 hover:opacity-100 transition" onclick="document.getElementById('music-zone').scrollIntoView()"><p class="text-[9px] font-black text-white uppercase tracking-widest mb-2 text-center">Music Pod</p><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="white" class="w-6 h-6 mx-auto"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" /></svg></div>
-    </section>
+    </div>
+</div>
 
-    <section id="music-zone">
-        <div class="w-full flex flex-col items-center justify-center">
+<div id="grammar" class="tab-content">
+    <div class="min-h-screen flex items-center justify-center pt-20">
+        <div class="glass-card p-10 w-full max-w-2xl mx-4 relative overflow-hidden" id="grammar-card">
             
-            <div class="flex flex-col md:flex-row items-center justify-center gap-8 w-full px-4 max-w-6xl">
+            <div class="flex justify-between items-center mb-10">
+                <button onclick="toggleGrammarMode()" id="g-mode-badge" class="text-[10px] font-black bg-indigo-600 px-3 py-1 rounded-full uppercase tracking-widest hover:scale-110 transition shadow-lg shadow-indigo-500/50">Trung ➔ Việt</button>
+                <div class="text-[9px] font-bold text-gray-400">AI AUDIO ENABLED</div>
+            </div>
+
+            <div class="text-center mb-10 min-h-[120px] flex flex-col justify-center items-center">
+                <div id="g-question" class="text-4xl md:text-5xl font-bold tracking-tight mb-4 leading-tight drop-shadow-lg cursor-pointer hover:text-indigo-300 transition" onclick="readGrammarQuestion()">...</div>
+                <p id="g-instruction" class="text-gray-500 text-sm italic">Hãy dịch câu trên</p>
+            </div>
+
+            <input type="text" id="g-input" placeholder="Nhập câu trả lời..." class="w-full bg-transparent border-b-2 border-white/10 py-4 text-center text-xl font-medium outline-none focus:border-indigo-500 transition mb-6 text-white placeholder-gray-600" autocomplete="off">
+
+            <div class="grid grid-cols-4 gap-4 mb-6">
+                <button onclick="nextGrammar()" class="col-span-1 py-4 bg-white/5 hover:bg-white/10 rounded-2xl font-bold text-[10px] uppercase tracking-widest text-gray-400 hover:text-white transition">Bỏ qua</button>
+                <button onclick="checkGrammar()" class="col-span-3 py-4 bg-white text-black hover:bg-indigo-400 hover:text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition shadow-lg">Kiểm tra</button>
+            </div>
+
+            <div id="g-feedback" class="text-center h-20">
+                <div id="g-msg" class="text-[11px] font-bold uppercase tracking-widest mb-1"></div>
+                <div id="g-note" class="text-[11px] text-pink-400 font-medium"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="music" class="tab-content">
+    <div class="min-h-screen flex flex-col items-center justify-center pt-20 pb-20">
+        <div class="flex flex-col md:flex-row items-center justify-center gap-8 w-full max-w-6xl px-4">
+            <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto">
+                <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-indigo-400 border-b border-white/10 pb-2">V-Pop Hits</h3>
+                <div id="v-list" class="space-y-2"></div>
+            </div>
+            <div class="w-full max-w-md flex flex-col items-center">
+                <h4 class="text-4xl font-black text-white tracking-tighter uppercase mb-4 drop-shadow-lg">Music Pod</h4>
                 
-                <div class="glass-panel p-6 w-full md:w-64 h-80 overflow-y-auto">
-                    <h3 class="text-gray-900 font-black text-xs uppercase tracking-widest mb-4 border-b border-gray-900/10 pb-2">Chinese Hits</h3>
-                    <div id="c-list" class="space-y-2"></div>
+                <div class="relative w-full h-[300px]">
+                     <model-viewer src="./airpods.glb" 
+                                   alt="My Airpods" auto-rotate camera-controls 
+                                   shadow-intensity="1" exposure="0.8" 
+                                   style="width: 100%; height: 100%; --poster-color: transparent;">
+                     </model-viewer>
                 </div>
-
-                <div class="w-full max-w-md flex flex-col items-center">
-                    <h4 class="text-3xl font-black text-white tracking-tighter uppercase drop-shadow-lg mb-2">360 POD</h4>
-                    
-                    <model-viewer src="./airpods.glb" alt="Airpods" auto-rotate camera-controls shadow-intensity="1" exposure="1.2" loading="eager" style="height: 300px;"></model-viewer>
-                    
-                    <div id="yt-screen">
-                        <div id="player"></div> 
-                        <video id="mp4-player" controls playsinline class="hidden"></video>
-                    </div>
-                </div>
-
-                <div class="glass-panel p-6 w-full md:w-64 h-80 overflow-y-auto">
-                    <h3 class="text-gray-900 font-black text-xs uppercase tracking-widest mb-4 border-b border-gray-900/10 pb-2">V-Pop Hits</h3>
-                    <div id="v-list" class="space-y-2"></div>
+                
+                <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl mt-[-40px] relative z-10">
+                    <div id="player"></div> 
+                    <video id="mp4-player" controls playsinline class="hidden w-full h-full object-cover"></video>
                 </div>
             </div>
+            <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto">
+                <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-pink-400 border-b border-white/10 pb-2">Chinese Hits</h3>
+                <div id="c-list" class="space-y-2"></div>
+            </div>
         </div>
-    </section>
+    </div>
 </div>
 
 <script>
-    // --- 1. DATA NHẠC (HYBRID) ---
-    // type: 'mp4' (file trực tiếp - NO ADS) hoặc 'yt' (youtube)
-    const vPop = [
-        { 
-            name: "Hôn vào đây", 
-            type: "mp4", 
-            id: "https://files.catbox.moe/kos9gw.mp4", 
-            thumb: "https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg" 
-        },
-        { 
-            name: "Hà Nội - Obito ft. VSTRA", 
-            type: "mp4", 
-            id: "https://files.catbox.moe/1ygyge.mp4", 
-            thumb: "https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg" 
-        },
-        { 
-            name: "Waiting For You", 
-            type: "yt", 
-            id: "U7Y2bJd5K2s", 
-            thumb: "https://img.youtube.com/vi/U7Y2bJd5K2s/mqdefault.jpg" 
+    // --- AUDIO ENGINE ---
+    function speakText(text) {
+        if(!text) return;
+        window.speechSynthesis.cancel(); // Dừng câu đang đọc
+        const msg = new SpeechSynthesisUtterance(text);
+        msg.lang = 'zh-CN'; // Set giọng chuẩn Trung Quốc
+        msg.rate = 0.8; // Đọc chậm rãi một chút để dễ nghe
+        window.speechSynthesis.speak(msg);
+    }
+
+    // --- DATABASE ---
+    const vocabData = [
+        { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" },
+        { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" },
+        { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "老师", py: "lǎoshī", mn: "thầy cô" },
+        { hz: "同学", py: "tóngxué", mn: "bạn học" }, { hz: "先生", py: "xiānsheng", mn: "ông/ngài" },
+        { hz: "零", py: "líng", mn: "không" }, { hz: "一", py: "yī", mn: "một" }, { hz: "二", py: "èr", mn: "hai" },
+        { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" },
+        { hz: "喜欢", py: "xǐhuan", mn: "thích" }, { hz: "爱", py: "ài", mn: "yêu" }, { hz: "吃", py: "chī", mn: "ăn" },
+        { hz: "喝", py: "hē", mn: "uống" }, { hz: "看", py: "kàn", mn: "nhìn/xem" }, { hz: "听", py: "tīng", mn: "nghe" },
+        { hz: "说", py: "shuō", mn: "nói" }, { hz: "买", py: "mǎi", mn: "mua" }, { hz: "水", py: "shuǐ", mn: "nước" },
+        { hz: "钱", py: "qián", mn: "tiền" }, { hz: "电脑", py: "diànnǎo", mn: "máy tính" }, { hz: "书", py: "shū", mn: "sách" }
+    ];
+
+    const grammarBank = [
+        { zh: "你叫什么名字？", vi: "bạn tên là gì", note: "叫 (jiào): Tên là / Gọi là" },
+        { zh: "他是我的老师", vi: "anh ấy là giáo viên của tôi", note: "的 (de): Sở hữu cách" },
+        { zh: "我去商店买东西", vi: "tôi đi cửa hàng mua đồ", note: "去 (qù) + Địa điểm + Làm gì" },
+        { zh: "在这个学校有很多学生", vi: "ở trường này có rất nhiều học sinh", note: "在 (zài): Ở" },
+        { zh: "你会说汉语吗", vi: "bạn biết nói tiếng trung không", note: "会 (huì): Biết (qua học tập)" },
+        { zh: "我不喜欢喝茶", vi: "tôi không thích uống trà", note: "不 (bù): Không" },
+        { zh: "现在几点", vi: "bây giờ là mấy giờ", note: "几 (jǐ): Mấy" },
+        { zh: "你住在哪里", vi: "bạn sống ở đâu", note: "住 (zhù): Sống" },
+        { zh: "这件衣服很漂亮", vi: "bộ quần áo này rất đẹp", note: "件 (jiàn): Lượng từ áo" },
+        { zh: "我想去中国", vi: "tôi muốn đi trung quốc", note: "想 (xiǎng): Muốn" },
+        { zh: "今天是星期几", vi: "hôm nay là thứ mấy", note: "星期 (xīngqī): Thứ" },
+        { zh: "苹果多少钱", vi: "táo bao nhiêu tiền", note: "多少 (duōshao): Bao nhiêu" },
+        { zh: "那是谁的书", vi: "kia là sách của ai", note: "那 (nà): Kia" },
+        { zh: "我没钱", vi: "tôi không có tiền", note: "没 (méi): Không có" },
+        { zh: "你认识他吗", vi: "bạn quen anh ấy không", note: "认识 (rènshi): Quen biết" }
+    ];
+
+    // --- SYSTEM VARS ---
+    let vMode = 0; let vIdx = 0;
+    let sIdx = 0;
+    let gIdx = 0; let gMode = 0;
+
+    function switchTab(id) {
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.getElementById('n-' + id).classList.add('active');
+        if(id === 'vocab') nextVocab(false);
+        if(id === 'speaking') updateSpeakUI();
+        if(id === 'grammar') nextGrammar();
+    }
+
+    // --- VOCAB LOGIC ---
+    function changeVocabMode() {
+        vMode = (vMode + 1) % 3;
+        const labels = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"];
+        const colors = ["bg-pink-500", "bg-indigo-500", "bg-teal-500"];
+        document.getElementById('v-mode-btn').innerText = "Mode: " + labels[vMode];
+        document.getElementById('v-mode-btn').className = `text-[10px] font-black ${colors[vMode]} px-3 py-1 rounded-full uppercase tracking-widest hover:scale-105 transition`;
+        nextVocab(false);
+    }
+    function nextVocab(random = true) {
+        if(random) vIdx = Math.floor(Math.random() * vocabData.length);
+        const item = vocabData[vIdx];
+        const qDiv = document.getElementById('v-question');
+        document.getElementById('v-input').value = "";
+        document.getElementById('v-msg').innerText = "";
+        document.getElementById('v-hint').innerText = "";
+        document.getElementById('vocab-card').classList.remove('glow-green', 'glow-red');
+
+        if(vMode === 0) qDiv.innerText = item.hz;
+        else if(vMode === 1) qDiv.innerText = item.mn.toUpperCase();
+        else qDiv.innerText = item.hz;
+    }
+    function checkVocab() {
+        const item = vocabData[vIdx];
+        const val = document.getElementById('v-input').value.trim().toLowerCase();
+        let correct = false; let answer = "";
+        if(vMode === 0) { correct = val === item.mn.toLowerCase(); answer = item.mn; }
+        else if(vMode === 1) { correct = val === item.hz; answer = item.hz; }
+        else { correct = val === item.py.toLowerCase() || val === item.py.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); answer = item.py; }
+        
+        const feedback = document.getElementById('v-msg');
+        if(correct) {
+            feedback.innerText = "CHÍNH XÁC!"; feedback.style.color = "#4ade80";
+            document.getElementById('vocab-card').classList.add('glow-green');
+            speakText(item.hz); // Đọc luôn từ vựng khi đúng
+            setTimeout(() => nextVocab(true), 1200);
+        } else {
+            feedback.innerText = "SAI RỒI"; feedback.style.color = "#f87171";
+            document.getElementById('v-hint').innerText = `Đáp án: ${answer}`;
+            document.getElementById('vocab-card').classList.add('glow-red');
+            speakText(item.hz); // Sai cũng đọc cho nhớ
         }
-    ];
+    }
 
-    const cPop = [
-        { name: "Sứ Thanh Hoa", type: "yt", id: "Z7vlR53_qNM", thumb: "https://img.youtube.com/vi/Z7vlR53_qNM/mqdefault.jpg" },
-        { name: "Đáy Biển", type: "yt", id: "rJjQ4w-B3cE", thumb: "https://img.youtube.com/vi/rJjQ4w-B3cE/mqdefault.jpg" },
-        { name: "Biệt Khúc Chờ Nhau", type: "yt", id: "s1sN8b4r0j0", thumb: "https://img.youtube.com/vi/s1sN8b4r0j0/mqdefault.jpg" }
-    ];
+    // --- SPEAKING LOGIC ---
+    function updateSpeakUI() {
+        const item = vocabData[sIdx];
+        document.getElementById('s-hz').innerText = item.hz;
+        document.getElementById('s-py').innerText = item.py;
+        document.getElementById('s-mn').innerText = item.mn.toUpperCase();
+        document.getElementById('speak-card').classList.remove('glow-green', 'glow-red');
+        document.getElementById('s-feedback').innerText = "Bấm nút micro để bắt đầu...";
+    }
+    function changeSpeakWord(dir) { sIdx = (sIdx + dir + vocabData.length) % vocabData.length; updateSpeakUI(); }
+    
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if(SpeechRecognition) {
+        const rec = new SpeechRecognition(); rec.lang = 'zh-CN'; rec.interimResults = false;
+        document.getElementById('mic-btn').onclick = () => { rec.start(); document.getElementById('mic-ring').classList.remove('hidden'); };
+        rec.onend = () => document.getElementById('mic-ring').classList.add('hidden');
+        rec.onresult = (e) => {
+            const spoken = e.results[0][0].transcript; const target = vocabData[sIdx].hz;
+            if(spoken.includes(target)) {
+                document.getElementById('s-feedback').innerText = "CHUẨN 100% ✨";
+                document.getElementById('s-feedback').className = "text-[11px] font-black uppercase tracking-widest text-green-400 h-12 flex items-center justify-center px-4";
+                document.getElementById('speak-card').classList.add('glow-green');
+            } else {
+                document.getElementById('s-feedback').innerText = `Nghe như: "${spoken}"`;
+                document.getElementById('s-feedback').className = "text-[11px] font-black uppercase tracking-widest text-red-400 h-12 flex items-center justify-center px-4";
+                document.getElementById('speak-card').classList.add('glow-red');
+            }
+        }
+    }
 
-    // --- 2. LOGIC TRÌNH PHÁT NHẠC (HYBRID) ---
+    // --- GRAMMAR LOGIC (AUTO READ) ---
+    function toggleGrammarMode() {
+        gMode = 1 - gMode;
+        document.getElementById('g-mode-badge').innerText = gMode === 0 ? "Trung ➔ Việt" : "Việt ➔ Trung";
+        nextGrammar();
+    }
+    
+    function nextGrammar() {
+        let newIdx;
+        do { newIdx = Math.floor(Math.random() * grammarBank.length); } while (newIdx === gIdx && grammarBank.length > 1);
+        gIdx = newIdx;
+        const item = grammarBank[gIdx];
+        document.getElementById('g-question').innerText = gMode === 0 ? item.zh : item.vi.toUpperCase();
+        document.getElementById('g-instruction').innerText = gMode === 0 ? "Dịch câu này sang Tiếng Việt" : "Dịch câu này sang Tiếng Trung";
+        document.getElementById('g-input').value = "";
+        document.getElementById('g-msg').innerText = "";
+        document.getElementById('g-note').innerText = "";
+        document.getElementById('grammar-card').className = "glass-card p-10 w-full max-w-2xl mx-4 relative overflow-hidden";
+        
+        // Nếu mode là Trung -> Việt thì đọc luôn câu hỏi
+        if(gMode === 0) speakText(item.zh);
+    }
+
+    function checkGrammar() {
+        const val = document.getElementById('g-input').value.trim().toLowerCase();
+        const item = grammarBank[gIdx];
+        const target = gMode === 0 ? item.vi : item.zh;
+        const card = document.getElementById('grammar-card');
+
+        let isCorrect = false;
+        if (gMode === 0) {
+            isCorrect = val === target.toLowerCase() || (target.toLowerCase().includes(val) && val.length > 5);
+        } else {
+            isCorrect = val === target || val === target.replace(/？|。/g, "");
+        }
+
+        // --- CORE: ĐỌC CÂU TIẾNG TRUNG SAU KHI CHECK ---
+        speakText(item.zh); // Luôn đọc câu tiếng Trung gốc
+
+        if(isCorrect) {
+            document.getElementById('g-msg').innerText = "RẤT TỐT! (NEXT QUESTION...)";
+            document.getElementById('g-msg').style.color = "#4ade80";
+            document.getElementById('g-note').innerText = item.note;
+            card.classList.add('glow-green');
+            setTimeout(nextGrammar, 2000); // Delay lâu hơn chút để nghe hết câu
+        } else {
+            document.getElementById('g-msg').innerText = "CHƯA CHÍNH XÁC";
+            document.getElementById('g-msg').style.color = "#f87171";
+            document.getElementById('g-note').innerText = `Đáp án đúng: ${target}`;
+            card.classList.add('glow-red');
+        }
+    }
+    document.getElementById('g-input').addEventListener("keypress", function(event) { if (event.key === "Enter") checkGrammar(); });
+    function readGrammarQuestion() { const item = grammarBank[gIdx]; speakText(item.zh); } // Click vào câu hỏi để nghe lại
+
+    // --- MUSIC ---
+    const vPop = [{name:"Hôn vào đây",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg"},{name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg"}];
+    const cPop = [{name:"Sứ Thanh Hoa",type:"yt",id:"Z7vlR53_qNM",thumb:"https://img.youtube.com/vi/Z7vlR53_qNM/mqdefault.jpg"},{name:"Đáy Biển",type:"yt",id:"rJjQ4w-B3cE",thumb:"https://img.youtube.com/vi/rJjQ4w-B3cE/mqdefault.jpg"}];
     var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
     var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     var player;
-
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', { height: '100%', width: '100%', videoId: '', playerVars: { 'playsinline': 1 } });
-    }
-
+    function onYouTubeIframeAPIReady() { player = new YT.Player('player', { height: '100%', width: '100%', videoId: '' }); }
     function playMedia(source, type) {
-        const ytDiv = document.getElementById('player');
-        const mp4Div = document.getElementById('mp4-player');
-        
-        // Dừng tất cả trước khi phát mới
-        if(player && player.stopVideo) player.stopVideo();
-        mp4Div.pause();
-
-        if (type === 'mp4') {
-            // Chế độ File MP4
-            ytDiv.style.display = 'none';
-            mp4Div.src = source;
-            mp4Div.style.display = 'block';
-            mp4Div.play();
-        } else {
-            // Chế độ Youtube
-            mp4Div.style.display = 'none';
-            ytDiv.style.display = 'block';
-            player.loadVideoById(source);
-        }
-        
-        // Cuộn xuống
-        document.getElementById('yt-screen').scrollIntoView({behavior: "smooth", block: "center"});
+        const ytDiv = document.getElementById('player'); const mp4Div = document.getElementById('mp4-player');
+        if(player && player.stopVideo) player.stopVideo(); mp4Div.pause();
+        if (type === 'mp4') { ytDiv.style.display = 'none'; mp4Div.style.display = 'block'; mp4Div.src = source; mp4Div.play(); } 
+        else { mp4Div.style.display = 'none'; ytDiv.style.display = 'block'; player.loadVideoById(source); }
     }
-
     function renderMusic() {
-        const renderItem = (song) => `
-            <div class="song-card" onclick="playMedia('${song.id}', '${song.type}')">
-                <img src="${song.thumb}" alt="thumb">
-                <div class="song-info">
-                    <h4>${song.name}</h4>
-                    <p>${song.type === 'mp4' ? 'NO ADS ✨' : 'Youtube'}</p>
-                </div>
-            </div>
-        `;
-        document.getElementById('v-list').innerHTML = vPop.map(renderItem).join('');
-        document.getElementById('c-list').innerHTML = cPop.map(renderItem).join('');
+        const tpl = (s) => `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}')"><img src="${s.thumb}"><div><h4 class="text-[10px] font-bold uppercase">${s.name}</h4><p class="text-[9px] text-gray-400">${s.type === 'mp4' ? 'NO ADS' : 'Youtube'}</p></div></div>`;
+        document.getElementById('v-list').innerHTML = vPop.map(tpl).join(''); document.getElementById('c-list').innerHTML = cPop.map(tpl).join('');
     }
-
-    // --- 3. LOGIC HỌC TẬP & SYSTEM ---
-    const vocabulary = [{ hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "老师", py: "lǎoshī", mn: "giáo viên" }];
-    let quizIdx=0, quizLevel=1, wordIdx=0, isCorrect=false;
-
-    function changeWord(dir) {
-        if (dir === 1 && !isCorrect) return alert("Bạn chưa phát âm đúng!");
-        wordIdx = (wordIdx + dir + vocabulary.length) % vocabulary.length;
-        document.getElementById('display-hz').innerText = vocabulary[wordIdx].hz;
-        document.getElementById('display-py').innerText = vocabulary[wordIdx].py;
-        document.getElementById('display-mn').innerText = vocabulary[wordIdx].mn;
-        isCorrect = false; document.getElementById('btn-next').disabled = true;
-        document.getElementById('mic-status').classList.add('hidden');
-    }
-    function forceNext() { isCorrect = true; changeWord(1); }
-    function speakTarget() { const msg = new SpeechSynthesisUtterance(vocabulary[wordIdx].hz); msg.lang = 'zh-CN'; window.speechSynthesis.speak(msg); }
-
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (SpeechRecognition) {
-        const rec = new SpeechRecognition(); rec.lang = 'zh-CN';
-        rec.onstart = () => { document.getElementById('mic-wave').classList.remove('hidden'); document.getElementById('mic-status').innerText = "Đang lắng nghe bạn nói..."; document.getElementById('mic-status').classList.remove('hidden', 'text-green-600', 'text-red-500'); document.getElementById('mic-status').classList.add('text-indigo-600'); };
-        rec.onend = () => document.getElementById('mic-wave').classList.add('hidden');
-        rec.onresult = (e) => {
-            const spoken = e.results[0][0].transcript;
-            if (spoken.includes(vocabulary[wordIdx].hz)) {
-                document.getElementById('mic-status').innerText = "CHÍNH XÁC! ĐÃ MỞ KHÓA.";
-                document.getElementById('mic-status').classList.replace('text-indigo-600', 'text-green-600');
-                isCorrect = true; document.getElementById('btn-next').disabled = false;
-            } else {
-                document.getElementById('mic-status').innerText = `Chưa đúng: "${spoken}"`;
-                document.getElementById('mic-status').classList.replace('text-indigo-600', 'text-red-500');
-            }
-        };
-        document.getElementById('mic-btn').onclick = () => rec.start();
-    }
-
-    function updateQuiz() {
-        const item = vocabulary[quizIdx];
-        document.getElementById('quiz-input').value = ""; document.getElementById('quiz-feedback').innerText = "";
-        document.getElementById('level-indicator').innerText = "Level " + quizLevel;
-        const q = document.getElementById('quiz-question');
-        if (quizLevel === 1) q.innerText = item.hz; else if (quizLevel === 2) q.innerText = item.mn; else q.innerText = item.hz;
-    }
-    function checkQuiz() {
-        const item = vocabulary[quizIdx]; const val = document.getElementById('quiz-input').value.trim().toLowerCase();
-        let ok = (quizLevel === 1 && val === item.py) || (quizLevel === 2 && val === item.hz) || (quizLevel === 3 && val === item.mn);
-        if (ok) {
-            document.getElementById('quiz-feedback').innerText = "CORRECT!";
-            setTimeout(() => { if (quizLevel < 3) quizLevel++; else { quizLevel = 1; quizIdx = (quizIdx + 1) % vocabulary.length; } updateQuiz(); }, 800);
-        } else document.getElementById('quiz-feedback').innerText = "INCORRECT";
-    }
-    function showHint() { document.getElementById('quiz-input').value = (quizLevel === 1) ? vocabulary[quizIdx].py : (quizLevel === 2 ? vocabulary[quizIdx].hz : vocabulary[quizIdx].mn); }
-    function resetVocab() { quizIdx = 0; quizLevel = 1; updateQuiz(); }
-
-    function switchTab(id) {
-        document.querySelectorAll('.tab-wrapper').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        document.getElementById('btn-' + id).classList.add('active');
-        if(id === 'vocab') updateQuiz();
-    }
-    const cursor = document.getElementById('custom-cursor');
-    document.addEventListener('mousemove', (e) => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
-    function handleGlobalClick(e) { cursor.style.transform = "scale(2)"; setTimeout(() => cursor.style.transform = "scale(1)", 150); }
-
-    window.onload = () => { updateQuiz(); renderMusic(); };
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; });
+    function handleGlobalClick() { cursor.style.transform = "scale(2)"; setTimeout(() => cursor.style.transform = "scale(1)", 150); }
+    
+    window.onload = () => { renderMusic(); switchTab('home'); };
 </script>
 </body>
 </html>
