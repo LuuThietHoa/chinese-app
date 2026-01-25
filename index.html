@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Chinese Hub | Audio Core v13.0</title>
+    <title>Skyreign Chinese Hub | HSK2 Core v14.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
@@ -13,7 +13,7 @@
         :root { --primary: #6366f1; --accent: #f472b6; }
         body {
             font-family: 'Space Grotesk', 'Noto Sans SC', sans-serif;
-            background: linear-gradient(-45deg, #020617, #312e81, #be185d, #0f766e);
+            background: linear-gradient(-45deg, #0f172a, #312e81, #9f1239, #115e59);
             background-size: 400% 400%;
             animation: gradientBG 20s ease infinite;
             color: #fff; min-height: 100vh; overflow-x: hidden; cursor: none;
@@ -58,6 +58,8 @@
         /* Feedback States */
         .glow-green { box-shadow: 0 0 40px #22c55e !important; border-color: #22c55e !important; }
         .glow-red { box-shadow: 0 0 40px #ef4444 !important; border-color: #ef4444 !important; }
+        .mic-ripple { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--primary); opacity: 0; animation: ripple 1.5s infinite; }
+        @keyframes ripple { 0% { transform: scale(1); opacity: 0.8; } 100% { transform: scale(2); opacity: 0; } }
         
         /* Music List */
         .song-item { display: flex; gap: 12px; padding: 10px; border-radius: 12px; background: rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; align-items: center; }
@@ -81,7 +83,7 @@
     <div class="h-screen flex items-center justify-center">
         <div class="glass-card p-12 text-center max-w-md mx-4">
             <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN</h1>
-            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Audio Core v13.0</p>
+            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • HSK2 Core v14.0</p>
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="switchTab('vocab')" class="py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-xs uppercase tracking-widest transition">Luyện Từ</button>
                 <button onclick="switchTab('grammar')" class="py-4 bg-pink-600 hover:bg-pink-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-pink-500/30">Ngữ Pháp</button>
@@ -95,7 +97,7 @@
         <div class="glass-card p-10 w-full max-w-lg mx-4 relative" id="vocab-card">
             <div class="flex justify-between items-center mb-8">
                 <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[10px] font-black bg-pink-500 px-3 py-1 rounded-full uppercase tracking-widest hover:scale-105 transition">Mode: Hán ➔ Việt</button>
-                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Sinh Tồn 6 Tháng</div>
+                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">HSK 1 & 2</div>
             </div>
             <div id="v-question" class="text-7xl font-black text-center mb-8 tracking-tighter min-h-[100px] flex items-center justify-center">?</div>
             <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b-2 border-white/20 py-3 text-center font-bold text-2xl outline-none focus:border-indigo-500 transition text-white placeholder-gray-600 mb-8" autocomplete="off">
@@ -199,25 +201,67 @@
     // --- AUDIO ENGINE ---
     function speakText(text) {
         if(!text) return;
-        window.speechSynthesis.cancel(); // Dừng câu đang đọc
+        window.speechSynthesis.cancel();
         const msg = new SpeechSynthesisUtterance(text);
-        msg.lang = 'zh-CN'; // Set giọng chuẩn Trung Quốc
-        msg.rate = 0.8; // Đọc chậm rãi một chút để dễ nghe
+        msg.lang = 'zh-CN'; 
+        msg.rate = 0.8; 
         window.speechSynthesis.speak(msg);
     }
 
-    // --- DATABASE ---
+    // --- DATABASE FULL HSK 1 & 2 ---
     const vocabData = [
-        { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" },
-        { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" },
-        { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "老师", py: "lǎoshī", mn: "thầy cô" },
-        { hz: "同学", py: "tóngxué", mn: "bạn học" }, { hz: "先生", py: "xiānsheng", mn: "ông/ngài" },
-        { hz: "零", py: "líng", mn: "không" }, { hz: "一", py: "yī", mn: "một" }, { hz: "二", py: "èr", mn: "hai" },
-        { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" },
-        { hz: "喜欢", py: "xǐhuan", mn: "thích" }, { hz: "爱", py: "ài", mn: "yêu" }, { hz: "吃", py: "chī", mn: "ăn" },
-        { hz: "喝", py: "hē", mn: "uống" }, { hz: "看", py: "kàn", mn: "nhìn/xem" }, { hz: "听", py: "tīng", mn: "nghe" },
-        { hz: "说", py: "shuō", mn: "nói" }, { hz: "买", py: "mǎi", mn: "mua" }, { hz: "水", py: "shuǐ", mn: "nước" },
-        { hz: "钱", py: "qián", mn: "tiền" }, { hz: "电脑", py: "diànnǎo", mn: "máy tính" }, { hz: "书", py: "shū", mn: "sách" }
+        // HSK 1 (Basic)
+        { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, 
+        { hz: "是", py: "shì", mn: "là" }, { hz: "有", py: "yǒu", mn: "có" },
+        { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" },
+        { hz: "老师", py: "lǎoshī", mn: "thầy cô" }, { hz: "学校", py: "xuéxiào", mn: "trường học" },
+        { hz: "人", py: "rén", mn: "người" }, { hz: "名字", py: "míngzi", mn: "tên" },
+        { hz: "书", py: "shū", mn: "sách" }, { hz: "水", py: "shuǐ", mn: "nước" },
+        
+        // HSK 2 (Enhanced)
+        { hz: "帮助", py: "bāngzhù", mn: "giúp đỡ" }, { hz: "别", py: "bié", mn: "đừng" },
+        { hz: "公司", py: "gōngsī", mn: "công ty" }, { hz: "大家", py: "dàjiā", mn: "mọi người" },
+        { hz: "懂", py: "dǒng", mn: "hiểu" }, { hz: "房间", py: "fángjiān", mn: "phòng" },
+        { hz: "非常", py: "fēicháng", mn: "vô cùng" }, { hz: "高", py: "gāo", mn: "cao" },
+        { hz: "告诉", py: "gàosu", mn: "nói cho biết" }, { hz: "哥哥", py: "gēge", mn: "anh trai" },
+        { hz: "给", py: "gěi", mn: "cho / đưa" }, { hz: "公共汽车", py: "gōnggòngqìchē", mn: "xe buýt" },
+        { hz: "贵", py: "guì", mn: "đắt" }, { hz: "好吃", py: "hǎochī", mn: "ngon" },
+        { hz: "欢迎", py: "huānyíng", mn: "hoan nghênh" }, { hz: "件", py: "jiàn", mn: "chiếc/cái" },
+        { hz: "觉得", py: "juéde", mn: "cảm thấy" }, { hz: "咖啡", py: "kāfēi", mn: "cà phê" },
+        { hz: "开始", py: "kāishǐ", mn: "bắt đầu" }, { hz: "考试", py: "kǎoshì", mn: "thi" },
+        { hz: "可能", py: "kěnéng", mn: "có khả năng" }, { hz: "可以", py: "kěyǐ", mn: "có thể" },
+        { hz: "快", py: "kuài", mn: "nhanh" }, { hz: "快乐", py: "kuàilè", mn: "vui vẻ" },
+        { hz: "累", py: "lèi", mn: "mệt" }, { hz: "离", py: "lí", mn: "cách" },
+        { hz: "路", py: "lù", mn: "đường" }, { hz: "旅游", py: "lǚyóu", mn: "du lịch" },
+        { hz: "卖", py: "mài", mn: "bán" }, { hz: "慢", py: "màn", mn: "chậm" },
+        { hz: "忙", py: "máng", mn: "bận" }, { hz: "每", py: "měi", mn: "mỗi" },
+        { hz: "妹妹", py: "mèimei", mn: "em gái" }, { hz: "男人", py: "nánrén", mn: "đàn ông" },
+        { hz: "牛奶", py: "niúnǎi", mn: "sữa bò" }, { hz: "女人", py: "nǚrén", mn: "phụ nữ" },
+        { hz: "旁边", py: "pángbiān", mn: "bên cạnh" }, { hz: "跑步", py: "pǎobù", mn: "chạy bộ" },
+        { hz: "便宜", py: "piányi", mn: "rẻ" }, { hz: "票", py: "piào", mn: "vé" },
+        { hz: "起床", py: "qǐchuáng", mn: "ngủ dậy" }, { hz: "让", py: "ràng", mn: "nhường/bảo" },
+        { hz: "上班", py: "shàngbān", mn: "đi làm" }, { hz: "身体", py: "shēntǐ", mn: "sức khỏe" },
+        { hz: "生病", py: "shēngbìng", mn: "bị ốm" }, { hz: "时间", py: "shíjiān", mn: "thời gian" },
+        { hz: "手机", py: "shǒujī", mn: "điện thoại" }, { hz: "送", py: "sòng", mn: "tặng/tiễn" },
+        { hz: "虽然", py: "suīrán", mn: "tuy rằng" }, { hz: "但是", py: "dànshì", mn: "nhưng mà" },
+        { hz: "踢足球", py: "tīzúqiú", mn: "đá bóng" }, { hz: "外", py: "wài", mn: "ngoài" },
+        { hz: "玩", py: "wán", mn: "chơi" }, { hz: "晚上", py: "wǎnshang", mn: "buổi tối" },
+        { hz: "为什么", py: "wèishénme", mn: "tại sao" }, { hz: "问题", py: "wèntí", mn: "vấn đề" },
+        { hz: "希望", py: "xīwàng", mn: "hy vọng" }, { hz: "洗", py: "xǐ", mn: "rửa/giặt" },
+        { hz: "小时", py: "xiǎoshí", mn: "tiếng đồng hồ" }, { hz: "笑", py: "xiào", mn: "cười" },
+        { hz: "新", py: "xīn", mn: "mới" }, { hz: "休息", py: "xiūxi", mn: "nghỉ ngơi" },
+        { hz: "眼睛", py: "yǎnjing", mn: "mắt" }, { hz: "药", py: "yào", mn: "thuốc" },
+        { hz: "要", py: "yào", mn: "muốn/cần" }, { hz: "也", py: "yě", mn: "cũng" },
+        { hz: "一起", py: "yìqǐ", mn: "cùng nhau" }, { hz: "已经", py: "yǐjīng", mn: "đã" },
+        { hz: "意思", py: "yìsi", mn: "ý nghĩa" }, { hz: "因为", py: "yīnwèi", mn: "bởi vì" },
+        { hz: "所以", py: "suǒyǐ", mn: "cho nên" }, { hz: "游泳", py: "yóuyǒng", mn: "bơi lội" },
+        { hz: "右边", py: "yòubian", mn: "bên phải" }, { hz: "鱼", py: "yú", mn: "cá" },
+        { hz: "远", py: "yuǎn", mn: "xa" }, { hz: "运动", py: "yùndòng", mn: "vận động" },
+        { hz: "再", py: "zài", mn: "nữa/lại" }, { hz: "早上", py: "zǎoshang", mn: "buổi sáng" },
+        { hz: "找", py: "zhǎo", mn: "tìm" }, { hz: "知道", py: "zhīdao", mn: "biết" },
+        { hz: "准备", py: "zhǔnbèi", mn: "chuẩn bị" }, { hz: "自行车", py: "zìxíngchē", mn: "xe đạp" },
+        { hz: "走", py: "zǒu", mn: "đi (bộ)" }, { hz: "最", py: "zuì", mn: "nhất" },
+        { hz: "左边", py: "zuǒbian", mn: "bên trái" }
     ];
 
     const grammarBank = [
@@ -287,17 +331,17 @@
         if(correct) {
             feedback.innerText = "CHÍNH XÁC!"; feedback.style.color = "#4ade80";
             document.getElementById('vocab-card').classList.add('glow-green');
-            speakText(item.hz); // Đọc luôn từ vựng khi đúng
+            speakText(item.hz); 
             setTimeout(() => nextVocab(true), 1200);
         } else {
             feedback.innerText = "SAI RỒI"; feedback.style.color = "#f87171";
             document.getElementById('v-hint').innerText = `Đáp án: ${answer}`;
             document.getElementById('vocab-card').classList.add('glow-red');
-            speakText(item.hz); // Sai cũng đọc cho nhớ
+            speakText(item.hz);
         }
     }
 
-    // --- SPEAKING LOGIC ---
+    // --- SPEAKING LOGIC (UPDATED WITH ONSTART) ---
     function updateSpeakUI() {
         const item = vocabData[sIdx];
         document.getElementById('s-hz').innerText = item.hz;
@@ -305,29 +349,52 @@
         document.getElementById('s-mn').innerText = item.mn.toUpperCase();
         document.getElementById('speak-card').classList.remove('glow-green', 'glow-red');
         document.getElementById('s-feedback').innerText = "Bấm nút micro để bắt đầu...";
+        document.getElementById('s-feedback').className = "text-[11px] font-bold uppercase tracking-widest text-gray-400 h-12 flex items-center justify-center px-4";
     }
     function changeSpeakWord(dir) { sIdx = (sIdx + dir + vocabData.length) % vocabData.length; updateSpeakUI(); }
     
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if(SpeechRecognition) {
         const rec = new SpeechRecognition(); rec.lang = 'zh-CN'; rec.interimResults = false;
-        document.getElementById('mic-btn').onclick = () => { rec.start(); document.getElementById('mic-ring').classList.remove('hidden'); };
-        rec.onend = () => document.getElementById('mic-ring').classList.add('hidden');
+        
+        const btn = document.getElementById('mic-btn');
+        const fb = document.getElementById('s-feedback');
+        const ring = document.getElementById('mic-ring');
+
+        btn.onclick = () => { try { rec.start(); } catch(e){} };
+
+        // HIỆN THỊ TRẠNG THÁI "ĐANG NGHE"
+        rec.onstart = () => {
+            ring.classList.remove('hidden');
+            fb.innerText = "Đang nghe bạn nói...";
+            fb.className = "text-[11px] font-black uppercase tracking-widest text-indigo-400 h-12 flex items-center justify-center px-4 animate-pulse";
+        };
+
+        rec.onend = () => { ring.classList.add('hidden'); };
+
         rec.onresult = (e) => {
-            const spoken = e.results[0][0].transcript; const target = vocabData[sIdx].hz;
-            if(spoken.includes(target)) {
-                document.getElementById('s-feedback').innerText = "CHUẨN 100% ✨";
-                document.getElementById('s-feedback').className = "text-[11px] font-black uppercase tracking-widest text-green-400 h-12 flex items-center justify-center px-4";
+            const spoken = e.results[0][0].transcript; 
+            const cleanSpoken = spoken.replace(/[.,?。？!！]/g, ""); // Lọc dấu câu
+            const target = vocabData[sIdx].hz;
+            
+            if(cleanSpoken.includes(target)) {
+                fb.innerText = "CHUẨN 100% ✨";
+                fb.className = "text-[11px] font-black uppercase tracking-widest text-green-400 h-12 flex items-center justify-center px-4";
                 document.getElementById('speak-card').classList.add('glow-green');
             } else {
-                document.getElementById('s-feedback').innerText = `Nghe như: "${spoken}"`;
-                document.getElementById('s-feedback').className = "text-[11px] font-black uppercase tracking-widest text-red-400 h-12 flex items-center justify-center px-4";
+                fb.innerText = `Nghe như: "${cleanSpoken}"`;
+                fb.className = "text-[11px] font-black uppercase tracking-widest text-red-400 h-12 flex items-center justify-center px-4";
                 document.getElementById('speak-card').classList.add('glow-red');
             }
         }
+        rec.onerror = () => {
+            fb.innerText = "Lỗi Micro. Thử lại!";
+            ring.classList.add('hidden');
+            fb.className = "text-[11px] font-black uppercase tracking-widest text-gray-500 h-12 flex items-center justify-center px-4";
+        }
     }
 
-    // --- GRAMMAR LOGIC (AUTO READ) ---
+    // --- GRAMMAR LOGIC ---
     function toggleGrammarMode() {
         gMode = 1 - gMode;
         document.getElementById('g-mode-badge').innerText = gMode === 0 ? "Trung ➔ Việt" : "Việt ➔ Trung";
@@ -345,8 +412,6 @@
         document.getElementById('g-msg').innerText = "";
         document.getElementById('g-note').innerText = "";
         document.getElementById('grammar-card').className = "glass-card p-10 w-full max-w-2xl mx-4 relative overflow-hidden";
-        
-        // Nếu mode là Trung -> Việt thì đọc luôn câu hỏi
         if(gMode === 0) speakText(item.zh);
     }
 
@@ -363,15 +428,14 @@
             isCorrect = val === target || val === target.replace(/？|。/g, "");
         }
 
-        // --- CORE: ĐỌC CÂU TIẾNG TRUNG SAU KHI CHECK ---
-        speakText(item.zh); // Luôn đọc câu tiếng Trung gốc
+        speakText(item.zh); 
 
         if(isCorrect) {
             document.getElementById('g-msg').innerText = "RẤT TỐT! (NEXT QUESTION...)";
             document.getElementById('g-msg').style.color = "#4ade80";
             document.getElementById('g-note').innerText = item.note;
             card.classList.add('glow-green');
-            setTimeout(nextGrammar, 2000); // Delay lâu hơn chút để nghe hết câu
+            setTimeout(nextGrammar, 2000);
         } else {
             document.getElementById('g-msg').innerText = "CHƯA CHÍNH XÁC";
             document.getElementById('g-msg').style.color = "#f87171";
@@ -380,7 +444,7 @@
         }
     }
     document.getElementById('g-input').addEventListener("keypress", function(event) { if (event.key === "Enter") checkGrammar(); });
-    function readGrammarQuestion() { const item = grammarBank[gIdx]; speakText(item.zh); } // Click vào câu hỏi để nghe lại
+    function readGrammarQuestion() { const item = grammarBank[gIdx]; speakText(item.zh); }
 
     // --- MUSIC ---
     const vPop = [{name:"Hôn vào đây",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg"},{name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg"}];
