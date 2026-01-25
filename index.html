@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Chinese Hub | 5s Logic v17.0</title>
+    <title>Skyreign Chinese Hub | Fix Mic v17.1</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
@@ -36,7 +36,6 @@
         .song-item:hover { background: rgba(255,255,255,0.15); }
         .song-item img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
         
-        /* Countdown Bar */
         #progress-bar { width: 0%; height: 4px; background: #22c55e; transition: width 0.1s linear; position: absolute; bottom: 0; left: 0; }
     </style>
 </head>
@@ -56,7 +55,7 @@
     <div class="h-screen flex items-center justify-center">
         <div class="glass-card p-12 text-center max-w-md mx-4">
             <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN</h1>
-            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Logic 5 Giây • v17.0</p>
+            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Real-time Mic • v17.1</p>
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="switchTab('vocab')" class="py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-xs uppercase tracking-widest transition">Luyện Từ</button>
                 <button onclick="switchTab('speaking')" class="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-indigo-500/30">Luyện Nói</button>
@@ -275,7 +274,7 @@
         }
     }
 
-    // --- LOGIC 5 GIÂY (5S WINDOW) ---
+    // --- LOGIC 5 GIÂY FIX BUG ---
     function updateSpeakUI() {
         const item = vocabData[sIdx];
         document.getElementById('s-hz').innerText = item.hz;
@@ -294,7 +293,7 @@
     if(SpeechRecognition) {
         recognition = new SpeechRecognition(); 
         recognition.lang = 'zh-CN'; 
-        recognition.interimResults = false; // Chỉ lấy kết quả cuối cùng
+        recognition.interimResults = true; // FIX QUAN TRỌNG: Bật chế độ nghe liên tục
         
         const btn = document.getElementById('mic-btn');
         const status = document.getElementById('s-status');
@@ -308,9 +307,7 @@
         let micError = false;
 
         btn.onclick = () => {
-            if(isListening) return; // Chặn spam click
-            
-            // 1. Reset trạng thái
+            if(isListening) return;
             isListening = true;
             micError = false;
             capturedResult = null;
@@ -319,30 +316,30 @@
             status.className = "text-indigo-400 font-bold animate-pulse";
             sub.innerText = "Nói to rõ ràng...";
             ring.classList.remove('hidden');
-            progressBar.style.width = '100%'; // Chạy thanh thời gian
+            progressBar.style.width = '100%'; 
             progressBar.style.transition = "width 5s linear";
 
-            // 2. Bật Mic
-            try { recognition.start(); } catch(e) { console.log("Mic busy"); }
+            try { recognition.start(); } catch(e) { }
 
-            // 3. Đặt hẹn giờ 5 giây chốt sổ
-            setTimeout(() => {
-                stopAndJudge();
-            }, 5000);
+            setTimeout(() => { stopAndJudge(); }, 5000);
         };
 
         recognition.onresult = (e) => {
-            // Lưu kết quả lại nhưng chưa phán xét ngay, đợi hết 5s hoặc mic tự tắt
-            capturedResult = e.results[0][0].transcript;
+            let interimTrans = '';
+            for (let i = e.resultIndex; i < e.results.length; ++i) {
+                if (e.results[i].isFinal) {
+                    capturedResult = e.results[i][0].transcript;
+                } else {
+                    interimTrans += e.results[i][0].transcript;
+                }
+            }
+            // Nếu chưa có kết quả final, dùng tạm interim để không bị Null
+            if(!capturedResult) capturedResult = interimTrans;
         };
 
         recognition.onerror = (e) => {
             micError = true;
-            if(e.error === 'no-speech') {
-                 // Sẽ xử lý ở logic "nói nhỏ"
-            } else {
-                 status.innerText = "Lỗi Mic / Trình duyệt";
-            }
+            if(e.error !== 'no-speech') status.innerText = "Lỗi Mic";
         };
 
         function stopAndJudge() {
@@ -352,11 +349,9 @@
             progressBar.style.transition = "none";
             progressBar.style.width = '0%';
 
-            // 4. PHÂN LOẠI KẾT QUẢ (LOGIC BẠN YÊU CẦU)
             const target = vocabData[sIdx].hz;
             
             if (micError) {
-                // Case 2b: Lỗi kỹ thuật
                 status.innerText = "Lỗi Mic / Kết nối";
                 status.className = "text-red-500 font-bold";
                 card.classList.add('glow-red');
@@ -364,7 +359,6 @@
             }
 
             if (!capturedResult) {
-                // Case 2a & 4: Không nghe thấy gì hoặc nói quá nhỏ
                 status.innerText = "BẠN NÓI QUÁ NHỎ!";
                 sub.innerText = "Hoặc không nghe rõ. Thử lại nhé.";
                 status.className = "text-pink-500 font-black";
@@ -372,17 +366,14 @@
                 return;
             }
 
-            // Có kết quả -> So sánh
-            const cleanSpoken = capturedResult.replace(/[.,?。？!！]/g, ""); // Lọc dấu
+            const cleanSpoken = capturedResult.replace(/[.,?。？!！]/g, ""); 
             
             if(cleanSpoken.includes(target)) {
-                // Case 3: Đúng
                 status.innerText = "CHÍNH XÁC! (CORRECT)";
                 sub.innerText = "Phát âm rất chuẩn.";
                 status.className = "text-green-500 font-black";
                 card.classList.add('glow-green');
             } else {
-                // Case 1: Sai (Hiện từ đã nói)
                 status.innerText = "SAI RỒI!";
                 sub.innerText = `Nghe như: "${cleanSpoken}"`;
                 status.className = "text-red-500 font-black";
@@ -390,7 +381,7 @@
             }
         }
     } else {
-        alert("Trình duyệt không hỗ trợ Web Speech API (Dùng Chrome nhé).");
+        alert("Trình duyệt không hỗ trợ Web Speech API.");
     }
 
     function toggleGrammarMode() {
