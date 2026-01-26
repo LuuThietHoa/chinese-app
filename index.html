@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Chinese Hub | Fix Mic v17.1</title>
+    <title>Skyreign Chinese Hub | V18.0 Fast Catch</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
@@ -55,7 +55,7 @@
     <div class="h-screen flex items-center justify-center">
         <div class="glass-card p-12 text-center max-w-md mx-4">
             <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN</h1>
-            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Real-time Mic • v17.1</p>
+            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">V18.0 • Fast Catch</p>
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="switchTab('vocab')" class="py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-xs uppercase tracking-widest transition">Luyện Từ</button>
                 <button onclick="switchTab('speaking')" class="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-indigo-500/30">Luyện Nói</button>
@@ -85,7 +85,7 @@
 <div id="speaking" class="tab-content">
     <div class="min-h-screen flex items-center justify-center pt-20">
         <div class="glass-card p-10 w-full max-w-md mx-4 text-center relative overflow-hidden" id="speak-card">
-            <div class="text-[10px] uppercase tracking-widest text-indigo-400 font-black mb-8">Chế độ chấm điểm 5 giây</div>
+            <div class="text-[10px] uppercase tracking-widest text-indigo-400 font-black mb-8">Chế độ Nhạy (Fast Catch)</div>
             
             <div class="mb-8 relative group">
                 <div id="s-hz" class="text-9xl font-black mb-2 tracking-tighter cursor-pointer transition hover:text-indigo-400" onclick="speakText(document.getElementById('s-hz').innerText)">我</div>
@@ -105,9 +105,11 @@
             </div>
 
             <div id="s-feedback" class="text-[11px] font-bold uppercase tracking-widest text-gray-400 h-16 flex flex-col items-center justify-center px-4">
-                <span id="s-status">Bấm mic để bắt đầu (5s)</span>
+                <span id="s-status">Bấm mic và nói ngay</span>
                 <span id="s-sub" class="text-[9px] text-gray-500 mt-1"></span>
             </div>
+            
+            <div id="s-live-text" class="absolute bottom-1 w-full text-center text-[9px] text-indigo-300/50 uppercase tracking-widest"></div>
 
             <div id="progress-bar"></div>
         </div>
@@ -170,10 +172,28 @@
         window.speechSynthesis.speak(msg);
     }
 
+    // --- TỪ ĐIỂN ĐỒNG ÂM (CỨU CÁNH CHO TỪ 1 CHỮ) ---
+    const homophones = {
+        "他": ["她", "它", "踏"], 
+        "做": ["作", "座", "坐"],
+        "那": ["哪"],
+        "是": ["事", "市", "试", "式", "世"],
+        "一": ["衣", "医"],
+        "有": ["友", "又", "佑"],
+        "和": ["河", "合"],
+        "几": ["己", "记", "寄"],
+        "不": ["布", "步"],
+        "没": ["梅", "眉"],
+        "书": ["输", "叔"],
+        "买": ["卖", "埋"]
+    };
+
     const vocabData = [
+        // HSK 1
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "是", py: "shì", mn: "là" }, { hz: "有", py: "yǒu", mn: "có" },
         { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "老师", py: "lǎoshī", mn: "thầy cô" }, { hz: "学校", py: "xuéxiào", mn: "trường học" },
         { hz: "人", py: "rén", mn: "người" }, { hz: "名字", py: "míngzi", mn: "tên" }, { hz: "书", py: "shū", mn: "sách" }, { hz: "水", py: "shuǐ", mn: "nước" },
+        // HSK 2
         { hz: "帮助", py: "bāngzhù", mn: "giúp đỡ" }, { hz: "别", py: "bié", mn: "đừng" }, { hz: "公司", py: "gōngsī", mn: "công ty" },
         { hz: "大家", py: "dàjiā", mn: "mọi người" }, { hz: "懂", py: "dǒng", mn: "hiểu" }, { hz: "房间", py: "fángjiān", mn: "phòng" },
         { hz: "非常", py: "fēicháng", mn: "vô cùng" }, { hz: "高", py: "gāo", mn: "cao" }, { hz: "告诉", py: "gàosu", mn: "nói cho biết" },
@@ -274,26 +294,29 @@
         }
     }
 
-    // --- LOGIC 5 GIÂY FIX BUG ---
+    // --- LOGIC V18: FAST CATCH (BẮT DÍNH) ---
     function updateSpeakUI() {
         const item = vocabData[sIdx];
         document.getElementById('s-hz').innerText = item.hz;
         document.getElementById('s-py').innerText = item.py;
         document.getElementById('s-mn').innerText = item.mn.toUpperCase();
         document.getElementById('speak-card').classList.remove('glow-green', 'glow-red');
-        document.getElementById('s-status').innerText = "Bấm mic để bắt đầu (5s)";
+        document.getElementById('s-status').innerText = "Bấm mic để bắt đầu";
         document.getElementById('s-sub').innerText = "";
         document.getElementById('progress-bar').style.width = '0%';
+        document.getElementById('s-live-text').innerText = "";
     }
     function changeSpeakWord(dir) { sIdx = (sIdx + dir + vocabData.length) % vocabData.length; updateSpeakUI(); }
     
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     let recognition;
+    let timer;
 
     if(SpeechRecognition) {
         recognition = new SpeechRecognition(); 
         recognition.lang = 'zh-CN'; 
-        recognition.interimResults = true; // FIX QUAN TRỌNG: Bật chế độ nghe liên tục
+        recognition.interimResults = true; // QUAN TRỌNG: Lấy kết quả tạm thời
+        recognition.continuous = true; // Giữ mic luôn bật để không bị ngắt quãng
         
         const btn = document.getElementById('mic-btn');
         const status = document.getElementById('s-status');
@@ -301,83 +324,89 @@
         const ring = document.getElementById('mic-ring');
         const progressBar = document.getElementById('progress-bar');
         const card = document.getElementById('speak-card');
+        const liveText = document.getElementById('s-live-text');
         
-        let capturedResult = null;
         let isListening = false;
-        let micError = false;
 
         btn.onclick = () => {
             if(isListening) return;
+            startSession();
+        };
+
+        function startSession() {
             isListening = true;
-            micError = false;
-            capturedResult = null;
             card.classList.remove('glow-green', 'glow-red');
             status.innerText = "ĐANG NGHE...";
             status.className = "text-indigo-400 font-bold animate-pulse";
             sub.innerText = "Nói to rõ ràng...";
             ring.classList.remove('hidden');
+            liveText.innerText = "";
+            
+            // Thanh thời gian 5s
             progressBar.style.width = '100%'; 
             progressBar.style.transition = "width 5s linear";
 
-            try { recognition.start(); } catch(e) { }
+            try { recognition.start(); } catch(e) {}
 
-            setTimeout(() => { stopAndJudge(); }, 5000);
-        };
+            // Hết 5s thì dừng và chốt hạ
+            timer = setTimeout(() => {
+                finishSession("TIMEOUT");
+            }, 5000);
+        }
 
         recognition.onresult = (e) => {
-            let interimTrans = '';
+            let interim = "";
             for (let i = e.resultIndex; i < e.results.length; ++i) {
-                if (e.results[i].isFinal) {
-                    capturedResult = e.results[i][0].transcript;
-                } else {
-                    interimTrans += e.results[i][0].transcript;
-                }
+                interim += e.results[i][0].transcript;
             }
-            // Nếu chưa có kết quả final, dùng tạm interim để không bị Null
-            if(!capturedResult) capturedResult = interimTrans;
+            
+            // Hiện chữ đang nghe (Live Text)
+            liveText.innerText = "Nghe: " + interim;
+
+            // --- CHECK NGAY LẬP TỨC (FAST CATCH) ---
+            const target = vocabData[sIdx].hz;
+            const clean = interim.replace(/[.,?。？!！]/g, "");
+            
+            // Kiểm tra: Trùng khớp hoàn toàn HOẶC Nằm trong danh sách đồng âm
+            if(clean.includes(target) || (homophones[target] && homophones[target].some(h => clean.includes(h)))) {
+                finishSession("WIN", clean);
+            }
         };
 
-        recognition.onerror = (e) => {
-            micError = true;
-            if(e.error !== 'no-speech') status.innerText = "Lỗi Mic";
-        };
+        recognition.onerror = () => { finishSession("ERROR"); };
+        // Tự động khởi động lại nếu mic bị ngắt bất ngờ khi đang trong phiên
+        recognition.onend = () => { if(isListening) { try{recognition.start()}catch(e){} } };
 
-        function stopAndJudge() {
+        function finishSession(type, word = "") {
+            if(!isListening) return;
             isListening = false;
+            clearTimeout(timer);
             recognition.stop();
             ring.classList.add('hidden');
             progressBar.style.transition = "none";
             progressBar.style.width = '0%';
 
-            const target = vocabData[sIdx].hz;
-            
-            if (micError) {
-                status.innerText = "Lỗi Mic / Kết nối";
-                status.className = "text-red-500 font-bold";
-                card.classList.add('glow-red');
-                return;
-            }
-
-            if (!capturedResult) {
-                status.innerText = "BẠN NÓI QUÁ NHỎ!";
-                sub.innerText = "Hoặc không nghe rõ. Thử lại nhé.";
-                status.className = "text-pink-500 font-black";
-                card.classList.add('glow-red');
-                return;
-            }
-
-            const cleanSpoken = capturedResult.replace(/[.,?。？!！]/g, ""); 
-            
-            if(cleanSpoken.includes(target)) {
+            if(type === "WIN") {
                 status.innerText = "CHÍNH XÁC! (CORRECT)";
-                sub.innerText = "Phát âm rất chuẩn.";
+                sub.innerText = "Bắt dính ngay lập tức!";
                 status.className = "text-green-500 font-black";
                 card.classList.add('glow-green');
+            } else if (type === "TIMEOUT") {
+                // Hết giờ mà vẫn chưa bắt được từ đúng
+                if(liveText.innerText.length > 5) { // Đã nghe được gì đó nhưng sai
+                     status.innerText = "SAI RỒI!";
+                     sub.innerText = `Nghe được: ${liveText.innerText.replace("Nghe: ", "")}`;
+                     status.className = "text-red-500 font-black";
+                     card.classList.add('glow-red');
+                } else { // Không nghe được gì hoặc quá ngắn
+                     status.innerText = "KHÔNG NGHE RÕ";
+                     sub.innerText = "Nói to hơn hoặc mic bị lỗi";
+                     status.className = "text-pink-500 font-black";
+                     card.classList.add('glow-red');
+                }
             } else {
-                status.innerText = "SAI RỒI!";
-                sub.innerText = `Nghe như: "${cleanSpoken}"`;
-                status.className = "text-red-500 font-black";
-                card.classList.add('glow-red');
+                 status.innerText = "LỖI MIC";
+                 status.className = "text-gray-500";
             }
         }
     } else {
