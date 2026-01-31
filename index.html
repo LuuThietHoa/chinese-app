@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V20.0 Coin Master</title>
+    <title>Skyreign Hub | V21.0 Shopkeeper</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
@@ -35,34 +35,38 @@
         .song-item:hover { background: rgba(255,255,255,0.15); }
         .song-item img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
         #progress-bar { width: 0%; height: 4px; background: #22c55e; transition: width 0.1s linear; position: absolute; bottom: 0; left: 0; }
-        
-        /* READING MODE STYLES */
         .reading-text { line-height: 1.8; letter-spacing: 1px; text-align: justify; }
         textarea:focus { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
-
-        /* COIN HUD ANIMATION */
         @keyframes coinPop { 0% { transform: scale(1); } 50% { transform: scale(1.5); } 100% { transform: scale(1); } }
         .coin-pop-green { animation: coinPop 0.3s ease; color: #4ade80 !important; }
         .coin-pop-red { animation: coinPop 0.3s ease; color: #f87171 !important; }
+        
+        /* SHOP MODAL ANIMATION */
+        #shop-modal { transition: opacity 0.3s ease, transform 0.3s ease; }
+        #shop-modal.hidden { display: none; }
     </style>
 </head>
 <body onclick="handleGlobalClick(event)">
 
 <div id="cursor"></div>
 
+<audio id="sfx-coin" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
+<audio id="sfx-click" src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-click-900.mp3"></audio>
+
 <div class="fixed top-6 right-6 z-[2000] flex items-center gap-3 bg-black/40 backdrop-blur-xl px-5 py-2 rounded-full border border-yellow-500/30 shadow-2xl transition hover:scale-105">
     <div class="w-10 h-10">
-        <model-viewer src="./coin.glb" 
-                      alt="Coin" 
-                      auto-rotate 
-                      rotation-per-second="30deg"
-                      disable-zoom
-                      style="width: 100%; height: 100%; --poster-color: transparent;">
-        </model-viewer>
+        <model-viewer src="./coin.glb" alt="Coin" auto-rotate rotation-per-second="30deg" disable-zoom style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>
     </div>
     <div class="flex flex-col items-end">
         <span class="text-[9px] font-bold text-yellow-500/80 uppercase tracking-widest">Balance</span>
         <span id="coin-display" class="text-2xl font-black text-yellow-400 leading-none tabular-nums">0</span>
+    </div>
+</div>
+
+<div id="shop-modal" class="hidden fixed inset-0 z-[3000] bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="relative w-full max-w-4xl h-[80vh] bg-black border border-white/20 rounded-3xl overflow-hidden shadow-2xl flex items-center justify-center">
+        <button onclick="closeShop()" class="absolute top-4 right-4 z-50 text-white hover:text-red-500 font-black text-xl bg-black/50 w-10 h-10 rounded-full">✕</button>
+        <img src="./ui.jpg" alt="Shop UI" class="w-full h-full object-contain"> 
     </div>
 </div>
 
@@ -76,13 +80,28 @@
 </nav>
 
 <div id="home" class="tab-content active">
-    <div class="h-screen flex items-center justify-center">
-        <div class="glass-card p-12 text-center max-w-md mx-4">
+    <div class="h-screen flex flex-col items-center justify-center relative">
+        <div class="glass-card p-12 text-center max-w-md mx-4 z-10">
             <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN</h1>
-            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • V20.0 Coin Master</p>
+            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Shopkeeper v21.0</p>
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="switchTab('vocab')" class="py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-xs uppercase tracking-widest transition">Luyện Từ</button>
-                <button onclick="switchTab('reading')" class="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-indigo-500/30">Đọc Hiểu</button>
+                <button onclick="switchTab('speaking')" class="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-indigo-500/30">Luyện Nói</button>
+            </div>
+        </div>
+
+        <div class="absolute bottom-32 cursor-pointer transition hover:scale-110 active:scale-95 group" onclick="openShop()">
+            <div class="w-40 h-40 md:w-60 md:h-60 relative">
+                <model-viewer src="./shop.glb" 
+                              alt="My Shop" 
+                              auto-rotate 
+                              camera-controls 
+                              shadow-intensity="1" 
+                              style="width: 100%; height: 100%; --poster-color: transparent;">
+                </model-viewer>
+                <div class="absolute -bottom-8 left-1/2 transform -translate-x-1/2 bg-white/10 backdrop-blur-md px-4 py-1 rounded-full border border-white/20 opacity-0 group-hover:opacity-100 transition">
+                    <span class="text-[10px] font-black uppercase tracking-widest text-white">Vào Cửa Hàng</span>
+                </div>
             </div>
         </div>
     </div>
@@ -98,7 +117,7 @@
             <div class="bg-black/20 p-6 rounded-2xl mb-6 border border-white/10">
                 <p id="r-text" class="text-xl md:text-2xl font-medium text-gray-100 reading-text">...</p>
             </div>
-            <p class="text-xs text-gray-400 mb-2 italic">Hãy dịch đoạn văn trên sang Tiếng Việt (Đúng ý là có tiền):</p>
+            <p class="text-xs text-gray-400 mb-2 italic">Hãy dịch đoạn văn trên sang Tiếng Việt (+1 Coin nếu đúng):</p>
             <textarea id="r-input" rows="4" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-gray-600 outline-none focus:border-indigo-500 transition mb-6" placeholder="Gõ bản dịch của bạn vào đây..."></textarea>
             <button onclick="checkReading()" class="w-full py-4 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-indigo-400 hover:text-white transition mb-4 shadow-lg">Kiểm Tra Bản Dịch</button>
             <div id="r-feedback" class="text-center min-h-[60px]">
@@ -206,9 +225,11 @@
 </div>
 
 <script>
-    // --- COIN SYSTEM ---
+    // --- COIN & SHOP SYSTEM ---
     let userCoins = parseInt(localStorage.getItem('skyCoins')) || 0;
     const coinDisplay = document.getElementById('coin-display');
+    const coinSfx = document.getElementById('sfx-coin');
+    const clickSfx = document.getElementById('sfx-click');
     coinDisplay.innerText = userCoins;
 
     function updateCoins(amount) {
@@ -216,11 +237,26 @@
         localStorage.setItem('skyCoins', userCoins);
         coinDisplay.innerText = userCoins;
         
-        // Animation effect
         coinDisplay.classList.remove('coin-pop-green', 'coin-pop-red');
-        void coinDisplay.offsetWidth; // Trigger reflow
-        if(amount > 0) coinDisplay.classList.add('coin-pop-green');
-        else coinDisplay.classList.add('coin-pop-red');
+        void coinDisplay.offsetWidth;
+        if(amount > 0) {
+            coinDisplay.classList.add('coin-pop-green');
+            coinSfx.currentTime = 0;
+            coinSfx.play().catch(e=>{});
+        } else {
+            coinDisplay.classList.add('coin-pop-red');
+        }
+    }
+
+    function openShop() {
+        clickSfx.currentTime = 0;
+        clickSfx.play().catch(e=>{});
+        const modal = document.getElementById('shop-modal');
+        modal.classList.remove('hidden');
+    }
+
+    function closeShop() {
+        document.getElementById('shop-modal').classList.add('hidden');
     }
 
     function speakText(text) {
@@ -231,7 +267,7 @@
 
     const homophones = { "他": ["她", "它"], "做": ["作", "座", "坐"], "那": ["哪"], "是": ["事", "市", "试"], "一": ["衣", "医"], "有": ["友", "又"] };
 
-    // ... (Giữ nguyên DATA HSK1 VOCABULARY LIST của bạn) ...
+    // ... (DATABASE HSK1 GIỮ NGUYÊN) ...
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" },
         { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚér", mn: "con gái" }, { hz: "老师", py: "lǎoshī", mn: "thầy cô" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn học" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" }, { hz: "先生", py: "xiānsheng", mn: "ngài/ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô/chị" },
@@ -285,7 +321,6 @@
         if(id === 'reading') nextParagraph();
     }
 
-    // --- READING LOGIC (WITH COINS) ---
     function nextParagraph() {
         let newIdx; do { newIdx = Math.floor(Math.random() * readingData.length); } while (newIdx === rIdx && readingData.length > 1);
         rIdx = newIdx;
@@ -326,7 +361,6 @@
         }
     }
 
-    // --- OTHER LOGIC (WITH COINS) ---
     function changeVocabMode() { vMode = (vMode + 1) % 3; const labels = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"]; document.getElementById('v-mode-btn').innerText = "Mode: " + labels[vMode]; document.getElementById('v-mode-btn').className = `text-[10px] font-black ${["bg-pink-500", "bg-indigo-500", "bg-teal-500"][vMode]} px-3 py-1 rounded-full uppercase tracking-widest hover:scale-105 transition`; nextVocab(false); }
     function nextVocab(random = true) { if(random) vIdx = Math.floor(Math.random() * vocabData.length); const item = vocabData[vIdx]; const qDiv = document.getElementById('v-question'); document.getElementById('v-input').value = ""; document.getElementById('v-msg').innerText = ""; document.getElementById('v-hint').innerText = ""; document.getElementById('vocab-card').classList.remove('glow-green', 'glow-red'); if(vMode === 0) qDiv.innerText = item.hz; else if(vMode === 1) qDiv.innerText = item.mn.toUpperCase(); else qDiv.innerText = item.hz; }
     
