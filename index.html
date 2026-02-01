@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V25.1 Fix Inventory</title>
+    <title>Skyreign Hub | V26.0 Music Back</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
@@ -199,7 +199,7 @@
 
         <div class="glass-card p-12 text-center max-w-md mx-4 z-10">
             <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN</h1>
-            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Inventory v25.1</p>
+            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Inventory v26.0</p>
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="switchTab('vocab')" class="py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-xs uppercase tracking-widest transition">Luyện Từ</button>
                 <button onclick="switchTab('speaking')" class="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-indigo-500/30">Luyện Nói</button>
@@ -212,13 +212,37 @@
 <div id="vocab" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-10 w-full max-w-lg mx-4 relative" id="vocab-card"> <div class="flex justify-between items-center mb-8"> <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[10px] font-black bg-pink-500 px-3 py-1 rounded-full uppercase tracking-widest hover:scale-105 transition">Mode: Hán ➔ Việt</button> <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">HSK 1 FULL</div> </div> <div id="v-question" class="text-7xl font-black text-center mb-8 tracking-tighter min-h-[100px] flex items-center justify-center">?</div> <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b-2 border-white/20 py-3 text-center font-bold text-2xl outline-none focus:border-indigo-500 transition text-white placeholder-gray-600 mb-8" autocomplete="off"> <button onclick="checkVocab()" class="w-full py-4 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-gray-200 transition mb-4">Kiểm Tra</button> <div id="v-feedback" class="text-center h-10"> <p id="v-msg" class="text-[11px] font-bold uppercase tracking-widest"></p> <p id="v-hint" class="text-[10px] text-gray-400 mt-1"></p> </div> </div> </div> </div>
 <div id="speaking" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-10 w-full max-w-md mx-4 text-center relative overflow-hidden" id="speak-card"> <div class="text-[10px] uppercase tracking-widest text-indigo-400 font-black mb-8">V18.0 - Fast Catch</div> <div class="mb-8 relative group"> <div id="s-hz" class="text-9xl font-black mb-2 tracking-tighter cursor-pointer transition hover:text-indigo-400" onclick="speakText(document.getElementById('s-hz').innerText)">我</div> <div id="s-py" class="text-2xl text-gray-500 mb-1">wǒ</div> <div id="s-mn" class="text-xs font-bold bg-white/10 px-3 py-1 rounded-full inline-block">TÔI</div> </div> <div class="flex justify-center items-center gap-6 mb-8"> <button onclick="changeSpeakWord(-1)" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition">←</button> <div class="relative"> <div id="mic-ring" class="hidden mic-ripple"></div> <button id="mic-btn" class="w-20 h-20 bg-indigo-600 rounded-full flex items-center justify-center shadow-2xl relative z-10 transition hover:scale-110 active:scale-90 text-white"> <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg> </button> </div> <button onclick="changeSpeakWord(1)" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition">→</button> </div> <div id="s-feedback" class="text-[11px] font-bold uppercase tracking-widest text-gray-400 h-16 flex flex-col items-center justify-center px-4"> <span id="s-status">Bấm mic và nói ngay</span> <span id="s-sub" class="text-[9px] text-gray-500 mt-1"></span> </div> <div id="s-live-text" class="absolute bottom-1 w-full text-center text-[9px] text-indigo-300/50 uppercase tracking-widest"></div> <div id="progress-bar"></div> </div> </div> </div>
 <div id="grammar" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-10 w-full max-w-2xl mx-4 relative overflow-hidden" id="grammar-card"> <div class="flex justify-between items-center mb-10"> <button onclick="toggleGrammarMode()" id="g-mode-badge" class="text-[10px] font-black bg-indigo-600 px-3 py-1 rounded-full uppercase tracking-widest hover:scale-110 transition shadow-lg shadow-indigo-500/50">Trung ➔ Việt</button> <div class="text-[9px] font-bold text-gray-400">HSK1 GRAMMAR</div> </div> <div class="text-center mb-10 min-h-[120px] flex flex-col justify-center items-center"> <div id="g-question" class="text-4xl md:text-5xl font-bold tracking-tight mb-4 leading-tight drop-shadow-lg cursor-pointer hover:text-indigo-300 transition" onclick="readGrammarQuestion()">...</div> <p id="g-instruction" class="text-gray-500 text-sm italic">Hãy dịch câu trên</p> </div> <input type="text" id="g-input" placeholder="Nhập câu trả lời..." class="w-full bg-transparent border-b-2 border-white/10 py-4 text-center text-xl font-medium outline-none focus:border-indigo-500 transition mb-6 text-white placeholder-gray-600" autocomplete="off"> <div class="grid grid-cols-4 gap-4 mb-6"> <button onclick="nextGrammar()" class="col-span-1 py-4 bg-white/5 hover:bg-white/10 rounded-2xl font-bold text-[10px] uppercase tracking-widest text-gray-400 hover:text-white transition">Bỏ qua</button> <button onclick="checkGrammar()" class="col-span-3 py-4 bg-white text-black hover:bg-indigo-400 hover:text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition shadow-lg">Kiểm tra</button> </div> <div id="g-feedback" class="text-center h-20"> <div id="g-msg" class="text-[11px] font-bold uppercase tracking-widest mb-1"></div> <div id="g-note" class="text-[11px] text-pink-400 font-medium"></div> </div> </div> </div> </div>
-<div id="music" class="tab-content"> <div class="min-h-screen flex flex-col items-center justify-center pt-20 pb-20"> <div class="flex flex-col md:flex-row items-center justify-center gap-8 w-full max-w-6xl px-4"> <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto"> <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-indigo-400 border-b border-white/10 pb-2">V-Pop Hits</h3> <div id="v-list" class="space-y-2"></div> </div> <div class="w-full max-w-md flex flex-col items-center"> <h4 class="text-4xl font-black text-white tracking-tighter uppercase mb-4 drop-shadow-lg">Music Pod</h4> <div class="relative w-full h-[300px]"> <model-viewer src="./airpods.glb" alt="My Airpods" auto-rotate camera-controls shadow-intensity="1" exposure="0.8" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer> </div> <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl mt-[-40px] relative z-10"> <div id="player" class="w-full h-full"></div> <video id="mp4-player" controls playsinline class="hidden w-full h-full object-cover"></video> <div id="video-error" class="hidden absolute inset-0 bg-black/80 flex items-center justify-center text-center p-4"> <p class="text-red-500 font-bold text-xs uppercase tracking-widest">Link nhạc hỏng!<br>Vui lòng cập nhật link MP4 mới.</p> </div> </div> </div> <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto"> <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-pink-400 border-b border-white/10 pb-2">Chinese Hits</h3> <div id="c-list" class="space-y-2"></div> </div> </div> </div> </div>
+
+<div id="music" class="tab-content">
+    <div class="min-h-screen flex flex-col items-center justify-center pt-20 pb-20">
+        <div class="flex flex-col md:flex-row items-center justify-center gap-8 w-full max-w-6xl px-4">
+            <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto">
+                <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-indigo-400 border-b border-white/10 pb-2">V-Pop Hits</h3>
+                <div id="v-list" class="space-y-2"></div>
+            </div>
+            <div class="w-full max-w-md flex flex-col items-center">
+                <h4 class="text-4xl font-black text-white tracking-tighter uppercase mb-4 drop-shadow-lg">Music Pod</h4>
+                
+                <div class="relative w-full h-[300px]">
+                     <model-viewer src="./airpods.glb" alt="My Airpods" auto-rotate camera-controls shadow-intensity="1" exposure="0.8" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>
+                </div>
+                
+                <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl mt-[-40px] relative z-10">
+                    <div id="player"></div> 
+                    <video id="mp4-player" controls playsinline class="hidden w-full h-full object-cover"></video>
+                </div>
+            </div>
+            <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto">
+                <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-pink-400 border-b border-white/10 pb-2">Chinese Hits</h3>
+                <div id="c-list" class="space-y-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     let userCoins = parseInt(localStorage.getItem('skyCoins')) || 0;
-    // BIẾN LƯU TRỮ QUÁI VẬT ĐÃ MUA
     let myMobs = JSON.parse(localStorage.getItem('skyMobs')) || [];
-    
     const coinDisplay = document.getElementById('coin-display');
     const coinSfx = document.getElementById('sfx-coin');
     const clickSfx = document.getElementById('sfx-click');
@@ -236,78 +260,63 @@
     }
 
     // --- SHOP LOGIC ---
-    const mobs = [ 
-        { id: "mob1", model: "./mob1.glb", name: "RAICER", atk: 200, hp: 900, price: 100 }
-    ];
+    const mobs = [ { id: "mob1", model: "./mob1.glb", name: "RAICER", atk: 200, hp: 900, price: 100 } ];
     let shopIdx = 0;
-
-    function openShop() { 
-        clickSfx.currentTime = 0; clickSfx.play().catch(e=>{}); 
-        document.getElementById('shop-modal').classList.remove('hidden'); 
-        setTimeout(() => typeWriter("Hãy mua những gì bạn muốn...", "npc-text"), 500); 
-        loadMob(0); 
-    }
-    
+    function openShop() { clickSfx.currentTime = 0; clickSfx.play().catch(e=>{}); document.getElementById('shop-modal').classList.remove('hidden'); setTimeout(() => typeWriter("Hãy mua những gì bạn muốn...", "npc-text"), 500); loadMob(0); }
     function closeShop() { document.getElementById('shop-modal').classList.add('hidden'); }
-    
-    function loadMob(idx) { 
-        if(idx < 0 || idx >= mobs.length) { alert("Hãy đợi cập nhật thêm quái mới!"); return; } 
-        shopIdx = idx; 
-        const m = mobs[shopIdx]; 
-        document.getElementById('shop-mob-viewer').src = m.model; 
-        document.getElementById('mob-name').innerText = m.name; 
-        document.getElementById('mob-atk').innerText = m.atk; 
-        document.getElementById('mob-hp').innerText = m.hp; 
-    }
-    
+    function loadMob(idx) { if(idx < 0 || idx >= mobs.length) { alert("Hãy đợi cập nhật thêm quái mới!"); return; } shopIdx = idx; const m = mobs[shopIdx]; document.getElementById('shop-mob-viewer').src = m.model; document.getElementById('mob-name').innerText = m.name; document.getElementById('mob-atk').innerText = m.atk; document.getElementById('mob-hp').innerText = m.hp; }
     function navShop(dir) { loadMob(shopIdx + dir); }
-    
-    function buyItem() { 
-        const m = mobs[shopIdx];
-        if(myMobs.includes(m.id)) {
-            alert("Bạn đã sở hữu quái vật này rồi!");
-            return;
-        }
-        if(userCoins >= m.price) { 
-            updateCoins(-m.price); 
-            myMobs.push(m.id);
-            localStorage.setItem('skyMobs', JSON.stringify(myMobs));
-            alert("Mua thành công! Hãy kiểm tra túi đồ."); 
-        } else { 
-            alert("Bạn chưa đủ tiền mua quái vật này"); 
-        } 
-    }
-    
+    function buyItem() { const m = mobs[shopIdx]; if(myMobs.includes(m.id)) { alert("Bạn đã sở hữu quái vật này rồi!"); return; } if(userCoins >= m.price) { updateCoins(-m.price); myMobs.push(m.id); localStorage.setItem('skyMobs', JSON.stringify(myMobs)); alert("Mua thành công! Hãy kiểm tra túi đồ."); } else { alert("Bạn chưa đủ tiền mua quái vật này"); } }
     function typeWriter(text, elementId) { const el = document.getElementById(elementId); el.innerText = ""; let i = 0; const speed = 70; function typing() { if (i < text.length) { let char = text.charAt(i); el.textContent += char; if(typeSfx) { typeSfx.currentTime = 0; typeSfx.play().catch(e=>{}); } i++; setTimeout(typing, speed); } } typing(); }
 
-    // --- INVENTORY LOGIC (FIXED) ---
-    function openInventory() {
-        clickSfx.currentTime = 0; clickSfx.play().catch(e=>{});
-        document.getElementById('inv-modal').classList.remove('hidden');
-        renderInventory();
-    }
-
-    function closeInventory() {
-        document.getElementById('inv-modal').classList.add('hidden');
-    }
-
-    function renderInventory() {
-        const container = document.getElementById('inv-mob-container');
-        const stats = document.getElementById('inv-stats');
-        
-        // Kiểm tra xem đã mua Mob1 chưa
-        if(myMobs.includes('mob1')) {
-            container.innerHTML = `<model-viewer src="./mob1.glb" auto-rotate camera-controls disable-zoom shadow-intensity="1" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>`;
-            stats.classList.remove('hidden');
-        } else {
-            container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-white/50 text-xs font-bold uppercase tracking-widest border border-white/20 px-4 py-2 rounded-lg">Chưa sở hữu quái vật</p></div>`;
-            stats.classList.add('hidden');
-        }
-    }
+    // --- INVENTORY LOGIC ---
+    function openInventory() { clickSfx.currentTime = 0; clickSfx.play().catch(e=>{}); document.getElementById('inv-modal').classList.remove('hidden'); renderInventory(); }
+    function closeInventory() { document.getElementById('inv-modal').classList.add('hidden'); }
+    function renderInventory() { const container = document.getElementById('inv-mob-container'); const stats = document.getElementById('inv-stats'); if(myMobs.includes('mob1')) { container.innerHTML = `<model-viewer src="./mob1.glb" auto-rotate camera-controls disable-zoom shadow-intensity="1" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>`; stats.classList.remove('hidden'); } else { container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-white/50 text-xs font-bold uppercase tracking-widest border border-white/20 px-4 py-2 rounded-lg">Chưa sở hữu quái vật</p></div>`; stats.classList.add('hidden'); } }
 
     // --- SYSTEM CORE ---
     function speakText(text) { if(!text) return; window.speechSynthesis.cancel(); const msg = new SpeechSynthesisUtterance(text); msg.lang = 'zh-CN'; msg.rate = 0.8; window.speechSynthesis.speak(msg); }
     const homophones = { "他": ["她", "它"], "做": ["作", "座", "坐"], "那": ["哪"], "是": ["事", "市", "试"], "一": ["衣", "医"], "有": ["友", "又"] };
+    
+    // --- MUSIC LOGIC (RESTORED V22.0) ---
+    const vPop = [
+        {name: "Hôn vào đây", type: "mp4", id: "https://files.catbox.moe/kos9gw.mp4", thumb: "https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg"},
+        {name: "Hà Nội - Obito", type: "mp4", id: "https://files.catbox.moe/1ygyge.mp4", thumb: "https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg"}
+    ];
+    const cPop = [
+        {name: "Sứ Thanh Hoa", type: "yt", id: "Z7vlR53_qNM", thumb: "https://img.youtube.com/vi/Z7vlR53_qNM/mqdefault.jpg"},
+        {name: "Đáy Biển", type: "yt", id: "rJjQ4w-B3cE", thumb: "https://img.youtube.com/vi/rJjQ4w-B3cE/mqdefault.jpg"}
+    ];
+
+    var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    var player; function onYouTubeIframeAPIReady() { player = new YT.Player('player', { height: '100%', width: '100%', videoId: '' }); }
+    
+    function playMedia(source, type) {
+        const ytDiv = document.getElementById('player');
+        const mp4Div = document.getElementById('mp4-player');
+        
+        if(player && player.stopVideo) player.stopVideo();
+        mp4Div.pause();
+
+        if (type === 'mp4') {
+            ytDiv.style.display = 'none';
+            mp4Div.style.display = 'block';
+            mp4Div.src = source;
+            mp4Div.play();
+        } else {
+            mp4Div.style.display = 'none';
+            ytDiv.style.display = 'block';
+            player.loadVideoById(source);
+        }
+    }
+
+    function renderMusic() {
+        const tpl = (s) => `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}')"><img src="${s.thumb}"><div><h4 class="text-[10px] font-bold uppercase">${s.name}</h4><p class="text-[9px] text-gray-400">${s.type === 'mp4' ? 'NO ADS' : 'Youtube'}</p></div></div>`;
+        document.getElementById('v-list').innerHTML = vPop.map(tpl).join('');
+        document.getElementById('c-list').innerHTML = cPop.map(tpl).join('');
+    }
+
+    // (KEEP DATA VOCAB/GRAMMAR/READING & THEIR LOGIC)
     const vocabData = [{hz:"我",py:"wǒ",mn:"tôi"},{hz:"你",py:"nǐ",mn:"bạn"},{hz:"他",py:"tā",mn:"anh ấy"},{hz:"她",py:"tā",mn:"cô ấy"},{hz:"我们",py:"wǒmen",mn:"chúng tôi"},{hz:"谁",py:"shéi",mn:"ai"},{hz:"爸爸",py:"bàba",mn:"bố"},{hz:"妈妈",py:"māma",mn:"mẹ"},{hz:"儿子",py:"érzi",mn:"con trai"},{hz:"女儿",py:"nǚér",mn:"con gái"},{hz:"老师",py:"lǎoshī",mn:"thầy cô"},{hz:"学生",py:"xuésheng",mn:"học sinh"},{hz:"同学",py:"tóngxué",mn:"bạn học"},{hz:"朋友",py:"péngyou",mn:"bạn bè"},{hz:"人",py:"rén",mn:"người"},{hz:"先生",py:"xiānsheng",mn:"ngài/ông"},{hz:"小姐",py:"xiǎojiě",mn:"cô/chị"},{hz:"零",py:"líng",mn:"không"},{hz:"一",py:"yī",mn:"một"},{hz:"二",py:"èr",mn:"hai"},{hz:"三",py:"sān",mn:"ba"},{hz:"四",py:"sì",mn:"bốn"},{hz:"五",py:"wǔ",mn:"năm"},{hz:"六",py:"liù",mn:"sáu"},{hz:"七",py:"qī",mn:"bảy"},{hz:"八",py:"bā",mn:"tám"},{hz:"九",py:"jiǔ",mn:"chín"},{hz:"十",py:"shí",mn:"mười"}]; 
     const grammarBank = [{zh:"我是学生。",vi:"tôi là học sinh",note:"Câu chữ 是"},{zh:"这是什么？",vi:"đây là cái gì",note:"Hỏi cái gì"}];
     const readingData = [{id:1,zh:"你好！我叫刘铁花...",key:"xin chào tôi tên lưu thiết hoa..."}];
