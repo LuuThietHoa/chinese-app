@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V26.0 Music Back</title>
+    <title>Skyreign Hub | V26.1 Fix Light & Music</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
@@ -49,14 +49,7 @@
         .npc-bubble { position: absolute; background: white; color: black; padding: 12px; border-radius: 20px; border-bottom-left-radius: 0; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); font-weight: 800; font-size: 10px; max-width: 200px; border: 2px solid #6366f1; z-index: 50; }
         
         /* INVENTORY SLOTS */
-        .inv-slot {
-            width: 50px; height: 50px;
-            background: rgba(0,0,0,0.6);
-            border: 2px solid rgba(255,255,255,0.2);
-            border-radius: 8px;
-            display: flex; align-items: center; justify-content: center;
-            transition: 0.2s; cursor: pointer;
-        }
+        .inv-slot { width: 50px; height: 50px; background: rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: 0.2s; cursor: pointer; }
         .inv-slot:hover { border-color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
         .song-item { display: flex; gap: 12px; padding: 10px; border-radius: 12px; background: rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; align-items: center; }
         .song-item:hover { background: rgba(255,255,255,0.15); }
@@ -93,14 +86,19 @@
         <button onclick="closeShop()" class="absolute top-6 right-6 z-50 text-white hover:text-red-500 font-black text-xl bg-white/10 w-12 h-12 rounded-full flex items-center justify-center border border-white/20 transition hover:rotate-90">✕</button>
         
         <div class="absolute bottom-10 left-10 w-48 h-80 md:w-64 md:h-96 z-20">
-            <model-viewer src="./main.glb" alt="Shopkeeper" camera-controls disable-zoom shadow-intensity="2" exposure="1.2" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>
+            <model-viewer src="./main.glb" alt="Shopkeeper" environment-image="neutral" camera-controls disable-zoom shadow-intensity="2" exposure="1.5" style="width: 100%; height: 100%; --poster-color: transparent;">
+                <div slot="error-patch" class="text-red-500 text-xs">Lỗi file main.glb</div>
+            </model-viewer>
             <div class="npc-bubble -top-10 left-20"><p id="npc-text">...</p></div>
         </div>
 
         <div class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
             <div class="relative w-72 h-72 md:w-[500px] md:h-[500px] pointer-events-auto group flex flex-col items-center">
                 <button onclick="buyItem()" class="absolute -top-16 z-50 bg-yellow-500 hover:bg-yellow-400 text-black px-6 py-3 rounded-full font-black uppercase tracking-widest shadow-lg shadow-yellow-500/50 animate-bounce transition transform hover:scale-110 border-4 border-black">MUA NGAY (100 🪙)</button>
-                <model-viewer id="shop-mob-viewer" src="./mob1.glb" alt="Mob" auto-rotate camera-controls shadow-intensity="2" exposure="1" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>
+                
+                <model-viewer id="shop-mob-viewer" src="./mob1.glb" alt="Mob" environment-image="neutral" auto-rotate camera-controls shadow-intensity="2" exposure="1.5" style="width: 100%; height: 100%; --poster-color: transparent;">
+                    <div slot="error-patch" class="text-red-500 text-xs">Lỗi file mob1.glb</div>
+                </model-viewer>
                 
                 <div class="absolute top-20 -right-10 md:-right-20 bg-black/80 backdrop-blur-xl border border-red-500/50 p-6 rounded-2xl w-56 shadow-2xl opacity-0 group-hover:opacity-100 transition duration-300 translate-x-4 group-hover:translate-x-0">
                     <h3 class="text-red-500 font-black text-3xl mb-2 uppercase italic tracking-tighter" id="mob-name">RAICER</h3>
@@ -127,7 +125,6 @@
 
         <div class="absolute inset-0 flex flex-col p-10 z-10">
             <div class="flex-1 flex justify-between items-center px-10">
-                
                 <div class="flex flex-col gap-4">
                     <div class="inv-slot"><span class="text-[8px] text-white/30">HEAD</span></div>
                     <div class="inv-slot"><span class="text-[8px] text-white/30">BODY</span></div>
@@ -137,9 +134,7 @@
                 </div>
 
                 <div class="relative w-96 h-96 flex items-center justify-center">
-                    <div id="inv-mob-container" class="w-full h-full">
-                        </div>
-                    
+                    <div id="inv-mob-container" class="w-full h-full"></div>
                     <div id="inv-stats" class="hidden absolute top-10 -right-10 bg-black/70 backdrop-blur border border-indigo-500/50 p-4 rounded-xl w-40">
                         <h4 class="text-indigo-400 font-bold text-xs uppercase mb-2 border-b border-white/10 pb-1">Chỉ Số Tổng</h4>
                         <div class="space-y-1 text-[10px] text-gray-300">
@@ -163,16 +158,7 @@
             <div class="h-32 mt-4 bg-black/40 rounded-xl border border-white/10 p-4">
                 <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest">Túi Đồ (Inventory)</h4>
                 <div class="flex gap-2 overflow-x-auto pb-2">
-                    <div class="inv-slot min-w-[50px]"></div>
-                    <div class="inv-slot min-w-[50px]"></div>
-                    <div class="inv-slot min-w-[50px]"></div>
-                    <div class="inv-slot min-w-[50px]"></div>
-                    <div class="inv-slot min-w-[50px]"></div>
-                    <div class="inv-slot min-w-[50px]"></div>
-                    <div class="inv-slot min-w-[50px]"></div>
-                    <div class="inv-slot min-w-[50px]"></div>
-                    <div class="inv-slot min-w-[50px]"></div>
-                    <div class="inv-slot min-w-[50px]"></div>
+                    <div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div>
                 </div>
             </div>
         </div>
@@ -199,7 +185,7 @@
 
         <div class="glass-card p-12 text-center max-w-md mx-4 z-10">
             <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN</h1>
-            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Inventory v26.0</p>
+            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Inventory v26.1</p>
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="switchTab('vocab')" class="py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-xs uppercase tracking-widest transition">Luyện Từ</button>
                 <button onclick="switchTab('speaking')" class="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-indigo-500/30">Luyện Nói</button>
@@ -259,7 +245,7 @@
         else { coinDisplay.classList.add('coin-pop-red'); }
     }
 
-    // --- SHOP LOGIC ---
+    // SHOP LOGIC
     const mobs = [ { id: "mob1", model: "./mob1.glb", name: "RAICER", atk: 200, hp: 900, price: 100 } ];
     let shopIdx = 0;
     function openShop() { clickSfx.currentTime = 0; clickSfx.play().catch(e=>{}); document.getElementById('shop-modal').classList.remove('hidden'); setTimeout(() => typeWriter("Hãy mua những gì bạn muốn...", "npc-text"), 500); loadMob(0); }
@@ -269,54 +255,23 @@
     function buyItem() { const m = mobs[shopIdx]; if(myMobs.includes(m.id)) { alert("Bạn đã sở hữu quái vật này rồi!"); return; } if(userCoins >= m.price) { updateCoins(-m.price); myMobs.push(m.id); localStorage.setItem('skyMobs', JSON.stringify(myMobs)); alert("Mua thành công! Hãy kiểm tra túi đồ."); } else { alert("Bạn chưa đủ tiền mua quái vật này"); } }
     function typeWriter(text, elementId) { const el = document.getElementById(elementId); el.innerText = ""; let i = 0; const speed = 70; function typing() { if (i < text.length) { let char = text.charAt(i); el.textContent += char; if(typeSfx) { typeSfx.currentTime = 0; typeSfx.play().catch(e=>{}); } i++; setTimeout(typing, speed); } } typing(); }
 
-    // --- INVENTORY LOGIC ---
+    // INVENTORY LOGIC
     function openInventory() { clickSfx.currentTime = 0; clickSfx.play().catch(e=>{}); document.getElementById('inv-modal').classList.remove('hidden'); renderInventory(); }
     function closeInventory() { document.getElementById('inv-modal').classList.add('hidden'); }
-    function renderInventory() { const container = document.getElementById('inv-mob-container'); const stats = document.getElementById('inv-stats'); if(myMobs.includes('mob1')) { container.innerHTML = `<model-viewer src="./mob1.glb" auto-rotate camera-controls disable-zoom shadow-intensity="1" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>`; stats.classList.remove('hidden'); } else { container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-white/50 text-xs font-bold uppercase tracking-widest border border-white/20 px-4 py-2 rounded-lg">Chưa sở hữu quái vật</p></div>`; stats.classList.add('hidden'); } }
+    function renderInventory() { const container = document.getElementById('inv-mob-container'); const stats = document.getElementById('inv-stats'); if(myMobs.includes('mob1')) { container.innerHTML = `<model-viewer src="./mob1.glb" environment-image="neutral" auto-rotate camera-controls disable-zoom shadow-intensity="1" exposure="1.5" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>`; stats.classList.remove('hidden'); } else { container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-white/50 text-xs font-bold uppercase tracking-widest border border-white/20 px-4 py-2 rounded-lg">Chưa sở hữu quái vật</p></div>`; stats.classList.add('hidden'); } }
 
-    // --- SYSTEM CORE ---
+    // SYSTEM
     function speakText(text) { if(!text) return; window.speechSynthesis.cancel(); const msg = new SpeechSynthesisUtterance(text); msg.lang = 'zh-CN'; msg.rate = 0.8; window.speechSynthesis.speak(msg); }
     const homophones = { "他": ["她", "它"], "做": ["作", "座", "坐"], "那": ["哪"], "是": ["事", "市", "试"], "一": ["衣", "医"], "有": ["友", "又"] };
     
-    // --- MUSIC LOGIC (RESTORED V22.0) ---
-    const vPop = [
-        {name: "Hôn vào đây", type: "mp4", id: "https://files.catbox.moe/kos9gw.mp4", thumb: "https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg"},
-        {name: "Hà Nội - Obito", type: "mp4", id: "https://files.catbox.moe/1ygyge.mp4", thumb: "https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg"}
-    ];
-    const cPop = [
-        {name: "Sứ Thanh Hoa", type: "yt", id: "Z7vlR53_qNM", thumb: "https://img.youtube.com/vi/Z7vlR53_qNM/mqdefault.jpg"},
-        {name: "Đáy Biển", type: "yt", id: "rJjQ4w-B3cE", thumb: "https://img.youtube.com/vi/rJjQ4w-B3cE/mqdefault.jpg"}
-    ];
-
+    // MUSIC LOGIC (OLD BUT GOLD)
+    const vPop = [{name:"Hôn vào đây",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg"},{name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg"}];
+    const cPop = [{name:"Sứ Thanh Hoa",type:"yt",id:"Z7vlR53_qNM",thumb:"https://img.youtube.com/vi/Z7vlR53_qNM/mqdefault.jpg"},{name:"Đáy Biển",type:"yt",id:"rJjQ4w-B3cE",thumb:"https://img.youtube.com/vi/rJjQ4w-B3cE/mqdefault.jpg"}];
     var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     var player; function onYouTubeIframeAPIReady() { player = new YT.Player('player', { height: '100%', width: '100%', videoId: '' }); }
-    
-    function playMedia(source, type) {
-        const ytDiv = document.getElementById('player');
-        const mp4Div = document.getElementById('mp4-player');
-        
-        if(player && player.stopVideo) player.stopVideo();
-        mp4Div.pause();
+    function playMedia(source, type) { const ytDiv = document.getElementById('player'); const mp4Div = document.getElementById('mp4-player'); if(player && player.stopVideo) player.stopVideo(); mp4Div.pause(); if (type === 'mp4') { ytDiv.style.display = 'none'; mp4Div.style.display = 'block'; mp4Div.src = source; mp4Div.play(); } else { mp4Div.style.display = 'none'; ytDiv.style.display = 'block'; player.loadVideoById(source); } }
+    function renderMusic() { const tpl = (s) => `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}')"><img src="${s.thumb}"><div><h4 class="text-[10px] font-bold uppercase">${s.name}</h4><p class="text-[9px] text-gray-400">${s.type === 'mp4' ? 'NO ADS' : 'Youtube'}</p></div></div>`; document.getElementById('v-list').innerHTML = vPop.map(tpl).join(''); document.getElementById('c-list').innerHTML = cPop.map(tpl).join(''); }
 
-        if (type === 'mp4') {
-            ytDiv.style.display = 'none';
-            mp4Div.style.display = 'block';
-            mp4Div.src = source;
-            mp4Div.play();
-        } else {
-            mp4Div.style.display = 'none';
-            ytDiv.style.display = 'block';
-            player.loadVideoById(source);
-        }
-    }
-
-    function renderMusic() {
-        const tpl = (s) => `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}')"><img src="${s.thumb}"><div><h4 class="text-[10px] font-bold uppercase">${s.name}</h4><p class="text-[9px] text-gray-400">${s.type === 'mp4' ? 'NO ADS' : 'Youtube'}</p></div></div>`;
-        document.getElementById('v-list').innerHTML = vPop.map(tpl).join('');
-        document.getElementById('c-list').innerHTML = cPop.map(tpl).join('');
-    }
-
-    // (KEEP DATA VOCAB/GRAMMAR/READING & THEIR LOGIC)
     const vocabData = [{hz:"我",py:"wǒ",mn:"tôi"},{hz:"你",py:"nǐ",mn:"bạn"},{hz:"他",py:"tā",mn:"anh ấy"},{hz:"她",py:"tā",mn:"cô ấy"},{hz:"我们",py:"wǒmen",mn:"chúng tôi"},{hz:"谁",py:"shéi",mn:"ai"},{hz:"爸爸",py:"bàba",mn:"bố"},{hz:"妈妈",py:"māma",mn:"mẹ"},{hz:"儿子",py:"érzi",mn:"con trai"},{hz:"女儿",py:"nǚér",mn:"con gái"},{hz:"老师",py:"lǎoshī",mn:"thầy cô"},{hz:"学生",py:"xuésheng",mn:"học sinh"},{hz:"同学",py:"tóngxué",mn:"bạn học"},{hz:"朋友",py:"péngyou",mn:"bạn bè"},{hz:"人",py:"rén",mn:"người"},{hz:"先生",py:"xiānsheng",mn:"ngài/ông"},{hz:"小姐",py:"xiǎojiě",mn:"cô/chị"},{hz:"零",py:"líng",mn:"không"},{hz:"一",py:"yī",mn:"một"},{hz:"二",py:"èr",mn:"hai"},{hz:"三",py:"sān",mn:"ba"},{hz:"四",py:"sì",mn:"bốn"},{hz:"五",py:"wǔ",mn:"năm"},{hz:"六",py:"liù",mn:"sáu"},{hz:"七",py:"qī",mn:"bảy"},{hz:"八",py:"bā",mn:"tám"},{hz:"九",py:"jiǔ",mn:"chín"},{hz:"十",py:"shí",mn:"mười"}]; 
     const grammarBank = [{zh:"我是学生。",vi:"tôi là học sinh",note:"Câu chữ 是"},{zh:"这是什么？",vi:"đây là cái gì",note:"Hỏi cái gì"}];
     const readingData = [{id:1,zh:"你好！我叫刘铁花...",key:"xin chào tôi tên lưu thiết hoa..."}];
