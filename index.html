@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V30.0 Open World</title>
+    <title>Skyreign Hub | V30.1 Smooth Anim</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -13,7 +13,6 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
     <style>
-        /* CORE SETUP */
         :root { --primary: #6366f1; --accent: #f472b6; }
         body {
             font-family: 'Space Grotesk', 'Noto Sans SC', sans-serif;
@@ -24,8 +23,6 @@
         }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         #cursor { position: fixed; width: 20px; height: 20px; background: white; border-radius: 50%; pointer-events: none; z-index: 9999; mix-blend-mode: difference; transition: transform 0.1s; }
-        
-        /* UI ELEMENTS */
         .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: transform 0.3s; }
         .glass-card:hover { transform: translateY(-5px); }
         nav { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; gap: 6px; background: rgba(0,0,0,0.8); padding: 8px; border-radius: 25px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); flex-wrap: wrap; justify-content: center; width: 90%; max-width: 600px; }
@@ -34,8 +31,6 @@
         .tab-content { display: none; opacity: 0; animation: fadeIn 0.5s forwards; padding-bottom: 120px; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* EFFECTS */
         .glow-green { box-shadow: 0 0 40px #22c55e !important; border-color: #22c55e !important; }
         .glow-red { box-shadow: 0 0 40px #ef4444 !important; border-color: #ef4444 !important; }
         #progress-bar { width: 0%; height: 4px; background: #22c55e; transition: width 0.1s linear; position: absolute; bottom: 0; left: 0; }
@@ -44,20 +39,16 @@
         @keyframes coinPop { 0% { transform: scale(1); } 50% { transform: scale(1.5); } 100% { transform: scale(1); } }
         .coin-pop-green { animation: coinPop 0.3s ease; color: #4ade80 !important; }
         .coin-pop-red { animation: coinPop 0.3s ease; color: #f87171 !important; }
-        
-        /* MODALS */
         .full-modal { transition: opacity 0.3s ease; }
         .full-modal.hidden { display: none; }
         .npc-bubble { position: absolute; background: white; color: black; padding: 12px; border-radius: 20px; border-bottom-left-radius: 0; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); font-weight: 800; font-size: 10px; max-width: 200px; border: 2px solid #6366f1; z-index: 50; }
-        
-        /* INVENTORY SLOTS */
         .inv-slot { width: 50px; height: 50px; background: rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: 0.2s; cursor: pointer; }
         .inv-slot:hover { border-color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
         .song-item { display: flex; gap: 12px; padding: 10px; border-radius: 12px; background: rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; align-items: center; }
         .song-item:hover { background: rgba(255,255,255,0.15); }
         .song-item img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
-
-        /* GAME CANVAS */
+        
+        /* GAME UI */
         #game-container { position: fixed; inset: 0; z-index: 5000; background: black; display: none; }
         #game-ui { position: absolute; top: 20px; left: 20px; color: white; z-index: 5001; pointer-events: none; }
         .key-hint { background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 5px; font-size: 10px; font-weight: bold; margin-right: 5px; }
@@ -91,13 +82,13 @@
 <div id="game-container">
     <div id="game-ui">
         <h2 class="text-xl font-black uppercase italic text-yellow-400">Thế Giới Skyreign</h2>
-        <div class="mt-2">
-            <span class="key-hint">W A S D</span> Di chuyển
-            <span class="key-hint">SHIFT + W</span> Chạy
+        <div class="mt-2 text-xs text-gray-300">
+            <p class="mb-1"><span class="key-hint">W A S D</span> Di chuyển</p>
+            <p><span class="key-hint">SHIFT + W</span> Chạy nhanh</p>
         </div>
     </div>
     <button onclick="exitGameWorld()" class="absolute top-6 right-6 z-[5002] text-white hover:text-red-500 font-black text-xl bg-white/10 w-12 h-12 rounded-full flex items-center justify-center border border-white/20">✕</button>
-    </div>
+</div>
 
 <div class="fixed bottom-24 left-6 z-[2000] cursor-pointer transition hover:scale-110 active:scale-95 group" onclick="openInventory()">
     <div class="w-24 h-24 relative">
@@ -196,7 +187,7 @@
         </div>
         <div class="glass-card p-12 text-center max-w-md mx-4 z-10">
             <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN</h1>
-            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Open World v30.0</p>
+            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Smooth Game v30.1</p>
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="switchTab('vocab')" class="py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-xs uppercase tracking-widest transition">Luyện Từ</button>
                 <button onclick="switchTab('speaking')" class="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-indigo-500/30">Luyện Nói</button>
@@ -209,7 +200,7 @@
 <div id="vocab" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-10 w-full max-w-lg mx-4 relative" id="vocab-card"> <div class="flex justify-between items-center mb-8"> <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[10px] font-black bg-pink-500 px-3 py-1 rounded-full uppercase tracking-widest hover:scale-105 transition">Mode: Hán ➔ Việt</button> <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">HSK 1 FULL</div> </div> <div id="v-question" class="text-7xl font-black text-center mb-8 tracking-tighter min-h-[100px] flex items-center justify-center">?</div> <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b-2 border-white/20 py-3 text-center font-bold text-2xl outline-none focus:border-indigo-500 transition text-white placeholder-gray-600 mb-8" autocomplete="off"> <button onclick="checkVocab()" class="w-full py-4 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-gray-200 transition mb-4">Kiểm Tra</button> <div id="v-feedback" class="text-center h-10"> <p id="v-msg" class="text-[11px] font-bold uppercase tracking-widest"></p> <p id="v-hint" class="text-[12px] font-bold text-red-400 mt-1 uppercase hidden"></p> </div> </div> </div> </div>
 <div id="speaking" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-10 w-full max-w-md mx-4 text-center relative overflow-hidden" id="speak-card"> <div class="text-[10px] uppercase tracking-widest text-indigo-400 font-black mb-8">V18.0 - Fast Catch</div> <div class="mb-8 relative group"> <div id="s-hz" class="text-9xl font-black mb-2 tracking-tighter cursor-pointer transition hover:text-indigo-400" onclick="speakText(document.getElementById('s-hz').innerText)">我</div> <div id="s-py" class="text-2xl text-gray-500 mb-1">wǒ</div> <div id="s-mn" class="text-xs font-bold bg-white/10 px-3 py-1 rounded-full inline-block">TÔI</div> </div> <div class="flex justify-center items-center gap-6 mb-8"> <button onclick="changeSpeakWord(-1)" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition">←</button> <div class="relative"> <div id="mic-ring" class="hidden mic-ripple"></div> <button id="mic-btn" class="w-20 h-20 bg-indigo-600 rounded-full flex items-center justify-center shadow-2xl relative z-10 transition hover:scale-110 active:scale-90 text-white"> <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg> </button> </div> <button onclick="changeSpeakWord(1)" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition">→</button> </div> <div id="s-feedback" class="text-[11px] font-bold uppercase tracking-widest text-gray-400 h-16 flex flex-col items-center justify-center px-4"> <span id="s-status">Bấm mic và nói ngay</span> <span id="s-sub" class="text-[9px] text-gray-500 mt-1"></span> </div> <div id="s-live-text" class="absolute bottom-1 w-full text-center text-[9px] text-indigo-300/50 uppercase tracking-widest"></div> <div id="progress-bar"></div> </div> </div> </div>
 <div id="grammar" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-10 w-full max-w-2xl mx-4 relative overflow-hidden" id="grammar-card"> <div class="flex justify-between items-center mb-10"> <button onclick="toggleGrammarMode()" id="g-mode-badge" class="text-[10px] font-black bg-indigo-600 px-3 py-1 rounded-full uppercase tracking-widest hover:scale-110 transition shadow-lg shadow-indigo-500/50">Trung ➔ Việt</button> <div class="text-[9px] font-bold text-gray-400">HSK1 GRAMMAR</div> </div> <div class="text-center mb-10 min-h-[120px] flex flex-col justify-center items-center"> <div id="g-question" class="text-4xl md:text-5xl font-bold tracking-tight mb-4 leading-tight drop-shadow-lg cursor-pointer hover:text-indigo-300 transition" onclick="readGrammarQuestion()">...</div> <p id="g-instruction" class="text-gray-500 text-sm italic">Hãy dịch câu trên</p> </div> <input type="text" id="g-input" placeholder="Nhập câu trả lời..." class="w-full bg-transparent border-b-2 border-white/10 py-4 text-center text-xl font-medium outline-none focus:border-indigo-500 transition mb-6 text-white placeholder-gray-600" autocomplete="off"> <div class="grid grid-cols-4 gap-4 mb-6"> <button onclick="nextGrammar()" class="col-span-1 py-4 bg-white/5 hover:bg-white/10 rounded-2xl font-bold text-[10px] uppercase tracking-widest text-gray-400 hover:text-white transition">Bỏ qua</button> <button onclick="checkGrammar()" class="col-span-3 py-4 bg-white text-black hover:bg-indigo-400 hover:text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition shadow-lg">Kiểm tra</button> </div> <div id="g-feedback" class="text-center h-20"> <div id="g-msg" class="text-[11px] font-bold uppercase tracking-widest mb-1"></div> <div id="g-note" class="text-[12px] font-bold text-red-400 mt-2 uppercase"></div> </div> </div> </div> </div>
-<div id="music" class="tab-content"> <div class="min-h-screen flex flex-col items-center justify-center pt-20 pb-20"> <div class="flex flex-col md:flex-row items-center justify-center gap-8 w-full max-w-6xl px-4"> <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto"> <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-indigo-400 border-b border-white/10 pb-2">V-Pop Hits</h3> <div id="v-list" class="space-y-2"></div> </div> <div class="w-full max-w-md flex flex-col items-center"> <h4 class="text-4xl font-black text-white tracking-tighter uppercase mb-4 drop-shadow-lg">Music Pod</h4> <div class="relative w-full h-[300px]"> <model-viewer src="./airpods.glb" alt="My Airpods" auto-rotate camera-controls shadow-intensity="1" exposure="0.8" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer> </div> <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl mt-[-40px] relative z-10"> <div id="player" class="w-full h-full"></div> <video id="mp4-player" controls playsinline class="hidden w-full h-full object-cover"></video> </div> </div> <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto"> <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-pink-400 border-b border-white/10 pb-2">Chinese Hits</h3> <div id="c-list" class="space-y-2"></div> </div> </div> </div> </div>
+<div id="music" class="tab-content"> <div class="min-h-screen flex flex-col items-center justify-center pt-20 pb-20"> <div class="flex flex-col md:flex-row items-center justify-center gap-8 w-full max-w-6xl px-4"> <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto"> <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-indigo-400 border-b border-white/10 pb-2">V-Pop Hits</h3> <div id="v-list" class="space-y-2"></div> </div> <div class="w-full max-w-md flex flex-col items-center"> <h4 class="text-4xl font-black text-white tracking-tighter uppercase mb-4 drop-shadow-lg">Music Pod</h4> <div class="relative w-full h-[300px]"> <model-viewer src="./airpods.glb" alt="My Airpods" auto-rotate camera-controls shadow-intensity="1" exposure="0.8" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer> </div> <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl mt-[-40px] relative z-10"> <div id="player"></div> <video id="mp4-player" controls playsinline class="hidden w-full h-full object-cover"></video> </div> </div> <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto"> <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-pink-400 border-b border-white/10 pb-2">Chinese Hits</h3> <div id="c-list" class="space-y-2"></div> </div> </div> </div> </div>
 
 <script>
     let userCoins = parseInt(localStorage.getItem('skyCoins')) || 0;
@@ -230,13 +221,16 @@
         else { coinDisplay.classList.add('coin-pop-red'); }
     }
 
-    // --- GAME LOGIC (THREE.JS) ---
+    // --- GAME LOGIC (THREE.JS - IMPROVED) ---
     let gameInited = false;
     let scene, camera, renderer, playerModel, mixer;
     let keys = { w: false, a: false, s: false, d: false, shift: false };
     let clock = new THREE.Clock();
-    let walkAction, idleAction, runAction;
-    let activeAction, lastAction;
+    
+    // Animation Actions
+    let actions = {};
+    let activeAction;
+    let lastAction;
 
     function enterGameWorld() {
         document.getElementById('game-container').style.display = 'block';
@@ -251,9 +245,12 @@
         gameInited = true;
         const container = document.getElementById('game-container');
         
-        // Scene & Camera
+        // Scene Setup
         scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x111111); // Nền tối
+        scene.background = new THREE.Color(0x111111);
+        scene.fog = new THREE.Fog(0x111111, 10, 50);
+
+        // Camera
         camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
         camera.position.set(0, 5, 10);
         
@@ -263,12 +260,13 @@
         renderer.shadowMap.enabled = true;
         container.appendChild(renderer.domElement);
 
-        // Lights
-        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444);
+        // Lighting
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
         hemiLight.position.set(0, 20, 0);
         scene.add(hemiLight);
-        const dirLight = new THREE.DirectionalLight(0xffffff);
-        dirLight.position.set(0, 20, 10);
+        
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        dirLight.position.set(5, 10, 7);
         dirLight.castShadow = true;
         scene.add(dirLight);
 
@@ -276,9 +274,9 @@
         const loader = new THREE.GLTFLoader();
         loader.load('./hud.glb', function (gltf) {
             const model = gltf.scene;
-            model.scale.set(5, 5, 5); // Scale to fit
+            model.scale.set(5, 5, 5); 
             scene.add(model);
-        }, undefined, function (e) { console.error(e); });
+        });
 
         // Load Player (Men.glb)
         loader.load('./men.glb', function (gltf) {
@@ -286,22 +284,23 @@
             playerModel.scale.set(1, 1, 1);
             scene.add(playerModel);
 
-            // Animation Mixer
+            // Mixer Setup
             mixer = new THREE.AnimationMixer(playerModel);
-            const animations = gltf.animations;
-            
-            // Tìm animation theo tên (Case insensitive)
-            const getClip = (name) => animations.find(a => a.name.toLowerCase() === name.toLowerCase());
-            
-            idleAction = mixer.clipAction(getClip('Idle') || animations[0]);
-            walkAction = mixer.clipAction(getClip('Walk') || animations[1]);
-            runAction = mixer.clipAction(getClip('Run') || animations[2]);
+            const clips = gltf.animations;
 
-            activeAction = idleAction;
+            // Load specific clips (Ignoring Transitions for smooth loop)
+            const getClip = (name) => clips.find(c => c.name.toLowerCase() === name.toLowerCase());
+            
+            actions['Idle'] = mixer.clipAction(getClip('Idle') || clips[0]);
+            actions['Walk'] = mixer.clipAction(getClip('Walk') || clips[1]);
+            actions['Run'] = mixer.clipAction(getClip('Run') || clips[2]);
+
+            // Start Idle
+            activeAction = actions['Idle'];
             activeAction.play();
 
             animate();
-        }, undefined, function (e) { console.error(e); });
+        });
 
         // Inputs
         document.addEventListener('keydown', (e) => {
@@ -323,7 +322,6 @@
             }
         });
 
-        // Resize
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
@@ -331,55 +329,75 @@
         });
     }
 
+    function fadeToAction(name, duration) {
+        if (activeAction !== actions[name]) {
+            lastAction = activeAction;
+            activeAction = actions[name];
+            lastAction.fadeOut(duration);
+            activeAction.reset().fadeIn(duration).play();
+        }
+    }
+
     function animate() {
         requestAnimationFrame(animate);
         const delta = clock.getDelta();
 
         if (playerModel && mixer) {
-            // Movement Logic
             let speed = 0;
-            let newAction = idleAction;
+            let moveState = 'Idle';
 
+            // Check movement
             if (keys.w || keys.s || keys.a || keys.d) {
-                speed = keys.shift ? 5 : 2; // Tốc độ
-                newAction = keys.shift ? runAction : walkAction;
-                
-                // Di chuyển (Z: Tiến/Lùi, X: Trái/Phải)
+                // Determine Walk or Run
+                if (keys.shift && keys.w) {
+                    speed = 6;
+                    moveState = 'Run';
+                } else {
+                    speed = 2.5;
+                    moveState = 'Walk';
+                }
+
+                // Handle Position
                 if (keys.w) playerModel.position.z -= speed * delta;
                 if (keys.s) playerModel.position.z += speed * delta;
                 if (keys.a) playerModel.position.x -= speed * delta;
                 if (keys.d) playerModel.position.x += speed * delta;
 
-                // Xoay nhân vật theo hướng đi (Đơn giản hóa)
-                if (keys.w) playerModel.rotation.y = Math.PI; // Lưng
-                if (keys.s) playerModel.rotation.y = 0; // Mặt
-                if (keys.a) playerModel.rotation.y = -Math.PI / 2;
-                if (keys.d) playerModel.rotation.y = Math.PI / 2;
-                if (keys.w && keys.a) playerModel.rotation.y = -3 * Math.PI / 4;
-                if (keys.w && keys.d) playerModel.rotation.y = 3 * Math.PI / 4;
+                // Handle Rotation (Face direction)
+                let angle = 0;
+                if (keys.w) angle = Math.PI;
+                if (keys.s) angle = 0;
+                if (keys.a) angle = -Math.PI / 2;
+                if (keys.d) angle = Math.PI / 2;
+                
+                // Diagonal Rotation
+                if (keys.w && keys.a) angle = -3 * Math.PI / 4;
+                if (keys.w && keys.d) angle = 3 * Math.PI / 4;
+                if (keys.s && keys.a) angle = -Math.PI / 4;
+                if (keys.s && keys.d) angle = Math.PI / 4;
+
+                // Smooth rotation
+                const targetRotation = new THREE.Quaternion();
+                targetRotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), angle);
+                playerModel.quaternion.slerp(targetRotation, 0.1);
             }
 
-            // Animation Blending
-            if (newAction !== activeAction) {
-                lastAction = activeAction;
-                activeAction = newAction;
-                lastAction.fadeOut(0.2);
-                activeAction.reset().fadeIn(0.2).play();
-            }
+            // Switch Animation
+            fadeToAction(moveState, 0.2); // 0.2s blend time
 
             mixer.update(delta);
 
             // Camera Follow
             camera.position.x = playerModel.position.x;
-            camera.position.z = playerModel.position.z + 5; // Cách sau lưng 5m
-            camera.position.y = playerModel.position.y + 5; // Cao hơn 5m
+            camera.position.z = playerModel.position.z + 6;
+            camera.position.y = playerModel.position.y + 7;
             camera.lookAt(playerModel.position);
         }
 
         renderer.render(scene, camera);
     }
 
-    // --- (KEEP SHOP/INVENTORY/OTHER LOGIC) ---
+    // --- (KEEP OTHER LOGIC) ---
     const mobs = [ { id: "mob1", model: "./mob1.glb", name: "RAICER", atk: 200, hp: 900, price: 100 } ];
     let shopIdx = 0;
     function openShop() { clickSfx.currentTime = 0; clickSfx.play().catch(e=>{}); document.getElementById('shop-modal').classList.remove('hidden'); setTimeout(() => typeWriter("Hãy mua những gì bạn muốn...", "npc-text"), 500); loadMob(0); }
@@ -411,7 +429,6 @@
     function nextVocab(random=true){if(remainingIndices.length===0){if(confirm("Bạn đã hoàn thành 150 từ vựng! Có muốn học lại không?")){resetVocabProgress();}else{return;}}if(random){const randomIndex=Math.floor(Math.random()*remainingIndices.length);vIdx=remainingIndices[randomIndex];}const item=vocabData[vIdx];document.getElementById('v-question').innerText=vMode===0?item.hz:(vMode===1?item.mn.toUpperCase():item.hz);document.getElementById('v-input').value="";document.getElementById('v-msg').innerText="";document.getElementById('v-hint').innerText="";document.getElementById('v-hint').classList.add('hidden');document.getElementById('vocab-card').classList.remove('glow-green','glow-red');}
     function checkVocab(){const item=vocabData[vIdx];const val=document.getElementById('v-input').value.trim().toLowerCase();let correct=false;if(vMode===0)correct=val===item.mn.toLowerCase();else if(vMode===1)correct=val===item.hz;else correct=val===item.py.toLowerCase()||val===item.py.normalize("NFD").replace(/[\u0300-\u036f]/g,"");const feedback=document.getElementById('v-msg');const hint=document.getElementById('v-hint');if(correct){updateCoins(1);feedback.innerText="CHÍNH XÁC!";feedback.style.color="#4ade80";document.getElementById('vocab-card').classList.add('glow-green');speakText(item.hz);hint.classList.add('hidden');remainingIndices=remainingIndices.filter(id=>id!==vIdx);localStorage.setItem('skyVocabProgress',JSON.stringify(remainingIndices));setTimeout(()=>nextVocab(true),1200);}else{updateCoins(-1);feedback.innerText="SAI RỒI";feedback.style.color="#f87171";hint.innerText="ĐÁP ÁN: "+(vMode===0?item.mn.toUpperCase():item.hz);hint.classList.remove('hidden');document.getElementById('vocab-card').classList.add('glow-red');speakText(item.hz);}}
     
-    // ... (Keep toggleReadingRef, changeVocabMode, checkGrammar, updateSpeakUI, SpeechRecognition, etc. from previous versions) ...
     function toggleReadingRef(){const txt=document.getElementById('r-text');const btn=document.getElementById('r-toggle-btn');const item=readingData[rIdx];isShowingAnswer=!isShowingAnswer;if(isShowingAnswer){txt.innerText=item.vi_display;btn.innerText="Xem Câu Hỏi (Trung)";}else{txt.innerText=item.zh;btn.innerText="Xem Đáp Án (Việt)";}}
     function changeVocabMode(){vMode=(vMode+1)%3;const labels=["Hán ➔ Việt","Việt ➔ Hán","Hán ➔ Pinyin"];document.getElementById('v-mode-btn').innerText="Mode: "+labels[vMode];nextVocab(false);}
     function updateSpeakUI(){const item=vocabData[sIdx];document.getElementById('s-hz').innerText=item.hz;document.getElementById('s-py').innerText=item.py;document.getElementById('s-mn').innerText=item.mn.toUpperCase();document.getElementById('speak-card').classList.remove('glow-green','glow-red');document.getElementById('s-status').innerText="Bấm mic và nói ngay";document.getElementById('s-live-text').innerText="";}
