@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V30.1 Smooth Anim</title>
+    <title>Skyreign Hub | V31.0 Lighting & Animation Fix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -39,16 +39,20 @@
         @keyframes coinPop { 0% { transform: scale(1); } 50% { transform: scale(1.5); } 100% { transform: scale(1); } }
         .coin-pop-green { animation: coinPop 0.3s ease; color: #4ade80 !important; }
         .coin-pop-red { animation: coinPop 0.3s ease; color: #f87171 !important; }
+        
+        /* MODALS */
         .full-modal { transition: opacity 0.3s ease; }
         .full-modal.hidden { display: none; }
         .npc-bubble { position: absolute; background: white; color: black; padding: 12px; border-radius: 20px; border-bottom-left-radius: 0; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); font-weight: 800; font-size: 10px; max-width: 200px; border: 2px solid #6366f1; z-index: 50; }
+        
+        /* INVENTORY SLOTS */
         .inv-slot { width: 50px; height: 50px; background: rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: 0.2s; cursor: pointer; }
         .inv-slot:hover { border-color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
         .song-item { display: flex; gap: 12px; padding: 10px; border-radius: 12px; background: rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; align-items: center; }
         .song-item:hover { background: rgba(255,255,255,0.15); }
         .song-item img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
-        
-        /* GAME UI */
+
+        /* GAME CANVAS */
         #game-container { position: fixed; inset: 0; z-index: 5000; background: black; display: none; }
         #game-ui { position: absolute; top: 20px; left: 20px; color: white; z-index: 5001; pointer-events: none; }
         .key-hint { background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 5px; font-size: 10px; font-weight: bold; margin-right: 5px; }
@@ -187,7 +191,7 @@
         </div>
         <div class="glass-card p-12 text-center max-w-md mx-4 z-10">
             <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN</h1>
-            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Smooth Game v30.1</p>
+            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Fix V31.0</p>
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="switchTab('vocab')" class="py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-xs uppercase tracking-widest transition">Luyện Từ</button>
                 <button onclick="switchTab('speaking')" class="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-indigo-500/30">Luyện Nói</button>
@@ -221,13 +225,11 @@
         else { coinDisplay.classList.add('coin-pop-red'); }
     }
 
-    // --- GAME LOGIC (THREE.JS - IMPROVED) ---
+    // --- GAME LOGIC (THREE.JS - IMPROVED LIGHTING & ANIMATION) ---
     let gameInited = false;
     let scene, camera, renderer, playerModel, mixer;
     let keys = { w: false, a: false, s: false, d: false, shift: false };
     let clock = new THREE.Clock();
-    
-    // Animation Actions
     let actions = {};
     let activeAction;
     let lastAction;
@@ -245,22 +247,23 @@
         gameInited = true;
         const container = document.getElementById('game-container');
         
-        // Scene Setup
         scene = new THREE.Scene();
         scene.background = new THREE.Color(0x111111);
         scene.fog = new THREE.Fog(0x111111, 10, 50);
 
-        // Camera
         camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
         camera.position.set(0, 5, 10);
         
-        // Renderer
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
         container.appendChild(renderer.domElement);
 
-        // Lighting
+        // --- NEW LIGHTING SETUP (FIX BLACK BODY) ---
+        // Ánh sáng môi trường mạnh hơn để làm sáng toàn bộ model
+        const ambientLight = new THREE.AmbientLight(0xffffff, 2.0); 
+        scene.add(ambientLight);
+        
         const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
         hemiLight.position.set(0, 20, 0);
         scene.add(hemiLight);
@@ -276,31 +279,40 @@
             const model = gltf.scene;
             model.scale.set(5, 5, 5); 
             scene.add(model);
-        });
+        }, undefined, function (error) { console.error('Lỗi HUD:', error); });
 
-        // Load Player (Men.glb)
+        // Load Player
         loader.load('./men.glb', function (gltf) {
             playerModel = gltf.scene;
             playerModel.scale.set(1, 1, 1);
             scene.add(playerModel);
 
-            // Mixer Setup
+            // Mixer Setup - Filter for Idle, Walk, Run specifically
             mixer = new THREE.AnimationMixer(playerModel);
             const clips = gltf.animations;
 
-            // Load specific clips (Ignoring Transitions for smooth loop)
+            // Tìm chính xác tên animation (Case insensitive)
             const getClip = (name) => clips.find(c => c.name.toLowerCase() === name.toLowerCase());
             
+            // Map actions, fallback to index if name not found
             actions['Idle'] = mixer.clipAction(getClip('Idle') || clips[0]);
             actions['Walk'] = mixer.clipAction(getClip('Walk') || clips[1]);
             actions['Run'] = mixer.clipAction(getClip('Run') || clips[2]);
 
-            // Start Idle
+            // Ensure they loop
+            actions['Idle'].play();
+            actions['Walk'].play();
+            actions['Run'].play();
+            
+            // Start in Idle
             activeAction = actions['Idle'];
+            // Stop others to be safe
+            actions['Walk'].stop();
+            actions['Run'].stop();
             activeAction.play();
 
             animate();
-        });
+        }, undefined, function (error) { console.error('Lỗi MEN:', error); });
 
         // Inputs
         document.addEventListener('keydown', (e) => {
@@ -350,10 +362,10 @@
             if (keys.w || keys.s || keys.a || keys.d) {
                 // Determine Walk or Run
                 if (keys.shift && keys.w) {
-                    speed = 6;
+                    speed = 10.0; // Tăng tốc độ chạy để khớp animation
                     moveState = 'Run';
                 } else {
-                    speed = 2.5;
+                    speed = 5.0; // Tốc độ đi bộ chuẩn
                     moveState = 'Walk';
                 }
 
@@ -370,20 +382,18 @@
                 if (keys.a) angle = -Math.PI / 2;
                 if (keys.d) angle = Math.PI / 2;
                 
-                // Diagonal Rotation
                 if (keys.w && keys.a) angle = -3 * Math.PI / 4;
                 if (keys.w && keys.d) angle = 3 * Math.PI / 4;
                 if (keys.s && keys.a) angle = -Math.PI / 4;
                 if (keys.s && keys.d) angle = Math.PI / 4;
 
-                // Smooth rotation
                 const targetRotation = new THREE.Quaternion();
                 targetRotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), angle);
                 playerModel.quaternion.slerp(targetRotation, 0.1);
             }
 
-            // Switch Animation
-            fadeToAction(moveState, 0.2); // 0.2s blend time
+            // Switch Animation (Blending 0.2s)
+            fadeToAction(moveState, 0.2);
 
             mixer.update(delta);
 
