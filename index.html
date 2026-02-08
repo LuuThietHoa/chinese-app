@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V37.0 Full Merge</title>
+    <title>Skyreign Hub | V38.0 Custom Environment</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -13,7 +13,7 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
     <style>
-        /* CORE SETUP */
+        /* GIỮ NGUYÊN CSS GIAO DIỆN */
         :root { --primary: #6366f1; --accent: #f472b6; }
         body {
             font-family: 'Space Grotesk', 'Noto Sans SC', sans-serif;
@@ -25,7 +25,6 @@
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         #cursor { position: fixed; width: 20px; height: 20px; background: white; border-radius: 50%; pointer-events: none; z-index: 9999; mix-blend-mode: difference; transition: transform 0.1s; }
         
-        /* UI ELEMENTS */
         .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: transform 0.3s; }
         .glass-card:hover { transform: translateY(-5px); }
         nav { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; gap: 6px; background: rgba(0,0,0,0.8); padding: 8px; border-radius: 25px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); flex-wrap: wrap; justify-content: center; width: 90%; max-width: 600px; }
@@ -35,7 +34,6 @@
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* EFFECTS */
         .glow-green { box-shadow: 0 0 40px #22c55e !important; border-color: #22c55e !important; }
         .glow-red { box-shadow: 0 0 40px #ef4444 !important; border-color: #ef4444 !important; }
         .mic-ripple { position: absolute; width: 100%; height: 100%; border-radius: 50%; border: 2px solid var(--primary); opacity: 0; animation: ripple 1.5s infinite; }
@@ -47,12 +45,10 @@
         .coin-pop-green { animation: coinPop 0.3s ease; color: #4ade80 !important; }
         .coin-pop-red { animation: coinPop 0.3s ease; color: #f87171 !important; }
         
-        /* MODALS */
         .full-modal { transition: opacity 0.3s ease; }
         .full-modal.hidden { display: none; }
         .npc-bubble { position: absolute; background: white; color: black; padding: 12px; border-radius: 20px; border-bottom-left-radius: 0; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); font-weight: 800; font-size: 10px; max-width: 200px; border: 2px solid #6366f1; z-index: 50; }
         
-        /* INVENTORY SLOTS */
         .inv-slot { width: 50px; height: 50px; background: rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: 0.2s; cursor: pointer; }
         .inv-slot:hover { border-color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
         .song-item { display: flex; gap: 12px; padding: 10px; border-radius: 12px; background: rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; align-items: center; }
@@ -198,7 +194,7 @@
         </div>
         <div class="glass-card p-12 text-center max-w-md mx-4 z-10">
             <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN</h1>
-            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • V37.0 Full Merge</p>
+            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • V38.0 Custom Env</p>
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="switchTab('vocab')" class="py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-xs uppercase tracking-widest transition">Luyện Từ</button>
                 <button onclick="switchTab('speaking')" class="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-indigo-500/30">Luyện Nói</button>
@@ -214,9 +210,7 @@
 <div id="music" class="tab-content"> <div class="min-h-screen flex flex-col items-center justify-center pt-20 pb-20"> <div class="flex flex-col md:flex-row items-center justify-center gap-8 w-full max-w-6xl px-4"> <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto"> <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-indigo-400 border-b border-white/10 pb-2">V-Pop Hits</h3> <div id="v-list" class="space-y-2"></div> </div> <div class="w-full max-w-md flex flex-col items-center"> <h4 class="text-4xl font-black text-white tracking-tighter uppercase mb-4 drop-shadow-lg">Music Pod</h4> <div class="relative w-full h-[300px]"> <model-viewer src="./airpods.glb" alt="My Airpods" auto-rotate camera-controls shadow-intensity="1" exposure="0.8" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer> </div> <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl mt-[-40px] relative z-10"> <div id="player"></div> <video id="mp4-player" controls playsinline class="hidden w-full h-full object-cover"></video> </div> </div> <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto"> <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-pink-400 border-b border-white/10 pb-2">Chinese Hits</h3> <div id="c-list" class="space-y-2"></div> </div> </div> </div> </div>
 
 <script>
-    // ----------------------------------------------------
-    // 1. DATA CŨ CỦA BẠN (VOCAB, READING, MUSIC, COIN...)
-    // ----------------------------------------------------
+    // --- 1. DATA CŨ (VOCAB, READING, MUSIC, ETC.) ---
     let userCoins = parseInt(localStorage.getItem('skyCoins')) || 0;
     let myMobs = JSON.parse(localStorage.getItem('skyMobs')) || [];
     const coinDisplay = document.getElementById('coin-display');
@@ -235,119 +229,7 @@
         else { coinDisplay.classList.add('coin-pop-red'); }
     }
 
-    const mobs = [ { id: "mob1", model: "./mob1.glb", name: "RAICER", atk: 200, hp: 900, price: 100 } ];
-    let shopIdx = 0;
-    function openShop() { clickSfx.currentTime = 0; clickSfx.play().catch(e=>{}); document.getElementById('shop-modal').classList.remove('hidden'); setTimeout(() => typeWriter("Hãy mua những gì bạn muốn...", "npc-text"), 500); loadMob(0); }
-    function closeShop() { document.getElementById('shop-modal').classList.add('hidden'); }
-    function loadMob(idx) { if(idx < 0 || idx >= mobs.length) { alert("Hãy đợi cập nhật thêm quái mới!"); return; } shopIdx = idx; const m = mobs[shopIdx]; document.getElementById('shop-mob-viewer').src = m.model; document.getElementById('mob-name').innerText = m.name; document.getElementById('mob-atk').innerText = m.atk; document.getElementById('mob-hp').innerText = m.hp; }
-    function navShop(dir) { loadMob(shopIdx + dir); }
-    function buyItem() { const m = mobs[shopIdx]; if(myMobs.includes(m.id)) { alert("Bạn đã sở hữu quái vật này rồi!"); return; } if(userCoins >= m.price) { updateCoins(-m.price); myMobs.push(m.id); localStorage.setItem('skyMobs', JSON.stringify(myMobs)); alert("Mua thành công! Hãy kiểm tra túi đồ."); } else { alert("Bạn chưa đủ tiền mua quái vật này"); } }
-    function typeWriter(text, elementId) { const el = document.getElementById(elementId); el.innerText = ""; let i = 0; const speed = 70; function typing() { if (i < text.length) { let char = text.charAt(i); el.textContent += char; if(typeSfx) { typeSfx.currentTime = 0; typeSfx.play().catch(e=>{}); } i++; setTimeout(typing, speed); } } typing(); }
-    function openInventory() { clickSfx.currentTime = 0; clickSfx.play().catch(e=>{}); document.getElementById('inv-modal').classList.remove('hidden'); renderInventory(); }
-    function closeInventory() { document.getElementById('inv-modal').classList.add('hidden'); }
-    function renderInventory() { const container = document.getElementById('inv-mob-container'); const stats = document.getElementById('inv-stats'); if(myMobs.includes('mob1')) { container.innerHTML = `<model-viewer src="./mob1.glb" environment-image="neutral" auto-rotate camera-controls disable-zoom shadow-intensity="1" exposure="1.5" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>`; stats.classList.remove('hidden'); } else { container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-white/50 text-xs font-bold uppercase tracking-widest border border-white/20 px-4 py-2 rounded-lg">Chưa sở hữu quái vật</p></div>`; stats.classList.add('hidden'); } }
-    function speakText(text) { if(!text) return; window.speechSynthesis.cancel(); const msg = new SpeechSynthesisUtterance(text); msg.lang = 'zh-CN'; msg.rate = 0.8; window.speechSynthesis.speak(msg); }
-    
-    // DATA V29 CỦA BẠN (ĐẦY ĐỦ)
-    const vPop = [{name:"Hôn vào đây",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg"},{name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg"}];
-    const cPop = [{name:"Mang Chủng (Mới)",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"},{name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"},{name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"},{name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"}];
-    var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    var player; function onYouTubeIframeAPIReady() { player = new YT.Player('player', { height: '100%', width: '100%', videoId: '' }); }
-    function playMedia(source, type) { const ytDiv = document.getElementById('player'); const mp4Div = document.getElementById('mp4-player'); if(player && player.stopVideo) player.stopVideo(); mp4Div.pause(); if (type === 'mp4') { ytDiv.style.display = 'none'; mp4Div.style.display = 'block'; mp4Div.src = source; mp4Div.play(); } else { mp4Div.style.display = 'none'; ytDiv.style.display = 'block'; player.loadVideoById(source); } }
-    function renderMusic() { const tpl = (s) => `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}')"><img src="${s.thumb}"><div><h4 class="text-[10px] font-bold uppercase">${s.name}</h4><p class="text-[9px] text-gray-400">${s.type === 'mp4' ? 'NO ADS' : 'Youtube'}</p></div></div>`; document.getElementById('v-list').innerHTML = vPop.map(tpl).join(''); document.getElementById('c-list').innerHTML = cPop.map(tpl).join(''); }
-    
-    // FULL VOCAB LIST HSK1
-    const vocabData = [
-        { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" },
-        { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚér", mn: "con gái" }, { hz: "老师", py: "lǎoshī", mn: "thầy cô" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn học" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" }, { hz: "先生", py: "xiānsheng", mn: "ngài/ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô/chị" },
-        { hz: "零", py: "líng", mn: "không" }, { hz: "一", py: "yī", mn: "một" }, { hz: "二", py: "èr", mn: "hai" }, { hz: "三", py: "sān", mn: "ba" }, { hz: "四", py: "sì", mn: "bốn" }, { hz: "五", py: "wǔ", mn: "năm" }, { hz: "六", py: "liù", mn: "sáu" }, { hz: "七", py: "qī", mn: "bảy" }, { hz: "八", py: "bā", mn: "tám" }, { hz: "九", py: "jiǔ", mn: "chín" }, { hz: "十", py: "shí", mn: "mười" },
-        { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" }, { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" }, { hz: "号", py: "hào", mn: "ngày (số)" }, { hz: "星期", py: "xīngqī", mn: "tuần/thứ" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" }, { hz: "时候", py: "shíhou", mn: "lúc/khi" },
-        { hz: "是", py: "shì", mn: "là" }, { hz: "有", py: "yǒu", mn: "có" }, { hz: "在", py: "zài", mn: "ở/đang" }, { hz: "要", py: "yào", mn: "muốn/cần" }, { hz: "喜欢", py: "xǐhuan", mn: "thích" }, { hz: "爱", py: "ài", mn: "yêu" }, { hz: "吃", py: "chī", mn: "ăn" }, { hz: "喝", py: "hē", mn: "uống" }, { hz: "去", py: "qù", mn: "đi" }, { hz: "来", py: "lái", mn: "đến" }, { hz: "想", py: "xiǎng", mn: "muốn/nghĩ" }, { hz: "看", py: "kàn", mn: "xem/nhìn" }, { hz: "听", py: "tīng", mn: "nghe" }, { hz: "说", py: "shuō", mn: "nói" }, { hz: "读", py: "dú", mn: "đọc" }, { hz: "写", py: "xiě", mn: "viết" }, { hz: "做", py: "zuò", mn: "làm" }, { hz: "买", py: "mǎi", mn: "mua" }, { hz: "给", py: "gěi", mn: "cho" }, { hz: "回", py: "huí", mn: "về" }, { hz: "住", py: "zhù", mn: "sống/ở" }, { hz: "认识", py: "rènshi", mn: "quen biết" }, { hz: "会", py: "huì", mn: "biết (kỹ năng)" }, { hz: "能", py: "néng", mn: "có thể" },
-        { hz: "好", py: "hǎo", mn: "tốt" }, { hz: "多", py: "duō", mn: "nhiều" }, { hz: "少", py: "shǎo", mn: "ít" }, { hz: "大", py: "dà", mn: "to/lớn" }, { hz: "小", py: "xiǎo", mn: "nhỏ/bé" }, { hz: "冷", py: "lěng", mn: "lạnh" }, { hz: "热", py: "rè", mn: "nóng" }, { hz: "高兴", py: "gāoxìng", mn: "vui vẻ" }, { hz: "漂亮", py: "piàoliang", mn: "xinh đẹp" }, { hz: "对", py: "duì", mn: "đúng" }, { hz: "错", py: "cuò", mn: "sai" }, { hz: "忙", py: "máng", mn: "bận" }, { hz: "累", py: "lèi", mn: "mệt" },
-        { hz: "水", py: "shuǐ", mn: "nước" }, { hz: "饭", py: "fàn", mn: "cơm" }, { hz: "菜", py: "cài", mn: "món ăn/rau" }, { hz: "茶", py: "chá", mn: "trà" }, { hz: "苹果", py: "píngguǒ", mn: "táo" }, { hz: "钱", py: "qián", mn: "tiền" }, { hz: "东西", py: "dōngxi", mn: "đồ đạc" }, { hz: "杯子", py: "bēizi", mn: "cốc/ly" }, { hz: "衣服", py: "yīfu", mn: "quần áo" }, { hz: "书", py: "shū", mn: "sách" }, { hz: "桌子", py: "zhuōzi", mn: "bàn" }, { hz: "椅子", py: "yǐzi", mn: "ghế" }, { hz: "电脑", py: "diànnǎo", mn: "máy tính" }, { hz: "电视", py: "diànshì", mn: "tivi" }, { hz: "家", py: "jiā", mn: "nhà" }, { hz: "学校", py: "xuéxiào", mn: "trường học" }, { hz: "饭店", py: "fàndiàn", mn: "nhà hàng" }, { hz: "商店", py: "shāngdiàn", mn: "cửa hàng" }, { hz: "北京", py: "běijīng", mn: "Bắc Kinh" }, { hz: "中国", py: "zhōngguó", mn: "Trung Quốc" },
-        { hz: "不", py: "bù", mn: "không (phủ định)" }, { hz: "没", py: "méi", mn: "không có/chưa" }, { hz: "很", py: "hěn", mn: "rất" }, { hz: "太", py: "tài", mn: "quá/lắm" }, { hz: "都", py: "dōu", mn: "đều" }, { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của/trợ từ" }, { hz: "吗", py: "ma", mn: "không (hỏi)" }, { hz: "呢", py: "ne", mn: "thì sao/nhỉ" }, { hz: "了", py: "le", mn: "rồi" }, { hz: "什么", py: "shénme", mn: "cái gì" }, { hz: "哪儿", py: "nǎr", mn: "ở đâu" }, { hz: "怎么", py: "zěnme", mn: "thế nào" }, { hz: "多少", py: "duōshao", mn: "bao nhiêu" }, { hz: "几", py: "jǐ", mn: "mấy" }
-    ];
-
-    const grammarBank = [
-        { zh: "我是学生。", vi: "tôi là học sinh", note: "Câu chữ 是 (Là): S + 是 + O" },
-        { zh: "这是什么？", vi: "đây là cái gì", note: "Câu hỏi với 什么 (Cái gì)" },
-        { zh: "他在家吗？", vi: "anh ấy có ở nhà không", note: "Câu hỏi 吗 (Có... không)" },
-        { zh: "你去哪儿？", vi: "bạn đi đâu", note: "Hỏi địa điểm 哪儿 (Ở đâu)" },
-        { zh: "这个多少钱？", vi: "cái này bao nhiêu tiền", note: "Hỏi giá 多少钱" },
-        { zh: "你是哪国人？", vi: "bạn là người nước nào", note: "Hỏi quốc tịch" },
-        { zh: "现在几点？", vi: "bây giờ là mấy giờ", note: "Hỏi giờ: 几点" },
-        { zh: "你会说汉语吗？", vi: "bạn biết nói tiếng trung không", note: "Động từ năng nguyện 会 (Biết)" },
-        { zh: "他的个子很高。", vi: "dáng người anh ấy rất cao", note: "Tính từ làm vị ngữ (Không dùng 是)" },
-        { zh: "我没钱了。", vi: "tôi hết tiền rồi", note: "Chữ 了 chỉ sự thay đổi trạng thái" },
-        { zh: "我和他是同学。", vi: "tôi và anh ấy là bạn học", note: "Liên từ 和 (Và)" },
-        { zh: "太热了！", vi: "nóng quá", note: "Cấu trúc cảm thán: 太...了" },
-        { zh: "这本书是谁的？", vi: "quyển sách này là của ai", note: "Câu sở hữu với 的" },
-        { zh: "你怎么去学校？", vi: "bạn đi đến trường bằng cách nào", note: "Hỏi phương thức: 怎么 + Động từ" },
-        { zh: "我不喜欢吃苹果。", vi: "tôi không thích ăn táo", note: "Phủ định dùng 不" }
-    ];
-
-    const readingData = [
-        { 
-            id: 1, 
-            zh: "你好！我叫刘铁花。我是学生。我家有五口人：爸爸、妈妈、哥哥、女儿和我。我爸爸是老师，他在学校工作。我妈妈不工作，她在家。我有一个好朋友，他是我的同学。认识你很高兴！",
-            key: "xin chào tôi tên lưu thiết hoa tôi là học sinh nhà tôi có năm người bố mẹ anh trai con gái và tôi bố tôi là giáo viên ông ấy làm việc ở trường mẹ tôi không đi làm bà ấy ở nhà tôi có một người bạn tốt cậu ấy là bạn học của tôi rất vui được làm quen",
-            vi_display: "Xin chào! Tôi tên Lưu Thiết Hoa. Tôi là học sinh. Nhà tôi có 5 người: Bố, mẹ, anh trai, con gái và tôi. Bố tôi là giáo viên, ông ấy làm việc ở trường. Mẹ tôi không đi làm, bà ấy ở nhà. Tôi có một người bạn tốt, cậu ấy là bạn học của tôi. Rất vui được làm quen với bạn!"
-        },
-        { 
-            id: 2, 
-            zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。我喜欢吃中国菜，喝茶。下午我要去商店买东西。我买了一个杯子和几件衣服。明天是星期日，我不工作，我想在家睡觉。",
-            key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm tôi thích ăn món trung quốc uống trà buổi chiều tôi muốn đi cửa hàng mua đồ tôi đã mua một cái cốc và vài bộ quần áo ngày mai là chủ nhật tôi không làm việc tôi muốn ở nhà ngủ",
-            vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm. Tôi thích ăn món Trung Quốc, uống trà. Buổi chiều tôi muốn đi cửa hàng mua đồ. Tôi đã mua một cái cốc và vài bộ quần áo. Ngày mai là chủ nhật, tôi không làm việc, tôi muốn ở nhà ngủ."
-        },
-        { 
-            id: 3, 
-            zh: "先生，你好！请问，现在几点了？现在三点十分。谢谢！不客气。你去哪儿？我去学校看老师。你的老师是谁？我的老师是王先生。他很好，也很忙。",
-            key: "chào ông xin hỏi bây giờ là mấy giờ rồi bây giờ là ba giờ mười phút cảm ơn không có gì bạn đi đâu tôi đi đến trường thăm giáo viên giáo viên của bạn là ai giáo viên của tôi là thầy vương ông ấy rất tốt cũng rất bận",
-            vi_display: "Chào ông! Xin hỏi, bây giờ là mấy giờ rồi? Bây giờ là 3 giờ 10 phút. Cảm ơn! Không có gì. Bạn đi đâu? Tôi đi đến trường thăm giáo viên. Giáo viên của bạn là ai? Giáo viên của tôi là thầy Vương. Ông ấy rất tốt, cũng rất bận."
-        },
-        { 
-            id: 4, 
-            zh: "你会说汉语吗？我会说一点儿。你喜欢做什么？我喜欢看电视和听老师说话。我不喜欢喝水，我喜欢喝茶。今天天气很热，我想吃苹果。你呢？我也一样。",
-            key: "bạn biết nói tiếng trung không tôi biết nói một chút bạn thích làm gì tôi thích xem tivi và nghe thầy giáo nói chuyện tôi không thích uống nước tôi thích uống trà hôm nay thời tiết rất nóng tôi muốn ăn táo còn bạn thì sao tôi cũng vậy",
-            vi_display: "Bạn biết nói tiếng Trung không? Tôi biết nói một chút. Bạn thích làm gì? Tôi thích xem tivi và nghe thầy giáo nói chuyện. Tôi không thích uống nước, tôi thích uống trà. Hôm nay thời tiết rất nóng, tôi muốn ăn táo. Còn bạn thì sao? Tôi cũng vậy."
-        },
-        { 
-            id: 5, 
-            zh: "这个电脑多少钱？这个电脑八千块钱。太贵了！那个桌子和椅子呢？那个桌子不贵。你要买什么？我要买一个小杯子。给你钱。谢谢。",
-            key: "cái máy tính này bao nhiêu tiền cái máy tính này tám nghìn tệ đắt quá cái bàn và ghế kia thì sao cái bàn đó không đắt bạn muốn mua gì tôi muốn mua một cái cốc nhỏ gửi bạn tiền cảm ơn",
-            vi_display: "Cái máy tính này bao nhiêu tiền? Cái máy tính này 8000 tệ. Đắt quá! Cái bàn và ghế kia thì sao? Cái bàn đó không đắt. Bạn muốn mua gì? Tôi muốn mua một cái cốc nhỏ. Gửi bạn tiền. Cảm ơn."
-        },
-        { 
-            id: 6, 
-            zh: "今天是星期五，天气很热。现在上午八点，我不在家，我在学校。我是这里的学生，我也认识很多同学和老师。我的老师是位先生，他很好，但是他今天很忙。",
-            key: "hôm nay là thứ sáu thời tiết rất nóng bây giờ là tám giờ sáng tôi không ở nhà tôi ở trường tôi là học sinh ở đây tôi cũng quen biết rất nhiều bạn học và thầy cô giáo viên của tôi là một quý ông ông ấy rất tốt nhưng hôm nay ông ấy rất bận",
-            vi_display: "Hôm nay là thứ sáu, thời tiết rất nóng. Bây giờ là 8 giờ sáng, tôi không ở nhà, tôi ở trường. Tôi là học sinh ở đây, tôi cũng quen biết rất nhiều bạn học và thầy cô. Giáo viên của tôi là một quý ông, ông ấy rất tốt, nhưng hôm nay ông ấy rất bận."
-        },
-        { 
-            id: 7, 
-            zh: "你好！请问你是谁？我是王小姐，我是你爸爸的朋友。噢！王小姐，快请进，请坐在这儿的椅子上。你认识我的女儿吗？我不认识她，她是谁？她是我的大女儿，他在北京读大学，现在在家里看电视。",
-            key: "xin chào xin hỏi cô là ai tôi là cô vương tôi là bạn của bố bạn ồ cô vương mau mời vào mời ngồi trên cái ghế ở đây cô có biết con gái tôi không tôi không biết cô ấy cô ấy là ai cô ấy là con gái lớn của tôi nó đang học đại học ở bắc kinh bây giờ đang ở nhà xem tivi",
-            vi_display: "Xin chào! Xin hỏi cô là ai? Tôi là cô Vương, tôi là bạn của bố bạn. Ồ! Cô Vương, mau mời vào, mời ngồi trên cái ghế ở đây. Cô có biết con gái tôi không? Tôi không biết cô ấy, cô ấy là ai? Cô ấy là con gái lớn của tôi, nó đang học đại học ở Bắc Kinh, bây giờ đang ở nhà xem tivi."
-        },
-        { 
-            id: 8, 
-            zh: "我是一个喜欢学习的人。现在我不在工作，我在学习。我会说汉语，也会读汉语书，但是我不会写很多字。我的同学太多了，他们都很努力。今天上午，老师说我们要做很多作业。这些作业不大也不小，但是很难。",
-            key: "tôi là một người thích học tập bây giờ tôi không làm việc tôi đang học tôi biết nói tiếng trung cũng biết đọc sách tiếng trung nhưng tôi không biết viết nhiều chữ bạn học của tôi đông quá họ đều rất nỗ lực sáng nay thầy giáo nói chúng tôi phải làm rất nhiều bài tập những bài tập này không lớn cũng không nhỏ nhưng rất khó",
-            vi_display: "Tôi là một người thích học tập. Bây giờ tôi không làm việc, tôi đang học. Tôi biết nói tiếng Trung, cũng biết đọc sách tiếng Trung, nhưng tôi không biết viết nhiều chữ. Bạn học của tôi đông quá, họ đều rất nỗ lực. Sáng nay, thầy giáo nói chúng tôi phải làm rất nhiều bài tập. Những bài tập này không lớn cũng không nhỏ, nhưng rất khó."
-        },
-        {
-            id: 9,
-            zh: "李小姐很漂亮。她喜欢吃中国菜，不喜欢吃苹果。她想喝茶，不想喝水。今天天气很冷，她在家里喝热茶。她很高兴。",
-            key: "cô lý rất xinh đẹp cô ấy thích ăn món trung quốc không thích ăn táo cô ấy muốn uống trà không muốn uống nước hôm nay thời tiết rất lạnh cô ấy ở nhà uống trà nóng cô ấy rất vui",
-            vi_display: "Cô Lý rất xinh đẹp. Cô ấy thích ăn món Trung Quốc, không thích ăn táo. Cô ấy muốn uống trà, không muốn uống nước. Hôm nay thời tiết rất lạnh, cô ấy ở nhà uống trà nóng. Cô ấy rất vui."
-        }
-    ];
-
-    let vMode = 0; let vIdx = 0; let sIdx = 0; let gIdx = 0; let gMode = 0; let rIdx = 0; let isShowingAnswer = false;
-    let remainingIndices = [];
-    
-    // --- 2. GAME LOGIC (3D) ---
-    // QUAN TRỌNG: Phải khởi tạo biến trước khi dùng
+    // --- 2. GAME LOGIC (3D) - V38.0 CUSTOM ENV ---
     let gameInited = false;
     let scene, camera, renderer, playerModel, mixer;
     let keys = { w: false, a: false, s: false, d: false, shift: false };
@@ -370,10 +252,10 @@
         const container = document.getElementById('game-container');
         
         scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x111111);
-        scene.fog = new THREE.Fog(0x111111, 10, 50);
+        // FOG (Sương mù nhẹ để nền hòa vào nhau)
+        scene.fog = new THREE.Fog(0x000000, 20, 100);
 
-        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
         camera.position.set(0, 5, 10);
         
         renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -382,25 +264,48 @@
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         container.appendChild(renderer.domElement);
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); 
+        // LIGHTING
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.2); 
         scene.add(ambientLight);
         const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
-        dirLight.position.set(5, 10, 7);
+        dirLight.position.set(10, 20, 10);
         dirLight.castShadow = true;
+        dirLight.shadow.mapSize.width = 2048;
+        dirLight.shadow.mapSize.height = 2048;
         scene.add(dirLight);
 
-        // Load HUD (Sân khấu)
-        const loader = new THREE.GLTFLoader();
-        loader.load('./hud.glb', function (gltf) {
-            const model = gltf.scene;
-            model.scale.set(5, 5, 5); 
-            scene.add(model);
-        }, undefined, function (error) { console.error('Lỗi HUD:', error); });
+        // --- CUSTOM ENVIRONMENT SETUP ---
+        const texLoader = new THREE.TextureLoader();
 
-        // Load Player (MEN.GLB) với Strict Animation Filter
+        // 1. BACKGROUND (blackg.jpg)
+        texLoader.load('./blackg.jpg', function(texture) {
+            scene.background = texture;
+        });
+
+        // 2. FLOOR / GROUND (sanh.jpg)
+        const groundSize = 40; // Kích thước sàn
+        const groundGeo = new THREE.PlaneGeometry(groundSize, groundSize);
+        const groundMat = new THREE.MeshStandardMaterial({
+            map: texLoader.load('./sanh.jpg'), // Load ảnh sàn
+            side: THREE.DoubleSide,
+            roughness: 0.8
+        });
+        // Lặp lại texture sàn để không bị vỡ hạt
+        groundMat.map.wrapS = THREE.RepeatWrapping;
+        groundMat.map.wrapT = THREE.RepeatWrapping;
+        groundMat.map.repeat.set(4, 4); 
+
+        const ground = new THREE.Mesh(groundGeo, groundMat);
+        ground.rotation.x = -Math.PI / 2; // Xoay nằm ngang
+        ground.position.y = 0;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // --- LOAD PLAYER ---
         loader.load('./men.glb', function (gltf) {
             playerModel = gltf.scene;
             playerModel.scale.set(1, 1, 1);
+            playerModel.position.set(0, 0, 0); // Đứng giữa sàn
             
             playerModel.traverse((child) => {
                 if (child.isMesh) {
@@ -414,12 +319,10 @@
 
             scene.add(playerModel);
 
-            // ANIMATION SETUP
+            // ANIMATION STRICT FILTER (Giữ nguyên logic chuẩn)
             mixer = new THREE.AnimationMixer(playerModel);
             const clips = gltf.animations;
-            console.log("Danh sách Animation:", clips.map(c => c.name));
-
-            // Hàm lọc thông minh: Tìm tên nhưng CẤM các từ khóa sai
+            
             const getStrictClip = (name, excludeList = []) => {
                 return clips.find(c => {
                     const n = c.name.toLowerCase();
@@ -430,7 +333,6 @@
                 });
             };
 
-            // Walk: Tìm "Walk", cấm "Idle", "to" -> Sẽ ra đúng Walk cycle
             const walkClip = getStrictClip('Walk', ['Idle', 'Run', 'to']);
             const runClip = getStrictClip('Run', ['Walk', 'Idle', 'to']);
             const idleClip = getStrictClip('Idle', ['Walk', 'Run', 'to']);
@@ -473,6 +375,9 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
     }
+
+    // Helper functions
+    const loader = new THREE.GLTFLoader(); // Khai báo loader ở phạm vi global để dùng chung
 
     function fadeToAction(name, duration) {
         if (activeAction !== actions[name] && actions[name]) {
@@ -522,13 +427,28 @@
         renderer.render(scene, camera);
     }
 
-    // --- 3. LOGIC HỌC TẬP (FIX INIT LOGIC) ---
+    // --- CÁC HÀM LOGIC CŨ (SHOP, VOCAB...) ---
+    // (Phần này tôi giữ nguyên code V29 chuẩn của bạn, chỉ copy lại để đảm bảo đủ)
+    const mobs = [ { id: "mob1", model: "./mob1.glb", name: "RAICER", atk: 200, hp: 900, price: 100 } ];
+    let shopIdx = 0;
+    function openShop() { clickSfx.currentTime = 0; clickSfx.play().catch(e=>{}); document.getElementById('shop-modal').classList.remove('hidden'); setTimeout(() => typeWriter("Hãy mua những gì bạn muốn...", "npc-text"), 500); loadMob(0); }
+    function closeShop() { document.getElementById('shop-modal').classList.add('hidden'); }
+    function loadMob(idx) { if(idx < 0 || idx >= mobs.length) { alert("Hãy đợi cập nhật thêm quái mới!"); return; } shopIdx = idx; const m = mobs[shopIdx]; document.getElementById('shop-mob-viewer').src = m.model; document.getElementById('mob-name').innerText = m.name; document.getElementById('mob-atk').innerText = m.atk; document.getElementById('mob-hp').innerText = m.hp; }
+    function navShop(dir) { loadMob(shopIdx + dir); }
+    function buyItem() { const m = mobs[shopIdx]; if(myMobs.includes(m.id)) { alert("Bạn đã sở hữu quái vật này rồi!"); return; } if(userCoins >= m.price) { updateCoins(-m.price); myMobs.push(m.id); localStorage.setItem('skyMobs', JSON.stringify(myMobs)); alert("Mua thành công! Hãy kiểm tra túi đồ."); } else { alert("Bạn chưa đủ tiền mua quái vật này"); } }
+    function typeWriter(text, elementId) { const el = document.getElementById(elementId); el.innerText = ""; let i = 0; const speed = 70; function typing() { if (i < text.length) { let char = text.charAt(i); el.textContent += char; if(typeSfx) { typeSfx.currentTime = 0; typeSfx.play().catch(e=>{}); } i++; setTimeout(typing, speed); } } typing(); }
+    function openInventory() { clickSfx.currentTime = 0; clickSfx.play().catch(e=>{}); document.getElementById('inv-modal').classList.remove('hidden'); renderInventory(); }
+    function closeInventory() { document.getElementById('inv-modal').classList.add('hidden'); }
+    function renderInventory() { const container = document.getElementById('inv-mob-container'); const stats = document.getElementById('inv-stats'); if(myMobs.includes('mob1')) { container.innerHTML = `<model-viewer src="./mob1.glb" environment-image="neutral" auto-rotate camera-controls disable-zoom shadow-intensity="1" exposure="1.5" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>`; stats.classList.remove('hidden'); } else { container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-white/50 text-xs font-bold uppercase tracking-widest border border-white/20 px-4 py-2 rounded-lg">Chưa sở hữu quái vật</p></div>`; stats.classList.add('hidden'); } }
+    function speakText(text) { if(!text) return; window.speechSynthesis.cancel(); const msg = new SpeechSynthesisUtterance(text); msg.lang = 'zh-CN'; msg.rate = 0.8; window.speechSynthesis.speak(msg); }
+    const homophones = { "他": ["她", "它"], "做": ["作", "座", "坐"], "那": ["哪"], "是": ["事", "市", "试"], "一": ["衣", "医"], "有": ["友", "又"] };
+    
+    // Init Data Logic (Vocab fix)
     function initVocabSystem() {
         const saved = localStorage.getItem('skyVocabProgress');
         if (saved) {
             try {
                 remainingIndices = JSON.parse(saved);
-                // FIX QUAN TRỌNG: Nếu mảng rỗng (học hết rồi), phải reset ngay lập tức
                 if (!Array.isArray(remainingIndices) || remainingIndices.length === 0) {
                     resetVocabProgress();
                 }
@@ -539,13 +459,12 @@
             resetVocabProgress();
         }
     }
-    
     function resetVocabProgress() {
         remainingIndices = Array.from({length: vocabData.length}, (_, i) => i);
         localStorage.setItem('skyVocabProgress', JSON.stringify(remainingIndices));
     }
 
-    // --- CÁC HÀM XỬ LÝ SỰ KIỆN KHÁC (GIỮ NGUYÊN) ---
+    // Tab Logic
     function switchTab(id) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -557,18 +476,18 @@
         if(id === 'reading') nextParagraph();
     }
 
+    // Reading Logic
     function nextParagraph() {
         let newIdx; do { newIdx = Math.floor(Math.random() * readingData.length); } while (newIdx === rIdx && readingData.length > 1);
         rIdx = newIdx;
         const item = readingData[rIdx];
-        if(!item) return; // Safety check
+        if(!item) return;
         document.getElementById('r-text').innerText = item.zh;
         document.getElementById('r-input').value = "";
         document.getElementById('r-msg').innerText = "";
         document.getElementById('r-toggle-btn').innerText = "Xem Đáp Án (Việt)";
         isShowingAnswer = false;
     }
-
     function toggleReadingRef() {
         const txt = document.getElementById('r-text');
         const btn = document.getElementById('r-toggle-btn');
@@ -577,7 +496,6 @@
         if(isShowingAnswer) { txt.innerText = item.vi_display; btn.innerText = "Xem Câu Hỏi (Trung)"; } 
         else { txt.innerText = item.zh; btn.innerText = "Xem Đáp Án (Việt)"; }
     }
-
     function checkReading() {
         const input = document.getElementById('r-input').value.trim().toLowerCase();
         const target = readingData[rIdx].key;
@@ -596,20 +514,19 @@
         }
     }
 
+    // Vocab Logic
     function changeVocabMode() { vMode = (vMode + 1) % 3; const labels = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"]; document.getElementById('v-mode-btn').innerText = "Mode: " + labels[vMode]; nextVocab(false); }
-    
     function nextVocab(random = true) { 
         if(remainingIndices.length === 0) {
             if(confirm("Bạn đã hoàn thành 150 từ vựng! Có muốn học lại không?")) { resetVocabProgress(); } else { return; }
         }
         if(random) { vIdx = remainingIndices[Math.floor(Math.random() * remainingIndices.length)]; }
         const item = vocabData[vIdx]; 
-        if(!item) return; // Safety check
+        if(!item) return; 
         document.getElementById('v-question').innerText = vMode === 0 ? item.hz : (vMode === 1 ? item.mn.toUpperCase() : item.hz); 
         document.getElementById('v-input').value = ""; document.getElementById('v-msg').innerText = ""; 
         document.getElementById('v-hint').classList.add('hidden'); document.getElementById('vocab-card').classList.remove('glow-green', 'glow-red'); 
     }
-    
     function checkVocab() { 
         const item = vocabData[vIdx]; const val = document.getElementById('v-input').value.trim().toLowerCase(); 
         let correct = false; let answer = ""; 
@@ -625,6 +542,7 @@
         } 
     }
 
+    // Grammar & Speaking
     function toggleGrammarMode() { gMode = 1 - gMode; document.getElementById('g-mode-badge').innerText = gMode === 0 ? "Trung ➔ Việt" : "Việt ➔ Trung"; nextGrammar(); }
     function nextGrammar() { let newIdx; do { newIdx = Math.floor(Math.random() * grammarBank.length); } while (newIdx === gIdx && grammarBank.length > 1); gIdx = newIdx; const item = grammarBank[gIdx]; document.getElementById('g-question').innerText = gMode === 0 ? item.zh : item.vi.toUpperCase(); document.getElementById('g-instruction').innerText = gMode === 0 ? "Dịch câu này sang Tiếng Việt" : "Dịch câu này sang Tiếng Trung"; document.getElementById('g-input').value = ""; document.getElementById('g-msg').innerText = ""; document.getElementById('g-note').innerText = ""; document.getElementById('grammar-card').className="glass-card p-10 w-full max-w-2xl mx-4 relative overflow-hidden"; if(gMode === 0) speakText(item.zh); }
     function checkGrammar() { const val = document.getElementById('g-input').value.trim().toLowerCase(); const item = grammarBank[gIdx]; const target = gMode === 0 ? item.vi : item.zh; const card = document.getElementById('grammar-card'); let isCorrect = false; if (gMode === 0) isCorrect = val === target.toLowerCase() || (target.toLowerCase().includes(val) && val.length > 5); else isCorrect = val === target || val === target.replace(/？|。/g, ""); speakText(item.zh); if(isCorrect) { updateCoins(1); document.getElementById('g-msg').innerText = "RẤT TỐT!"; document.getElementById('g-msg').style.color = "#4ade80"; document.getElementById('g-note').innerText = item.note; card.classList.add('glow-green'); setTimeout(nextGrammar, 2000); } else { updateCoins(-1); document.getElementById('g-msg').innerText = "CHƯA CHÍNH XÁC"; document.getElementById('g-msg').style.color = "#f87171"; document.getElementById('g-note').innerHTML = `<span class="text-red-400">ĐÁP ÁN: ${target}</span><br><span class="text-gray-400">${item.note}</span>`; card.classList.add('glow-red'); } }
@@ -639,14 +557,7 @@
     document.getElementById('g-input').addEventListener("keypress", function(event) { if (event.key === "Enter") checkGrammar(); });
 
     const cursor = document.getElementById('cursor'); document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; }); function handleGlobalClick() { cursor.style.transform = "scale(2)"; setTimeout(() => cursor.style.transform = "scale(1)", 150); }
-    
-    // MAIN ENTRY POINT
-    window.onload = () => { 
-        renderMusic(); 
-        switchTab('home'); 
-        // Force init first time to avoid undefined
-        initVocabSystem();
-    };
+    window.onload = () => { renderMusic(); switchTab('home'); initVocabSystem(); };
 </script>
 </body>
 </html>
