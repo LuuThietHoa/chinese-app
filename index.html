@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V31.0 Lighting & Animation Fix</title>
+    <title>Skyreign Hub | V32.0 Men.glb Fix & Lighting</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -105,7 +105,7 @@
     <div class="relative w-full max-w-6xl aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10">
         <button onclick="closeShop()" class="absolute top-6 right-6 z-50 text-white hover:text-red-500 font-black text-xl bg-white/10 w-12 h-12 rounded-full flex items-center justify-center border border-white/20 transition hover:rotate-90">✕</button>
         <div class="absolute bottom-10 left-10 w-48 h-80 md:w-64 md:h-96 z-20">
-            <model-viewer src="./main.glb" alt="Shopkeeper" environment-image="neutral" camera-controls disable-zoom shadow-intensity="2" exposure="1.5" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>
+            <model-viewer src="./main.glb" alt="Shopkeeper" environment-image="neutral" autoplay animation-name="Idle" camera-controls disable-zoom shadow-intensity="2" exposure="1.5" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>
             <div class="npc-bubble -top-10 left-20"><p id="npc-text">...</p></div>
         </div>
         <div class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
@@ -191,7 +191,7 @@
         </div>
         <div class="glass-card p-12 text-center max-w-md mx-4 z-10">
             <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN</h1>
-            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Fix V31.0</p>
+            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Fix V32.0</p>
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="switchTab('vocab')" class="py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-xs uppercase tracking-widest transition">Luyện Từ</button>
                 <button onclick="switchTab('speaking')" class="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-indigo-500/30">Luyện Nói</button>
@@ -203,7 +203,7 @@
 <div id="reading" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-8 w-full max-w-3xl mx-4 relative" id="reading-card"> <div class="flex justify-between items-center mb-6"> <div class="text-[10px] font-black bg-pink-500 px-3 py-1 rounded-full uppercase tracking-widest">Đoạn Văn Ngẫu Nhiên</div> <div class="flex gap-2"> <button id="r-toggle-btn" onclick="toggleReadingRef()" class="text-[10px] font-bold text-green-400 hover:text-white uppercase tracking-widest transition border border-green-500 px-2 py-1 rounded-lg">Xem Đáp Án (Việt)</button> <button onclick="nextParagraph()" class="text-[10px] font-bold text-gray-400 hover:text-white uppercase tracking-widest transition">Đổi bài khác ↻</button> </div> </div> <div class="bg-black/20 p-6 rounded-2xl mb-6 border border-white/10 h-64 overflow-y-auto"> <p id="r-text" class="text-xl md:text-2xl font-medium text-gray-100 reading-text">Loading...</p> </div> <p class="text-xs text-gray-400 mb-2 italic">Hãy dịch đoạn văn trên sang Tiếng Việt (+1 Coin nếu đúng):</p> <textarea id="r-input" rows="4" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-gray-600 outline-none focus:border-indigo-500 transition mb-6" placeholder="Gõ bản dịch của bạn vào đây..."></textarea> <button onclick="checkReading()" class="w-full py-4 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-indigo-400 hover:text-white transition mb-4 shadow-lg">Kiểm Tra Bản Dịch</button> <div id="r-feedback" class="text-center min-h-[40px]"> <p id="r-msg" class="text-[11px] font-bold uppercase tracking-widest mb-1"></p> </div> </div> </div> </div>
 <div id="vocab" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-10 w-full max-w-lg mx-4 relative" id="vocab-card"> <div class="flex justify-between items-center mb-8"> <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[10px] font-black bg-pink-500 px-3 py-1 rounded-full uppercase tracking-widest hover:scale-105 transition">Mode: Hán ➔ Việt</button> <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">HSK 1 FULL</div> </div> <div id="v-question" class="text-7xl font-black text-center mb-8 tracking-tighter min-h-[100px] flex items-center justify-center">?</div> <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b-2 border-white/20 py-3 text-center font-bold text-2xl outline-none focus:border-indigo-500 transition text-white placeholder-gray-600 mb-8" autocomplete="off"> <button onclick="checkVocab()" class="w-full py-4 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-gray-200 transition mb-4">Kiểm Tra</button> <div id="v-feedback" class="text-center h-10"> <p id="v-msg" class="text-[11px] font-bold uppercase tracking-widest"></p> <p id="v-hint" class="text-[12px] font-bold text-red-400 mt-1 uppercase hidden"></p> </div> </div> </div> </div>
 <div id="speaking" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-10 w-full max-w-md mx-4 text-center relative overflow-hidden" id="speak-card"> <div class="text-[10px] uppercase tracking-widest text-indigo-400 font-black mb-8">V18.0 - Fast Catch</div> <div class="mb-8 relative group"> <div id="s-hz" class="text-9xl font-black mb-2 tracking-tighter cursor-pointer transition hover:text-indigo-400" onclick="speakText(document.getElementById('s-hz').innerText)">我</div> <div id="s-py" class="text-2xl text-gray-500 mb-1">wǒ</div> <div id="s-mn" class="text-xs font-bold bg-white/10 px-3 py-1 rounded-full inline-block">TÔI</div> </div> <div class="flex justify-center items-center gap-6 mb-8"> <button onclick="changeSpeakWord(-1)" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition">←</button> <div class="relative"> <div id="mic-ring" class="hidden mic-ripple"></div> <button id="mic-btn" class="w-20 h-20 bg-indigo-600 rounded-full flex items-center justify-center shadow-2xl relative z-10 transition hover:scale-110 active:scale-90 text-white"> <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg> </button> </div> <button onclick="changeSpeakWord(1)" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition">→</button> </div> <div id="s-feedback" class="text-[11px] font-bold uppercase tracking-widest text-gray-400 h-16 flex flex-col items-center justify-center px-4"> <span id="s-status">Bấm mic và nói ngay</span> <span id="s-sub" class="text-[9px] text-gray-500 mt-1"></span> </div> <div id="s-live-text" class="absolute bottom-1 w-full text-center text-[9px] text-indigo-300/50 uppercase tracking-widest"></div> <div id="progress-bar"></div> </div> </div> </div>
-<div id="grammar" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-10 w-full max-w-2xl mx-4 relative overflow-hidden" id="grammar-card"> <div class="flex justify-between items-center mb-10"> <button onclick="toggleGrammarMode()" id="g-mode-badge" class="text-[10px] font-black bg-indigo-600 px-3 py-1 rounded-full uppercase tracking-widest hover:scale-110 transition shadow-lg shadow-indigo-500/50">Trung ➔ Việt</button> <div class="text-[9px] font-bold text-gray-400">HSK1 GRAMMAR</div> </div> <div class="text-center mb-10 min-h-[120px] flex flex-col justify-center items-center"> <div id="g-question" class="text-4xl md:text-5xl font-bold tracking-tight mb-4 leading-tight drop-shadow-lg cursor-pointer hover:text-indigo-300 transition" onclick="readGrammarQuestion()">...</div> <p id="g-instruction" class="text-gray-500 text-sm italic">Hãy dịch câu trên</p> </div> <input type="text" id="g-input" placeholder="Nhập câu trả lời..." class="w-full bg-transparent border-b-2 border-white/10 py-4 text-center text-xl font-medium outline-none focus:border-indigo-500 transition mb-6 text-white placeholder-gray-600" autocomplete="off"> <div class="grid grid-cols-4 gap-4 mb-6"> <button onclick="nextGrammar()" class="col-span-1 py-4 bg-white/5 hover:bg-white/10 rounded-2xl font-bold text-[10px] uppercase tracking-widest text-gray-400 hover:text-white transition">Bỏ qua</button> <button onclick="checkGrammar()" class="col-span-3 py-4 bg-white text-black hover:bg-indigo-400 hover:text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition shadow-lg">Kiểm tra</button> </div> <div id="g-feedback" class="text-center h-20"> <div id="g-msg" class="text-[11px] font-bold uppercase tracking-widest mb-1"></div> <div id="g-note" class="text-[12px] font-bold text-red-400 mt-2 uppercase"></div> </div> </div> </div> </div>
+<div id="grammar" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-10 w-full max-w-2xl mx-4 relative overflow-hidden" id="grammar-card"> <div class="flex justify-between items-center mb-10"> <button onclick="toggleGrammarMode()" id="g-mode-badge" class="text-[10px] font-black bg-indigo-600 px-3 py-1 rounded-full uppercase tracking-widest hover:scale-110 transition shadow-lg shadow-indigo-500/50">Trung ➔ Việt</button> <div class="text-[9px] font-bold text-gray-400">HSK1 GRAMMAR</div> </div> <div class="text-center mb-10 min-h-[120px] flex flex-col justify-center items-center"> <div id="g-question" class="text-4xl md:text-5xl font-bold tracking-tight mb-4 leading-tight drop-shadow-lg cursor-pointer hover:text-indigo-300 transition" onclick="readGrammarQuestion()">...</div> <p id="g-instruction" class="text-gray-500 text-sm italic">Hãy dịch câu trên</p> </div> <input type="text" id="g-input" placeholder="Nhập câu trả lời..." class="w-full bg-transparent border-b-2 border-white/10 py-4 text-center text-xl font-medium outline-none focus:border-indigo-500 transition mb-6" text-white placeholder-gray-600" autocomplete="off"> <div class="grid grid-cols-4 gap-4 mb-6"> <button onclick="nextGrammar()" class="col-span-1 py-4 bg-white/5 hover:bg-white/10 rounded-2xl font-bold text-[10px] uppercase tracking-widest text-gray-400 hover:text-white transition">Bỏ qua</button> <button onclick="checkGrammar()" class="col-span-3 py-4 bg-white text-black hover:bg-indigo-400 hover:text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition shadow-lg">Kiểm tra</button> </div> <div id="g-feedback" class="text-center h-20"> <div id="g-msg" class="text-[11px] font-bold uppercase tracking-widest mb-1"></div> <div id="g-note" class="text-[12px] font-bold text-red-400 mt-2 uppercase"></div> </div> </div> </div> </div>
 <div id="music" class="tab-content"> <div class="min-h-screen flex flex-col items-center justify-center pt-20 pb-20"> <div class="flex flex-col md:flex-row items-center justify-center gap-8 w-full max-w-6xl px-4"> <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto"> <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-indigo-400 border-b border-white/10 pb-2">V-Pop Hits</h3> <div id="v-list" class="space-y-2"></div> </div> <div class="w-full max-w-md flex flex-col items-center"> <h4 class="text-4xl font-black text-white tracking-tighter uppercase mb-4 drop-shadow-lg">Music Pod</h4> <div class="relative w-full h-[300px]"> <model-viewer src="./airpods.glb" alt="My Airpods" auto-rotate camera-controls shadow-intensity="1" exposure="0.8" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer> </div> <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl mt-[-40px] relative z-10"> <div id="player"></div> <video id="mp4-player" controls playsinline class="hidden w-full h-full object-cover"></video> </div> </div> <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto"> <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-pink-400 border-b border-white/10 pb-2">Chinese Hits</h3> <div id="c-list" class="space-y-2"></div> </div> </div> </div> </div>
 
 <script>
@@ -257,14 +257,14 @@
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Bóng mềm hơn
         container.appendChild(renderer.domElement);
 
-        // --- NEW LIGHTING SETUP (FIX BLACK BODY) ---
-        // Ánh sáng môi trường mạnh hơn để làm sáng toàn bộ model
-        const ambientLight = new THREE.AmbientLight(0xffffff, 2.0); 
+        // --- FIX LIGHTING (Làm sáng model đen) ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); 
         scene.add(ambientLight);
         
-        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.2);
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.5);
         hemiLight.position.set(0, 20, 0);
         scene.add(hemiLight);
         
@@ -285,16 +285,26 @@
         loader.load('./men.glb', function (gltf) {
             playerModel = gltf.scene;
             playerModel.scale.set(1, 1, 1);
+            
+            // --- FIX MATERIAL: DUYỆT QUA TOÀN BỘ MESH ĐỂ KHỬ MÀU ĐEN ---
+            playerModel.traverse((child) => {
+                if (child.isMesh) {
+                    // Reset vật liệu để nó bắt sáng cơ bản thay vì phản chiếu môi trường (gây đen)
+                    child.material.metalness = 0;   // Không kim loại
+                    child.material.roughness = 1;   // Nhám hoàn toàn để bắt sáng đều
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                }
+            });
+
             scene.add(playerModel);
 
-            // Mixer Setup - Filter for Idle, Walk, Run specifically
+            // Mixer Setup
             mixer = new THREE.AnimationMixer(playerModel);
             const clips = gltf.animations;
 
-            // Tìm chính xác tên animation (Case insensitive)
-            const getClip = (name) => clips.find(c => c.name.toLowerCase() === name.toLowerCase());
+            const getClip = (name) => clips.find(c => c.name.toLowerCase().includes(name.toLowerCase()));
             
-            // Map actions, fallback to index if name not found
             actions['Idle'] = mixer.clipAction(getClip('Idle') || clips[0]);
             actions['Walk'] = mixer.clipAction(getClip('Walk') || clips[1]);
             actions['Run'] = mixer.clipAction(getClip('Run') || clips[2]);
@@ -304,9 +314,7 @@
             actions['Walk'].play();
             actions['Run'].play();
             
-            // Start in Idle
             activeAction = actions['Idle'];
-            // Stop others to be safe
             actions['Walk'].stop();
             actions['Run'].stop();
             activeAction.play();
@@ -342,7 +350,7 @@
     }
 
     function fadeToAction(name, duration) {
-        if (activeAction !== actions[name]) {
+        if (activeAction !== actions[name] && actions[name]) {
             lastAction = activeAction;
             activeAction = actions[name];
             lastAction.fadeOut(duration);
@@ -360,12 +368,11 @@
 
             // Check movement
             if (keys.w || keys.s || keys.a || keys.d) {
-                // Determine Walk or Run
                 if (keys.shift && keys.w) {
-                    speed = 10.0; // Tăng tốc độ chạy để khớp animation
+                    speed = 8.0; // Tinh chỉnh lại tốc độ chạy
                     moveState = 'Run';
                 } else {
-                    speed = 5.0; // Tốc độ đi bộ chuẩn
+                    speed = 4.0; // Tốc độ đi bộ
                     moveState = 'Walk';
                 }
 
@@ -375,7 +382,7 @@
                 if (keys.a) playerModel.position.x -= speed * delta;
                 if (keys.d) playerModel.position.x += speed * delta;
 
-                // Handle Rotation (Face direction)
+                // Handle Rotation
                 let angle = 0;
                 if (keys.w) angle = Math.PI;
                 if (keys.s) angle = 0;
@@ -389,15 +396,12 @@
 
                 const targetRotation = new THREE.Quaternion();
                 targetRotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), angle);
-                playerModel.quaternion.slerp(targetRotation, 0.1);
+                playerModel.quaternion.slerp(targetRotation, 0.15); // Xoay nhanh hơn một chút
             }
 
-            // Switch Animation (Blending 0.2s)
-            fadeToAction(moveState, 0.2);
-
+            fadeToAction(moveState, 0.25);
             mixer.update(delta);
 
-            // Camera Follow
             camera.position.x = playerModel.position.x;
             camera.position.z = playerModel.position.z + 6;
             camera.position.y = playerModel.position.y + 7;
@@ -407,7 +411,7 @@
         renderer.render(scene, camera);
     }
 
-    // --- (KEEP OTHER LOGIC) ---
+    // --- CÁC HÀM LOGIC CŨ GIỮ NGUYÊN ---
     const mobs = [ { id: "mob1", model: "./mob1.glb", name: "RAICER", atk: 200, hp: 900, price: 100 } ];
     let shopIdx = 0;
     function openShop() { clickSfx.currentTime = 0; clickSfx.play().catch(e=>{}); document.getElementById('shop-modal').classList.remove('hidden'); setTimeout(() => typeWriter("Hãy mua những gì bạn muốn...", "npc-text"), 500); loadMob(0); }
