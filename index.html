@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V32.0 Men.glb Fix & Lighting</title>
+    <title>Skyreign Hub | V33.0 Animation Fix Final</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -191,7 +191,7 @@
         </div>
         <div class="glass-card p-12 text-center max-w-md mx-4 z-10">
             <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN</h1>
-            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Fix V32.0</p>
+            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Fix V33.0</p>
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="switchTab('vocab')" class="py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-xs uppercase tracking-widest transition">Luyện Từ</button>
                 <button onclick="switchTab('speaking')" class="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-indigo-500/30">Luyện Nói</button>
@@ -225,7 +225,7 @@
         else { coinDisplay.classList.add('coin-pop-red'); }
     }
 
-    // --- GAME LOGIC (THREE.JS - IMPROVED LIGHTING & ANIMATION) ---
+    // --- GAME LOGIC (THREE.JS - IMPROVED ANIMATION & LIGHTING) ---
     let gameInited = false;
     let scene, camera, renderer, playerModel, mixer;
     let keys = { w: false, a: false, s: false, d: false, shift: false };
@@ -257,10 +257,10 @@
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Bóng mềm hơn
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         container.appendChild(renderer.domElement);
 
-        // --- FIX LIGHTING (Làm sáng model đen) ---
+        // --- FIX LIGHTING ---
         const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); 
         scene.add(ambientLight);
         
@@ -289,35 +289,47 @@
             // --- FIX MATERIAL: DUYỆT QUA TOÀN BỘ MESH ĐỂ KHỬ MÀU ĐEN ---
             playerModel.traverse((child) => {
                 if (child.isMesh) {
-                    // Reset vật liệu để nó bắt sáng cơ bản thay vì phản chiếu môi trường (gây đen)
-                    child.material.metalness = 0;   // Không kim loại
-                    child.material.roughness = 1;   // Nhám hoàn toàn để bắt sáng đều
+                    child.material.metalness = 0.0; // Tắt phản chiếu kim loại
+                    child.material.roughness = 0.8; // Tăng độ nhám để bắt sáng tốt
                     child.castShadow = true;
                     child.receiveShadow = true;
+                    // Fallback nếu mất texture
+                    if(!child.material.map) {
+                        child.material.color.setHex(0xaaaaaa);
+                    }
                 }
             });
 
             scene.add(playerModel);
 
-            // Mixer Setup
+            // --- FIX ANIMATION: Tìm đúng tên trong file sketchfab ---
             mixer = new THREE.AnimationMixer(playerModel);
             const clips = gltf.animations;
 
-            const getClip = (name) => clips.find(c => c.name.toLowerCase().includes(name.toLowerCase()));
-            
-            actions['Idle'] = mixer.clipAction(getClip('Idle') || clips[0]);
-            actions['Walk'] = mixer.clipAction(getClip('Walk') || clips[1]);
-            actions['Run'] = mixer.clipAction(getClip('Run') || clips[2]);
+            // Debug tên animation ra console để kiểm tra
+            console.log("Animations found:", clips.map(c => c.name));
 
-            // Ensure they loop
-            actions['Idle'].play();
-            actions['Walk'].play();
-            actions['Run'].play();
+            // Hàm tìm chính xác (Case Sensitive)
+            const getClip = (name) => {
+                const clip = clips.find(c => c.name === name); // Ưu tiên tìm chính xác
+                if(clip) return clip;
+                return clips.find(c => c.name.toLowerCase().includes(name.toLowerCase())); // Fallback tìm gần đúng
+            };
+            
+            const idleClip = getClip('Idle');
+            const walkClip = getClip('Walk');
+            const runClip = getClip('Run');
+
+            if (idleClip) {
+                actions['Idle'] = mixer.clipAction(idleClip);
+                actions['Idle'].play();
+            }
+            if (walkClip) actions['Walk'] = mixer.clipAction(walkClip);
+            if (runClip) actions['Run'] = mixer.clipAction(runClip);
             
             activeAction = actions['Idle'];
-            actions['Walk'].stop();
-            actions['Run'].stop();
-            activeAction.play();
+            
+            console.log("Đã setup xong animation:", actions);
 
             animate();
         }, undefined, function (error) { console.error('Lỗi MEN:', error); });
@@ -350,9 +362,11 @@
     }
 
     function fadeToAction(name, duration) {
+        // Chỉ chuyển nếu animation đó tồn tại và khác hành động hiện tại
         if (activeAction !== actions[name] && actions[name]) {
             lastAction = activeAction;
             activeAction = actions[name];
+            
             lastAction.fadeOut(duration);
             activeAction.reset().fadeIn(duration).play();
         }
@@ -369,10 +383,10 @@
             // Check movement
             if (keys.w || keys.s || keys.a || keys.d) {
                 if (keys.shift && keys.w) {
-                    speed = 8.0; // Tinh chỉnh lại tốc độ chạy
+                    speed = 8.0; 
                     moveState = 'Run';
                 } else {
-                    speed = 4.0; // Tốc độ đi bộ
+                    speed = 4.0;
                     moveState = 'Walk';
                 }
 
@@ -396,10 +410,12 @@
 
                 const targetRotation = new THREE.Quaternion();
                 targetRotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), angle);
-                playerModel.quaternion.slerp(targetRotation, 0.15); // Xoay nhanh hơn một chút
+                playerModel.quaternion.slerp(targetRotation, 0.15); 
             }
 
+            // Gọi hàm chuyển đổi animation mượt mà
             fadeToAction(moveState, 0.25);
+            
             mixer.update(delta);
 
             camera.position.x = playerModel.position.x;
@@ -411,7 +427,7 @@
         renderer.render(scene, camera);
     }
 
-    // --- CÁC HÀM LOGIC CŨ GIỮ NGUYÊN ---
+    // --- CÁC HÀM LOGIC CŨ GIỮ NGUYÊN (Game Logic, Shop, Inventory, Music...) ---
     const mobs = [ { id: "mob1", model: "./mob1.glb", name: "RAICER", atk: 200, hp: 900, price: 100 } ];
     let shopIdx = 0;
     function openShop() { clickSfx.currentTime = 0; clickSfx.play().catch(e=>{}); document.getElementById('shop-modal').classList.remove('hidden'); setTimeout(() => typeWriter("Hãy mua những gì bạn muốn...", "npc-text"), 500); loadMob(0); }
