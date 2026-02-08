@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V33.0 Animation Fix Final</title>
+    <title>Skyreign Hub | V34.0 Strict Animation Fix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -191,7 +191,7 @@
         </div>
         <div class="glass-card p-12 text-center max-w-md mx-4 z-10">
             <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN</h1>
-            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Fix V33.0</p>
+            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Fix V34.0</p>
             <div class="grid grid-cols-2 gap-4">
                 <button onclick="switchTab('vocab')" class="py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-xs uppercase tracking-widest transition">Luyện Từ</button>
                 <button onclick="switchTab('speaking')" class="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-indigo-500/30">Luyện Nói</button>
@@ -293,7 +293,6 @@
                     child.material.roughness = 0.8; // Tăng độ nhám để bắt sáng tốt
                     child.castShadow = true;
                     child.receiveShadow = true;
-                    // Fallback nếu mất texture
                     if(!child.material.map) {
                         child.material.color.setHex(0xaaaaaa);
                     }
@@ -302,34 +301,64 @@
 
             scene.add(playerModel);
 
-            // --- FIX ANIMATION: Tìm đúng tên trong file sketchfab ---
+            // --- FIX ANIMATION: LOGIC LỌC NGHIÊM NGẶT (V34.0) ---
             mixer = new THREE.AnimationMixer(playerModel);
             const clips = gltf.animations;
 
-            // Debug tên animation ra console để kiểm tra
-            console.log("Animations found:", clips.map(c => c.name));
+            console.log("Danh sách Animation trong file:", clips.map(c => c.name));
 
-            // Hàm tìm chính xác (Case Sensitive)
-            const getClip = (name) => {
-                const clip = clips.find(c => c.name === name); // Ưu tiên tìm chính xác
-                if(clip) return clip;
-                return clips.find(c => c.name.toLowerCase().includes(name.toLowerCase())); // Fallback tìm gần đúng
+            // Hàm tìm clip thông minh với bộ lọc loại trừ (Strict Filter)
+            const getStrictClip = (name, excludeList = []) => {
+                // 1. Tìm chính xác tuyệt đối
+                let clip = clips.find(c => c.name === name);
+                if (clip) return clip;
+
+                // 2. Tìm chứa tên NHƯNG không chứa từ cấm
+                return clips.find(c => {
+                    const n = c.name.toLowerCase();
+                    const target = name.toLowerCase();
+                    // Phải chứa từ khóa target
+                    if (!n.includes(target)) return false;
+                    
+                    // Và KHÔNG được chứa bất kỳ từ nào trong danh sách loại trừ
+                    for (let ex of excludeList) {
+                        if (n.includes(ex.toLowerCase())) return false;
+                    }
+                    return true;
+                });
             };
-            
-            const idleClip = getClip('Idle');
-            const walkClip = getClip('Walk');
-            const runClip = getClip('Run');
 
-            if (idleClip) {
-                actions['Idle'] = mixer.clipAction(idleClip);
+            // THIẾT LẬP CÁC HÀNH ĐỘNG
+            // Walk: Tìm chữ "Walk", nhưng CẤM chữ "Idle", "Run", "to" -> Sẽ ra đúng Walk cycle
+            const walkClip = getStrictClip('Walk', ['Idle', 'Run', 'to']);
+            
+            // Run: Tìm chữ "Run", cấm chữ "Walk", "to"
+            const runClip = getStrictClip('Run', ['Walk', 'Idle', 'to']);
+            
+            // Idle: Tìm chữ "Idle", cấm chữ "Walk", "Run", "to"
+            const idleClip = getStrictClip('Idle', ['Walk', 'Run', 'to']);
+
+            // Fallback (Phòng hờ nếu lọc kỹ quá không ra thì lấy đại cái đầu tiên chứa tên)
+            const fallbackClip = (name) => clips.find(c => c.name.toLowerCase().includes(name.toLowerCase()));
+
+            if (idleClip || fallbackClip('Idle')) {
+                actions['Idle'] = mixer.clipAction(idleClip || fallbackClip('Idle'));
                 actions['Idle'].play();
             }
-            if (walkClip) actions['Walk'] = mixer.clipAction(walkClip);
-            if (runClip) actions['Run'] = mixer.clipAction(runClip);
+            
+            if (walkClip || fallbackClip('Walk')) {
+                actions['Walk'] = mixer.clipAction(walkClip || fallbackClip('Walk'));
+            } else {
+                console.warn("Vẫn không tìm thấy Walk chuẩn, hãy kiểm tra Console log tên animation!");
+            }
+
+            if (runClip || fallbackClip('Run')) {
+                actions['Run'] = mixer.clipAction(runClip || fallbackClip('Run'));
+            }
             
             activeAction = actions['Idle'];
             
-            console.log("Đã setup xong animation:", actions);
+            console.log("Đã load xong với logic lọc Animation mới.");
 
             animate();
         }, undefined, function (error) { console.error('Lỗi MEN:', error); });
