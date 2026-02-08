@@ -3,143 +3,366 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V35.0 FINAL DEBUG FIX</title>
+    <title>Skyreign Hub | V35.0 Full Web Fix</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
     <style>
         :root { --primary: #6366f1; --accent: #f472b6; }
-        body { font-family: 'Space Grotesk', sans-serif; background: #000; color: #fff; overflow-x: hidden; }
+        body {
+            font-family: 'Space Grotesk', 'Noto Sans SC', sans-serif;
+            background: linear-gradient(-45deg, #020617, #1e1b4b, #be185d, #0f766e);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
+            color: #fff; min-height: 100vh; overflow-x: hidden; cursor: none;
+        }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        #cursor { position: fixed; width: 20px; height: 20px; background: white; border-radius: 50%; pointer-events: none; z-index: 9999; mix-blend-mode: difference; transition: transform 0.1s; }
+        .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 30px; box-shadow: 0 20px 50px rgba(0,0,0,0.3); transition: transform 0.3s; }
+        .glass-card:hover { transform: translateY(-5px); }
+        nav { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 1000; display: flex; gap: 6px; background: rgba(0,0,0,0.8); padding: 8px; border-radius: 25px; backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); flex-wrap: wrap; justify-content: center; width: 90%; max-width: 600px; }
+        .nav-btn { padding: 10px 16px; border-radius: 18px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; color: #94a3b8; white-space: nowrap; }
+        .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); }
+        .tab-content { display: none; opacity: 0; animation: fadeIn 0.5s forwards; padding-bottom: 120px; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .glow-green { box-shadow: 0 0 40px #22c55e !important; border-color: #22c55e !important; }
+        .glow-red { box-shadow: 0 0 40px #ef4444 !important; border-color: #ef4444 !important; }
+        #progress-bar { width: 0%; height: 4px; background: #22c55e; transition: width 0.1s linear; position: absolute; bottom: 0; left: 0; }
+        .reading-text { line-height: 1.8; letter-spacing: 1px; text-align: justify; }
+        textarea:focus { box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
+        @keyframes coinPop { 0% { transform: scale(1); } 50% { transform: scale(1.5); } 100% { transform: scale(1); } }
+        .coin-pop-green { animation: coinPop 0.3s ease; color: #4ade80 !important; }
+        .coin-pop-red { animation: coinPop 0.3s ease; color: #f87171 !important; }
+        
+        /* MODALS */
+        .full-modal { transition: opacity 0.3s ease; }
+        .full-modal.hidden { display: none; }
+        .npc-bubble { position: absolute; background: white; color: black; padding: 12px; border-radius: 20px; border-bottom-left-radius: 0; box-shadow: 0 0 20px rgba(99, 102, 241, 0.5); font-weight: 800; font-size: 10px; max-width: 200px; border: 2px solid #6366f1; z-index: 50; }
+        
+        /* INVENTORY SLOTS */
+        .inv-slot { width: 50px; height: 50px; background: rgba(0,0,0,0.6); border: 2px solid rgba(255,255,255,0.2); border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: 0.2s; cursor: pointer; }
+        .inv-slot:hover { border-color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
+        .song-item { display: flex; gap: 12px; padding: 10px; border-radius: 12px; background: rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; align-items: center; }
+        .song-item:hover { background: rgba(255,255,255,0.15); }
+        .song-item img { width: 40px; height: 40px; border-radius: 8px; object-fit: cover; }
+
+        /* GAME CANVAS */
         #game-container { position: fixed; inset: 0; z-index: 5000; background: black; display: none; }
         #game-ui { position: absolute; top: 20px; left: 20px; color: white; z-index: 5001; pointer-events: none; }
         .key-hint { background: rgba(255,255,255,0.2); padding: 5px 10px; border-radius: 5px; font-size: 10px; font-weight: bold; margin-right: 5px; }
-        /* Debug Box để bạn nhìn thấy tên Animation ngay trên màn hình */
-        #debug-console { position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.8); padding: 10px; border: 1px solid lime; color: lime; font-family: monospace; font-size: 10px; z-index: 6000; max-height: 200px; overflow-y: auto; pointer-events: none;}
     </style>
 </head>
-<body>
+<body onclick="handleGlobalClick(event)">
 
-<div id="debug-console" style="display:none;">Loading...</div>
+<div id="cursor"></div>
 
-<div class="fixed top-32 right-6 z-[2000] cursor-pointer" onclick="enterGameWorld()">
-    <div class="bg-indigo-600 text-white px-4 py-2 rounded font-bold">VÀO GAME (TEST FIX)</div>
+<audio id="sfx-coin" src="https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3"></audio>
+<audio id="sfx-click" src="https://assets.mixkit.co/sfx/preview/mixkit-sci-fi-click-900.mp3"></audio>
+<audio id="sfx-type" src="https://assets.mixkit.co/sfx/preview/mixkit-keyboard-typing-1386.mp3"></audio>
+
+<div class="fixed top-6 right-6 z-[2000] flex items-center gap-3 bg-black/40 backdrop-blur-xl px-5 py-2 rounded-full border border-yellow-500/30 shadow-2xl transition hover:scale-105">
+    <div class="w-10 h-10">
+        <model-viewer src="./coin.glb" alt="Coin" auto-rotate rotation-per-second="30deg" disable-zoom style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>
+    </div>
+    <div class="flex flex-col items-end">
+        <span class="text-[9px] font-bold text-yellow-500/80 uppercase tracking-widest">Balance</span>
+        <span id="coin-display" class="text-2xl font-black text-yellow-400 leading-none tabular-nums">0</span>
+    </div>
+</div>
+
+<div class="fixed top-32 right-6 z-[2000] cursor-pointer transition hover:scale-110 active:scale-95 group flex flex-col items-center" onclick="enterGameWorld()">
+    <div class="w-16 h-16 bg-indigo-900/80 rounded-full border-2 border-indigo-400 flex items-center justify-center shadow-lg shadow-indigo-500/50">
+        <span class="text-2xl">🌍</span>
+    </div>
+    <div class="bg-indigo-600 text-white px-2 py-1 rounded text-[8px] font-bold uppercase mt-1">Vào Thế Giới</div>
 </div>
 
 <div id="game-container">
     <div id="game-ui">
-        <h2 class="text-xl font-black uppercase text-yellow-400">DEBUG MODE</h2>
+        <h2 class="text-xl font-black uppercase italic text-yellow-400">Thế Giới Skyreign</h2>
         <div class="mt-2 text-xs text-gray-300">
             <p class="mb-1"><span class="key-hint">W A S D</span> Di chuyển</p>
-            <p><span class="key-hint">SHIFT + W</span> Chạy</p>
+            <p><span class="key-hint">SHIFT + W</span> Chạy nhanh</p>
         </div>
     </div>
-    <div id="debug-console-ingame" style="position: absolute; top: 100px; left: 20px; color: lime; font-family: monospace; background: rgba(0,0,0,0.7); padding: 10px;"></div>
-    <button onclick="exitGameWorld()" class="absolute top-6 right-6 z-[5002] text-white font-black text-xl">✕</button>
+    <button onclick="exitGameWorld()" class="absolute top-6 right-6 z-[5002] text-white hover:text-red-500 font-black text-xl bg-white/10 w-12 h-12 rounded-full flex items-center justify-center border border-white/20">✕</button>
 </div>
 
+<div class="fixed bottom-24 left-6 z-[2000] cursor-pointer transition hover:scale-110 active:scale-95 group" onclick="openInventory()">
+    <div class="w-24 h-24 relative">
+        <model-viewer src="./loot.glb" alt="Inventory" auto-rotate rotation-per-second="20deg" disable-zoom style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>
+        <div class="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white px-3 py-1 rounded-full font-black text-[8px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-lg border border-white/20">Túi Đồ</div>
+    </div>
+</div>
+
+<div id="shop-modal" class="full-modal hidden fixed inset-0 z-[3000] bg-black/95 flex items-center justify-center p-4">
+    <div class="relative w-full max-w-6xl aspect-video bg-black rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+        <button onclick="closeShop()" class="absolute top-6 right-6 z-50 text-white hover:text-red-500 font-black text-xl bg-white/10 w-12 h-12 rounded-full flex items-center justify-center border border-white/20 transition hover:rotate-90">✕</button>
+        <div class="absolute bottom-10 left-10 w-48 h-80 md:w-64 md:h-96 z-20">
+            <model-viewer src="./main.glb" alt="Shopkeeper" environment-image="neutral" autoplay animation-name="Idle" camera-controls disable-zoom shadow-intensity="2" exposure="1.5" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>
+            <div class="npc-bubble -top-10 left-20"><p id="npc-text">...</p></div>
+        </div>
+        <div class="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
+            <div class="relative w-72 h-72 md:w-[500px] md:h-[500px] pointer-events-auto group flex flex-col items-center">
+                <button onclick="buyItem()" class="absolute -top-16 z-50 bg-yellow-500 hover:bg-yellow-400 text-black px-6 py-3 rounded-full font-black uppercase tracking-widest shadow-lg shadow-yellow-500/50 animate-bounce transition transform hover:scale-110 border-4 border-black">MUA NGAY (100 🪙)</button>
+                <model-viewer id="shop-mob-viewer" src="./mob1.glb" alt="Mob" environment-image="neutral" auto-rotate camera-controls shadow-intensity="2" exposure="1.5" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>
+                <div class="absolute top-20 -right-10 md:-right-20 bg-black/80 backdrop-blur-xl border border-red-500/50 p-6 rounded-2xl w-56 shadow-2xl opacity-0 group-hover:opacity-100 transition duration-300 translate-x-4 group-hover:translate-x-0">
+                    <h3 class="text-red-500 font-black text-3xl mb-2 uppercase italic tracking-tighter" id="mob-name">RAICER</h3>
+                    <div class="space-y-3 text-xs font-bold text-gray-400">
+                        <div class="flex justify-between border-b border-white/10 pb-1"><span>⚔ Tấn Công:</span> <span class="text-white" id="mob-atk">200</span></div>
+                        <div class="flex justify-between border-b border-white/10 pb-1"><span>♥ Máu:</span> <span class="text-white" id="mob-hp">900</span></div>
+                        <div class="mt-2 text-[10px] italic text-gray-500 text-center">Quái vật cấp 1</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-30 flex gap-4">
+            <button onclick="navShop(-1)" class="px-6 py-3 bg-white/5 hover:bg-white/20 border border-white/20 rounded-xl font-bold text-xs uppercase tracking-widest text-gray-300 hover:text-white transition flex items-center gap-2">◀ Lùi lại</button>
+            <button onclick="navShop(1)" class="px-6 py-3 bg-indigo-600 hover:bg-indigo-500 shadow-lg shadow-indigo-500/50 rounded-xl font-bold text-xs uppercase tracking-widest text-white transition flex items-center gap-2">Tiếp theo ▶</button>
+        </div>
+    </div>
+</div>
+
+<div id="inv-modal" class="full-modal hidden fixed inset-0 z-[3000] bg-black/90 flex items-center justify-center p-4">
+    <div class="relative w-full max-w-5xl aspect-video bg-[#1a1a1a] rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+        <img src="./iv.jpg" alt="Inventory BG" class="absolute inset-0 w-full h-full object-cover opacity-60">
+        <button onclick="closeInventory()" class="absolute top-6 right-6 z-50 text-white hover:text-red-500 font-black text-xl bg-black/60 w-12 h-12 rounded-full flex items-center justify-center border border-white/20">✕</button>
+        <div class="absolute inset-0 flex flex-col p-10 z-10">
+            <div class="flex-1 flex justify-between items-center px-10">
+                <div class="flex flex-col gap-4">
+                    <div class="inv-slot"><span class="text-[8px] text-white/30">HEAD</span></div>
+                    <div class="inv-slot"><span class="text-[8px] text-white/30">BODY</span></div>
+                    <div class="inv-slot"><span class="text-[8px] text-white/30">LEGS</span></div>
+                    <div class="inv-slot"><span class="text-[8px] text-white/30">HAND</span></div>
+                    <div class="inv-slot"><span class="text-[8px] text-white/30">ACC</span></div>
+                </div>
+                <div class="relative w-96 h-96 flex items-center justify-center">
+                    <div id="inv-mob-container" class="w-full h-full"></div>
+                    <div id="inv-stats" class="hidden absolute top-10 -right-10 bg-black/70 backdrop-blur border border-indigo-500/50 p-4 rounded-xl w-40">
+                        <h4 class="text-indigo-400 font-bold text-xs uppercase mb-2 border-b border-white/10 pb-1">Chỉ Số Tổng</h4>
+                        <div class="space-y-1 text-[10px] text-gray-300">
+                            <div class="flex justify-between"><span>ATK:</span> <span class="text-white">200</span></div>
+                            <div class="flex justify-between"><span>HP:</span> <span class="text-white">900</span></div>
+                            <div class="flex justify-between"><span>DEF:</span> <span class="text-white">50</span></div>
+                            <div class="flex justify-between"><span>SPD:</span> <span class="text-white">120</span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <div class="inv-slot"><span class="text-[8px] text-white/30">WEAPON</span></div>
+                    <div class="inv-slot"><span class="text-[8px] text-white/30">SHIELD</span></div>
+                    <div class="inv-slot"><span class="text-[8px] text-white/30">RING 1</span></div>
+                    <div class="inv-slot"><span class="text-[8px] text-white/30">RING 2</span></div>
+                    <div class="inv-slot"><span class="text-[8px] text-white/30">PET</span></div>
+                </div>
+            </div>
+            <div class="h-32 mt-4 bg-black/40 rounded-xl border border-white/10 p-4">
+                <h4 class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest">Túi Đồ (Inventory)</h4>
+                <div class="flex gap-2 overflow-x-auto pb-2">
+                    <div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div><div class="inv-slot min-w-[50px]"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nav>
+    <button onclick="switchTab('home')" class="nav-btn active" id="n-home">Sảnh</button>
+    <button onclick="switchTab('vocab')" class="nav-btn" id="n-vocab">Học Từ</button>
+    <button onclick="switchTab('reading')" class="nav-btn" id="n-reading">Đọc Hiểu</button>
+    <button onclick="switchTab('speaking')" class="nav-btn" id="n-speaking">Luyện Nói</button>
+    <button onclick="switchTab('grammar')" class="nav-btn" id="n-grammar">Ngữ Pháp</button>
+    <button onclick="switchTab('music')" class="nav-btn" id="n-music">Nhạc</button>
+</nav>
+
+<div id="home" class="tab-content active">
+    <div class="h-screen flex flex-col items-center justify-center relative">
+        <div class="absolute top-24 left-10 cursor-pointer transition hover:scale-110 active:scale-95 group z-20" onclick="openShop()">
+            <div class="w-32 h-32 relative">
+                <model-viewer src="./shop.glb" alt="My Shop" auto-rotate camera-controls shadow-intensity="1" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>
+                <div class="absolute -bottom-4 left-1/2 transform -translate-x-1/2 bg-yellow-500 text-black px-3 py-1 rounded-full font-black text-[9px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition whitespace-nowrap shadow-lg border-2 border-white">Cửa Hàng</div>
+            </div>
+        </div>
+        <div class="glass-card p-12 text-center max-w-md mx-4 z-10">
+            <h1 class="text-6xl md:text-8xl font-black italic tracking-tighter mb-4 bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN</h1>
+            <p class="text-xs tracking-[0.5em] text-gray-400 uppercase mb-10">Lưu Thiết Hoa • Fix V35.0</p>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="switchTab('vocab')" class="py-4 bg-white/10 hover:bg-white/20 rounded-xl font-bold text-xs uppercase tracking-widest transition">Luyện Từ</button>
+                <button onclick="switchTab('speaking')" class="py-4 bg-indigo-600 hover:bg-indigo-700 rounded-xl font-bold text-xs uppercase tracking-widest transition shadow-lg shadow-indigo-500/30">Luyện Nói</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="reading" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-8 w-full max-w-3xl mx-4 relative" id="reading-card"> <div class="flex justify-between items-center mb-6"> <div class="text-[10px] font-black bg-pink-500 px-3 py-1 rounded-full uppercase tracking-widest">Đoạn Văn Ngẫu Nhiên</div> <div class="flex gap-2"> <button id="r-toggle-btn" onclick="toggleReadingRef()" class="text-[10px] font-bold text-green-400 hover:text-white uppercase tracking-widest transition border border-green-500 px-2 py-1 rounded-lg">Xem Đáp Án (Việt)</button> <button onclick="nextParagraph()" class="text-[10px] font-bold text-gray-400 hover:text-white uppercase tracking-widest transition">Đổi bài khác ↻</button> </div> </div> <div class="bg-black/20 p-6 rounded-2xl mb-6 border border-white/10 h-64 overflow-y-auto"> <p id="r-text" class="text-xl md:text-2xl font-medium text-gray-100 reading-text">Loading...</p> </div> <p class="text-xs text-gray-400 mb-2 italic">Hãy dịch đoạn văn trên sang Tiếng Việt (+1 Coin nếu đúng):</p> <textarea id="r-input" rows="4" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-gray-600 outline-none focus:border-indigo-500 transition mb-6" placeholder="Gõ bản dịch của bạn vào đây..."></textarea> <button onclick="checkReading()" class="w-full py-4 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-indigo-400 hover:text-white transition mb-4 shadow-lg">Kiểm Tra Bản Dịch</button> <div id="r-feedback" class="text-center min-h-[40px]"> <p id="r-msg" class="text-[11px] font-bold uppercase tracking-widest mb-1"></p> </div> </div> </div> </div>
+<div id="vocab" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-10 w-full max-w-lg mx-4 relative" id="vocab-card"> <div class="flex justify-between items-center mb-8"> <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[10px] font-black bg-pink-500 px-3 py-1 rounded-full uppercase tracking-widest hover:scale-105 transition">Mode: Hán ➔ Việt</button> <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">HSK 1 FULL</div> </div> <div id="v-question" class="text-7xl font-black text-center mb-8 tracking-tighter min-h-[100px] flex items-center justify-center">?</div> <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b-2 border-white/20 py-3 text-center font-bold text-2xl outline-none focus:border-indigo-500 transition text-white placeholder-gray-600 mb-8" autocomplete="off"> <button onclick="checkVocab()" class="w-full py-4 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-gray-200 transition mb-4">Kiểm Tra</button> <div id="v-feedback" class="text-center h-10"> <p id="v-msg" class="text-[11px] font-bold uppercase tracking-widest"></p> <p id="v-hint" class="text-[12px] font-bold text-red-400 mt-1 uppercase hidden"></p> </div> </div> </div> </div>
+<div id="speaking" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-10 w-full max-w-md mx-4 text-center relative overflow-hidden" id="speak-card"> <div class="text-[10px] uppercase tracking-widest text-indigo-400 font-black mb-8">V18.0 - Fast Catch</div> <div class="mb-8 relative group"> <div id="s-hz" class="text-9xl font-black mb-2 tracking-tighter cursor-pointer transition hover:text-indigo-400" onclick="speakText(document.getElementById('s-hz').innerText)">我</div> <div id="s-py" class="text-2xl text-gray-500 mb-1">wǒ</div> <div id="s-mn" class="text-xs font-bold bg-white/10 px-3 py-1 rounded-full inline-block">TÔI</div> </div> <div class="flex justify-center items-center gap-6 mb-8"> <button onclick="changeSpeakWord(-1)" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition">←</button> <div class="relative"> <div id="mic-ring" class="hidden mic-ripple"></div> <button id="mic-btn" class="w-20 h-20 bg-indigo-600 rounded-full flex items-center justify-center shadow-2xl relative z-10 transition hover:scale-110 active:scale-90 text-white"> <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" /></svg> </button> </div> <button onclick="changeSpeakWord(1)" class="w-10 h-10 rounded-full bg-white/5 hover:bg-white/20 flex items-center justify-center transition">→</button> </div> <div id="s-feedback" class="text-[11px] font-bold uppercase tracking-widest text-gray-400 h-16 flex flex-col items-center justify-center px-4"> <span id="s-status">Bấm mic và nói ngay</span> <span id="s-sub" class="text-[9px] text-gray-500 mt-1"></span> </div> <div id="s-live-text" class="absolute bottom-1 w-full text-center text-[9px] text-indigo-300/50 uppercase tracking-widest"></div> <div id="progress-bar"></div> </div> </div> </div>
+<div id="grammar" class="tab-content"> <div class="min-h-screen flex items-center justify-center pt-20"> <div class="glass-card p-10 w-full max-w-2xl mx-4 relative overflow-hidden" id="grammar-card"> <div class="flex justify-between items-center mb-10"> <button onclick="toggleGrammarMode()" id="g-mode-badge" class="text-[10px] font-black bg-indigo-600 px-3 py-1 rounded-full uppercase tracking-widest hover:scale-110 transition shadow-lg shadow-indigo-500/50">Trung ➔ Việt</button> <div class="text-[9px] font-bold text-gray-400">HSK1 GRAMMAR</div> </div> <div class="text-center mb-10 min-h-[120px] flex flex-col justify-center items-center"> <div id="g-question" class="text-4xl md:text-5xl font-bold tracking-tight mb-4 leading-tight drop-shadow-lg cursor-pointer hover:text-indigo-300 transition" onclick="readGrammarQuestion()">...</div> <p id="g-instruction" class="text-gray-500 text-sm italic">Hãy dịch câu trên</p> </div> <input type="text" id="g-input" placeholder="Nhập câu trả lời..." class="w-full bg-transparent border-b-2 border-white/10 py-4 text-center text-xl font-medium outline-none focus:border-indigo-500 transition mb-6" text-white placeholder-gray-600" autocomplete="off"> <div class="grid grid-cols-4 gap-4 mb-6"> <button onclick="nextGrammar()" class="col-span-1 py-4 bg-white/5 hover:bg-white/10 rounded-2xl font-bold text-[10px] uppercase tracking-widest text-gray-400 hover:text-white transition">Bỏ qua</button> <button onclick="checkGrammar()" class="col-span-3 py-4 bg-white text-black hover:bg-indigo-400 hover:text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] transition shadow-lg">Kiểm tra</button> </div> <div id="g-feedback" class="text-center h-20"> <div id="g-msg" class="text-[11px] font-bold uppercase tracking-widest mb-1"></div> <div id="g-note" class="text-[12px] font-bold text-red-400 mt-2 uppercase"></div> </div> </div> </div> </div>
+<div id="music" class="tab-content"> <div class="min-h-screen flex flex-col items-center justify-center pt-20 pb-20"> <div class="flex flex-col md:flex-row items-center justify-center gap-8 w-full max-w-6xl px-4"> <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto"> <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-indigo-400 border-b border-white/10 pb-2">V-Pop Hits</h3> <div id="v-list" class="space-y-2"></div> </div> <div class="w-full max-w-md flex flex-col items-center"> <h4 class="text-4xl font-black text-white tracking-tighter uppercase mb-4 drop-shadow-lg">Music Pod</h4> <div class="relative w-full h-[300px]"> <model-viewer src="./airpods.glb" alt="My Airpods" auto-rotate camera-controls shadow-intensity="1" exposure="0.8" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer> </div> <div class="w-full aspect-video bg-black rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl mt-[-40px] relative z-10"> <div id="player"></div> <video id="mp4-player" controls playsinline class="hidden w-full h-full object-cover"></video> </div> </div> <div class="glass-card p-6 w-full md:w-72 h-96 overflow-y-auto"> <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-pink-400 border-b border-white/10 pb-2">Chinese Hits</h3> <div id="c-list" class="space-y-2"></div> </div> </div> </div> </div>
+
 <script>
-    // --- GAME LOGIC ---
+    let userCoins = parseInt(localStorage.getItem('skyCoins')) || 0;
+    let myMobs = JSON.parse(localStorage.getItem('skyMobs')) || [];
+    const coinDisplay = document.getElementById('coin-display');
+    const coinSfx = document.getElementById('sfx-coin');
+    const clickSfx = document.getElementById('sfx-click');
+    const typeSfx = document.getElementById('sfx-type');
+    coinDisplay.innerText = userCoins;
+
+    function updateCoins(amount) {
+        userCoins += amount;
+        localStorage.setItem('skyCoins', userCoins);
+        coinDisplay.innerText = userCoins;
+        coinDisplay.classList.remove('coin-pop-green', 'coin-pop-red');
+        void coinDisplay.offsetWidth;
+        if(amount > 0) { coinDisplay.classList.add('coin-pop-green'); coinSfx.currentTime = 0; coinSfx.play().catch(e=>{}); } 
+        else { coinDisplay.classList.add('coin-pop-red'); }
+    }
+
+    // --- GAME LOGIC (THREE.JS - IMPROVED ANIMATION & LIGHTING) ---
     let gameInited = false;
     let scene, camera, renderer, playerModel, mixer;
     let keys = { w: false, a: false, s: false, d: false, shift: false };
     let clock = new THREE.Clock();
     let actions = {};
-    let activeAction, lastAction;
+    let activeAction;
+    let lastAction;
 
     function enterGameWorld() {
         document.getElementById('game-container').style.display = 'block';
         if (!gameInited) initGame();
     }
-    function exitGameWorld() { document.getElementById('game-container').style.display = 'none'; }
+
+    function exitGameWorld() {
+        document.getElementById('game-container').style.display = 'none';
+    }
 
     function initGame() {
         gameInited = true;
         const container = document.getElementById('game-container');
         
         scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x222222);
-        
-        // Đèn sáng trưng để nhìn rõ model
-        const ambientLight = new THREE.AmbientLight(0xffffff, 2); 
-        scene.add(ambientLight);
-        const dirLight = new THREE.DirectionalLight(0xffffff, 2);
-        dirLight.position.set(5, 10, 7);
-        scene.add(dirLight);
+        scene.background = new THREE.Color(0x111111);
+        scene.fog = new THREE.Fog(0x111111, 10, 50);
 
         camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
         camera.position.set(0, 5, 10);
         
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
         container.appendChild(renderer.domElement);
 
-        // Load Environment nền
-        const loader = new THREE.GLTFLoader();
-        loader.load('./hud.glb', (gltf) => {
-            gltf.scene.scale.set(5,5,5);
-            scene.add(gltf.scene);
-        }, undefined, (e) => {});
+        // --- FIX LIGHTING ---
+        const ambientLight = new THREE.AmbientLight(0xffffff, 1.5); 
+        scene.add(ambientLight);
+        
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 1.5);
+        hemiLight.position.set(0, 20, 0);
+        scene.add(hemiLight);
+        
+        const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        dirLight.position.set(5, 10, 7);
+        dirLight.castShadow = true;
+        scene.add(dirLight);
 
-        // --- LOAD PLAYER ---
+        // Load HUD (Environment)
+        const loader = new THREE.GLTFLoader();
+        loader.load('./hud.glb', function (gltf) {
+            const model = gltf.scene;
+            model.scale.set(5, 5, 5); 
+            scene.add(model);
+        }, undefined, function (error) { console.error('Lỗi HUD:', error); });
+
+        // Load Player
         loader.load('./men.glb', function (gltf) {
             playerModel = gltf.scene;
-            scene.add(playerModel);
-
-            // Xử lý Material để không bị đen
+            playerModel.scale.set(1, 1, 1);
+            
+            // --- FIX MATERIAL ---
             playerModel.traverse((child) => {
                 if (child.isMesh) {
-                    child.material.metalness = 0;
-                    child.material.roughness = 1;
+                    child.material.metalness = 0.0;
+                    child.material.roughness = 0.8;
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    if(!child.material.map) {
+                        child.material.color.setHex(0xaaaaaa);
+                    }
                 }
             });
 
+            scene.add(playerModel);
+
+            // --- FIX ANIMATION: LOGIC LỌC NGHIÊM NGẶT (V35.0) ---
             mixer = new THREE.AnimationMixer(playerModel);
             const clips = gltf.animations;
 
-            // === PHẦN QUAN TRỌNG NHẤT: IN DANH SÁCH ANIMATION ===
-            let debugHTML = "<b>DANH SÁCH ANIMATION TÌM THẤY:</b><br>";
-            clips.forEach((clip, index) => {
-                debugHTML += `Index [${index}]: ${clip.name} (Time: ${clip.duration.toFixed(2)}s)<br>`;
-            });
-            document.getElementById('debug-console-ingame').innerHTML = debugHTML;
-            console.log("Danh sách Animation:", clips); // Xem chi tiết ở F12
+            // Debug tên animation ra console để kiểm tra
+            console.log("DANH SÁCH ANIMATION TRONG FILE:");
+            clips.forEach((c, i) => console.log(`${i}: ${c.name}`));
 
-            // === SỬA THỦ CÔNG TẠI ĐÂY NẾU CẦN ===
-            // Dựa trên ảnh Sketchfab bạn gửi, thứ tự thường là:
-            // clips[0] = T-Pose hoặc Idle
-            // clips[1] = Idle To Walk (Cái gây lỗi!)
-            // clips[2] = Walk (Cái chúng ta cần)
-            // clips[3] = Walk To Run
-            // clips[4] = Run
+            // Hàm lấy clip theo index (ĐỘ CHÍNH XÁC CAO NHẤT)
+            // Nếu lọc tên vẫn sai, bạn xem console rồi sửa số index ở đây
+            // Thường: 0=Idle, 1=IdleToWalk(Bỏ), 2=Walk, 3=WalkToRun(Bỏ), 4=Run
             
-            // Tôi sẽ lấy theo INDEX thay vì tên để tránh nhầm lẫn
-            const idleClip = clips[0]; // Thường là cái đầu tiên
-            
-            // LƯU Ý: Nếu vào game nhân vật vẫn đi sai, bạn hãy đổi số 2 thành số khác (ví dụ 1, 3) dựa vào bảng tên hiện trên màn hình
-            const walkClip = clips[2]; 
-            
-            const runClip = clips[4];  // Thường là cái cuối hoặc số 4
+            const idleClip = clips[0];  // Mặc định lấy cái đầu tiên làm Idle
+            const walkClip = clips[2] || clips[1]; // Thử lấy cái thứ 3 (index 2), nếu k có lấy cái t2
+            const runClip = clips[4] || clips[2];  // Thử lấy cái thứ 5 (index 4)
 
-            if(idleClip) { actions['Idle'] = mixer.clipAction(idleClip); actions['Idle'].play(); }
-            if(walkClip) { actions['Walk'] = mixer.clipAction(walkClip); }
-            if(runClip)  { actions['Run']  = mixer.clipAction(runClip); }
+            // Nếu lọc bằng tên:
+            // const walkClip = clips.find(c => c.name === 'Walk' || c.name === 'walk'); 
 
+            if (idleClip) {
+                actions['Idle'] = mixer.clipAction(idleClip);
+                actions['Idle'].play();
+            }
+            
+            if (walkClip) {
+                actions['Walk'] = mixer.clipAction(walkClip);
+                console.log("Đã chọn Walk Clip:", walkClip.name);
+            }
+
+            if (runClip) {
+                actions['Run'] = mixer.clipAction(runClip);
+                console.log("Đã chọn Run Clip:", runClip.name);
+            }
+            
             activeAction = actions['Idle'];
             animate();
+        }, undefined, function (error) { console.error('Lỗi MEN:', error); });
 
-        }, undefined, function (error) { console.error(error); });
-
-        // Input
+        // Inputs
         document.addEventListener('keydown', (e) => {
-            if(e.key.toLowerCase() === 'w') keys.w = true;
-            if(e.key.toLowerCase() === 'shift') keys.shift = true;
+            switch(e.key.toLowerCase()) {
+                case 'w': keys.w = true; break;
+                case 'a': keys.a = true; break;
+                case 's': keys.s = true; break;
+                case 'd': keys.d = true; break;
+                case 'shift': keys.shift = true; break;
+            }
         });
         document.addEventListener('keyup', (e) => {
-            if(e.key.toLowerCase() === 'w') keys.w = false;
-            if(e.key.toLowerCase() === 'shift') keys.shift = false;
+            switch(e.key.toLowerCase()) {
+                case 'w': keys.w = false; break;
+                case 'a': keys.a = false; break;
+                case 's': keys.s = false; break;
+                case 'd': keys.d = false; break;
+                case 'shift': keys.shift = false; break;
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
         });
     }
 
@@ -155,29 +378,101 @@
     function animate() {
         requestAnimationFrame(animate);
         const delta = clock.getDelta();
+
         if (playerModel && mixer) {
+            let speed = 0;
             let moveState = 'Idle';
-            if (keys.w) {
-                moveState = keys.shift ? 'Run' : 'Walk';
-                playerModel.position.z -= (keys.shift ? 8 : 4) * delta;
+
+            // Check movement
+            if (keys.w || keys.s || keys.a || keys.d) {
+                if (keys.shift && keys.w) {
+                    speed = 8.0; 
+                    moveState = 'Run';
+                } else {
+                    speed = 4.0;
+                    moveState = 'Walk';
+                }
+
+                if (keys.w) playerModel.position.z -= speed * delta;
+                if (keys.s) playerModel.position.z += speed * delta;
+                if (keys.a) playerModel.position.x -= speed * delta;
+                if (keys.d) playerModel.position.x += speed * delta;
+
+                let angle = 0;
+                if (keys.w) angle = Math.PI;
+                if (keys.s) angle = 0;
+                if (keys.a) angle = -Math.PI / 2;
+                if (keys.d) angle = Math.PI / 2;
+                
+                if (keys.w && keys.a) angle = -3 * Math.PI / 4;
+                if (keys.w && keys.d) angle = 3 * Math.PI / 4;
+                if (keys.s && keys.a) angle = -Math.PI / 4;
+                if (keys.s && keys.d) angle = Math.PI / 4;
+
+                const targetRotation = new THREE.Quaternion();
+                targetRotation.setFromAxisAngle(new THREE.Vector3(0, 1, 0), angle);
+                playerModel.quaternion.slerp(targetRotation, 0.15); 
             }
-            fadeToAction(moveState, 0.2);
+
+            fadeToAction(moveState, 0.25);
             mixer.update(delta);
-            
-            // Camera follow đơn giản
+
             camera.position.x = playerModel.position.x;
-            camera.position.z = playerModel.position.z + 5;
-            camera.position.y = playerModel.position.y + 5;
+            camera.position.z = playerModel.position.z + 6;
+            camera.position.y = playerModel.position.y + 7;
             camera.lookAt(playerModel.position);
         }
+
         renderer.render(scene, camera);
     }
+
+    // --- CÁC HÀM LOGIC CŨ GIỮ NGUYÊN ---
+    const mobs = [ { id: "mob1", model: "./mob1.glb", name: "RAICER", atk: 200, hp: 900, price: 100 } ];
+    let shopIdx = 0;
+    function openShop() { clickSfx.currentTime = 0; clickSfx.play().catch(e=>{}); document.getElementById('shop-modal').classList.remove('hidden'); setTimeout(() => typeWriter("Hãy mua những gì bạn muốn...", "npc-text"), 500); loadMob(0); }
+    function closeShop() { document.getElementById('shop-modal').classList.add('hidden'); }
+    function loadMob(idx) { if(idx < 0 || idx >= mobs.length) { alert("Hãy đợi cập nhật thêm quái mới!"); return; } shopIdx = idx; const m = mobs[shopIdx]; document.getElementById('shop-mob-viewer').src = m.model; document.getElementById('mob-name').innerText = m.name; document.getElementById('mob-atk').innerText = m.atk; document.getElementById('mob-hp').innerText = m.hp; }
+    function navShop(dir) { loadMob(shopIdx + dir); }
+    function buyItem() { const m = mobs[shopIdx]; if(myMobs.includes(m.id)) { alert("Bạn đã sở hữu quái vật này rồi!"); return; } if(userCoins >= m.price) { updateCoins(-m.price); myMobs.push(m.id); localStorage.setItem('skyMobs', JSON.stringify(myMobs)); alert("Mua thành công! Hãy kiểm tra túi đồ."); } else { alert("Bạn chưa đủ tiền mua quái vật này"); } }
+    function typeWriter(text, elementId) { const el = document.getElementById(elementId); el.innerText = ""; let i = 0; const speed = 70; function typing() { if (i < text.length) { let char = text.charAt(i); el.textContent += char; if(typeSfx) { typeSfx.currentTime = 0; typeSfx.play().catch(e=>{}); } i++; setTimeout(typing, speed); } } typing(); }
+    function openInventory() { clickSfx.currentTime = 0; clickSfx.play().catch(e=>{}); document.getElementById('inv-modal').classList.remove('hidden'); renderInventory(); }
+    function closeInventory() { document.getElementById('inv-modal').classList.add('hidden'); }
+    function renderInventory() { const container = document.getElementById('inv-mob-container'); const stats = document.getElementById('inv-stats'); if(myMobs.includes('mob1')) { container.innerHTML = `<model-viewer src="./mob1.glb" environment-image="neutral" auto-rotate camera-controls disable-zoom shadow-intensity="1" exposure="1.5" style="width: 100%; height: 100%; --poster-color: transparent;"></model-viewer>`; stats.classList.remove('hidden'); } else { container.innerHTML = `<div class="flex items-center justify-center h-full"><p class="text-white/50 text-xs font-bold uppercase tracking-widest border border-white/20 px-4 py-2 rounded-lg">Chưa sở hữu quái vật</p></div>`; stats.classList.add('hidden'); } }
+    function speakText(text) { if(!text) return; window.speechSynthesis.cancel(); const msg = new SpeechSynthesisUtterance(text); msg.lang = 'zh-CN'; msg.rate = 0.8; window.speechSynthesis.speak(msg); }
+    const homophones = { "他": ["她", "它"], "做": ["作", "座", "坐"], "那": ["哪"], "是": ["事", "市", "试"], "一": ["衣", "医"], "有": ["友", "又"] };
+    const vPop = [{name:"Hôn vào đây",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg"},{name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg"}];
+    const cPop = [{name:"Mang Chủng (Mới)",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"},{name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"},{name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"},{name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"}];
+    var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    var player; function onYouTubeIframeAPIReady() { player = new YT.Player('player', { height: '100%', width: '100%', videoId: '' }); }
+    function playMedia(source, type) { const ytDiv = document.getElementById('player'); const mp4Div = document.getElementById('mp4-player'); if(player && player.stopVideo) player.stopVideo(); mp4Div.pause(); if (type === 'mp4') { ytDiv.style.display = 'none'; mp4Div.style.display = 'block'; mp4Div.src = source; mp4Div.play(); } else { mp4Div.style.display = 'none'; ytDiv.style.display = 'block'; player.loadVideoById(source); } }
+    function renderMusic() { const tpl = (s) => `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}')"><img src="${s.thumb}"><div><h4 class="text-[10px] font-bold uppercase">${s.name}</h4><p class="text-[9px] text-gray-400">${s.type === 'mp4' ? 'NO ADS' : 'Youtube'}</p></div></div>`; document.getElementById('v-list').innerHTML = vPop.map(tpl).join(''); document.getElementById('c-list').innerHTML = cPop.map(tpl).join(''); }
+    const vocabData = [{hz:"我",py:"wǒ",mn:"tôi"},{hz:"你",py:"nǐ",mn:"bạn"},{hz:"他",py:"tā",mn:"anh ấy"},{hz:"她",py:"tā",mn:"cô ấy"},{hz:"我们",py:"wǒmen",mn:"chúng tôi"},{hz:"谁",py:"shéi",mn:"ai"},{hz:"爸爸",py:"bàba",mn:"bố"},{hz:"妈妈",py:"māma",mn:"mẹ"},{hz:"儿子",py:"érzi",mn:"con trai"},{hz:"女儿",py:"nǚér",mn:"con gái"},{hz:"老师",py:"lǎoshī",mn:"thầy cô"},{hz:"学生",py:"xuésheng",mn:"học sinh"},{hz:"同学",py:"tóngxué",mn:"bạn học"},{hz:"朋友",py:"péngyou",mn:"bạn bè"},{hz:"人",py:"rén",mn:"người"},{hz:"先生",py:"xiānsheng",mn:"ngài/ông"},{hz:"小姐",py:"xiǎojiě",mn:"cô/chị"},{hz:"零",py:"líng",mn:"không"},{hz:"一",py:"yī",mn:"một"},{hz:"二",py:"èr",mn:"hai"},{hz:"三",py:"sān",mn:"ba"},{hz:"四",py:"sì",mn:"bốn"},{hz:"五",py:"wǔ",mn:"năm"},{hz:"六",py:"liù",mn:"sáu"},{hz:"七",py:"qī",mn:"bảy"},{hz:"八",py:"bā",mn:"tám"},{hz:"九",py:"jiǔ",mn:"chín"},{hz:"十",py:"shí",mn:"mười"}]; const grammarBank = [{zh:"我是学生。",vi:"tôi là học sinh",note:"Câu chữ 是"},{zh:"这是什么？",vi:"đây là cái gì",note:"Hỏi cái gì"}];
+    const readingData = [{id:1,zh:"你好！我叫刘铁花...",key:"xin chào tôi tên lưu thiết hoa..."}];
+    let vMode=0; let vIdx=0; let sIdx=0; let gIdx=0; let gMode=0; let rIdx=0;
+    let remainingIndices = [];
+    function initVocabSystem() { const saved = localStorage.getItem('skyVocabProgress'); if (saved) { remainingIndices = JSON.parse(saved); } else { resetVocabProgress(); } }
+    function resetVocabProgress() { remainingIndices = Array.from({length: vocabData.length}, (_, i) => i); localStorage.setItem('skyVocabProgress', JSON.stringify(remainingIndices)); }
+    function switchTab(id) { document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active')); document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active')); document.getElementById(id).classList.add('active'); document.getElementById('n-'+id).classList.add('active'); if(id==='vocab') { initVocabSystem(); nextVocab(true); } if(id==='speaking')updateSpeakUI(); if(id==='grammar')nextGrammar(); if(id==='reading')nextParagraph(); }
+    function nextParagraph(){let newIdx;do{newIdx=Math.floor(Math.random()*readingData.length);}while(newIdx===rIdx&&readingData.length>1);rIdx=newIdx;const item=readingData[rIdx];document.getElementById('r-text').innerText=item.zh;document.getElementById('r-input').value="";document.getElementById('r-msg').innerText="";document.getElementById('r-toggle-btn').innerText="Xem Đáp Án (Việt)";isShowingAnswer=false;}
+    function checkReading(){const input=document.getElementById('r-input').value.trim().toLowerCase();const target=readingData[rIdx].key;const card=document.getElementById('reading-card');const hint=document.getElementById('r-hint');const inputWords=input.split(/\s+/);const targetWords=target.split(/\s+/);let matchCount=0;inputWords.forEach(word=>{if(target.includes(word))matchCount++;});const score=matchCount/targetWords.length;if(score>0.5){updateCoins(1);document.getElementById('r-msg').innerText=`RẤT TỐT! (${Math.round(score*100)}%)`;document.getElementById('r-msg').style.color="#4ade80";card.classList.add('glow-green');}else{updateCoins(-1);document.getElementById('r-msg').innerText=`CHƯA ĐẠT (${Math.round(score*100)}%)`;document.getElementById('r-msg').style.color="#f87171";card.classList.add('glow-red');}}
+    function nextVocab(random=true){if(remainingIndices.length===0){if(confirm("Bạn đã hoàn thành 150 từ vựng! Có muốn học lại không?")){resetVocabProgress();}else{return;}}if(random){const randomIndex=Math.floor(Math.random()*remainingIndices.length);vIdx=remainingIndices[randomIndex];}const item=vocabData[vIdx];document.getElementById('v-question').innerText=vMode===0?item.hz:(vMode===1?item.mn.toUpperCase():item.hz);document.getElementById('v-input').value="";document.getElementById('v-msg').innerText="";document.getElementById('v-hint').innerText="";document.getElementById('v-hint').classList.add('hidden');document.getElementById('vocab-card').classList.remove('glow-green','glow-red');}
+    function checkVocab(){const item=vocabData[vIdx];const val=document.getElementById('v-input').value.trim().toLowerCase();let correct=false;if(vMode===0)correct=val===item.mn.toLowerCase();else if(vMode===1)correct=val===item.hz;else correct=val===item.py.toLowerCase()||val===item.py.normalize("NFD").replace(/[\u0300-\u036f]/g,"");const feedback=document.getElementById('v-msg');const hint=document.getElementById('v-hint');if(correct){updateCoins(1);feedback.innerText="CHÍNH XÁC!";feedback.style.color="#4ade80";document.getElementById('vocab-card').classList.add('glow-green');speakText(item.hz);hint.classList.add('hidden');remainingIndices=remainingIndices.filter(id=>id!==vIdx);localStorage.setItem('skyVocabProgress',JSON.stringify(remainingIndices));setTimeout(()=>nextVocab(true),1200);}else{updateCoins(-1);feedback.innerText="SAI RỒI";feedback.style.color="#f87171";hint.innerText="ĐÁP ÁN: "+(vMode===0?item.mn.toUpperCase():item.hz);hint.classList.remove('hidden');document.getElementById('vocab-card').classList.add('glow-red');speakText(item.hz);}}
     
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
+    function toggleReadingRef(){const txt=document.getElementById('r-text');const btn=document.getElementById('r-toggle-btn');const item=readingData[rIdx];isShowingAnswer=!isShowingAnswer;if(isShowingAnswer){txt.innerText=item.vi_display;btn.innerText="Xem Câu Hỏi (Trung)";}else{txt.innerText=item.zh;btn.innerText="Xem Đáp Án (Việt)";}}
+    function changeVocabMode(){vMode=(vMode+1)%3;const labels=["Hán ➔ Việt","Việt ➔ Hán","Hán ➔ Pinyin"];document.getElementById('v-mode-btn').innerText="Mode: "+labels[vMode];nextVocab(false);}
+    function updateSpeakUI(){const item=vocabData[sIdx];document.getElementById('s-hz').innerText=item.hz;document.getElementById('s-py').innerText=item.py;document.getElementById('s-mn').innerText=item.mn.toUpperCase();document.getElementById('speak-card').classList.remove('glow-green','glow-red');document.getElementById('s-status').innerText="Bấm mic và nói ngay";document.getElementById('s-live-text').innerText="";}
+    function changeSpeakWord(dir){sIdx=(sIdx+dir+vocabData.length)%vocabData.length;updateSpeakUI();}
+    function toggleGrammarMode(){gMode=1-gMode;document.getElementById('g-mode-badge').innerText=gMode===0?"Trung ➔ Việt":"Việt ➔ Trung";nextGrammar();}
+    function nextGrammar(){let newIdx;do{newIdx=Math.floor(Math.random()*grammarBank.length);}while(newIdx===gIdx&&grammarBank.length>1);gIdx=newIdx;const item=grammarBank[gIdx];document.getElementById('g-question').innerText=gMode===0?item.zh:item.vi.toUpperCase();document.getElementById('g-instruction').innerText=gMode===0?"Dịch câu này sang Tiếng Việt":"Dịch câu này sang Tiếng Trung";document.getElementById('g-input').value="";document.getElementById('g-msg').innerText="";document.getElementById('g-note').innerText="";document.getElementById('grammar-card').className="glass-card p-10 w-full max-w-2xl mx-4 relative overflow-hidden";if(gMode===0)speakText(item.zh);}
+    function checkGrammar(){const val=document.getElementById('g-input').value.trim().toLowerCase();const item=grammarBank[gIdx];const target=gMode===0?item.vi:item.zh;const card=document.getElementById('grammar-card');let isCorrect=false;if(gMode===0)isCorrect=val===target.toLowerCase()||(target.toLowerCase().includes(val)&&val.length>5);else isCorrect=val===target||val===target.replace(/？|。/g,"");speakText(item.zh);if(isCorrect){updateCoins(1);document.getElementById('g-msg').innerText="RẤT TỐT!";card.classList.add('glow-green');setTimeout(nextGrammar,2000);}else{updateCoins(-1);document.getElementById('g-msg').innerText="CHƯA CHÍNH XÁC";document.getElementById('g-note').innerHTML=`<span class="text-red-400">ĐÁP ÁN: ${target}</span>`;card.classList.add('glow-red');}}
+    const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;let recognition;let timer;if(SpeechRecognition){recognition=new SpeechRecognition();recognition.lang='zh-CN';recognition.interimResults=true;recognition.continuous=true;const btn=document.getElementById('mic-btn');const status=document.getElementById('s-status');const progressBar=document.getElementById('progress-bar');const card=document.getElementById('speak-card');const liveText=document.getElementById('s-live-text');let isListening=false;btn.onclick=()=>{if(isListening)return;startSession();};function startSession(){isListening=true;card.classList.remove('glow-green','glow-red');status.innerText="ĐANG NGHE...";progressBar.style.width='100%';progressBar.style.transition="width 5s linear";try{recognition.start();}catch(e){}timer=setTimeout(()=>{finishSession("TIMEOUT");},5000);}recognition.onresult=(e)=>{let interim="";for(let i=e.resultIndex;i<e.results.length;++i){interim+=e.results[i][0].transcript;}liveText.innerText="Nghe: "+interim;const target=vocabData[sIdx].hz;const clean=interim.replace(/[.,?。？!！]/g,"");if(clean.includes(target)||(homophones[target]&&homophones[target].some(h=>clean.includes(h)))){finishSession("WIN",clean);}};recognition.onerror=()=>{finishSession("ERROR");};recognition.onend=()=>{if(isListening){try{recognition.start()}catch(e){}}};function finishSession(type,word=""){if(!isListening)return;isListening=false;clearTimeout(timer);recognition.stop();progressBar.style.transition="none";progressBar.style.width='0%';if(type==="WIN"){updateCoins(1);status.innerText="CHÍNH XÁC!";card.classList.add('glow-green');}else{status.innerText="THỬ LẠI";card.classList.add('glow-red');}}}
+
+    document.getElementById('v-input').addEventListener("keypress", function(event) { if (event.key === "Enter") checkVocab(); });
+    document.getElementById('r-input').addEventListener("keypress", function(event) { if (event.key === "Enter") { event.preventDefault(); checkReading(); } });
+    document.getElementById('g-input').addEventListener("keypress", function(event) { if (event.key === "Enter") checkGrammar(); });
+
+    const cursor = document.getElementById('cursor'); document.addEventListener('mousemove', e => { cursor.style.left = e.clientX + 'px'; cursor.style.top = e.clientY + 'px'; }); function handleGlobalClick() { cursor.style.transform = "scale(2)"; setTimeout(() => cursor.style.transform = "scale(1)", 150); }
+    window.onload = () => { renderMusic(); switchTab('home'); };
 </script>
 </body>
 </html>
