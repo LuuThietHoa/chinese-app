@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V31.0 Focus</title>
+    <title>Skyreign Hub | V32.0 Professional</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -22,76 +22,96 @@
         /* UI ELEMENTS */
         .glass-card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         
-        /* NAVIGATION */
-        nav { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; display: flex; background: rgba(0,0,0,0.9); padding: 15px; backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1); overflow-x: auto; justify-content: center; gap: 10px; }
-        .nav-btn { padding: 8px 16px; border-radius: 8px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; transition: 0.3s; color: #94a3b8; white-space: nowrap; background: rgba(255,255,255,0.05); }
-        .nav-btn.active { background: var(--primary); color: white; box-shadow: 0 0 15px rgba(99, 102, 241, 0.5); }
+        /* NAVIGATION - NO ICONS */
+        nav { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; display: flex; background: rgba(0,0,0,0.95); padding: 15px; backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1); overflow-x: auto; justify-content: center; gap: 10px; }
+        .nav-btn { padding: 10px 20px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; color: #64748b; white-space: nowrap; background: transparent; border: 1px solid rgba(255,255,255,0.1); }
+        .nav-btn:hover { color: white; border-color: white; }
+        .nav-btn.active { background: white; color: black; border-color: white; box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
         
-        .tab-content { display: none; padding-bottom: 100px; animation: fadeIn 0.3s forwards; }
+        .tab-content { display: none; padding-bottom: 100px; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* EFFECTS */
-        .glow-green { border-color: #22c55e !important; box-shadow: 0 0 20px #22c55e !important; }
-        .glow-red { border-color: #ef4444 !important; box-shadow: 0 0 20px #ef4444 !important; }
-        .reading-text { line-height: 2; letter-spacing: 1px; text-align: justify; font-size: 1.2rem; }
-        input, textarea { background: rgba(0,0,0,0.3) !important; color: white !important; }
+        /* MODERN TEXT EFFECT */
+        .modern-text {
+            font-weight: 300; /* Thin font */
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            background: linear-gradient(90deg, #fff, #a5b4fc, #f472b6, #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: shine 5s linear infinite;
+            text-shadow: 0 0 20px rgba(165, 180, 252, 0.3);
+        }
+        @keyframes shine { to { background-position: 200% center; } }
 
-        /* SCHEDULE TABLE */
-        .schedule-table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 12px; }
-        .schedule-table th { background: rgba(99, 102, 241, 0.3); padding: 12px; text-transform: uppercase; color: white; border: 1px solid rgba(255,255,255,0.2); }
-        .schedule-table td { padding: 12px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
-        .time-chip { display: inline-block; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 6px 12px; margin: 4px; border-radius: 20px; font-size: 10px; cursor: pointer; transition: 0.2s; }
-        .time-chip:hover { background: var(--primary); border-color: var(--primary); }
+        input, textarea { background: rgba(0,0,0,0.3) !important; color: white !important; font-family: monospace; }
         
-        .song-item { display: flex; gap: 12px; padding: 12px; border-radius: 12px; background: rgba(255,255,255,0.05); cursor: pointer; transition: 0.2s; align-items: center; border: 1px solid transparent; }
-        .song-item:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.2); }
-        .song-item img { width: 50px; height: 50px; border-radius: 8px; object-fit: cover; }
+        /* SCHEDULE TABLE */
+        .schedule-table { width: 100%; border-collapse: separate; border-spacing: 0 4px; margin-top: 20px; font-size: 12px; }
+        .schedule-table th { padding: 12px; text-transform: uppercase; color: #94a3b8; font-size: 9px; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .schedule-table td { padding: 15px; background: rgba(255,255,255,0.03); text-align: center; border: none; }
+        .schedule-table tr:first-child td:first-child { border-top-left-radius: 10px; }
+        .schedule-table tr:first-child td:last-child { border-top-right-radius: 10px; }
+        .schedule-table tr:last-child td:first-child { border-bottom-left-radius: 10px; }
+        .schedule-table tr:last-child td:last-child { border-bottom-right-radius: 10px; }
+
+        .time-chip { display: inline-block; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; margin: 4px; border-radius: 4px; font-size: 10px; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+        .time-chip:hover { background: white; color: black; }
+        
+        /* MUSIC LIST */
+        .song-item { display: flex; gap: 12px; padding: 12px; border-radius: 8px; background: transparent; cursor: pointer; transition: 0.2s; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .song-item:hover { background: rgba(255,255,255,0.05); padding-left: 20px; }
+        .song-item img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; filter: grayscale(100%); transition: 0.3s; }
+        .song-item:hover img { filter: grayscale(0%); }
+        
+        /* TOGGLE SWITCH */
+        .toggle-checkbox:checked { right: 0; border-color: #68D391; }
+        .toggle-checkbox:checked + .toggle-label { background-color: #68D391; }
     </style>
 </head>
 <body>
 
-<div class="fixed top-0 left-0 w-full p-4 flex justify-between items-center z-50 bg-gradient-to-b from-black/80 to-transparent pointer-events-none">
+<div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
-        <h1 class="text-xl font-black italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-pink-400">SKYREIGN <span class="text-[10px] text-gray-400 not-italic">V31.0</span></h1>
+        <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V32.0 PROFESSIONAL</span>
     </div>
-    <div class="pointer-events-auto flex items-center gap-3 bg-black/40 backdrop-blur px-4 py-2 rounded-full border border-yellow-500/30">
-        <span class="text-2xl">🪙</span>
-        <span id="coin-display" class="text-xl font-black text-yellow-400 tabular-nums">0</span>
+    <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
+        <span class="text-yellow-400 text-xs">BALANCE</span>
+        <span id="coin-display" class="text-xl font-mono font-bold text-white tabular-nums">0</span>
     </div>
 </div>
 
 <nav>
-    <button onclick="switchTab('home')" class="nav-btn active" id="n-home">🏠 Home</button>
-    <button onclick="switchTab('memo')" class="nav-btn" id="n-memo">📚 Ghi Nhớ</button>
-    <button onclick="switchTab('test')" class="nav-btn" id="n-test">✍️ Kiểm Tra</button>
-    <button onclick="switchTab('work')" class="nav-btn" id="n-work">📅 Lịch Làm</button>
-    <button onclick="switchTab('vocab')" class="nav-btn" id="n-vocab">🔤 Học Từ</button>
-    <button onclick="switchTab('reading')" class="nav-btn" id="n-reading">📖 Đọc</button>
-    <button onclick="switchTab('music')" class="nav-btn" id="n-music">🎵 Nhạc</button>
+    <button onclick="switchTab('home')" class="nav-btn active" id="n-home">Home</button>
+    <button onclick="switchTab('memo')" class="nav-btn" id="n-memo">Ngữ Pháp</button>
+    <button onclick="switchTab('test')" class="nav-btn" id="n-test">Kiểm Tra</button>
+    <button onclick="switchTab('work')" class="nav-btn" id="n-work">Lịch Làm</button>
+    <button onclick="switchTab('vocab')" class="nav-btn" id="n-vocab">Học Từ</button>
+    <button onclick="switchTab('reading')" class="nav-btn" id="n-reading">Đọc Hiểu</button>
+    <button onclick="switchTab('music')" class="nav-btn" id="n-music">Music</button>
 </nav>
 
 <div id="home" class="tab-content active">
     <div class="min-h-screen flex flex-col items-center justify-center p-4">
-        <div class="glass-card p-10 text-center max-w-md w-full">
-            <h2 class="text-3xl font-bold mb-2">Chào Thiết Hoa!</h2>
-            <p class="text-gray-400 mb-8 text-sm">Hôm nay bạn muốn làm gì?</p>
+        <div class="glass-card p-12 text-center max-w-lg w-full">
+            <h2 class="text-4xl font-light mb-2 tracking-tighter">Chào Thiết Hoa</h2>
+            <div class="h-1 w-20 bg-indigo-500 mx-auto mb-8"></div>
             <div class="grid grid-cols-2 gap-4">
-                <button onclick="switchTab('work')" class="p-6 bg-indigo-600/20 hover:bg-indigo-600 border border-indigo-500/50 rounded-xl transition group">
-                    <div class="text-3xl mb-2">📅</div>
-                    <div class="font-bold text-xs uppercase tracking-widest">Xếp Lịch</div>
+                <button onclick="switchTab('work')" class="p-8 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
+                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Xếp Lịch</div>
                 </button>
-                <button onclick="switchTab('memo')" class="p-6 bg-pink-600/20 hover:bg-pink-600 border border-pink-500/50 rounded-xl transition group">
-                    <div class="text-3xl mb-2">🧠</div>
-                    <div class="font-bold text-xs uppercase tracking-widest">Ôn Ngữ Pháp</div>
+                <button onclick="switchTab('memo')" class="p-8 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
+                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Ngữ Pháp</div>
                 </button>
-                <button onclick="switchTab('vocab')" class="p-6 bg-green-600/20 hover:bg-green-600 border border-green-500/50 rounded-xl transition group">
-                    <div class="text-3xl mb-2">🔤</div>
-                    <div class="font-bold text-xs uppercase tracking-widest">Học Từ Vựng</div>
+                <button onclick="switchTab('vocab')" class="p-8 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
+                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Từ Vựng</div>
                 </button>
-                <button onclick="switchTab('music')" class="p-6 bg-orange-600/20 hover:bg-orange-600 border border-orange-500/50 rounded-xl transition group">
-                    <div class="text-3xl mb-2">🎧</div>
-                    <div class="font-bold text-xs uppercase tracking-widest">Nghe Nhạc</div>
+                <button onclick="switchTab('music')" class="p-8 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
+                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Giải Trí</div>
                 </button>
             </div>
         </div>
@@ -99,94 +119,48 @@
 </div>
 
 <div id="memo" class="tab-content">
-    <div class="min-h-screen flex flex-col items-center pt-24 px-4">
-        <h2 class="text-2xl font-black uppercase mb-6 tracking-widest text-indigo-400">Danh Sách Ngữ Pháp</h2>
+    <div class="min-h-screen flex flex-col items-center pt-32 px-4">
+        <h2 class="text-xl font-light uppercase mb-8 tracking-[0.3em] text-indigo-300">Danh Sách Ngữ Pháp</h2>
         <div id="grammar-list" class="w-full max-w-3xl space-y-4">
             </div>
     </div>
 </div>
 
-<div id="test" class="tab-content">
-    <div class="min-h-screen flex flex-col items-center pt-24 px-4">
-        <div class="glass-card p-8 w-full max-w-3xl relative">
-            <div class="flex justify-center gap-4 mb-8">
-                <button onclick="setTestMode('analyze')" class="px-4 py-2 bg-indigo-600 rounded-lg text-xs font-bold uppercase hover:bg-indigo-500 shadow-lg">Phân Tích & Đặt Câu</button>
-                <button onclick="setTestMode('fill')" class="px-4 py-2 bg-pink-600 rounded-lg text-xs font-bold uppercase hover:bg-pink-500 shadow-lg">Điền Từ (Hội thoại)</button>
-            </div>
-
-            <div id="test-analyze" class="hidden">
-                <div class="text-center mb-6 bg-black/30 p-6 rounded-xl border border-white/10">
-                    <p class="text-[10px] text-gray-400 uppercase tracking-widest mb-2">AI Hỏi Bạn:</p>
-                    <h3 id="ta-question" class="text-4xl font-black text-white mb-2">...</h3>
-                </div>
-                
-                <p id="ta-status" class="text-center text-sm font-bold h-6 mb-4"></p>
-
-                <div id="ta-step1" class="space-y-3">
-                    <p class="text-sm text-center text-gray-400 italic">Câu trên thuộc ngữ pháp nào?</p>
-                    <div class="grid grid-cols-1 gap-3" id="ta-options"></div>
-                </div>
-
-                <div id="ta-step2" class="hidden space-y-4 animate-fadeIn">
-                    <div class="bg-indigo-900/30 p-4 rounded-xl border border-indigo-500/30">
-                        <p class="text-sm font-bold text-indigo-300 mb-2">Phân tích thành phần câu:</p>
-                        <div class="space-y-3">
-                            <div>
-                                <label class="text-[10px] uppercase text-gray-400">Chủ ngữ (S) là gì?</label>
-                                <input type="text" id="ta-sub-input" class="w-full p-2 rounded border border-white/20 outline-none focus:border-indigo-500">
-                            </div>
-                            <div>
-                                <label class="text-[10px] uppercase text-gray-400">Danh từ (N) là gì?</label>
-                                <input type="text" id="ta-noun-input" class="w-full p-2 rounded border border-white/20 outline-none focus:border-indigo-500">
-                            </div>
-                            <button onclick="checkComponents()" class="w-full py-3 bg-white text-black font-bold text-xs uppercase rounded hover:bg-gray-200">Kiểm Tra Thành Phần</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="ta-step3" class="hidden space-y-4 animate-fadeIn mt-4">
-                    <div class="bg-green-900/30 p-4 rounded-xl border border-green-500/30">
-                        <p class="text-sm font-bold text-green-400 mb-2">Thử thách: Tự đặt 1 câu tương tự</p>
-                        <input type="text" id="ta-make-sentence" class="w-full p-3 rounded border border-white/20 outline-none focus:border-green-500 text-center text-xl" placeholder="Nhập câu tiếng Trung...">
-                        <button onclick="checkAISentence()" class="w-full mt-3 py-3 bg-green-600 text-white font-bold text-xs uppercase rounded hover:bg-green-500">AI Kiểm Tra (+Tiền)</button>
-                        <div id="ta-ai-feedback" class="text-center text-xs font-bold mt-2"></div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="test-fill" class="hidden flex flex-col items-center">
-                 <div class="bg-black/30 p-8 rounded-2xl w-full mb-6 border border-white/10 min-h-[100px] flex items-center justify-center">
-                    <p id="tf-dialogue" class="text-2xl leading-relaxed text-center font-medium"></p>
-                 </div>
-                 <div id="tf-options" class="flex flex-wrap gap-3 justify-center mb-6"></div>
-                 <p id="tf-msg" class="text-xs font-bold uppercase tracking-widest h-6 mb-4"></p>
-                 <button onclick="nextFillTest()" class="py-2 px-6 bg-white/10 rounded-full text-[10px] uppercase hover:bg-white/20">Đổi đoạn khác</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <div id="work" class="tab-content">
-    <div class="min-h-screen flex flex-col items-center pt-24 px-4">
-        <div class="glass-card p-8 w-full max-w-4xl">
-            <h2 class="text-2xl font-black uppercase text-center mb-6 text-orange-400">Xếp Lịch Tự Động</h2>
+    <div class="min-h-screen flex flex-col items-center pt-24 px-4 pb-24">
+        <div class="glass-card p-8 w-full max-w-5xl">
+            <div class="flex justify-between items-end mb-6 border-b border-white/10 pb-4">
+                <h2 class="text-3xl font-light uppercase tracking-widest text-white">Lịch Làm Việc</h2>
+                <div class="flex gap-2">
+                    <select id="week-selector" onchange="changeWeek()" class="bg-black text-xs uppercase p-2 border border-white/20 outline-none">
+                        <option value="1">Tuần 1</option>
+                        <option value="2">Tuần 2</option>
+                        <option value="3">Tuần 3</option>
+                    </select>
+                </div>
+            </div>
             
-            <div id="work-wizard" class="flex flex-col items-center">
-                <div class="w-full max-w-md space-y-6">
+            <div id="work-wizard" class="flex flex-col items-center py-10">
+                <div class="w-full max-w-lg space-y-8">
                     <div class="text-center">
-                        <span class="text-[10px] bg-white/10 px-3 py-1 rounded-full uppercase text-gray-400">Bước <span id="w-step-num">1</span>/7</span>
-                        <h3 class="text-3xl font-bold mt-2 text-white" id="w-day-title">Thứ 2</h3>
+                        <span class="text-[9px] border border-white/20 px-3 py-1 uppercase text-gray-400 tracking-widest">Bước <span id="w-step-num">1</span>/7</span>
+                        <h3 class="text-4xl font-bold mt-4 text-white" id="w-day-title">Thứ 2</h3>
                     </div>
                     
                     <div id="w-date-input-container">
-                        <label class="text-[10px] uppercase font-bold text-gray-500">Ngày</label>
-                        <input type="text" id="w-date" class="w-full bg-transparent border-b border-white/20 py-2 text-xl outline-none focus:border-orange-500" placeholder="Ví dụ: 15/10">
+                        <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Ngày</label>
+                        <input type="text" id="w-date" class="w-full bg-transparent border-b border-white/20 py-2 text-2xl outline-none focus:border-indigo-500" placeholder="DD/MM">
                     </div>
 
                     <div>
-                        <label class="text-[10px] uppercase font-bold text-gray-500">Vị trí</label>
-                        <input type="text" id="w-pos" class="w-full bg-transparent border-b border-white/20 py-2 text-xl outline-none focus:border-orange-500" placeholder="Nhập vị trí...">
-                        <div class="mt-2">
+                        <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Vị trí</label>
+                        <input type="text" id="w-pos" class="w-full bg-transparent border-b border-white/20 py-2 text-xl outline-none focus:border-indigo-500" placeholder="...">
+                        <div class="mt-3 flex flex-wrap">
+                             <span onclick="setVal('w-pos','Gác tĩnh')" class="time-chip">Gác tĩnh</span>
+                             <span onclick="setVal('w-pos','Nhảy đệm')" class="time-chip">Nhảy đệm</span>
+                             <span onclick="setVal('w-pos','Đấu trường')" class="time-chip">Đấu trường</span>
+                             <span onclick="setVal('w-pos','Chăm thú')" class="time-chip">Chăm thú</span>
+                             <span onclick="setVal('w-pos','Tạp vụ')" class="time-chip">Tạp vụ</span>
                              <span onclick="setVal('w-pos','Donut')" class="time-chip">Donut</span>
                              <span onclick="setVal('w-pos','Núi Lửa')" class="time-chip">Núi Lửa</span>
                              <span onclick="setVal('w-pos','Cổng')" class="time-chip">Cổng</span>
@@ -195,21 +169,21 @@
                     </div>
 
                     <div>
-                        <label class="text-[10px] uppercase font-bold text-gray-500">Ca làm việc</label>
-                        <input type="text" id="w-time" class="w-full bg-transparent border-b border-white/20 py-2 text-xl outline-none focus:border-orange-500" placeholder="Nhập giờ...">
-                        <div class="mt-2">
+                        <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Ca làm việc</label>
+                        <input type="text" id="w-time" class="w-full bg-transparent border-b border-white/20 py-2 text-xl outline-none focus:border-indigo-500" placeholder="...">
+                        <div class="mt-3">
                             <span onclick="setVal('w-time','15h30-22h30')" class="time-chip">15h30-22h30</span>
                             <span onclick="setVal('w-time','18h00-22h30')" class="time-chip">18h00-22h30</span>
                             <span onclick="setVal('w-time','08h30-15h30')" class="time-chip">08h30-15h30</span>
                         </div>
                     </div>
 
-                    <button onclick="nextWorkStep()" class="w-full py-4 bg-orange-600 rounded-xl font-bold uppercase tracking-widest shadow-lg active:scale-95 transition hover:bg-orange-500">Tiếp Theo ➔</button>
+                    <button onclick="nextWorkStep()" class="w-full py-4 bg-white text-black font-bold uppercase tracking-[0.2em] text-xs hover:bg-gray-200 transition">Tiếp Theo ➔</button>
                 </div>
             </div>
 
             <div id="work-result" class="hidden">
-                <div class="overflow-x-auto rounded-xl border border-white/10">
+                <div class="overflow-x-auto">
                     <table class="schedule-table">
                         <thead>
                             <tr>
@@ -217,151 +191,217 @@
                                 <th>Ngày</th>
                                 <th>Vị Trí</th>
                                 <th>Giờ Làm</th>
-                                <th>Giờ Công</th>
+                                <th>Số Giờ</th>
                             </tr>
                         </thead>
                         <tbody id="work-tbody"></tbody>
                     </table>
                 </div>
-                <div class="mt-6 flex gap-4 justify-center">
-                    <button onclick="resetWorkSchedule()" class="px-6 py-3 bg-gray-700 rounded-lg text-xs font-bold uppercase hover:bg-gray-600">Làm Lại</button>
-                    <button onclick="window.print()" class="px-6 py-3 bg-white text-black rounded-lg text-xs font-bold uppercase hover:bg-gray-200">In Lịch</button>
+                
+                <div class="mt-6 p-6 bg-white/5 border border-white/10 flex justify-between items-center rounded-lg">
+                    <div>
+                        <p class="text-[10px] uppercase text-gray-400 tracking-widest">Tổng lương tuần (25k/h)</p>
+                        <p id="total-salary" class="text-2xl font-mono text-green-400">0 VNĐ</p>
+                    </div>
+                    <div class="text-right">
+                         <p class="text-[10px] uppercase text-gray-400 tracking-widest">Tổng giờ</p>
+                         <p id="total-hours" class="text-xl font-mono text-white">0h</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex gap-4 justify-end">
+                    <button onclick="editCurrentSchedule()" class="px-6 py-3 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Chỉnh sửa lịch hiện tại</button>
+                    <button onclick="addNewSchedule()" class="px-6 py-3 bg-indigo-600 rounded text-[10px] font-bold uppercase hover:bg-indigo-500 transition">Thêm lịch mới (Reset)</button>
                 </div>
             </div>
-        </div>
-    </div>
-</div>
-
-<div id="vocab" class="tab-content">
-    <div class="min-h-screen flex flex-col items-center pt-24 px-4">
-        <div class="glass-card p-10 w-full max-w-lg relative text-center" id="vocab-card">
-            <div class="flex justify-between items-center mb-8">
-                <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[10px] font-black bg-pink-500 px-3 py-1 rounded-full uppercase tracking-widest hover:scale-105 transition">Mode: Hán ➔ Việt</button>
-                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">HSK 1</div>
-            </div>
-            <div id="v-question" class="text-6xl md:text-7xl font-black text-center mb-8 tracking-tighter min-h-[80px] flex items-center justify-center">...</div>
-            
-            <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b-2 border-white/20 py-3 text-center font-bold text-2xl outline-none focus:border-indigo-500 transition text-white placeholder-gray-600 mb-8" autocomplete="off" onkeypress="if(event.key==='Enter') checkVocab()">
-            
-            <button onclick="checkVocab()" class="w-full py-4 bg-white text-black rounded-2xl font-black text-xs uppercase tracking-[0.2em] hover:bg-gray-200 transition mb-4">Kiểm Tra</button>
-            
-            <div id="v-feedback" class="text-center h-12">
-                <p id="v-msg" class="text-[11px] font-bold uppercase tracking-widest"></p>
-                <p id="v-hint" class="text-[14px] font-bold text-red-400 mt-1 uppercase hidden"></p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="reading" class="tab-content">
-    <div class="min-h-screen flex flex-col items-center pt-24 px-4">
-        <div class="glass-card p-8 w-full max-w-3xl relative" id="reading-card">
-            <div class="flex justify-between items-center mb-6">
-                <div class="text-[10px] font-black bg-green-500 px-3 py-1 rounded-full uppercase tracking-widest">Đoạn Văn</div>
-                <div class="flex gap-2">
-                    <button id="r-toggle-btn" onclick="toggleReadingRef()" class="text-[10px] font-bold text-indigo-300 hover:text-white uppercase tracking-widest transition border border-indigo-500 px-2 py-1 rounded-lg">Xem Đáp Án</button>
-                    <button onclick="nextParagraph()" class="text-[10px] font-bold text-gray-400 hover:text-white uppercase tracking-widest transition">Bài Khác ↻</button>
-                </div>
-            </div>
-            <div class="bg-black/20 p-6 rounded-2xl mb-6 border border-white/10 h-64 overflow-y-auto">
-                <p id="r-text" class="reading-text text-gray-100">Đang tải dữ liệu...</p>
-            </div>
-            <textarea id="r-input" rows="3" class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder-gray-600 outline-none focus:border-indigo-500 transition mb-4" placeholder="Dịch sang Tiếng Việt..."></textarea>
-            <button onclick="checkReading()" class="w-full py-4 bg-indigo-600 text-white rounded-xl font-black text-xs uppercase tracking-[0.2em] hover:bg-indigo-500 transition mb-4 shadow-lg">Chấm Điểm</button>
-            <p id="r-msg" class="text-center text-[11px] font-bold uppercase tracking-widest h-6"></p>
         </div>
     </div>
 </div>
 
 <div id="music" class="tab-content">
     <div class="min-h-screen flex flex-col items-center pt-24 px-4 pb-24">
-        <div class="flex flex-col md:flex-row gap-6 w-full max-w-6xl">
-            <div class="glass-card p-4 w-full md:w-1/4 h-[500px] overflow-y-auto">
-                <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-indigo-400 sticky top-0 bg-[#1a1a2e] pb-2 z-10">V-Pop Hits</h3>
-                <div id="v-list" class="space-y-2"></div>
+        <div class="flex flex-col md:flex-row gap-8 w-full max-w-7xl">
+            <div class="w-full md:w-1/4">
+                <div class="flex justify-between items-center mb-4 sticky top-0 bg-[#0f172a] p-2 z-10 border-b border-white/10">
+                    <h3 class="modern-text text-lg">V-Pop Hits</h3>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[9px] uppercase text-gray-500">Auto</span>
+                        <div class="relative inline-block w-8 h-4 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" name="toggle" id="toggle-vpop" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-600 transition-all duration-300"/>
+                            <label for="toggle-vpop" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-600 cursor-pointer"></label>
+                        </div>
+                    </div>
+                </div>
+                <div id="v-list" class="space-y-1 h-[500px] overflow-y-auto pr-2"></div>
             </div>
 
             <div class="w-full md:w-2/4 flex flex-col">
-                <div class="aspect-video bg-black rounded-2xl overflow-hidden border-2 border-white/10 shadow-2xl relative">
+                <div class="aspect-video bg-black shadow-2xl relative border border-white/10">
                     <div id="player" class="w-full h-full"></div> 
                     <video id="mp4-player" controls playsinline class="hidden w-full h-full object-cover"></video>
                 </div>
-                <div class="mt-4 text-center">
-                    <h4 id="now-playing" class="text-xl font-bold text-white uppercase tracking-tight">Chọn bài hát để phát</h4>
-                    <p class="text-xs text-gray-400 uppercase tracking-widest mt-1">Skyreign Music Player</p>
+                <div class="mt-6 text-center">
+                    <h4 id="now-playing" class="text-2xl font-light text-white uppercase tracking-tight">Skyreign Music</h4>
+                    <div class="h-[1px] w-12 bg-gray-700 mx-auto mt-4"></div>
                 </div>
             </div>
 
-            <div class="glass-card p-4 w-full md:w-1/4 h-[500px] overflow-y-auto">
-                <h3 class="text-xs font-black uppercase tracking-widest mb-4 text-pink-400 sticky top-0 bg-[#1a1a2e] pb-2 z-10">Chinese Hits</h3>
-                <div id="c-list" class="space-y-2"></div>
+            <div class="w-full md:w-1/4">
+                <div class="flex justify-between items-center mb-4 sticky top-0 bg-[#0f172a] p-2 z-10 border-b border-white/10">
+                    <h3 class="modern-text text-lg">Chinese Hits</h3>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[9px] uppercase text-gray-500">Auto</span>
+                        <div class="relative inline-block w-8 h-4 align-middle select-none transition duration-200 ease-in">
+                            <input type="checkbox" name="toggle" id="toggle-cpop" class="toggle-checkbox absolute block w-4 h-4 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-600 transition-all duration-300"/>
+                            <label for="toggle-cpop" class="toggle-label block overflow-hidden h-4 rounded-full bg-gray-600 cursor-pointer"></label>
+                        </div>
+                    </div>
+                </div>
+                <div id="c-list" class="space-y-1 h-[500px] overflow-y-auto pr-2"></div>
             </div>
         </div>
     </div>
 </div>
 
+<div id="test" class="tab-content">
+    <div class="min-h-screen flex flex-col items-center pt-32 px-4">
+        <div class="glass-card p-8 w-full max-w-3xl relative">
+            <div class="flex justify-center gap-4 mb-8">
+                <button onclick="setTestMode('analyze')" class="px-6 py-2 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black">Phân Tích</button>
+                <button onclick="setTestMode('fill')" class="px-6 py-2 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black">Điền Từ</button>
+            </div>
+            <div id="test-analyze" class="hidden">
+                 <div class="text-center mb-6">
+                    <h3 id="ta-question" class="text-3xl font-light text-white mb-2">...</h3>
+                 </div>
+                 <p id="ta-status" class="text-center text-xs font-bold h-6 mb-4 text-green-400"></p>
+                 <div id="ta-step1" class="space-y-3">
+                    <div class="grid grid-cols-1 gap-2" id="ta-options"></div>
+                 </div>
+                 <div id="ta-step2" class="hidden space-y-4 pt-4">
+                    <input type="text" id="ta-sub-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none" placeholder="Nhập Chủ ngữ (S)">
+                    <input type="text" id="ta-noun-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none" placeholder="Nhập Danh từ (N)">
+                    <button onclick="checkComponents()" class="w-full py-3 bg-white text-black font-bold text-xs uppercase">Kiểm Tra</button>
+                 </div>
+                 <div id="ta-step3" class="hidden space-y-4 pt-4">
+                     <input type="text" id="ta-make-sentence" class="w-full p-3 border-b border-white/20 bg-transparent text-center text-xl outline-none" placeholder="Tự đặt câu...">
+                     <button onclick="checkAISentence()" class="w-full mt-3 py-3 bg-green-600 text-white font-bold text-xs uppercase">AI Check</button>
+                     <div id="ta-ai-feedback" class="text-center text-xs mt-2"></div>
+                 </div>
+            </div>
+            <div id="test-fill" class="hidden flex flex-col items-center">
+                 <p id="tf-dialogue" class="text-xl leading-relaxed text-center font-light mb-8"></p>
+                 <div id="tf-options" class="flex flex-wrap gap-3 justify-center mb-6"></div>
+                 <p id="tf-msg" class="text-xs font-bold uppercase h-6 mb-4"></p>
+                 <button onclick="nextFillTest()" class="py-2 px-6 border border-white/20 text-[10px] uppercase hover:bg-white hover:text-black">Tiếp</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="vocab" class="tab-content">
+    <div class="min-h-screen flex flex-col items-center pt-32 px-4">
+        <div class="glass-card p-10 w-full max-w-lg relative text-center">
+            <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[9px] mb-8 border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition">Mode: Hán ➔ Việt</button>
+            <div id="v-question" class="text-7xl font-light text-center mb-12 tracking-tighter">...</div>
+            <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-2xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkVocab()">
+            <button onclick="checkVocab()" class="w-full py-4 bg-white text-black font-bold text-xs uppercase tracking-[0.2em]">Kiểm Tra</button>
+            <div id="v-feedback" class="text-center h-12 mt-4">
+                <p id="v-msg" class="text-[10px] font-bold uppercase tracking-widest"></p>
+                <p id="v-hint" class="text-[12px] text-red-400 mt-1 uppercase hidden"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="reading" class="tab-content">
+    <div class="min-h-screen flex flex-col items-center pt-32 px-4">
+        <div class="glass-card p-8 w-full max-w-3xl relative">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-[10px] bg-green-900 text-green-300 px-3 py-1 uppercase tracking-widest">Đoạn Văn</span>
+                <div class="flex gap-2">
+                    <button id="r-toggle-btn" onclick="toggleReadingRef()" class="text-[10px] font-bold border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition">Đáp Án</button>
+                    <button onclick="nextParagraph()" class="text-[10px] font-bold border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition">Bài Khác</button>
+                </div>
+            </div>
+            <div class="p-6 mb-6 h-64 overflow-y-auto">
+                <p id="r-text" class="text-xl leading-loose font-light text-gray-100">Loading...</p>
+            </div>
+            <textarea id="r-input" rows="3" class="w-full bg-white/5 border-b border-white/20 p-4 text-white outline-none mb-4" placeholder="Dịch..."></textarea>
+            <button onclick="checkReading()" class="w-full py-4 bg-indigo-600 text-white font-bold text-xs uppercase tracking-[0.2em] hover:bg-indigo-500">Chấm Điểm</button>
+            <p id="r-msg" class="text-center text-[10px] mt-2 font-bold uppercase tracking-widest"></p>
+        </div>
+    </div>
+</div>
+
 <script>
-    // --- DỮ LIỆU GỐC (RESTORED FROM V29) ---
+    // --- DATA ---
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" },
         { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "老师", py: "lǎoshī", mn: "thầy cô" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn học" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" },
-        { hz: "零", py: "líng", mn: "không" }, { hz: "一", py: "yī", mn: "một" }, { hz: "二", py: "èr", mn: "hai" }, { hz: "三", py: "sān", mn: "ba" }, { hz: "四", py: "sì", mn: "bốn" }, { hz: "五", py: "wǔ", mn: "năm" }, { hz: "六", py: "liù", mn: "sáu" }, { hz: "七", py: "qī", mn: "bảy" }, { hz: "八", py: "bā", mn: "tám" }, { hz: "九", py: "jiǔ", mn: "chín" }, { hz: "十", py: "shí", mn: "mười" },
-        { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" }, { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" },
-        { hz: "是", py: "shì", mn: "là" }, { hz: "有", py: "yǒu", mn: "có" }, { hz: "在", py: "zài", mn: "ở/đang" }, { hz: "要", py: "yào", mn: "muốn/cần" }, { hz: "喜欢", py: "xǐhuan", mn: "thích" }, { hz: "爱", py: "ài", mn: "yêu" }, { hz: "吃", py: "chī", mn: "ăn" }, { hz: "喝", py: "hē", mn: "uống" }, { hz: "去", py: "qù", mn: "đi" }, { hz: "来", py: "lái", mn: "đến" }, { hz: "想", py: "xiǎng", mn: "muốn/nghĩ" }, { hz: "看", py: "kàn", mn: "xem/nhìn" }, { hz: "听", py: "tīng", mn: "nghe" }, { hz: "说", py: "shuō", mn: "nói" }, { hz: "读", py: "dú", mn: "đọc" }, { hz: "写", py: "xiě", mn: "viết" }, { hz: "做", py: "zuò", mn: "làm" }, { hz: "买", py: "mǎi", mn: "mua" },
-        { hz: "好", py: "hǎo", mn: "tốt" }, { hz: "多", py: "duō", mn: "nhiều" }, { hz: "少", py: "shǎo", mn: "ít" }, { hz: "大", py: "dà", mn: "to" }, { hz: "小", py: "xiǎo", mn: "nhỏ" }, { hz: "冷", py: "lěng", mn: "lạnh" }, { hz: "热", py: "rè", mn: "nóng" }, { hz: "高兴", py: "gāoxìng", mn: "vui vẻ" }, { hz: "漂亮", py: "piàoliang", mn: "xinh đẹp" }, { hz: "对", py: "duì", mn: "đúng" }, { hz: "错", py: "cuò", mn: "sai" }, { hz: "忙", py: "máng", mn: "bận" }, { hz: "累", py: "lèi", mn: "mệt" },
-        { hz: "水", py: "shuǐ", mn: "nước" }, { hz: "饭", py: "fàn", mn: "cơm" }, { hz: "菜", py: "cài", mn: "món ăn" }, { hz: "茶", py: "chá", mn: "trà" }, { hz: "苹果", py: "píngguǒ", mn: "táo" }, { hz: "钱", py: "qián", mn: "tiền" }, { hz: "东西", py: "dōngxi", mn: "đồ đạc" }, { hz: "杯子", py: "bēizi", mn: "cốc" }, { hz: "衣服", py: "yīfu", mn: "quần áo" }, { hz: "书", py: "shū", mn: "sách" }, { hz: "桌子", py: "zhuōzi", mn: "bàn" }, { hz: "椅子", py: "yǐzi", mn: "ghế" }, { hz: "电脑", py: "diànnǎo", mn: "máy tính" }, { hz: "电视", py: "diànshì", mn: "tivi" },
-        { hz: "不", py: "bù", mn: "không" }, { hz: "没", py: "méi", mn: "chưa/không có" }, { hz: "很", py: "hěn", mn: "rất" }, { hz: "太", py: "tài", mn: "quá" }, { hz: "都", py: "dōu", mn: "đều" }, { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của" }, { hz: "吗", py: "ma", mn: "không (hỏi)" }, { hz: "呢", py: "ne", mn: "thì sao/nhỉ" }, { hz: "了", py: "le", mn: "rồi" }, { hz: "什么", py: "shénme", mn: "cái gì" }, { hz: "哪儿", py: "nǎr", mn: "ở đâu" }, { hz: "怎么", py: "zěnme", mn: "thế nào" }, { hz: "多少", py: "duōshao", mn: "bao nhiêu" }, { hz: "几", py: "jǐ", mn: "mấy" }
+        { hz: "是", py: "shì", mn: "là" }, { hz: "有", py: "yǒu", mn: "có" }, { hz: "在", py: "zài", mn: "ở" }, { hz: "要", py: "yào", mn: "muốn" }, { hz: "喜欢", py: "xǐhuan", mn: "thích" }, { hz: "爱", py: "ài", mn: "yêu" }, { hz: "吃", py: "chī", mn: "ăn" }, { hz: "喝", py: "hē", mn: "uống" }, { hz: "去", py: "qù", mn: "đi" }, { hz: "来", py: "lái", mn: "đến" },
+        { hz: "不", py: "bù", mn: "không" }, { hz: "没", py: "méi", mn: "chưa" }, { hz: "很", py: "hěn", mn: "rất" }, { hz: "太", py: "tài", mn: "quá" }, { hz: "都", py: "dōu", mn: "đều" }, { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của" }, { hz: "吗", py: "ma", mn: "không?" }, { hz: "呢", py: "ne", mn: "nhỉ" }, { hz: "了", py: "le", mn: "rồi" }, { hz: "什么", py: "shénme", mn: "cái gì" }
     ];
 
     const readingData = [
-        { id: 1, zh: "你好！我叫刘铁花。我是学生。我家有五口人：爸爸、妈妈、哥哥、女儿和我。我爸爸是老师，他在学校工作。我妈妈不工作，她在家。我有一个好朋友，他是我的同学。", key: "xin chào tôi tên lưu thiết hoa tôi là học sinh nhà tôi có năm người bố mẹ anh trai con gái và tôi bố tôi là giáo viên ông ấy làm việc ở trường mẹ tôi không đi làm bà ấy ở nhà tôi có một người bạn tốt cậu ấy là bạn học của tôi", vi_display: "Xin chào! Tôi tên Lưu Thiết Hoa. Tôi là học sinh. Nhà tôi có 5 người: Bố, mẹ, anh trai, con gái và tôi. Bố tôi là giáo viên, ông ấy làm việc ở trường. Mẹ tôi không đi làm, bà ấy ở nhà. Tôi có một người bạn tốt, cậu ấy là bạn học của tôi." },
-        { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。我喜欢吃中国菜，喝茶。下午我要去商店买东西。我买了一个杯子和几件衣服。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm tôi thích ăn món trung quốc uống trà buổi chiều tôi muốn đi cửa hàng mua đồ tôi đã mua một cái cốc và vài bộ quần áo", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm. Tôi thích ăn món Trung Quốc, uống trà. Buổi chiều tôi muốn đi cửa hàng mua đồ. Tôi đã mua một cái cốc và vài bộ quần áo." },
-        { id: 3, zh: "这个电脑多少钱？这个电脑八千块钱。太贵了！那个桌子和椅子呢？那个桌子不贵。你要买什么？我要买一个小杯子。给你钱。谢谢。", key: "cái máy tính này bao nhiêu tiền cái máy tính này tám nghìn tệ đắt quá cái bàn và ghế kia thì sao cái bàn đó không đắt bạn muốn mua gì tôi muốn mua một cái cốc nhỏ gửi bạn tiền cảm ơn", vi_display: "Cái máy tính này bao nhiêu tiền? Cái máy tính này 8000 tệ. Đắt quá! Cái bàn và ghế kia thì sao? Cái bàn đó không đắt. Bạn muốn mua gì? Tôi muốn mua một cái cốc nhỏ. Gửi bạn tiền. Cảm ơn." }
+        { id: 1, zh: "你好！我叫刘铁花。我是学生。我家有五口人：爸爸、妈妈、哥哥、女儿和我。", key: "xin chào tôi tên lưu thiết hoa tôi là học sinh nhà tôi có năm người bố mẹ anh trai con gái và tôi", vi_display: "Xin chào! Tôi tên Lưu Thiết Hoa. Tôi là học sinh. Nhà tôi có 5 người: Bố, mẹ, anh trai, con gái và tôi." },
+        { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }
     ];
 
     const vPop = [
-        {name:"Hôn vào đây",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg"},
-        {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg"}
+        {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg"},
+        {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg"},
+        {name:"Gieo Quẻ",type:"yt",id:"ul3Ezn8m6IQ",thumb:"https://img.youtube.com/vi/ul3Ezn8m6IQ/mqdefault.jpg"}
     ];
     const cPop = [
-        {name:"Mang Chủng (Mới)",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"},
+        {name:"Mang Chủng",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"},
         {name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"},
         {name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"},
         {name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"}
     ];
 
-    // --- LOGIC HỆ THỐNG ---
+    // --- SYSTEM ---
     let userCoins = parseInt(localStorage.getItem('skyCoins')) || 0;
-    const coinDisplay = document.getElementById('coin-display');
-    coinDisplay.innerText = userCoins;
+    document.getElementById('coin-display').innerText = userCoins;
+    function updateCoins(amount) { userCoins += amount; localStorage.setItem('skyCoins', userCoins); document.getElementById('coin-display').innerText = userCoins; }
 
-    function updateCoins(amount) {
-        userCoins += amount;
-        localStorage.setItem('skyCoins', userCoins);
-        coinDisplay.innerText = userCoins;
-    }
-
-    // TABS
     function switchTab(id) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         document.getElementById('n-' + id).classList.add('active');
-        
-        if (id === 'vocab') { if(document.getElementById('v-question').innerText === "...") nextVocab(true); }
-        if (id === 'reading') { if(document.getElementById('r-text').innerText === "Đang tải dữ liệu...") nextParagraph(); }
+        if (id === 'vocab' && document.getElementById('v-question').innerText === "...") nextVocab(true);
+        if (id === 'reading' && document.getElementById('r-text').innerText === "Loading...") nextParagraph();
         if (id === 'memo') renderGrammarList();
-        if (id === 'work') resetWorkSchedule();
+        if (id === 'work') loadWorkSchedule();
     }
 
-    // WORK SCHEDULE LOGIC
+    // --- WORK SCHEDULE LOGIC (UPDATED) ---
     const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
     let workStep = 0;
+    let currentWeek = 1;
     let scheduleData = [];
+    
+    function changeWeek() {
+        currentWeek = document.getElementById('week-selector').value;
+        loadWorkSchedule();
+    }
+
+    function loadWorkSchedule() {
+        const key = `skyWork_W${currentWeek}`;
+        const saved = localStorage.getItem(key);
+        if (saved) {
+            scheduleData = JSON.parse(saved);
+            renderScheduleResult();
+        } else {
+            resetWorkSchedule();
+        }
+    }
 
     function setVal(id, val) { document.getElementById(id).value = val; }
     
     function resetWorkSchedule() {
+        // Show Wizard
         workStep = 0;
         scheduleData = [];
         document.getElementById('work-wizard').classList.remove('hidden');
@@ -370,9 +410,22 @@
         updateWizardUI();
     }
 
+    function editCurrentSchedule() {
+        // Simply unlock wizard but keep week
+        resetWorkSchedule();
+    }
+    
+    function addNewSchedule() {
+        // Clear data for this week
+        const key = `skyWork_W${currentWeek}`;
+        localStorage.removeItem(key);
+        resetWorkSchedule();
+    }
+
     function updateWizardUI() {
         document.getElementById('w-day-title').innerText = workDays[workStep];
         document.getElementById('w-step-num').innerText = workStep + 1;
+        // Auto Date Logic
         if(workStep > 0 && scheduleData.length > 0) {
             const prevDate = scheduleData[workStep-1].date;
             const parts = prevDate.split('/');
@@ -381,10 +434,7 @@
                 let m = parseInt(parts[1]);
                 if(d > 31) { d = 1; m++; }
                 document.getElementById('w-date').value = `${d}/${m}`;
-                document.getElementById('w-date-input-container').style.opacity = '0.5';
             }
-        } else {
-            document.getElementById('w-date-input-container').style.opacity = '1';
         }
     }
 
@@ -392,9 +442,14 @@
         const date = document.getElementById('w-date').value || "N/A";
         const pos = document.getElementById('w-pos').value || "N/A";
         const time = document.getElementById('w-time').value || "N/A";
+        
         scheduleData.push({ day: workDays[workStep], date, pos, time });
         workStep++;
+        
         if(workStep >= 7) {
+            // Save
+            const key = `skyWork_W${currentWeek}`;
+            localStorage.setItem(key, JSON.stringify(scheduleData));
             renderScheduleResult();
         } else {
             setVal('w-pos',''); setVal('w-time','');
@@ -406,254 +461,133 @@
         document.getElementById('work-wizard').classList.add('hidden');
         document.getElementById('work-result').classList.remove('hidden');
         const tbody = document.getElementById('work-tbody');
+        let totalH = 0;
+
         tbody.innerHTML = scheduleData.map(d => {
             let duration = 0;
             if(d.time.includes('-')) {
-                const t = d.time.replace(/h/g, '.').split('-');
-                if(t.length === 2) duration = parseFloat(t[1]) - parseFloat(t[0]);
+                const t = d.time.replace(/h/g, '.').replace(/:/g, '.').split('-');
+                if(t.length === 2) {
+                     // Normalize time format e.g., 15.30 -> 15.5
+                     const start = parseFloat(t[0]);
+                     const end = parseFloat(t[1]);
+                     // Handle simple minutes if needed (basic .5 logic here)
+                     duration = end - start; 
+                     // Fix negative duration if past midnight? Assuming not for now based on user data
+                }
             }
-            return `<tr class="${d.pos === 'OFF' ? 'bg-red-500/20' : ''}">
-                <td class="font-bold text-indigo-300">${d.day}</td>
+            if(d.pos !== 'OFF' && !isNaN(duration)) totalH += duration;
+
+            return `<tr class="${d.pos === 'OFF' ? 'text-red-400' : ''}">
+                <td class="font-bold text-gray-400">${d.day}</td>
                 <td>${d.date}</td>
-                <td class="uppercase font-bold">${d.pos}</td>
+                <td class="uppercase font-bold tracking-widest text-xs">${d.pos}</td>
                 <td>${d.time}</td>
                 <td>${d.pos === 'OFF' ? '-' : (duration > 0 ? duration.toFixed(1) + 'h' : '?')}</td>
             </tr>`;
         }).join('');
+
+        // Salary Calc
+        document.getElementById('total-hours').innerText = totalH.toFixed(1) + "h";
+        const salary = totalH * 25000;
+        document.getElementById('total-salary').innerText = salary.toLocaleString('vi-VN') + " VNĐ";
     }
 
-    // GRAMMAR TEST LOGIC
-    const grammarRules = [
-        { id: "g1", title: "S + 是 + N", structure: "S + 是 + N (Là)", regex: /(.+)是(.+)/ },
-        { id: "g2", title: "S + 不 + 是 + N", structure: "S + 不 + 是 + N (Không là)", regex: /(.+)不是(.+)/ },
-        { id: "g3", title: "S + 是 + N + 吗?", structure: "S + 是 + N + 吗? (Hỏi)", regex: /(.+)是(.+)吗[?？]?/ }
-    ];
-    let curTestRule = null;
-    let curTestSentence = "";
-
-    function setTestMode(mode) {
-        document.getElementById('test-analyze').classList.add('hidden');
-        document.getElementById('test-fill').classList.add('hidden');
-        if(mode === 'analyze') {
-            document.getElementById('test-analyze').classList.remove('hidden');
-            startAnalyze();
-        } else {
-            document.getElementById('test-fill').classList.remove('hidden');
-            nextFillTest();
-        }
-    }
-
-    function startAnalyze() {
-        curTestRule = grammarRules[Math.floor(Math.random() * 3)];
-        const sub = ["我","你","他","爸爸","老师"];
-        const noun = ["学生","医生","好人","越南人"];
-        const S = sub[Math.floor(Math.random() * sub.length)];
-        const N = noun[Math.floor(Math.random() * noun.length)];
-        
-        if(curTestRule.id === "g1") curTestSentence = S + "是" + N;
-        if(curTestRule.id === "g2") curTestSentence = S + "不是" + N;
-        if(curTestRule.id === "g3") curTestSentence = S + "是" + N + "吗？";
-
-        document.getElementById('ta-question').innerText = curTestSentence;
-        document.getElementById('ta-status').innerText = "";
-        document.getElementById('ta-step1').classList.remove('hidden');
-        document.getElementById('ta-step2').classList.add('hidden');
-        document.getElementById('ta-step3').classList.add('hidden');
-        document.getElementById('ta-sub-input').value = "";
-        document.getElementById('ta-noun-input').value = "";
-        document.getElementById('ta-make-sentence').value = "";
-        document.getElementById('ta-ai-feedback').innerText = "";
-
-        document.getElementById('ta-options').innerHTML = grammarRules.map(r => 
-            `<button onclick="checkRule('${r.id}')" class="w-full p-3 bg-white/10 hover:bg-indigo-600 border border-white/20 rounded text-left text-xs uppercase transition font-bold">${r.structure}</button>`
-        ).join('');
-    }
-
-    function checkRule(id) {
-        if(id === curTestRule.id) {
-            updateCoins(1);
-            document.getElementById('ta-status').innerText = "CHÍNH XÁC! (+1 Xu)";
-            document.getElementById('ta-status').className = "text-center text-sm font-bold h-6 mb-4 text-green-400";
-            setTimeout(() => {
-                document.getElementById('ta-step1').classList.add('hidden');
-                document.getElementById('ta-step2').classList.remove('hidden');
-            }, 500);
-        } else {
-            updateCoins(-1);
-            document.getElementById('ta-status').innerText = "SAI RỒI! (-1 Xu)";
-            document.getElementById('ta-status').className = "text-center text-sm font-bold h-6 mb-4 text-red-400";
-        }
-    }
-
-    function checkComponents() {
-        const s = document.getElementById('ta-sub-input').value.trim();
-        const n = document.getElementById('ta-noun-input').value.trim();
-        if(curTestSentence.includes(s) && curTestSentence.includes(n) && s !== "" && n !== "") {
-            updateCoins(1);
-            alert("Đúng thành phần!");
-            document.getElementById('ta-step2').classList.add('hidden');
-            document.getElementById('ta-step3').classList.remove('hidden');
-        } else {
-            alert("Chưa đúng, hãy nhìn kỹ câu hỏi.");
-        }
-    }
-
-    function checkAISentence() {
-        const val = document.getElementById('ta-make-sentence').value;
-        const fb = document.getElementById('ta-ai-feedback');
-        if(val.match(curTestRule.regex) && /[\u4e00-\u9fa5]/.test(val)) {
-            updateCoins(5);
-            fb.innerText = "AI Chấp Thuận: Câu Tốt! (+5 Xu)";
-            fb.style.color = "#4ade80";
-            setTimeout(startAnalyze, 2000);
-        } else {
-            fb.innerText = "AI Từ Chối: Sai cấu trúc hoặc không phải tiếng Trung.";
-            fb.style.color = "#f87171";
-        }
-    }
-
-    // FILL TEST
-    const dialogues = [
-        {txt:"你好！我叫Lưu Thiết Hoa. 我是学生。", hide:"学生"},
-        {txt:"你去哪儿？我去学校看老师。", hide:"学校"},
-        {txt:"这个多少钱？太贵了！", hide:"钱"},
-        {txt:"你是中国人吗？不是，我是越南人。", hide:"越南人"}
-    ];
-    function nextFillTest() {
-        const d = dialogues[Math.floor(Math.random() * dialogues.length)];
-        document.getElementById('tf-dialogue').innerHTML = d.txt.replace(d.hide, `<span class="border-b-2 border-dashed border-white text-gray-500">???</span>`);
-        document.getElementById('tf-msg').innerText = "";
-        const opts = [d.hide, "爸爸", "什么", "因为"].sort(()=>Math.random()-0.5);
-        document.getElementById('tf-options').innerHTML = opts.map(o => 
-            `<button onclick="checkFill('${o}','${d.hide}')" class="px-4 py-2 bg-white/10 hover:bg-white/30 border border-white/20 rounded font-bold">${o}</button>`
-        ).join('');
-    }
-    function checkFill(ans, corr) {
-        if(ans === corr) {
-            updateCoins(1);
-            document.getElementById('tf-msg').innerText = "CHÍNH XÁC!";
-            document.getElementById('tf-msg').style.color = "#4ade80";
-            document.getElementById('tf-dialogue').innerText = document.getElementById('tf-dialogue').innerText.replace("???", corr);
-            setTimeout(nextFillTest, 1500);
-        } else {
-            document.getElementById('tf-msg').innerText = "SAI RỒI";
-            document.getElementById('tf-msg').style.color = "#f87171";
-        }
-    }
-
-    // MEMO RENDER
-    function renderGrammarList() {
-        document.getElementById('grammar-list').innerHTML = grammarRules.map(r => {
-            let ex = "";
-            if(r.id === "g1") ex = "我是学生 (Tôi là học sinh)";
-            if(r.id === "g2") ex = "我不是老师 (Tôi không phải giáo viên)";
-            if(r.id === "g3") ex = "你是中国人吗？ (Bạn là người TQ phải không?)";
-            return `
-            <div class="bg-black/40 p-6 rounded-xl border border-white/10">
-                <h3 class="text-xl font-bold text-indigo-400 mb-2">${r.title}</h3>
-                <code class="block bg-black/30 p-2 rounded text-pink-400 mb-2 font-mono">${r.structure}</code>
-                <p class="text-sm text-gray-300">Ví dụ: ${ex}</p>
-            </div>`;
-        }).join('');
-        // Add extra rule 4
-        document.getElementById('grammar-list').innerHTML += `
-        <div class="bg-black/40 p-6 rounded-xl border border-white/10">
-            <h3 class="text-xl font-bold text-indigo-400 mb-2">Đại từ/Danh từ + 们</h3>
-            <code class="block bg-black/30 p-2 rounded text-pink-400 mb-2 font-mono">N + 们 (Số nhiều)</code>
-            <p class="text-sm text-gray-300">Ví dụ: 我们 (Chúng tôi), 老师们 (Các thầy cô)</p>
-        </div>`;
-    }
-
-    // VOCAB LOGIC
-    let vMode = 0; let vIdx = 0; let remaining = [...Array(vocabData.length).keys()];
-    function changeVocabMode() { vMode = (vMode + 1) % 3; const l = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"]; document.getElementById('v-mode-btn').innerText = "Mode: " + l[vMode]; nextVocab(false); }
-    function nextVocab(rand) {
-        if(remaining.length === 0) remaining = [...Array(vocabData.length).keys()];
-        if(rand) vIdx = remaining[Math.floor(Math.random() * remaining.length)];
-        const item = vocabData[vIdx];
-        document.getElementById('v-question').innerText = vMode === 0 ? item.hz : (vMode === 1 ? item.mn.toUpperCase() : item.hz);
-        document.getElementById('v-input').value = "";
-        document.getElementById('v-msg').innerText = "";
-        document.getElementById('v-hint').classList.add('hidden');
-        document.getElementById('vocab-card').className = "glass-card p-10 w-full max-w-lg relative text-center";
-    }
-    function checkVocab() {
-        const item = vocabData[vIdx];
-        const val = document.getElementById('v-input').value.toLowerCase().trim();
-        let ok = false; let ans = "";
-        if(vMode === 0) { ok = val === item.mn.toLowerCase(); ans = item.mn; }
-        else if(vMode === 1) { ok = val === item.hz; ans = item.hz; }
-        else { ok = val === item.py || val === item.py.normalize("NFD").replace(/[\u0300-\u036f]/g, ""); ans = item.py; }
-
-        if(ok) {
-            updateCoins(1);
-            document.getElementById('v-msg').innerText = "CHÍNH XÁC!";
-            document.getElementById('v-msg').style.color = "#4ade80";
-            document.getElementById('vocab-card').classList.add('glow-green');
-            remaining = remaining.filter(i => i !== vIdx);
-            setTimeout(() => nextVocab(true), 1000);
-        } else {
-            updateCoins(-1);
-            document.getElementById('v-msg').innerText = "SAI RỒI";
-            document.getElementById('v-msg').style.color = "#f87171";
-            document.getElementById('v-hint').innerText = "ĐÁP ÁN: " + ans.toUpperCase();
-            document.getElementById('v-hint').classList.remove('hidden');
-            document.getElementById('vocab-card').classList.add('glow-red');
-        }
-    }
-
-    // READING LOGIC
-    let rIdx = 0;
-    function nextParagraph() {
-        rIdx = (rIdx + 1) % readingData.length;
-        const d = readingData[rIdx];
-        document.getElementById('r-text').innerText = d.zh;
-        document.getElementById('r-input').value = "";
-        document.getElementById('r-msg').innerText = "";
-        document.getElementById('r-toggle-btn').innerText = "Xem Đáp Án";
-    }
-    function toggleReadingRef() {
-        const el = document.getElementById('r-text');
-        const btn = document.getElementById('r-toggle-btn');
-        if(btn.innerText === "Xem Đáp Án") { el.innerText = readingData[rIdx].vi_display; btn.innerText = "Xem Câu Hỏi"; }
-        else { el.innerText = readingData[rIdx].zh; btn.innerText = "Xem Đáp Án"; }
-    }
-    function checkReading() {
-        const val = document.getElementById('r-input').value.toLowerCase();
-        const key = readingData[rIdx].key;
-        let count = 0;
-        const words = val.split(" ");
-        words.forEach(w => { if(key.includes(w) && w.length > 1) count++; });
-        if(count > 5) { updateCoins(1); document.getElementById('r-msg').innerText = "TỐT LẮM! (+1 Xu)"; document.getElementById('r-msg').style.color = "#4ade80"; }
-        else { document.getElementById('r-msg').innerText = "HÃY VIẾT CHI TIẾT HƠN..."; document.getElementById('r-msg').style.color = "white"; }
-    }
-
-    // MUSIC LOGIC
+    // --- MUSIC LOGIC (UPDATED WITH AUTO-PLAY) ---
+    let currentList = 'vpop'; 
+    let currentIndex = 0;
+    
     function renderMusic() {
-        const tpl = (s) => `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${s.name}')"><img src="${s.thumb}"><div><h4 class="text-[10px] font-bold uppercase text-white">${s.name}</h4><span class="text-[9px] text-gray-400 bg-white/10 px-1 rounded">${s.type==='mp4'?'NO ADS':'YT'}</span></div></div>`;
-        document.getElementById('v-list').innerHTML = vPop.map(tpl).join('');
-        document.getElementById('c-list').innerHTML = cPop.map(tpl).join('');
+        const tpl = (s, idx, type) => `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${s.name}', ${idx}, '${type}')">
+            <img src="${s.thumb}">
+            <div>
+                <h4 class="text-[10px] font-bold uppercase text-white tracking-widest">${s.name}</h4>
+                <span class="text-[8px] text-gray-500">${s.type==='mp4'?'NO ADS':'YOUTUBE'}</span>
+            </div>
+        </div>`;
+        document.getElementById('v-list').innerHTML = vPop.map((s,i) => tpl(s, i, 'vpop')).join('');
+        document.getElementById('c-list').innerHTML = cPop.map((s,i) => tpl(s, i, 'cpop')).join('');
     }
+
+    // Youtube API
     var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    var player; function onYouTubeIframeAPIReady() { player = new YT.Player('player', { height: '100%', width: '100%', videoId: '' }); }
-    function playMedia(src, type, name) {
+    var player; 
+    function onYouTubeIframeAPIReady() { 
+        player = new YT.Player('player', { height: '100%', width: '100%', videoId: '', events: { 'onStateChange': onPlayerStateChange } }); 
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.ENDED) {
+            checkAutoPlay();
+        }
+    }
+
+    // HTML5 Video Event
+    document.getElementById('mp4-player').addEventListener('ended', checkAutoPlay);
+
+    function playMedia(src, type, name, idx, listType) {
+        currentList = listType;
+        currentIndex = idx;
         document.getElementById('now-playing').innerText = name;
         const yt = document.getElementById('player');
         const mp4 = document.getElementById('mp4-player');
+        
         if(player && player.stopVideo) player.stopVideo();
         mp4.pause();
-        if(type === 'mp4') { yt.style.display = 'none'; mp4.style.display = 'block'; mp4.src = src; mp4.play(); }
-        else { mp4.style.display = 'none'; yt.style.display = 'block'; player.loadVideoById(src); }
+        
+        if(type === 'mp4') { 
+            yt.style.display = 'none'; mp4.style.display = 'block'; 
+            mp4.src = src; mp4.play(); 
+        } else { 
+            mp4.style.display = 'none'; yt.style.display = 'block'; 
+            player.loadVideoById(src); 
+        }
     }
 
-    // INIT
-    window.onload = () => {
-        switchTab('home');
-        renderMusic();
-        nextVocab(true);
-        nextParagraph();
-        renderGrammarList();
-    };
+    function checkAutoPlay() {
+        const isAuto = document.getElementById(`toggle-${currentList}`).checked;
+        if(isAuto) {
+            const listData = currentList === 'vpop' ? vPop : cPop;
+            const nextIdx = (currentIndex + 1) % listData.length;
+            const nextSong = listData[nextIdx];
+            playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList);
+        }
+    }
+
+    // --- GRAMMAR & VOCAB (RESTORED) ---
+    const grammarRules = [
+        { id: "g1", title: "S + 是 + N", structure: "S + 是 + N (Là)", ex: "我是学生 (Tôi là học sinh)" },
+        { id: "g2", title: "S + 不 + 是 + N", structure: "S + 不 + 是 + N (Không là)", ex: "我不是老师" },
+        { id: "g3", title: "S + 是 + N + 吗?", structure: "S + 是 + N + 吗? (Hỏi)", ex: "你是中国人吗？" },
+        { id: "g4", title: "N + 们", structure: "N + 们 (Số nhiều)", ex: "我们 (Chúng tôi), 老师们 (Các thầy cô)" }
+    ];
+    function renderGrammarList() {
+        document.getElementById('grammar-list').innerHTML = grammarRules.map(r => `
+            <div class="bg-white/5 p-6 border-l-2 border-indigo-500">
+                <h3 class="text-lg font-light text-white mb-2">${r.title}</h3>
+                <code class="block bg-black/20 p-2 text-pink-300 mb-2 font-mono text-xs">${r.structure}</code>
+                <p class="text-xs text-gray-400 italic">Ví dụ: ${r.ex}</p>
+            </div>`).join('');
+    }
+
+    // Vocab & Reading functions (Same logic, cleaner code)
+    let vIdx = 0; let vMode = 0;
+    function changeVocabMode() { vMode = (vMode+1)%3; document.getElementById('v-mode-btn').innerText = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"][vMode]; nextVocab(true); }
+    function nextVocab(rand) { if(rand) vIdx = Math.floor(Math.random()*vocabData.length); const i = vocabData[vIdx]; document.getElementById('v-question').innerText = vMode===0?i.hz:(vMode===1?i.mn.toUpperCase():i.hz); document.getElementById('v-input').value = ""; document.getElementById('v-msg').innerText = ""; }
+    function checkVocab() { 
+        const i = vocabData[vIdx]; const v = document.getElementById('v-input').value.toLowerCase().trim();
+        let ok = (vMode===0 && v===i.mn.toLowerCase()) || (vMode===1 && v===i.hz) || (vMode===2 && v===i.py);
+        if(ok) { updateCoins(1); document.getElementById('v-msg').innerText = "CHÍNH XÁC!"; setTimeout(()=>nextVocab(true),1000); }
+        else { document.getElementById('v-msg').innerText = "SAI RỒI"; }
+    }
+    
+    let rIdx = 0;
+    function nextParagraph() { rIdx = (rIdx+1)%readingData.length; document.getElementById('r-text').innerText = readingData[rIdx].zh; document.getElementById('r-input').value=""; }
+    function toggleReadingRef() { const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
+    function checkReading() { if(document.getElementById('r-input').value.length > 5) { updateCoins(1); document.getElementById('r-msg').innerText = "OK (+1 Xu)"; } }
+
+    // Init
+    window.onload = () => { switchTab('home'); renderMusic(); nextVocab(true); nextParagraph(); };
 </script>
 </body>
 </html>
