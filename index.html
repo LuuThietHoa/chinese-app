@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V33.0 Perfect</title>
+    <title>Skyreign Hub | V34.0 Corrected</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -22,7 +22,7 @@
         /* UI ELEMENTS */
         .glass-card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         
-        /* NAVIGATION - NO ICONS */
+        /* NAVIGATION */
         nav { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; display: flex; background: rgba(0,0,0,0.95); padding: 15px; backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1); overflow-x: auto; justify-content: center; gap: 10px; }
         .nav-btn { padding: 10px 20px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; color: #64748b; white-space: nowrap; background: transparent; border: 1px solid rgba(255,255,255,0.1); }
         .nav-btn:hover { color: white; border-color: white; }
@@ -34,7 +34,7 @@
         
         /* MODERN TEXT EFFECT */
         .modern-text {
-            font-weight: 300; /* Thin font */
+            font-weight: 300;
             text-transform: uppercase;
             letter-spacing: 4px;
             background: linear-gradient(90deg, #fff, #a5b4fc, #f472b6, #fff);
@@ -61,11 +61,10 @@
         .time-chip { display: inline-block; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; margin: 4px; border-radius: 4px; font-size: 10px; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; }
         .time-chip:hover { background: white; color: black; }
         
-        /* MUSIC LIST */
+        /* MUSIC LIST - FIXED AVATAR COLOR */
         .song-item { display: flex; gap: 12px; padding: 12px; border-radius: 8px; background: transparent; cursor: pointer; transition: 0.2s; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .song-item:hover { background: rgba(255,255,255,0.05); padding-left: 20px; }
-        .song-item img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; filter: grayscale(100%); transition: 0.3s; }
-        .song-item:hover img { filter: grayscale(0%); }
+        .song-item img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; /* No grayscale here */ }
         
         /* TOGGLE SWITCH */
         .toggle-checkbox:checked { right: 0; border-color: #68D391; }
@@ -77,7 +76,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V33.0 PERFECT</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V34.0 CORRECTED</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -348,11 +347,11 @@
         { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }
     ];
 
-    // UPDATED V-POP LIST
+    // UPDATED V-POP LIST V34.0
     const vPop = [
-        {name:"HÔN LỄ CỦA EM",type:"yt",id:"ccLPKYyk4hs",thumb:"https://img.youtube.com/vi/ccLPKYyk4hs/mqdefault.jpg"},
+        {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg"}, // User's custom request: Name Hôn Lễ but link Amee
         {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg"},
-        {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg"},
+        {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg"}, // Restored V29
         {name:"Gieo Quẻ",type:"yt",id:"ul3Ezn8m6IQ",thumb:"https://img.youtube.com/vi/ul3Ezn8m6IQ/mqdefault.jpg"}
     ];
     const cPop = [
@@ -378,7 +377,7 @@
         if (id === 'work') loadWorkSchedule();
     }
 
-    // --- WORK SCHEDULE LOGIC (UPDATED) ---
+    // --- WORK SCHEDULE LOGIC ---
     const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
     let workStep = 0;
     let currentWeek = 1;
@@ -403,7 +402,6 @@
     function setVal(id, val) { document.getElementById(id).value = val; }
     
     function resetWorkSchedule() {
-        // Show Wizard
         workStep = 0;
         scheduleData = [];
         document.getElementById('work-wizard').classList.remove('hidden');
@@ -413,12 +411,10 @@
     }
 
     function editCurrentSchedule() {
-        // Simply unlock wizard but keep week
         resetWorkSchedule();
     }
     
     function addNewSchedule() {
-        // Clear data for this week
         const key = `skyWork_W${currentWeek}`;
         localStorage.removeItem(key);
         resetWorkSchedule();
@@ -427,7 +423,6 @@
     function updateWizardUI() {
         document.getElementById('w-day-title').innerText = workDays[workStep];
         document.getElementById('w-step-num').innerText = workStep + 1;
-        // Auto Date Logic
         if(workStep > 0 && scheduleData.length > 0) {
             const prevDate = scheduleData[workStep-1].date;
             const parts = prevDate.split('/');
@@ -449,7 +444,6 @@
         workStep++;
         
         if(workStep >= 7) {
-            // Save
             const key = `skyWork_W${currentWeek}`;
             localStorage.setItem(key, JSON.stringify(scheduleData));
             renderScheduleResult();
@@ -470,10 +464,8 @@
             if(d.time.includes('-')) {
                 const t = d.time.replace(/h/g, '.').replace(/:/g, '.').split('-');
                 if(t.length === 2) {
-                     // Normalize time format e.g., 15.30 -> 15.5
                      const start = parseFloat(t[0]);
                      const end = parseFloat(t[1]);
-                     // Handle simple minutes if needed (basic .5 logic here)
                      duration = end - start; 
                 }
             }
@@ -488,7 +480,6 @@
             </tr>`;
         }).join('');
 
-        // Salary Calc
         document.getElementById('total-hours').innerText = totalH.toFixed(1) + "h";
         const salary = totalH * 25000;
         document.getElementById('total-salary').innerText = salary.toLocaleString('vi-VN') + " VNĐ";
@@ -510,7 +501,6 @@
         document.getElementById('c-list').innerHTML = cPop.map((s,i) => tpl(s, i, 'cpop')).join('');
     }
 
-    // Youtube API
     var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
     var player; 
     function onYouTubeIframeAPIReady() { 
@@ -523,7 +513,6 @@
         }
     }
 
-    // HTML5 Video Event
     document.getElementById('mp4-player').addEventListener('ended', checkAutoPlay);
 
     function playMedia(src, type, name, idx, listType) {
@@ -571,7 +560,6 @@
             </div>`).join('');
     }
 
-    // Vocab & Reading functions
     let vIdx = 0; let vMode = 0;
     function changeVocabMode() { vMode = (vMode+1)%3; document.getElementById('v-mode-btn').innerText = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"][vMode]; nextVocab(true); }
     function nextVocab(rand) { if(rand) vIdx = Math.floor(Math.random()*vocabData.length); const i = vocabData[vIdx]; document.getElementById('v-question').innerText = vMode===0?i.hz:(vMode===1?i.mn.toUpperCase():i.hz); document.getElementById('v-input').value = ""; document.getElementById('v-msg').innerText = ""; }
@@ -587,7 +575,6 @@
     function toggleReadingRef() { const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
     function checkReading() { if(document.getElementById('r-input').value.length > 5) { updateCoins(1); document.getElementById('r-msg').innerText = "OK (+1 Xu)"; } }
 
-    // Init
     window.onload = () => { switchTab('home'); renderMusic(); nextVocab(true); nextParagraph(); };
 </script>
 </body>
