@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.0 Manager</title>
+    <title>Skyreign Hub | V41.0 Smart Date</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -72,7 +72,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.0 MANAGER</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V41.0 SMART DATE</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -518,7 +518,7 @@
         }
     }
 
-    // --- WORK SCHEDULE LOGIC (V40 MANAGER) ---
+    // --- WORK SCHEDULE LOGIC (V41 SMART DATE) ---
     const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
     let workStep = 0;
     let currentWeek = 1;
@@ -533,8 +533,7 @@
         let w = prompt("Bạn muốn tạo lịch tuần mấy? (Nhập số)");
         if (w && parseInt(w) > 0) {
             currentWeek = parseInt(w);
-            document.getElementById('week-selector').value = currentWeek; // Try to set value
-            // Force reset if option doesn't exist (basic handling)
+            document.getElementById('week-selector').value = currentWeek; 
             resetWorkSchedule();
         }
     }
@@ -542,7 +541,6 @@
     function loadWorkSchedule() {
         document.getElementById('w-current-week-display').innerText = currentWeek;
         document.getElementById('lbl-week-num').innerText = currentWeek;
-        
         const key = `skyWork_W${currentWeek}`;
         const saved = localStorage.getItem(key);
         if (saved) {
@@ -565,11 +563,9 @@
         updateWizardUI();
     }
 
-    // NEW: Cancel Function
     function cancelWizard() {
         const key = `skyWork_W${currentWeek}`;
         if(localStorage.getItem(key)) {
-            // Data exists, go back to view
             scheduleData = JSON.parse(localStorage.getItem(key));
             renderScheduleResult();
         } else {
@@ -584,14 +580,25 @@
         document.getElementById('w-day-title').innerText = workDays[workStep];
         document.getElementById('w-step-num').innerText = workStep + 1;
         document.getElementById('w-current-week-display').innerText = currentWeek;
+        
+        // --- SMART AUTO DATE LOGIC ---
         if(workStep > 0 && scheduleData.length > 0) {
             const prevDate = scheduleData[workStep-1].date;
-            const parts = prevDate.split('/');
-            if(parts.length === 2) {
-                let d = parseInt(parts[0]) + 1;
+            // Robust regex to capture days/months (supports 9/2, 09-02, 9.2)
+            const parts = prevDate.match(/(\d+)/g); 
+            if(parts && parts.length >= 2) {
+                let d = parseInt(parts[0]);
                 let m = parseInt(parts[1]);
-                if(d > 31) { d = 1; m++; }
-                document.getElementById('w-date').value = `${d}/${m}`;
+                
+                // Use Date object for accurate calendar math
+                const currentYear = new Date().getFullYear();
+                const dateObj = new Date(currentYear, m - 1, d); // Month is 0-indexed
+                dateObj.setDate(dateObj.getDate() + 1); // Add 1 day
+                
+                const nextD = dateObj.getDate();
+                const nextM = dateObj.getMonth() + 1;
+                
+                document.getElementById('w-date').value = `${nextD}/${nextM}`;
             }
         }
     }
@@ -635,7 +642,6 @@
         const stats = calculateSalary(scheduleData);
         
         tbody.innerHTML = scheduleData.map(d => {
-            // Just raw display, calculation done in stats
             return `<tr class="${d.pos === 'OFF' ? 'text-red-400' : ''}">
                 <td class="font-bold text-gray-400">${d.day}</td>
                 <td>${d.date}</td>
@@ -652,7 +658,6 @@
     function updateMonthlyStat() {
         let totalH = 0;
         let totalM = 0;
-        // Loop weeks 1 to 5
         for(let i=1; i<=5; i++) {
             const d = localStorage.getItem(`skyWork_W${i}`);
             if(d) {
@@ -665,7 +670,7 @@
         document.getElementById('month-salary').innerText = totalM.toLocaleString('vi-VN') + " VNĐ";
     }
 
-    // --- MUSIC LOGIC (RESTORED V39 CORE) ---
+    // --- MUSIC LOGIC (CORE FIX) ---
     let currentList = 'vpop'; 
     let currentIndex = 0;
     
@@ -694,11 +699,9 @@
         document.getElementById('now-playing').innerText = name;
         const yt = document.getElementById('player');
         const mp4 = document.getElementById('mp4-player');
-        
         if(player && player.stopVideo) player.stopVideo();
         mp4.pause();
-        
-        // V39 FIX RE-APPLIED: CLASSLIST TOGGLE
+        // V39 FIX RE-APPLIED
         if(type === 'mp4') { 
             yt.classList.add('hidden'); 
             mp4.classList.remove('hidden'); 
