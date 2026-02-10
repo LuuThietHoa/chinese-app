@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V41.0 Smart Date</title>
+    <title>Skyreign Hub | V43.0 Perfect Logic</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -72,7 +72,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V41.0 SMART DATE</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V43.0 FINAL LOGIC</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -518,7 +518,7 @@
         }
     }
 
-    // --- WORK SCHEDULE LOGIC (V41 SMART DATE) ---
+    // --- WORK SCHEDULE LOGIC (V39 RESTORED) ---
     const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
     let workStep = 0;
     let currentWeek = 1;
@@ -581,25 +581,20 @@
         document.getElementById('w-step-num').innerText = workStep + 1;
         document.getElementById('w-current-week-display').innerText = currentWeek;
         
-        // --- SMART AUTO DATE LOGIC ---
+        // --- V39 AUTO DATE LOGIC RESTORED ---
         if(workStep > 0 && scheduleData.length > 0) {
             const prevDate = scheduleData[workStep-1].date;
-            // Robust regex to capture days/months (supports 9/2, 09-02, 9.2)
-            const parts = prevDate.match(/(\d+)/g); 
-            if(parts && parts.length >= 2) {
-                let d = parseInt(parts[0]);
+            // Uses simple split logic exactly like V39
+            const parts = prevDate.split(/[\/\-\.]/); 
+            if(parts.length === 2) {
+                let d = parseInt(parts[0]) + 1;
                 let m = parseInt(parts[1]);
-                
-                // Use Date object for accurate calendar math
-                const currentYear = new Date().getFullYear();
-                const dateObj = new Date(currentYear, m - 1, d); // Month is 0-indexed
-                dateObj.setDate(dateObj.getDate() + 1); // Add 1 day
-                
-                const nextD = dateObj.getDate();
-                const nextM = dateObj.getMonth() + 1;
-                
-                document.getElementById('w-date').value = `${nextD}/${nextM}`;
+                if(d > 31) { d = 1; m++; }
+                document.getElementById('w-date').value = `${d}/${m}`;
+                document.getElementById('w-date-input-container').style.opacity = '0.5';
             }
+        } else {
+            document.getElementById('w-date-input-container').style.opacity = '1';
         }
     }
 
