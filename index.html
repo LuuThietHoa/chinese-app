@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V38.0 Video Fixed</title>
+    <title>Skyreign Hub | V38.0 Stable</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -55,9 +55,6 @@
         .song-item:hover { background: rgba(255,255,255,0.1); padding-left: 20px; }
         .song-item img { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; }
         
-        /* VIDEO PLAYER */
-        video { width: 100%; height: 100%; background: black; object-fit: contain; }
-        
         /* TOGGLE SWITCH */
         .toggle-checkbox:checked { right: 0; border-color: #68D391; }
         .toggle-checkbox:checked + .toggle-label { background-color: #68D391; }
@@ -72,7 +69,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V38.0 VIDEO FIX</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V38.0 STABLE</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -232,7 +229,7 @@
             <div class="w-full md:w-2/4 flex flex-col">
                 <div class="aspect-video bg-black shadow-2xl relative border border-white/10">
                     <div id="player" class="w-full h-full"></div> 
-                    <video id="mp4-player" controls playsinline class="hidden w-full h-full"></video>
+                    <video id="mp4-player" controls playsinline class="hidden w-full h-full object-cover"></video>
                 </div>
                 <div class="mt-6 text-center">
                     <h4 id="now-playing" class="text-2xl font-light text-white uppercase tracking-tight">Skyreign Music</h4>
@@ -345,7 +342,7 @@
 </div>
 
 <script>
-    // --- GLOBAL DATA ---
+    // --- GLOBAL DATA (Moved Up) ---
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" },
         { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "老师", py: "lǎoshī", mn: "thầy cô" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn học" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" },
@@ -365,6 +362,7 @@
         { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }
     ];
 
+    // UPDATED PLAYLIST
     const vPop = [
         {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg"},
         {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg"},
@@ -394,7 +392,7 @@
         if (id === 'work') loadWorkSchedule();
     }
 
-    // --- TEST TAB LOGIC ---
+    // --- TEST TAB LOGIC (FIXED) ---
     let currentTestRule = null;
     let currentTestSentence = "";
     
@@ -610,12 +608,12 @@
         document.getElementById('total-salary').innerText = (totalH * 25000).toLocaleString('vi-VN') + " VNĐ";
     }
 
-    // --- MUSIC LOGIC ---
+    // --- MUSIC LOGIC (RESTORED V29) ---
     let currentList = 'vpop'; 
     let currentIndex = 0;
     
     function renderMusic() {
-        const tpl = (s, idx, type) => `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${s.name}', ${idx}, '${type}')">
+        const tpl = (s, idx, type) => `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${s.name}', ${idx}, '${type}', '${s.thumb}')">
             <img src="${s.thumb}">
             <div>
                 <h4 class="text-[10px] font-bold uppercase text-white tracking-widest">${s.name}</h4>
@@ -634,23 +632,24 @@
     function onPlayerStateChange(event) { if (event.data === YT.PlayerState.ENDED) checkAutoPlay(); }
     document.getElementById('mp4-player').addEventListener('ended', checkAutoPlay);
 
-    function playMedia(src, type, name, idx, listType) {
+    function playMedia(src, type, name, idx, listType, thumb) {
         currentList = listType; currentIndex = idx;
         document.getElementById('now-playing').innerText = name;
         const yt = document.getElementById('player');
         const mp4 = document.getElementById('mp4-player');
         if(player && player.stopVideo) player.stopVideo();
         mp4.pause();
-        // FIXED VISIBILITY TOGGLE LOGIC
+        
+        // V29 LOGIC RESTORED: SIMPLE TOGGLE
         if(type === 'mp4') { 
-            yt.classList.add('hidden'); 
-            mp4.classList.remove('hidden'); 
+            yt.style.display = 'none'; 
+            mp4.style.display = 'block'; 
             mp4.src = src; 
             mp4.play(); 
         } 
         else { 
-            mp4.classList.add('hidden'); 
-            yt.classList.remove('hidden'); 
+            mp4.style.display = 'none'; 
+            yt.style.display = 'block'; 
             player.loadVideoById(src); 
         }
     }
@@ -660,7 +659,7 @@
             const listData = currentList === 'vpop' ? vPop : cPop;
             const nextIdx = (currentIndex + 1) % listData.length;
             const nextSong = listData[nextIdx];
-            playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList);
+            playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb);
         }
     }
 
