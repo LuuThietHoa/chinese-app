@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.1 Double Shift Update</title>
+    <title>Skyreign Hub | V40.2 Fix Meal Time</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -72,7 +72,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.1 DOUBLE SHIFT UPDATE</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.2 MEAL TIME FIX</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -176,11 +176,12 @@
                             </div>
                         </div>
                         <div>
-                            <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Giờ 1</label>
+                            <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Giờ 1 (Tự trừ 30p ăn với ca dài)</label>
                             <input type="text" id="w-time" class="w-full bg-transparent border-b border-white/20 py-1 text-lg outline-none" placeholder="...">
                             <div class="mt-2 flex flex-wrap gap-1">
                                 <span onclick="setVal('w-time','07h00-15h30')" class="time-chip text-yellow-300 border-yellow-300/30">07h00-15h30</span>
                                 <span onclick="setVal('w-time','08h30-15h30')" class="time-chip">08h30-15h30</span>
+                                <span onclick="setVal('w-time','11h00-15h30')" class="time-chip">11h00-15h30</span>
                                 <span onclick="setVal('w-time','15h30-22h30')" class="time-chip">15h30-22h30</span>
                                 <span onclick="setVal('w-time','18h00-22h30')" class="time-chip">18h00-22h30</span>
                             </div>
@@ -210,6 +211,7 @@
                             <div class="mt-2 flex flex-wrap gap-1">
                                 <span onclick="setVal('w-time-2','07h00-15h30')" class="time-chip text-yellow-300 border-yellow-300/30">07h00-15h30</span>
                                 <span onclick="setVal('w-time-2','08h30-15h30')" class="time-chip">08h30-15h30</span>
+                                <span onclick="setVal('w-time-2','11h00-15h30')" class="time-chip">11h00-15h30</span>
                                 <span onclick="setVal('w-time-2','15h30-22h30')" class="time-chip">15h30-22h30</span>
                                 <span onclick="setVal('w-time-2','18h00-22h30')" class="time-chip">18h00-22h30</span>
                             </div>
@@ -242,7 +244,7 @@
                         <p id="total-salary" class="text-2xl font-mono text-green-400">0 VNĐ</p>
                     </div>
                     <div class="text-right">
-                         <p class="text-[10px] uppercase text-gray-400 tracking-widest">Tổng giờ</p>
+                         <p class="text-[10px] uppercase text-gray-400 tracking-widest">Tổng giờ (Đã trừ giờ ăn)</p>
                          <p id="total-hours" class="text-xl font-mono text-white">0h</p>
                     </div>
                 </div>
@@ -560,12 +562,12 @@
         }
     }
 
-    // --- WORK SCHEDULE LOGIC (V40.1 - 2 SHIFTS SUPPORT) ---
+    // --- WORK SCHEDULE LOGIC (V40.2 - MEAL TIME FIX) ---
     const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
     let workStep = 0;
     let currentWeek = 1;
     let scheduleData = [];
-    let isDoubleShift = false; // Biến kiểm tra có làm 2 ca không
+    let isDoubleShift = false; 
     
     function changeWeek() {
         currentWeek = parseInt(document.getElementById('week-selector').value);
@@ -588,7 +590,6 @@
 
     function setVal(id, val) { document.getElementById(id).value = val; }
     
-    // Bật/Tắt chế độ 2 Ca
     function toggleDoubleShift() {
         isDoubleShift = !isDoubleShift;
         const section2 = document.getElementById('section-ca-2');
@@ -603,7 +604,6 @@
             section2.classList.add('hidden');
             btn.classList.remove('bg-indigo-500', 'text-white');
             btn.innerText = "+ Làm 2 Ca / Full";
-            // Clear data ca 2 để tránh lưu nhầm
             setVal('w-pos-2', '');
             setVal('w-time-2', '');
         }
@@ -619,8 +619,7 @@
         setVal('w-pos',''); 
         setVal('w-time','');
         
-        // Reset Ca 2 về trạng thái ẩn
-        if(isDoubleShift) toggleDoubleShift(); // Tắt nếu đang bật
+        if(isDoubleShift) toggleDoubleShift(); 
         
         updateWizardUI();
     }
@@ -685,7 +684,6 @@
         const pos = document.getElementById('w-pos').value || "N/A";
         const time = document.getElementById('w-time').value || "N/A";
         
-        // Lấy data ca 2 nếu có
         let pos2 = "";
         let time2 = "";
         if(isDoubleShift) {
@@ -693,7 +691,6 @@
             time2 = document.getElementById('w-time-2').value || "";
         }
         
-        // Lưu cả 2 ca vào object
         scheduleData.push({ day: workDays[workStep], date, pos, time, pos2, time2, hasCa2: isDoubleShift });
         
         workStep++;
@@ -702,25 +699,44 @@
             localStorage.setItem(`skyWork_W${currentWeek}`, JSON.stringify(scheduleData));
             renderScheduleResult();
         } else {
-            // Reset form cho bước tiếp theo
             setVal('w-pos',''); 
             setVal('w-time','');
-            // Tắt Ca 2 cho ngày mới (mặc định về 1 ca để đỡ phải tắt tay)
             if(isDoubleShift) toggleDoubleShift(); 
             updateWizardUI();
         }
     }
 
-    // Hàm tính giờ từ chuỗi "HHhMM-HHhMM"
+    // V40.2: LOGIC TRỪ GIỜ ĂN (30p = 0.5h) CHO CA DÀI
     function calcHours(timeStr) {
         if(!timeStr || !timeStr.includes('-')) return 0;
-        const t = timeStr.replace(/h/g, '.').replace(/:/g, '.').split('-');
+        
+        // Dọn dẹp khoảng trắng để so sánh chính xác
+        const cleanStr = timeStr.replace(/\s/g, ''); 
+        const t = cleanStr.replace(/h/g, '.').replace(/:/g, '.').split('-');
+        
+        let duration = 0;
         if(t.length === 2) {
              const start = parseFloat(t[0]);
              const end = parseFloat(t[1]);
-             return end - start; 
+             duration = end - start; 
         }
-        return 0;
+
+        // Danh sách các ca cần trừ 30 phút (0.5h)
+        const deductionShifts = [
+           "07h00-15h30",
+           "08h30-15h30",
+           "15h30-22h30"
+        ];
+        
+        // Kiểm tra xem ca hiện tại có nằm trong danh sách trừ không
+        for(let s of deductionShifts) {
+            if(cleanStr.includes(s)) {
+                duration -= 0.5; // Trừ 30 phút
+                break; 
+            }
+        }
+
+        return duration > 0 ? duration : 0;
     }
 
     function renderScheduleResult() {
@@ -730,16 +746,11 @@
         let totalH = 0;
         
         tbody.innerHTML = scheduleData.map(d => {
-            // Tính giờ Ca 1
             let h1 = (d.pos !== 'OFF') ? calcHours(d.time) : 0;
-            // Tính giờ Ca 2 (nếu có)
             let h2 = (d.hasCa2 && d.pos2) ? calcHours(d.time2) : 0;
-            
-            // Tổng giờ ngày đó
             let dayTotal = h1 + h2;
             totalH += dayTotal;
             
-            // Hiển thị: Nếu có Ca 2 thì dùng <br> để xuống dòng
             let displayPos = `<span class="font-bold">${d.pos}</span>`;
             let displayTime = d.time;
             
