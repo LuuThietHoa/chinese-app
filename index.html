@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.0 Work Schedule Fix</title>
+    <title>Skyreign Hub | V40.1 Double Shift Update</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -72,7 +72,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.0 SCHEDULE UPDATE</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.1 DOUBLE SHIFT UPDATE</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -136,9 +136,9 @@
             </div>
             
             <div id="work-wizard" class="flex flex-col items-center py-10">
-                <div class="w-full max-w-lg space-y-8">
+                <div class="w-full max-w-lg space-y-6">
                     <div class="flex justify-between items-start">
-                        <button id="btn-cancel-edit" onclick="cancelEdit()" class="hidden text-[9px] border border-red-500/50 text-red-400 px-3 py-1 uppercase tracking-widest hover:bg-red-900/20">
+                         <button id="btn-cancel-edit" onclick="cancelEdit()" class="hidden text-[9px] border border-red-500/50 text-red-400 px-3 py-1 uppercase tracking-widest hover:bg-red-900/20">
                             ✖ Hủy / Quay lại
                         </button>
                         <div class="text-right flex-1">
@@ -152,30 +152,67 @@
                         <input type="text" id="w-date" class="w-full bg-transparent border-b border-white/20 py-2 text-2xl outline-none focus:border-indigo-500" placeholder="DD/MM">
                     </div>
 
-                    <div>
-                        <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Vị trí</label>
-                        <input type="text" id="w-pos" class="w-full bg-transparent border-b border-white/20 py-2 text-xl outline-none focus:border-indigo-500" placeholder="...">
-                        <div class="mt-3 flex flex-wrap">
-                             <span onclick="setVal('w-pos','Gác tĩnh')" class="time-chip">Gác tĩnh</span>
-                             <span onclick="setVal('w-pos','Nhảy đệm')" class="time-chip">Nhảy đệm</span>
-                             <span onclick="setVal('w-pos','Đấu trường')" class="time-chip">Đấu trường</span>
-                             <span onclick="setVal('w-pos','Chăm thú')" class="time-chip">Chăm thú</span>
-                             <span onclick="setVal('w-pos','Tạp vụ')" class="time-chip">Tạp vụ</span>
-                             <span onclick="setVal('w-pos','Donut')" class="time-chip">Donut</span>
-                             <span onclick="setVal('w-pos','Núi Lửa')" class="time-chip">Núi Lửa</span>
-                             <span onclick="setVal('w-pos','Cổng')" class="time-chip">Cổng</span>
-                             <span onclick="setVal('w-pos','OFF')" class="time-chip text-red-400 border-red-400">NGHỈ</span>
+                    <div class="flex justify-end">
+                        <button id="btn-toggle-double" onclick="toggleDoubleShift()" class="text-[10px] font-bold border border-indigo-500 text-indigo-300 px-4 py-2 rounded hover:bg-indigo-500 hover:text-white transition">
+                            + Làm 2 Ca / Full
+                        </button>
+                    </div>
+
+                    <div class="bg-white/5 p-4 rounded border border-white/10">
+                        <p class="text-[10px] uppercase font-bold text-indigo-400 mb-2">Ca 1</p>
+                        <div class="mb-4">
+                            <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Vị trí 1</label>
+                            <input type="text" id="w-pos" class="w-full bg-transparent border-b border-white/20 py-1 text-lg outline-none" placeholder="...">
+                            <div class="mt-2 flex flex-wrap gap-1">
+                                <span onclick="setVal('w-pos','Gác tĩnh')" class="time-chip">Gác tĩnh</span>
+                                <span onclick="setVal('w-pos','Nhảy đệm')" class="time-chip">Nhảy đệm</span>
+                                <span onclick="setVal('w-pos','Đấu trường')" class="time-chip">Đấu trường</span>
+                                <span onclick="setVal('w-pos','Chăm thú')" class="time-chip">Chăm thú</span>
+                                <span onclick="setVal('w-pos','Tạp vụ')" class="time-chip">Tạp vụ</span>
+                                <span onclick="setVal('w-pos','Donut')" class="time-chip">Donut</span>
+                                <span onclick="setVal('w-pos','Núi Lửa')" class="time-chip">Núi Lửa</span>
+                                <span onclick="setVal('w-pos','Cổng')" class="time-chip">Cổng</span>
+                                <span onclick="setVal('w-pos','OFF')" class="time-chip text-red-400 border-red-400">NGHỈ</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Giờ 1</label>
+                            <input type="text" id="w-time" class="w-full bg-transparent border-b border-white/20 py-1 text-lg outline-none" placeholder="...">
+                            <div class="mt-2 flex flex-wrap gap-1">
+                                <span onclick="setVal('w-time','07h00-15h30')" class="time-chip text-yellow-300 border-yellow-300/30">07h00-15h30</span>
+                                <span onclick="setVal('w-time','08h30-15h30')" class="time-chip">08h30-15h30</span>
+                                <span onclick="setVal('w-time','15h30-22h30')" class="time-chip">15h30-22h30</span>
+                                <span onclick="setVal('w-time','18h00-22h30')" class="time-chip">18h00-22h30</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div>
-                        <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Ca làm việc</label>
-                        <input type="text" id="w-time" class="w-full bg-transparent border-b border-white/20 py-2 text-xl outline-none focus:border-indigo-500" placeholder="...">
-                        <div class="mt-3">
-                            <span onclick="setVal('w-time','07h00-15h30')" class="time-chip text-yellow-300 border-yellow-300/30">07h00-15h30</span>
-                            <span onclick="setVal('w-time','08h30-15h30')" class="time-chip">08h30-15h30</span>
-                            <span onclick="setVal('w-time','15h30-22h30')" class="time-chip">15h30-22h30</span>
-                            <span onclick="setVal('w-time','18h00-22h30')" class="time-chip">18h00-22h30</span>
+                    <div id="section-ca-2" class="hidden bg-white/5 p-4 rounded border border-dashed border-indigo-500/50 mt-4 relative">
+                        <div onclick="toggleDoubleShift()" class="absolute top-2 right-2 text-red-400 cursor-pointer text-xs font-bold hover:bg-white/10 px-2 rounded">✕ Bỏ Ca 2</div>
+                        <p class="text-[10px] uppercase font-bold text-indigo-400 mb-2">Ca 2 (Làm thêm)</p>
+                        <div class="mb-4">
+                            <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Vị trí 2</label>
+                            <input type="text" id="w-pos-2" class="w-full bg-transparent border-b border-white/20 py-1 text-lg outline-none" placeholder="...">
+                            <div class="mt-2 flex flex-wrap gap-1">
+                                <span onclick="setVal('w-pos-2','Gác tĩnh')" class="time-chip">Gác tĩnh</span>
+                                <span onclick="setVal('w-pos-2','Nhảy đệm')" class="time-chip">Nhảy đệm</span>
+                                <span onclick="setVal('w-pos-2','Đấu trường')" class="time-chip">Đấu trường</span>
+                                <span onclick="setVal('w-pos-2','Chăm thú')" class="time-chip">Chăm thú</span>
+                                <span onclick="setVal('w-pos-2','Tạp vụ')" class="time-chip">Tạp vụ</span>
+                                <span onclick="setVal('w-pos-2','Donut')" class="time-chip">Donut</span>
+                                <span onclick="setVal('w-pos-2','Núi Lửa')" class="time-chip">Núi Lửa</span>
+                                <span onclick="setVal('w-pos-2','Cổng')" class="time-chip">Cổng</span>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Giờ 2</label>
+                            <input type="text" id="w-time-2" class="w-full bg-transparent border-b border-white/20 py-1 text-lg outline-none" placeholder="...">
+                            <div class="mt-2 flex flex-wrap gap-1">
+                                <span onclick="setVal('w-time-2','07h00-15h30')" class="time-chip text-yellow-300 border-yellow-300/30">07h00-15h30</span>
+                                <span onclick="setVal('w-time-2','08h30-15h30')" class="time-chip">08h30-15h30</span>
+                                <span onclick="setVal('w-time-2','15h30-22h30')" class="time-chip">15h30-22h30</span>
+                                <span onclick="setVal('w-time-2','18h00-22h30')" class="time-chip">18h00-22h30</span>
+                            </div>
                         </div>
                     </div>
 
@@ -523,11 +560,12 @@
         }
     }
 
-    // --- WORK SCHEDULE LOGIC (UPDATED WITH AUTO-NEXT-WEEK) ---
+    // --- WORK SCHEDULE LOGIC (V40.1 - 2 SHIFTS SUPPORT) ---
     const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
     let workStep = 0;
     let currentWeek = 1;
     let scheduleData = [];
+    let isDoubleShift = false; // Biến kiểm tra có làm 2 ca không
     
     function changeWeek() {
         currentWeek = parseInt(document.getElementById('week-selector').value);
@@ -538,7 +576,6 @@
         const key = `skyWork_W${currentWeek}`;
         const saved = localStorage.getItem(key);
         
-        // Mặc định ẩn nút hủy
         document.getElementById('btn-cancel-edit').classList.add('hidden');
 
         if (saved) {
@@ -551,15 +588,40 @@
 
     function setVal(id, val) { document.getElementById(id).value = val; }
     
-    // Reset form với tham số ngày bắt đầu tùy chọn
+    // Bật/Tắt chế độ 2 Ca
+    function toggleDoubleShift() {
+        isDoubleShift = !isDoubleShift;
+        const section2 = document.getElementById('section-ca-2');
+        const btn = document.getElementById('btn-toggle-double');
+        
+        if(isDoubleShift) {
+            section2.classList.remove('hidden');
+            section2.classList.add('fade-in');
+            btn.classList.add('bg-indigo-500', 'text-white');
+            btn.innerText = "- Bỏ chế độ 2 Ca";
+        } else {
+            section2.classList.add('hidden');
+            btn.classList.remove('bg-indigo-500', 'text-white');
+            btn.innerText = "+ Làm 2 Ca / Full";
+            // Clear data ca 2 để tránh lưu nhầm
+            setVal('w-pos-2', '');
+            setVal('w-time-2', '');
+        }
+    }
+
     function resetWorkSchedule(startDate = '') {
         workStep = 0;
         scheduleData = [];
         document.getElementById('work-wizard').classList.remove('hidden');
         document.getElementById('work-result').classList.add('hidden');
+        
         setVal('w-date', startDate); 
         setVal('w-pos',''); 
         setVal('w-time','');
+        
+        // Reset Ca 2 về trạng thái ẩn
+        if(isDoubleShift) toggleDoubleShift(); // Tắt nếu đang bật
+        
         updateWizardUI();
     }
 
@@ -567,41 +629,34 @@
         let firstDate = '';
         if(scheduleData.length > 0) firstDate = scheduleData[0].date;
         resetWorkSchedule(firstDate);
-        // Hiện nút hủy khi edit
         document.getElementById('btn-cancel-edit').classList.remove('hidden');
     }
 
     function cancelEdit() {
-        loadWorkSchedule(); // Quay lại data đã lưu
+        loadWorkSchedule();
     }
 
-    // Tạo tuần tiếp theo: Tự nhảy tuần và điền ngày
     function createNextWeek() {
-        // Lấy ngày cuối tuần cũ
         let lastDateOfWeek = '';
         if(scheduleData.length > 0) {
             lastDateOfWeek = scheduleData[scheduleData.length - 1].date;
         }
 
-        // Tính ngày bắt đầu tuần mới
         let nextStartDate = '';
         if(lastDateOfWeek && lastDateOfWeek.includes('/')) {
             let [d, m] = lastDateOfWeek.split('/').map(Number);
             let dateObj = new Date(2026, m - 1, d);
-            dateObj.setDate(dateObj.getDate() + 1); // Cộng 1 ngày
-            
+            dateObj.setDate(dateObj.getDate() + 1);
             let newD = dateObj.getDate();
             let newM = dateObj.getMonth() + 1;
             nextStartDate = `${newD}/${newM}`;
         }
 
-        // Tăng tuần
         currentWeek++;
         const selector = document.getElementById('week-selector');
         if(currentWeek > 4) currentWeek = 1; 
         selector.value = currentWeek;
 
-        // Mở form nhập với ngày mới
         resetWorkSchedule(nextStartDate);
     }
 
@@ -609,7 +664,6 @@
         document.getElementById('w-day-title').innerText = workDays[workStep];
         document.getElementById('w-step-num').innerText = workStep + 1;
         
-        // Tự động điền ngày cho các bước tiếp theo
         if(workStep > 0 && scheduleData.length > 0) {
             const prevDate = scheduleData[workStep-1].date;
             const parts = prevDate.split('/');
@@ -630,17 +684,43 @@
         const date = document.getElementById('w-date').value || "N/A";
         const pos = document.getElementById('w-pos').value || "N/A";
         const time = document.getElementById('w-time').value || "N/A";
-        scheduleData.push({ day: workDays[workStep], date, pos, time });
+        
+        // Lấy data ca 2 nếu có
+        let pos2 = "";
+        let time2 = "";
+        if(isDoubleShift) {
+            pos2 = document.getElementById('w-pos-2').value || "";
+            time2 = document.getElementById('w-time-2').value || "";
+        }
+        
+        // Lưu cả 2 ca vào object
+        scheduleData.push({ day: workDays[workStep], date, pos, time, pos2, time2, hasCa2: isDoubleShift });
+        
         workStep++;
         
         if(workStep >= 7) {
             localStorage.setItem(`skyWork_W${currentWeek}`, JSON.stringify(scheduleData));
             renderScheduleResult();
         } else {
+            // Reset form cho bước tiếp theo
             setVal('w-pos',''); 
             setVal('w-time','');
+            // Tắt Ca 2 cho ngày mới (mặc định về 1 ca để đỡ phải tắt tay)
+            if(isDoubleShift) toggleDoubleShift(); 
             updateWizardUI();
         }
+    }
+
+    // Hàm tính giờ từ chuỗi "HHhMM-HHhMM"
+    function calcHours(timeStr) {
+        if(!timeStr || !timeStr.includes('-')) return 0;
+        const t = timeStr.replace(/h/g, '.').replace(/:/g, '.').split('-');
+        if(t.length === 2) {
+             const start = parseFloat(t[0]);
+             const end = parseFloat(t[1]);
+             return end - start; 
+        }
+        return 0;
     }
 
     function renderScheduleResult() {
@@ -648,25 +728,35 @@
         document.getElementById('work-result').classList.remove('hidden');
         const tbody = document.getElementById('work-tbody');
         let totalH = 0;
+        
         tbody.innerHTML = scheduleData.map(d => {
-            let duration = 0;
-            if(d.time.includes('-')) {
-                const t = d.time.replace(/h/g, '.').replace(/:/g, '.').split('-');
-                if(t.length === 2) {
-                     const start = parseFloat(t[0]);
-                     const end = parseFloat(t[1]);
-                     duration = end - start; 
-                }
+            // Tính giờ Ca 1
+            let h1 = (d.pos !== 'OFF') ? calcHours(d.time) : 0;
+            // Tính giờ Ca 2 (nếu có)
+            let h2 = (d.hasCa2 && d.pos2) ? calcHours(d.time2) : 0;
+            
+            // Tổng giờ ngày đó
+            let dayTotal = h1 + h2;
+            totalH += dayTotal;
+            
+            // Hiển thị: Nếu có Ca 2 thì dùng <br> để xuống dòng
+            let displayPos = `<span class="font-bold">${d.pos}</span>`;
+            let displayTime = d.time;
+            
+            if(d.hasCa2 && d.pos2) {
+                displayPos += `<br><span class="text-indigo-300 text-[10px]">+ ${d.pos2}</span>`;
+                displayTime += `<br><span class="text-indigo-300 text-[10px]">${d.time2}</span>`;
             }
-            if(d.pos !== 'OFF' && !isNaN(duration)) totalH += duration;
+
             return `<tr class="${d.pos === 'OFF' ? 'text-red-400' : ''}">
                 <td class="font-bold text-gray-400">${d.day}</td>
                 <td>${d.date}</td>
-                <td class="uppercase font-bold tracking-widest text-xs">${d.pos}</td>
-                <td>${d.time}</td>
-                <td>${d.pos === 'OFF' ? '-' : (duration > 0 ? duration.toFixed(1) + 'h' : '?')}</td>
+                <td class="uppercase font-bold tracking-widest text-xs">${displayPos}</td>
+                <td>${displayTime}</td>
+                <td>${d.pos === 'OFF' ? '-' : (dayTotal > 0 ? dayTotal.toFixed(1) + 'h' : '?')}</td>
             </tr>`;
         }).join('');
+        
         document.getElementById('total-hours').innerText = totalH.toFixed(1) + "h";
         document.getElementById('total-salary').innerText = (totalH * 25000).toLocaleString('vi-VN') + " VNĐ";
     }
