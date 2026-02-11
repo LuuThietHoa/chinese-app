@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V39.0 Media Core Fix</title>
+    <title>Skyreign Hub | V44.0 Work Manager Upgrade</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -72,7 +72,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V39.0 MEDIA CORE FIX</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V44.0 MANAGER</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -124,12 +124,21 @@
     <div class="min-h-screen flex flex-col items-center pt-24 px-4 pb-24">
         <div class="glass-card p-8 w-full max-w-5xl">
             <div class="flex justify-between items-end mb-6 border-b border-white/10 pb-4">
-                <h2 class="text-3xl font-light uppercase tracking-widest text-white">Lịch Làm Việc</h2>
-                <div class="flex gap-2">
-                    <select id="week-selector" onchange="changeWeek()" class="bg-black text-xs uppercase p-2 border border-white/20 outline-none">
+                <div>
+                    <h2 class="text-3xl font-light uppercase tracking-widest text-white">Lịch Làm Việc</h2>
+                    <div class="flex gap-4 mt-2">
+                        <span class="text-[10px] text-gray-500 uppercase tracking-widest">Lương: 25k/h</span>
+                        <span class="text-[10px] text-gray-500 uppercase tracking-widest">Chốt công: 25</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <span class="text-xs text-gray-400">Tuần:</span>
+                    <select id="week-selector" onchange="changeWeek()" class="bg-black text-xs uppercase p-2 border border-white/20 outline-none rounded">
                         <option value="1">Tuần 1</option>
                         <option value="2">Tuần 2</option>
                         <option value="3">Tuần 3</option>
+                        <option value="4">Tuần 4</option>
+                        <option value="5">Tuần 5</option>
                     </select>
                 </div>
             </div>
@@ -137,13 +146,13 @@
             <div id="work-wizard" class="flex flex-col items-center py-10">
                 <div class="w-full max-w-lg space-y-8">
                     <div class="text-center">
-                        <span class="text-[9px] border border-white/20 px-3 py-1 uppercase text-gray-400 tracking-widest">Bước <span id="w-step-num">1</span>/7</span>
+                        <span class="text-[9px] border border-white/20 px-3 py-1 uppercase text-gray-400 tracking-widest">Đang tạo lịch: Tuần <span id="w-current-week-display">1</span></span>
                         <h3 class="text-4xl font-bold mt-4 text-white" id="w-day-title">Thứ 2</h3>
                     </div>
                     
                     <div id="w-date-input-container">
-                        <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Ngày</label>
-                        <input type="text" id="w-date" class="w-full bg-transparent border-b border-white/20 py-2 text-2xl outline-none focus:border-indigo-500" placeholder="DD/MM">
+                        <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Ngày (DD/MM)</label>
+                        <input type="text" id="w-date" class="w-full bg-transparent border-b border-white/20 py-2 text-2xl outline-none focus:border-indigo-500" placeholder="09/02">
                     </div>
 
                     <div>
@@ -166,13 +175,17 @@
                         <label class="text-[9px] uppercase font-bold text-gray-500 tracking-widest">Ca làm việc</label>
                         <input type="text" id="w-time" class="w-full bg-transparent border-b border-white/20 py-2 text-xl outline-none focus:border-indigo-500" placeholder="...">
                         <div class="mt-3">
+                            <span onclick="setVal('w-time','07h00-15h30')" class="time-chip">07h00-15h30</span>
                             <span onclick="setVal('w-time','15h30-22h30')" class="time-chip">15h30-22h30</span>
                             <span onclick="setVal('w-time','18h00-22h30')" class="time-chip">18h00-22h30</span>
                             <span onclick="setVal('w-time','08h30-15h30')" class="time-chip">08h30-15h30</span>
                         </div>
                     </div>
 
-                    <button onclick="nextWorkStep()" class="w-full py-4 bg-white text-black font-bold uppercase tracking-[0.2em] text-xs hover:bg-gray-200 transition">Tiếp Theo ➔</button>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="cancelWizard()" class="py-4 border border-white/20 text-gray-400 font-bold uppercase tracking-[0.2em] text-xs hover:bg-white hover:text-black transition rounded">Hủy / Quay lại</button>
+                        <button onclick="nextWorkStep()" class="py-4 bg-white text-black font-bold uppercase tracking-[0.2em] text-xs hover:bg-gray-200 transition rounded">Tiếp Theo ➔</button>
+                    </div>
                 </div>
             </div>
 
@@ -204,8 +217,8 @@
                 </div>
 
                 <div class="mt-6 flex gap-4 justify-end">
-                    <button onclick="editCurrentSchedule()" class="px-6 py-3 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Chỉnh sửa lịch hiện tại</button>
-                    <button onclick="addNewSchedule()" class="px-6 py-3 bg-indigo-600 rounded text-[10px] font-bold uppercase hover:bg-indigo-500 transition">Thêm lịch mới (Reset)</button>
+                    <button onclick="createNextWeek()" class="px-6 py-3 bg-indigo-600 rounded text-[10px] font-bold uppercase hover:bg-indigo-500 transition shadow-lg">➕ Tạo Tuần <span id="next-week-btn-num">2</span></button>
+                    <button onclick="editCurrentSchedule()" class="px-6 py-3 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Chỉnh sửa tuần này</button>
                 </div>
             </div>
         </div>
@@ -264,39 +277,32 @@
                 <button onclick="startGrammarTest()" class="px-6 py-2 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Ngữ Pháp (4 Bước)</button>
                 <button onclick="startFillTest()" class="px-6 py-2 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Điền Từ (Hội Thoại)</button>
             </div>
-            
             <div id="test-grammar" class="hidden">
                  <div class="text-center mb-6">
                     <p class="text-[9px] text-gray-400 uppercase tracking-widest mb-2">AI Question</p>
                     <h3 id="tg-question" class="text-3xl font-light text-white mb-2 fade-in">...</h3>
                  </div>
-                 
                  <div id="tg-step1" class="space-y-3">
                     <p class="text-center text-xs text-indigo-300 mb-2">Bước 1: Chọn ngữ pháp đúng</p>
                     <div class="grid grid-cols-1 gap-2" id="tg-options"></div>
                  </div>
-
                  <div id="tg-step2" class="hidden space-y-4 pt-4 fade-in">
                     <p class="text-center text-xs text-indigo-300">Bước 2: Tìm Chủ Ngữ (S)</p>
                     <input type="text" id="tg-sub-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none text-center" placeholder="Nhập S...">
                     <button onclick="checkSubject()" class="w-full py-3 bg-white/10 text-white font-bold text-xs uppercase hover:bg-white/20">Xác nhận S</button>
                  </div>
-
                  <div id="tg-step3" class="hidden space-y-4 pt-4 fade-in">
                     <p class="text-center text-xs text-indigo-300">Bước 3: Tìm Danh Từ (N)</p>
                     <input type="text" id="tg-noun-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none text-center" placeholder="Nhập N...">
                     <button onclick="checkNoun()" class="w-full py-3 bg-white/10 text-white font-bold text-xs uppercase hover:bg-white/20">Xác nhận N</button>
                  </div>
-
                  <div id="tg-step4" class="hidden space-y-4 pt-4 fade-in">
                      <p class="text-center text-xs text-green-400">Bước 4: Tự đặt 1 câu dùng ngữ pháp này (Chữ Hán)</p>
                      <input type="text" id="tg-make-sentence" class="w-full p-3 border-b border-white/20 bg-transparent text-center text-xl outline-none" placeholder="Viết câu...">
                      <button onclick="checkAISentence()" class="w-full mt-3 py-3 bg-green-600 text-white font-bold text-xs uppercase hover:bg-green-500">AI Kiểm Tra (+1 Coin)</button>
                  </div>
-                 
                  <p id="tg-feedback" class="text-center text-xs font-bold h-6 mt-4 text-green-400"></p>
             </div>
-
             <div id="test-fill" class="hidden flex flex-col items-center">
                  <div class="bg-white/5 p-6 rounded-lg w-full mb-6 text-center border border-white/10">
                     <p id="tf-dialogue" class="text-xl leading-loose font-light"></p>
@@ -401,8 +407,7 @@
     function startGrammarTest() {
         document.getElementById('test-grammar').classList.remove('hidden');
         document.getElementById('test-fill').classList.add('hidden');
-        
-        // Reset Steps
+        // Reset
         document.getElementById('tg-step1').classList.remove('hidden');
         document.getElementById('tg-step2').classList.add('hidden');
         document.getElementById('tg-step3').classList.add('hidden');
@@ -411,20 +416,16 @@
         document.getElementById('tg-noun-input').value = "";
         document.getElementById('tg-make-sentence').value = "";
         document.getElementById('tg-feedback').innerText = "";
-
         // Generate
         currentTestRule = grammarRules[Math.floor(Math.random() * 3)];
         const subs = ["我","你","他","爸爸","妈妈"];
         const nouns = ["学生","老师","医生","好人"];
         const S = subs[Math.floor(Math.random() * subs.length)];
         const N = nouns[Math.floor(Math.random() * nouns.length)];
-        
         if(currentTestRule.id === "g1") currentTestSentence = S + "是" + N;
         if(currentTestRule.id === "g2") currentTestSentence = S + "不是" + N;
         if(currentTestRule.id === "g3") currentTestSentence = S + "是" + N + "吗？";
-        
         document.getElementById('tg-question').innerText = currentTestSentence;
-
         document.getElementById('tg-options').innerHTML = grammarRules.slice(0,3).map(r => 
             `<button onclick="checkStructure('${r.id}')" class="p-3 bg-white/5 border border-white/20 rounded text-xs hover:bg-white hover:text-black transition text-left">${r.structure}</button>`
         ).join('');
@@ -465,7 +466,6 @@
         const feedback = document.getElementById('tg-feedback');
         const match = val.match(currentTestRule.regex);
         const isChinese = /[\u4e00-\u9fa5]/.test(val);
-
         if(match && isChinese) {
             updateCoins(1);
             feedback.innerText = "TUYỆT VỜI! (+1 COIN)";
@@ -490,14 +490,11 @@
         const S = subjects[Math.floor(Math.random() * subjects.length)];
         const V = verbs[Math.floor(Math.random() * verbs.length)];
         const N = nouns[Math.floor(Math.random() * nouns.length)];
-        
         const hideTarget = Math.random() > 0.5 ? V : N;
         const dialogue = `A: ${S === '我' ? '你' : '我'}${V}什么？<br>B: ${S}${V === hideTarget ? '____' : V}${N === hideTarget ? '____' : N}。`;
-        
         document.getElementById('tf-dialogue').innerHTML = dialogue;
         let opts = [hideTarget, "什么", "吗", "不"];
         opts = opts.sort(() => Math.random() - 0.5);
-        
         document.getElementById('tf-options').innerHTML = opts.map(o => 
             `<button onclick="checkFill('${o}', '${hideTarget}')" class="px-4 py-2 border border-white/20 rounded hover:bg-white hover:text-black font-bold">${o}</button>`
         ).join('');
@@ -516,18 +513,22 @@
         }
     }
 
-    // --- WORK SCHEDULE LOGIC ---
+    // --- WORK SCHEDULE LOGIC (V44 UPDATED) ---
     const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
     let workStep = 0;
     let currentWeek = 1;
     let scheduleData = [];
     
     function changeWeek() {
-        currentWeek = document.getElementById('week-selector').value;
+        currentWeek = parseInt(document.getElementById('week-selector').value);
         loadWorkSchedule();
     }
 
     function loadWorkSchedule() {
+        document.getElementById('w-current-week-display').innerText = currentWeek;
+        // Update button text for next week
+        document.getElementById('next-week-btn-num').innerText = currentWeek + 1;
+        
         const key = `skyWork_W${currentWeek}`;
         const saved = localStorage.getItem(key);
         if (saved) {
@@ -536,6 +537,42 @@
         } else {
             resetWorkSchedule();
         }
+    }
+
+    function createNextWeek() {
+        // Find previous week data to get date
+        const prevKey = `skyWork_W${currentWeek}`;
+        const prevData = localStorage.getItem(prevKey);
+        
+        // Move to next week
+        currentWeek++;
+        document.getElementById('week-selector').value = currentWeek;
+        
+        // Reset with smart date from prev week
+        workStep = 0;
+        scheduleData = [];
+        document.getElementById('work-wizard').classList.remove('hidden');
+        document.getElementById('work-result').classList.add('hidden');
+        setVal('w-pos',''); setVal('w-time','');
+        
+        if (prevData) {
+            const data = JSON.parse(prevData);
+            const lastDay = data[data.length-1].date; // Sunday
+            const parts = lastDay.split(/[\/\-\.]/);
+            if(parts.length === 2) {
+                // Logic: Add 1 to day for Monday of new week
+                // Simple V39 logic as requested
+                let d = parseInt(parts[0]) + 1;
+                let m = parseInt(parts[1]);
+                if(d > 31) { d = 1; m++; }
+                document.getElementById('w-date').value = `${d}/${m}`;
+                document.getElementById('w-date-input-container').style.opacity = '0.5';
+            }
+        } else {
+            setVal('w-date','');
+            document.getElementById('w-date-input-container').style.opacity = '1';
+        }
+        updateWizardUI();
     }
 
     function setVal(id, val) { document.getElementById(id).value = val; }
@@ -549,21 +586,52 @@
         updateWizardUI();
     }
 
-    function editCurrentSchedule() { resetWorkSchedule(); }
-    function addNewSchedule() { localStorage.removeItem(`skyWork_W${currentWeek}`); resetWorkSchedule(); }
+    // Cancel Button Feature
+    function cancelWizard() {
+        const key = `skyWork_W${currentWeek}`;
+        if(localStorage.getItem(key)) {
+            scheduleData = JSON.parse(localStorage.getItem(key));
+            renderScheduleResult();
+        } else {
+            // If no data, maybe go back to week 1 or alert
+            if(currentWeek > 1) {
+                currentWeek--;
+                document.getElementById('week-selector').value = currentWeek;
+                loadWorkSchedule();
+            } else {
+                alert("Chưa có dữ liệu để quay lại!");
+            }
+        }
+    }
+
+    function editCurrentSchedule() { 
+        // Just show wizard, keep current data in scheduleData to overwrite later
+        document.getElementById('work-wizard').classList.remove('hidden');
+        document.getElementById('work-result').classList.add('hidden');
+        // Reset step to 0 to start over editing
+        workStep = 0;
+        scheduleData = []; 
+        updateWizardUI();
+    }
 
     function updateWizardUI() {
         document.getElementById('w-day-title').innerText = workDays[workStep];
         document.getElementById('w-step-num').innerText = workStep + 1;
+        document.getElementById('w-current-week-display').innerText = currentWeek;
+        
+        // --- AUTO DATE V39 LOGIC ---
         if(workStep > 0 && scheduleData.length > 0) {
             const prevDate = scheduleData[workStep-1].date;
-            const parts = prevDate.split('/');
+            const parts = prevDate.split(/[\/\-\.]/); 
             if(parts.length === 2) {
                 let d = parseInt(parts[0]) + 1;
                 let m = parseInt(parts[1]);
                 if(d > 31) { d = 1; m++; }
                 document.getElementById('w-date').value = `${d}/${m}`;
+                document.getElementById('w-date-input-container').style.opacity = '0.5';
             }
+        } else if (workStep === 0 && document.getElementById('w-date').value === '') {
+             document.getElementById('w-date-input-container').style.opacity = '1';
         }
     }
 
@@ -582,12 +650,9 @@
         }
     }
 
-    function renderScheduleResult() {
-        document.getElementById('work-wizard').classList.add('hidden');
-        document.getElementById('work-result').classList.remove('hidden');
-        const tbody = document.getElementById('work-tbody');
-        let totalH = 0;
-        tbody.innerHTML = scheduleData.map(d => {
+    function calculateSalary(data) {
+        let hours = 0;
+        data.forEach(d => {
             let duration = 0;
             if(d.time.includes('-')) {
                 const t = d.time.replace(/h/g, '.').replace(/:/g, '.').split('-');
@@ -597,17 +662,28 @@
                      duration = end - start; 
                 }
             }
-            if(d.pos !== 'OFF' && !isNaN(duration)) totalH += duration;
+            if(d.pos !== 'OFF' && !isNaN(duration)) hours += duration;
+        });
+        return { hours: hours, money: hours * 25000 };
+    }
+
+    function renderScheduleResult() {
+        document.getElementById('work-wizard').classList.add('hidden');
+        document.getElementById('work-result').classList.remove('hidden');
+        const tbody = document.getElementById('work-tbody');
+        const stats = calculateSalary(scheduleData);
+        
+        tbody.innerHTML = scheduleData.map(d => {
             return `<tr class="${d.pos === 'OFF' ? 'text-red-400' : ''}">
                 <td class="font-bold text-gray-400">${d.day}</td>
                 <td>${d.date}</td>
                 <td class="uppercase font-bold tracking-widest text-xs">${d.pos}</td>
                 <td>${d.time}</td>
-                <td>${d.pos === 'OFF' ? '-' : (duration > 0 ? duration.toFixed(1) + 'h' : '?')}</td>
             </tr>`;
         }).join('');
-        document.getElementById('total-hours').innerText = totalH.toFixed(1) + "h";
-        document.getElementById('total-salary').innerText = (totalH * 25000).toLocaleString('vi-VN') + " VNĐ";
+        
+        document.getElementById('total-hours').innerText = stats.hours.toFixed(1) + "h";
+        document.getElementById('total-salary').innerText = stats.money.toLocaleString('vi-VN') + " VNĐ";
     }
 
     // --- MUSIC LOGIC (CORE FIX) ---
@@ -639,11 +715,9 @@
         document.getElementById('now-playing').innerText = name;
         const yt = document.getElementById('player');
         const mp4 = document.getElementById('mp4-player');
-        
         if(player && player.stopVideo) player.stopVideo();
         mp4.pause();
-        
-        // V39 FIX: USE CLASSLIST FOR CLEAN TOGGLING
+        // V39 FIX RE-APPLIED
         if(type === 'mp4') { 
             yt.classList.add('hidden'); 
             mp4.classList.remove('hidden'); 
