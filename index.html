@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V44.0 Work Manager Upgrade</title>
+    <title>Skyreign Hub | V43.0 Final Logic</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -28,7 +28,7 @@
         .nav-btn:hover { color: white; border-color: white; }
         .nav-btn.active { background: white; color: black; border-color: white; box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
         
-        .tab-content { display: none; padding-bottom: 100px; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .tab-content { display: none; padding-bottom: 120px; animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
@@ -55,15 +55,15 @@
         .song-item:hover { background: rgba(255,255,255,0.1); padding-left: 20px; }
         .song-item img { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; }
         
-        /* VIDEO PLAYER FIX */
+        /* VIDEO PLAYER */
         video { width: 100%; height: 100%; background: black; object-fit: contain; }
         
         /* TOGGLE SWITCH */
         .toggle-checkbox:checked { right: 0; border-color: #68D391; }
         .toggle-checkbox:checked + .toggle-label { background-color: #68D391; }
         
-        /* UTILS - FIXED HIDDEN CLASS */
-        .hidden { display: none; } 
+        /* UTILS */
+        .hidden { display: none !important; }
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
     </style>
 </head>
@@ -72,7 +72,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V44.0 MANAGER</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V43.0 FINAL LOGIC</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -274,42 +274,33 @@
     <div class="min-h-screen flex flex-col items-center pt-32 px-4">
         <div class="glass-card p-8 w-full max-w-3xl relative">
             <div class="flex justify-center gap-4 mb-8">
-                <button onclick="startGrammarTest()" class="px-6 py-2 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Ngữ Pháp (4 Bước)</button>
-                <button onclick="startFillTest()" class="px-6 py-2 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Điền Từ (Hội Thoại)</button>
+                <button onclick="setTestMode('analyze')" class="px-6 py-2 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black">Phân Tích</button>
+                <button onclick="setTestMode('fill')" class="px-6 py-2 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black">Điền Từ</button>
             </div>
-            <div id="test-grammar" class="hidden">
+            <div id="test-analyze" class="hidden">
                  <div class="text-center mb-6">
-                    <p class="text-[9px] text-gray-400 uppercase tracking-widest mb-2">AI Question</p>
-                    <h3 id="tg-question" class="text-3xl font-light text-white mb-2 fade-in">...</h3>
+                    <h3 id="ta-question" class="text-3xl font-light text-white mb-2">...</h3>
                  </div>
-                 <div id="tg-step1" class="space-y-3">
-                    <p class="text-center text-xs text-indigo-300 mb-2">Bước 1: Chọn ngữ pháp đúng</p>
-                    <div class="grid grid-cols-1 gap-2" id="tg-options"></div>
+                 <p id="ta-status" class="text-center text-xs font-bold h-6 mb-4 text-green-400"></p>
+                 <div id="ta-step1" class="space-y-3">
+                    <div class="grid grid-cols-1 gap-2" id="ta-options"></div>
                  </div>
-                 <div id="tg-step2" class="hidden space-y-4 pt-4 fade-in">
-                    <p class="text-center text-xs text-indigo-300">Bước 2: Tìm Chủ Ngữ (S)</p>
-                    <input type="text" id="tg-sub-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none text-center" placeholder="Nhập S...">
-                    <button onclick="checkSubject()" class="w-full py-3 bg-white/10 text-white font-bold text-xs uppercase hover:bg-white/20">Xác nhận S</button>
+                 <div id="ta-step2" class="hidden space-y-4 pt-4">
+                    <input type="text" id="ta-sub-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none" placeholder="Nhập Chủ ngữ (S)">
+                    <input type="text" id="ta-noun-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none" placeholder="Nhập Danh từ (N)">
+                    <button onclick="checkComponents()" class="w-full py-3 bg-white text-black font-bold text-xs uppercase">Kiểm Tra</button>
                  </div>
-                 <div id="tg-step3" class="hidden space-y-4 pt-4 fade-in">
-                    <p class="text-center text-xs text-indigo-300">Bước 3: Tìm Danh Từ (N)</p>
-                    <input type="text" id="tg-noun-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none text-center" placeholder="Nhập N...">
-                    <button onclick="checkNoun()" class="w-full py-3 bg-white/10 text-white font-bold text-xs uppercase hover:bg-white/20">Xác nhận N</button>
+                 <div id="ta-step3" class="hidden space-y-4 pt-4">
+                     <input type="text" id="ta-make-sentence" class="w-full p-3 border-b border-white/20 bg-transparent text-center text-xl outline-none" placeholder="Tự đặt câu...">
+                     <button onclick="checkAISentence()" class="w-full mt-3 py-3 bg-green-600 text-white font-bold text-xs uppercase">AI Check</button>
+                     <div id="ta-ai-feedback" class="text-center text-xs mt-2"></div>
                  </div>
-                 <div id="tg-step4" class="hidden space-y-4 pt-4 fade-in">
-                     <p class="text-center text-xs text-green-400">Bước 4: Tự đặt 1 câu dùng ngữ pháp này (Chữ Hán)</p>
-                     <input type="text" id="tg-make-sentence" class="w-full p-3 border-b border-white/20 bg-transparent text-center text-xl outline-none" placeholder="Viết câu...">
-                     <button onclick="checkAISentence()" class="w-full mt-3 py-3 bg-green-600 text-white font-bold text-xs uppercase hover:bg-green-500">AI Kiểm Tra (+1 Coin)</button>
-                 </div>
-                 <p id="tg-feedback" class="text-center text-xs font-bold h-6 mt-4 text-green-400"></p>
             </div>
             <div id="test-fill" class="hidden flex flex-col items-center">
-                 <div class="bg-white/5 p-6 rounded-lg w-full mb-6 text-center border border-white/10">
-                    <p id="tf-dialogue" class="text-xl leading-loose font-light"></p>
-                 </div>
+                 <p id="tf-dialogue" class="text-xl leading-relaxed text-center font-light mb-8"></p>
                  <div id="tf-options" class="flex flex-wrap gap-3 justify-center mb-6"></div>
                  <p id="tf-msg" class="text-xs font-bold uppercase h-6 mb-4"></p>
-                 <button onclick="generateFillTest()" class="py-2 px-6 border border-white/20 text-[10px] uppercase hover:bg-white hover:text-black transition">Đổi câu khác</button>
+                 <button onclick="nextFillTest()" class="py-2 px-6 border border-white/20 text-[10px] uppercase hover:bg-white hover:text-black">Tiếp</button>
             </div>
         </div>
     </div>
@@ -351,7 +342,7 @@
 </div>
 
 <script>
-    // --- GLOBAL DATA ---
+    // --- DATA ---
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" },
         { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "老师", py: "lǎoshī", mn: "thầy cô" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn học" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" },
@@ -359,22 +350,16 @@
         { hz: "不", py: "bù", mn: "không" }, { hz: "没", py: "méi", mn: "chưa" }, { hz: "很", py: "hěn", mn: "rất" }, { hz: "太", py: "tài", mn: "quá" }, { hz: "都", py: "dōu", mn: "đều" }, { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của" }, { hz: "吗", py: "ma", mn: "không?" }, { hz: "呢", py: "ne", mn: "nhỉ" }, { hz: "了", py: "le", mn: "rồi" }, { hz: "什么", py: "shénme", mn: "cái gì" }
     ];
 
-    const grammarRules = [
-        { id: "g1", title: "S + 是 + N", structure: "S + 是 + N (Là)", ex: "我是学生", regex: /(.+)是(.+)/ },
-        { id: "g2", title: "S + 不 + 是 + N", structure: "S + 不 + 是 + N (Phủ định)", ex: "我不是老师", regex: /(.+)不是(.+)/ },
-        { id: "g3", title: "S + 是 + N + 吗?", structure: "S + 是 + N + 吗? (Nghi vấn)", ex: "你是中国人吗？", regex: /(.+)是(.+)吗[?？]?/ },
-        { id: "g4", title: "N + 们", structure: "N + 们 (Số nhiều)", ex: "我们", regex: /(.+)们/ }
-    ];
-
     const readingData = [
         { id: 1, zh: "你好！我叫刘铁花。我是学生。我家有五口人：爸爸、妈妈、哥哥、女儿和我。", key: "xin chào tôi tên lưu thiết hoa tôi là học sinh nhà tôi có năm người bố mẹ anh trai con gái và tôi", vi_display: "Xin chào! Tôi tên Lưu Thiết Hoa. Tôi là học sinh. Nhà tôi có 5 người: Bố, mẹ, anh trai, con gái và tôi." },
         { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }
     ];
 
+    // UPDATED V-POP LIST V34.0
     const vPop = [
-        {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg"},
+        {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg"}, // User's custom request: Name Hôn Lễ but link Amee
         {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg"},
-        {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg"},
+        {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg"}, // Restored V29
         {name:"Gieo Quẻ",type:"yt",id:"ul3Ezn8m6IQ",thumb:"https://img.youtube.com/vi/ul3Ezn8m6IQ/mqdefault.jpg"}
     ];
     const cPop = [
@@ -400,127 +385,14 @@
         if (id === 'work') loadWorkSchedule();
     }
 
-    // --- TEST TAB LOGIC ---
-    let currentTestRule = null;
-    let currentTestSentence = "";
-    
-    function startGrammarTest() {
-        document.getElementById('test-grammar').classList.remove('hidden');
-        document.getElementById('test-fill').classList.add('hidden');
-        // Reset
-        document.getElementById('tg-step1').classList.remove('hidden');
-        document.getElementById('tg-step2').classList.add('hidden');
-        document.getElementById('tg-step3').classList.add('hidden');
-        document.getElementById('tg-step4').classList.add('hidden');
-        document.getElementById('tg-sub-input').value = "";
-        document.getElementById('tg-noun-input').value = "";
-        document.getElementById('tg-make-sentence').value = "";
-        document.getElementById('tg-feedback').innerText = "";
-        // Generate
-        currentTestRule = grammarRules[Math.floor(Math.random() * 3)];
-        const subs = ["我","你","他","爸爸","妈妈"];
-        const nouns = ["学生","老师","医生","好人"];
-        const S = subs[Math.floor(Math.random() * subs.length)];
-        const N = nouns[Math.floor(Math.random() * nouns.length)];
-        if(currentTestRule.id === "g1") currentTestSentence = S + "是" + N;
-        if(currentTestRule.id === "g2") currentTestSentence = S + "不是" + N;
-        if(currentTestRule.id === "g3") currentTestSentence = S + "是" + N + "吗？";
-        document.getElementById('tg-question').innerText = currentTestSentence;
-        document.getElementById('tg-options').innerHTML = grammarRules.slice(0,3).map(r => 
-            `<button onclick="checkStructure('${r.id}')" class="p-3 bg-white/5 border border-white/20 rounded text-xs hover:bg-white hover:text-black transition text-left">${r.structure}</button>`
-        ).join('');
-    }
-
-    function checkStructure(id) {
-        if(id === currentTestRule.id) {
-            document.getElementById('tg-step1').classList.add('hidden');
-            document.getElementById('tg-step2').classList.remove('hidden');
-            document.getElementById('tg-feedback').innerText = "Đúng cấu trúc!";
-        } else {
-            alert("Sai rồi! Hãy nhìn kỹ câu hỏi.");
-        }
-    }
-
-    function checkSubject() {
-        const val = document.getElementById('tg-sub-input').value.trim();
-        if(currentTestSentence.includes(val) && val.length > 0) {
-            document.getElementById('tg-step2').classList.add('hidden');
-            document.getElementById('tg-step3').classList.remove('hidden');
-        } else {
-            alert("Chưa đúng chủ ngữ!");
-        }
-    }
-
-    function checkNoun() {
-        const val = document.getElementById('tg-noun-input').value.trim();
-        if(currentTestSentence.includes(val) && val.length > 0) {
-            document.getElementById('tg-step3').classList.add('hidden');
-            document.getElementById('tg-step4').classList.remove('hidden');
-        } else {
-            alert("Chưa đúng danh từ!");
-        }
-    }
-
-    function checkAISentence() {
-        const val = document.getElementById('tg-make-sentence').value.trim();
-        const feedback = document.getElementById('tg-feedback');
-        const match = val.match(currentTestRule.regex);
-        const isChinese = /[\u4e00-\u9fa5]/.test(val);
-        if(match && isChinese) {
-            updateCoins(1);
-            feedback.innerText = "TUYỆT VỜI! (+1 COIN)";
-            feedback.classList.replace("text-red-400", "text-green-400");
-            setTimeout(startGrammarTest, 2000);
-        } else {
-            feedback.innerText = "Sai cấu trúc hoặc không phải tiếng Trung!";
-            feedback.classList.add("text-red-400");
-        }
-    }
-
-    function startFillTest() {
-        document.getElementById('test-grammar').classList.add('hidden');
-        document.getElementById('test-fill').classList.remove('hidden');
-        generateFillTest();
-    }
-
-    function generateFillTest() {
-        const subjects = ["我", "你", "他"];
-        const verbs = ["喜欢", "想", "去", "吃", "喝"];
-        const nouns = ["苹果", "茶", "中国菜", "学校", "北京"];
-        const S = subjects[Math.floor(Math.random() * subjects.length)];
-        const V = verbs[Math.floor(Math.random() * verbs.length)];
-        const N = nouns[Math.floor(Math.random() * nouns.length)];
-        const hideTarget = Math.random() > 0.5 ? V : N;
-        const dialogue = `A: ${S === '我' ? '你' : '我'}${V}什么？<br>B: ${S}${V === hideTarget ? '____' : V}${N === hideTarget ? '____' : N}。`;
-        document.getElementById('tf-dialogue').innerHTML = dialogue;
-        let opts = [hideTarget, "什么", "吗", "不"];
-        opts = opts.sort(() => Math.random() - 0.5);
-        document.getElementById('tf-options').innerHTML = opts.map(o => 
-            `<button onclick="checkFill('${o}', '${hideTarget}')" class="px-4 py-2 border border-white/20 rounded hover:bg-white hover:text-black font-bold">${o}</button>`
-        ).join('');
-        document.getElementById('tf-msg').innerText = "";
-    }
-
-    function checkFill(ans, correct) {
-        if(ans === correct) {
-            updateCoins(1);
-            document.getElementById('tf-msg').innerText = "CHÍNH XÁC! (+1 COIN)";
-            document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-green-400";
-            setTimeout(generateFillTest, 1000);
-        } else {
-            document.getElementById('tf-msg').innerText = "SAI RỒI!";
-            document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-red-400";
-        }
-    }
-
-    // --- WORK SCHEDULE LOGIC (V44 UPDATED) ---
+    // --- WORK SCHEDULE LOGIC ---
     const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
     let workStep = 0;
     let currentWeek = 1;
     let scheduleData = [];
     
     function changeWeek() {
-        currentWeek = parseInt(document.getElementById('week-selector').value);
+        currentWeek = document.getElementById('week-selector').value;
         loadWorkSchedule();
     }
 
@@ -686,7 +558,7 @@
         document.getElementById('total-salary').innerText = stats.money.toLocaleString('vi-VN') + " VNĐ";
     }
 
-    // --- MUSIC LOGIC (CORE FIX) ---
+    // --- MUSIC LOGIC ---
     let currentList = 'vpop'; 
     let currentIndex = 0;
     
@@ -707,7 +579,13 @@
     function onYouTubeIframeAPIReady() { 
         player = new YT.Player('player', { height: '100%', width: '100%', videoId: '', events: { 'onStateChange': onPlayerStateChange } }); 
     }
-    function onPlayerStateChange(event) { if (event.data === YT.PlayerState.ENDED) checkAutoPlay(); }
+
+    function onPlayerStateChange(event) {
+        if (event.data === YT.PlayerState.ENDED) {
+            checkAutoPlay();
+        }
+    }
+
     document.getElementById('mp4-player').addEventListener('ended', checkAutoPlay);
 
     function playMedia(src, type, name, idx, listType, thumb) {
@@ -715,24 +593,22 @@
         document.getElementById('now-playing').innerText = name;
         const yt = document.getElementById('player');
         const mp4 = document.getElementById('mp4-player');
+        
         if(player && player.stopVideo) player.stopVideo();
         mp4.pause();
-        // V39 FIX RE-APPLIED
+        
         if(type === 'mp4') { 
-            yt.classList.add('hidden'); 
-            mp4.classList.remove('hidden'); 
-            mp4.src = src; 
-            mp4.play(); 
-        } 
-        else { 
-            mp4.classList.add('hidden'); 
-            yt.classList.remove('hidden'); 
+            yt.style.display = 'none'; mp4.style.display = 'block'; 
+            mp4.src = src; mp4.play(); 
+        } else { 
+            mp4.style.display = 'none'; yt.style.display = 'block'; 
             player.loadVideoById(src); 
         }
     }
 
     function checkAutoPlay() {
-        if(document.getElementById(`toggle-${currentList}`).checked) {
+        const isAuto = document.getElementById(`toggle-${currentList}`).checked;
+        if(isAuto) {
             const listData = currentList === 'vpop' ? vPop : cPop;
             const nextIdx = (currentIndex + 1) % listData.length;
             const nextSong = listData[nextIdx];
@@ -740,7 +616,13 @@
         }
     }
 
-    // --- OTHER ---
+    // --- GRAMMAR & VOCAB ---
+    const grammarRules = [
+        { id: "g1", title: "S + 是 + N", structure: "S + 是 + N (Là)", ex: "我是学生 (Tôi là học sinh)" },
+        { id: "g2", title: "S + 不 + 是 + N", structure: "S + 不 + 是 + N (Không là)", ex: "我不是老师" },
+        { id: "g3", title: "S + 是 + N + 吗?", structure: "S + 是 + N + 吗? (Hỏi)", ex: "你是中国人吗？" },
+        { id: "g4", title: "N + 们", structure: "N + 们 (Số nhiều)", ex: "我们 (Chúng tôi), 老师们 (Các thầy cô)" }
+    ];
     function renderGrammarList() {
         document.getElementById('grammar-list').innerHTML = grammarRules.map(r => `
             <div class="bg-white/5 p-6 border-l-2 border-indigo-500">
@@ -750,6 +632,7 @@
             </div>`).join('');
     }
 
+    // Vocab & Reading functions
     let vIdx = 0; let vMode = 0;
     function changeVocabMode() { vMode = (vMode+1)%3; document.getElementById('v-mode-btn').innerText = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"][vMode]; nextVocab(true); }
     function nextVocab(rand) { if(rand) vIdx = Math.floor(Math.random()*vocabData.length); const i = vocabData[vIdx]; document.getElementById('v-question').innerText = vMode===0?i.hz:(vMode===1?i.mn.toUpperCase():i.hz); document.getElementById('v-input').value = ""; document.getElementById('v-msg').innerText = ""; }
@@ -765,6 +648,118 @@
     function toggleReadingRef() { const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
     function checkReading() { if(document.getElementById('r-input').value.length > 5) { updateCoins(1); document.getElementById('r-msg').innerText = "OK (+1 Xu)"; } }
 
+    // TEST TAB LOGIC - FIXED
+    let currentTestRule = null;
+    let currentTestSentence = "";
+    
+    function setTestMode(mode) {
+        document.getElementById('test-analyze').classList.add('hidden');
+        document.getElementById('test-fill').classList.add('hidden');
+        if(mode === 'analyze') {
+            document.getElementById('test-analyze').classList.remove('hidden');
+            startAnalyze();
+        } else {
+            document.getElementById('test-fill').classList.remove('hidden');
+            nextFillTest();
+        }
+    }
+
+    function startAnalyze() {
+        currentTestRule = grammarRules[Math.floor(Math.random() * 3)];
+        const sub = ["我","你","他","爸爸","妈妈"];
+        const noun = ["学生","医生","好人","越南人"];
+        const S = sub[Math.floor(Math.random() * sub.length)];
+        const N = noun[Math.floor(Math.random() * noun.length)];
+        
+        if(currentTestRule.id === "g1") currentTestSentence = S + "是" + N;
+        if(currentTestRule.id === "g2") currentTestSentence = S + "不是" + N;
+        if(currentTestRule.id === "g3") currentTestSentence = S + "是" + N + "吗？";
+
+        document.getElementById('ta-question').innerText = currentTestSentence;
+        document.getElementById('ta-status').innerText = "";
+        document.getElementById('ta-step1').classList.remove('hidden');
+        document.getElementById('ta-step2').classList.add('hidden');
+        document.getElementById('ta-step3').classList.add('hidden');
+        document.getElementById('ta-sub-input').value = "";
+        document.getElementById('ta-noun-input').value = "";
+        document.getElementById('ta-make-sentence').value = "";
+        document.getElementById('ta-ai-feedback').innerText = "";
+
+        document.getElementById('ta-options').innerHTML = grammarRules.map(r => 
+            `<button onclick="checkRule('${r.id}')" class="w-full p-3 border border-white/20 rounded text-left text-xs uppercase hover:bg-white hover:text-black transition">${r.structure}</button>`
+        ).join('');
+    }
+
+    function checkRule(id) {
+        if(id === currentTestRule.id) {
+            updateCoins(1);
+            document.getElementById('ta-status').innerText = "CHÍNH XÁC!";
+            document.getElementById('ta-status').className = "text-center text-xs font-bold h-6 mb-4 text-green-400";
+            document.getElementById('ta-step1').classList.add('hidden');
+            document.getElementById('ta-step2').classList.remove('hidden');
+        } else {
+            document.getElementById('ta-status').innerText = "SAI RỒI!";
+            document.getElementById('ta-status').className = "text-center text-xs font-bold h-6 mb-4 text-red-400";
+        }
+    }
+
+    function checkComponents() {
+        const s = document.getElementById('ta-sub-input').value.trim();
+        const n = document.getElementById('ta-noun-input').value.trim();
+        if(currentTestSentence.includes(s) && currentTestSentence.includes(n) && s !== "" && n !== "") {
+            updateCoins(1);
+            document.getElementById('ta-step2').classList.add('hidden');
+            document.getElementById('ta-step3').classList.remove('hidden');
+        } else {
+            alert("Chưa đúng thành phần!");
+        }
+    }
+
+    function checkAISentence() {
+        const val = document.getElementById('ta-make-sentence').value;
+        const fb = document.getElementById('ta-ai-feedback');
+        // Simple mock check
+        if(val.length > 2 && /[\u4e00-\u9fa5]/.test(val)) {
+            updateCoins(5);
+            fb.innerText = "Câu tốt! (+5 Xu)";
+            fb.className = "text-center text-xs mt-2 text-green-400";
+            setTimeout(startAnalyze, 2000);
+        } else {
+            fb.innerText = "Chưa đạt yêu cầu.";
+            fb.className = "text-center text-xs mt-2 text-red-400";
+        }
+    }
+
+    // FILL TEST
+    const dialogues = [
+        {txt:"你好！我叫Lưu Thiết Hoa. 我是学生。", hide:"学生"},
+        {txt:"你去哪儿？我去学校看老师。", hide:"学校"},
+        {txt:"这个多少钱？太贵了！", hide:"钱"},
+        {txt:"你是中国人吗？不是，我是越南人。", hide:"越南人"}
+    ];
+    function nextFillTest() {
+        const d = dialogues[Math.floor(Math.random() * dialogues.length)];
+        document.getElementById('tf-dialogue').innerHTML = d.txt.replace(d.hide, "____");
+        document.getElementById('tf-msg').innerText = "";
+        const opts = [d.hide, "爸爸", "什么", "因为"].sort(()=>Math.random()-0.5);
+        document.getElementById('tf-options').innerHTML = opts.map(o => 
+            `<button onclick="checkFill('${o}','${d.hide}')" class="px-4 py-2 border border-white/20 rounded hover:bg-white hover:text-black transition">${o}</button>`
+        ).join('');
+    }
+    function checkFill(ans, corr) {
+        if(ans === corr) {
+            updateCoins(1);
+            document.getElementById('tf-msg').innerText = "CHÍNH XÁC!";
+            document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-green-400";
+            document.getElementById('tf-dialogue').innerText = document.getElementById('tf-dialogue').innerText.replace("____", corr);
+            setTimeout(nextFillTest, 1500);
+        } else {
+            document.getElementById('tf-msg').innerText = "SAI RỒI";
+            document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-red-400";
+        }
+    }
+
+    // Init
     window.onload = () => { switchTab('home'); renderMusic(); nextVocab(true); nextParagraph(); };
 </script>
 </body>
