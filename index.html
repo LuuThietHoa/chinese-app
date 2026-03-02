@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.3 Music Preload</title>
+    <title>Skyreign Hub | V40.4 HIEUTHUHAI Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -62,7 +62,7 @@
         .toggle-checkbox:checked { right: 0; border-color: #68D391; }
         .toggle-checkbox:checked + .toggle-label { background-color: #68D391; }
         
-        /* UTILS - FIXED HIDDEN CLASS */
+        /* UTILS */
         .hidden { display: none; } 
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
     </style>
@@ -72,7 +72,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.3 MUSIC PRELOAD FIX</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.4 HIEUTHUHAI EDITION</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -261,7 +261,7 @@
 <div id="music" class="tab-content">
     <div class="min-h-screen flex flex-col items-center pt-24 px-4 pb-24">
         <div class="flex flex-col md:flex-row gap-8 w-full max-w-7xl">
-            <div class="w-full md:w-1/4">
+            <div class="w-full md:w-1/4 flex flex-col relative">
                 <div class="flex justify-between items-center mb-4 sticky top-0 bg-[#0f172a] p-2 z-10 border-b border-white/10">
                     <h3 class="modern-text text-lg">V-Pop Hits</h3>
                     <div class="flex items-center gap-2">
@@ -272,7 +272,11 @@
                         </div>
                     </div>
                 </div>
-                <div id="v-list" class="space-y-1 h-[500px] overflow-y-auto pr-2"></div>
+                <div id="v-list" class="space-y-1 h-[430px] overflow-y-auto pr-2 transition-opacity duration-300"></div>
+                
+                <div class="flex justify-center items-center mt-4 border-t border-white/10 pt-4">
+                    <img src="hieuthuhai.png" id="hieu-btn" class="w-12 h-12 object-cover rounded-full cursor-pointer transition-all duration-300 opacity-50 hover:opacity-100 hover:scale-110" onclick="toggleHieuThuHai()" title="Chỉ nghe nhạc HIEUTHUHAI" alt="HIEUTHUHAI">
+                </div>
             </div>
 
             <div class="w-full md:w-2/4 flex flex-col">
@@ -286,7 +290,7 @@
                 </div>
             </div>
 
-            <div class="w-full md:w-1/4">
+            <div class="w-full md:w-1/4 flex flex-col relative">
                 <div class="flex justify-between items-center mb-4 sticky top-0 bg-[#0f172a] p-2 z-10 border-b border-white/10">
                     <h3 class="modern-text text-lg">Chinese Hits</h3>
                     <div class="flex items-center gap-2">
@@ -297,7 +301,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="c-list" class="space-y-1 h-[500px] overflow-y-auto pr-2"></div>
+                <div id="c-list" class="space-y-1 h-[430px] overflow-y-auto pr-2"></div>
             </div>
         </div>
     </div>
@@ -411,12 +415,18 @@
         { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }
     ];
 
-    // ĐÃ THAY BÀI THỨ 4 BẰNG LINK MP4 MỚI CỦA BẠN
+    // MẢNG VPOP GỒM TẤT CẢ NHẠC CŨ VÀ MỚI (CÓ CỜ ISHIEU ĐỂ NHẬN DIỆN HIEUTHUHAI)
     const vPop = [
-        {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg"},
-        {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg"},
-        {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg"},
-        {name:"BÀI VPOP MỚI",type:"mp4",id:"https://files.catbox.moe/woi0iy.mp4",thumb:"https://img.youtube.com/vi/ul3Ezn8m6IQ/mqdefault.jpg"}
+        {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false},
+        {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false},
+        {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false},
+        {name:"BÀI VPOP MỚI",type:"mp4",id:"https://files.catbox.moe/woi0iy.mp4",thumb:"https://img.youtube.com/vi/ul3Ezn8m6IQ/mqdefault.jpg", isHieu: false},
+        
+        {name:"hieuthuhai - ngủ một mình ft. negav (prod. by kewtiie) | official mv",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true},
+        {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn (prod. by Kewtiie) | OFFICIAL MV",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true},
+        {name:"HIEUTHUHAI - Không Thể Say (prod. by Kewtiie) l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true},
+        {name:"Exit Sign - HIEUTHUHAI ft. marzuz | Live at GENfest 23 | Fancam Focus | Live Performance",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true},
+        {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik ft. Orange | Anh Trai Say Hi",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true}
     ];
     
     const cPop = [
@@ -450,7 +460,6 @@
         document.getElementById('test-grammar').classList.remove('hidden');
         document.getElementById('test-fill').classList.add('hidden');
         
-        // Reset Steps
         document.getElementById('tg-step1').classList.remove('hidden');
         document.getElementById('tg-step2').classList.add('hidden');
         document.getElementById('tg-step3').classList.add('hidden');
@@ -460,7 +469,6 @@
         document.getElementById('tg-make-sentence').value = "";
         document.getElementById('tg-feedback').innerText = "";
 
-        // Generate
         currentTestRule = grammarRules[Math.floor(Math.random() * 3)];
         const subs = ["我","你","他","爸爸","妈妈"];
         const nouns = ["学生","老师","医生","好人"];
@@ -564,7 +572,7 @@
         }
     }
 
-    // --- WORK SCHEDULE LOGIC (V40.2 - MEAL TIME FIX) ---
+    // --- WORK SCHEDULE LOGIC ---
     const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
     let workStep = 0;
     let currentWeek = 1;
@@ -769,20 +777,70 @@
         document.getElementById('total-salary').innerText = (totalH * 25000).toLocaleString('vi-VN') + " VNĐ";
     }
 
-    // --- MUSIC LOGIC (CORE FIX) ---
+    // --- MUSIC LOGIC ---
     let currentList = 'vpop'; 
     let currentIndex = 0;
+    let isHieuMode = false;
+    let displayedVPop = [];
     
+    // HÀM RENDER RIÊNG V-POP VỚI HIỆU ỨNG VÀ TRUNCATE TEXT
+    function renderMusicVPop() {
+        displayedVPop = isHieuMode ? vPop.filter(s => s.isHieu) : vPop;
+        
+        const tpl = (s, idx) => {
+            const safeName = s.name.replace(/'/g, "\\'");
+            return `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${safeName}', ${idx}, 'vpop', '${s.thumb}')">
+                <img src="${s.thumb}" class="flex-shrink-0">
+                <div class="flex-1 overflow-hidden">
+                    <h4 class="text-[10px] font-bold uppercase text-white tracking-widest truncate" title="${s.name}">${s.name}</h4>
+                    <span class="text-[8px] text-gray-500">${s.type==='mp4'?'NO ADS':'YOUTUBE'}</span>
+                </div>
+            </div>`;
+        };
+        
+        document.getElementById('v-list').innerHTML = displayedVPop.map((s,i) => tpl(s, i)).join('');
+    }
+
+    // RENDER C-POP BÌNH THƯỜNG
+    function renderMusicCPop() {
+        const tpl = (s, idx) => {
+            const safeName = s.name.replace(/'/g, "\\'");
+            return `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${safeName}', ${idx}, 'cpop', '${s.thumb}')">
+                <img src="${s.thumb}" class="flex-shrink-0">
+                <div class="flex-1 overflow-hidden">
+                    <h4 class="text-[10px] font-bold uppercase text-white tracking-widest truncate" title="${s.name}">${s.name}</h4>
+                    <span class="text-[8px] text-gray-500">${s.type==='mp4'?'NO ADS':'YOUTUBE'}</span>
+                </div>
+            </div>`;
+        };
+        document.getElementById('c-list').innerHTML = cPop.map((s,i) => tpl(s, i)).join('');
+    }
+
     function renderMusic() {
-        const tpl = (s, idx, type) => `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${s.name}', ${idx}, '${type}', '${s.thumb}')">
-            <img src="${s.thumb}">
-            <div>
-                <h4 class="text-[10px] font-bold uppercase text-white tracking-widest">${s.name}</h4>
-                <span class="text-[8px] text-gray-500">${s.type==='mp4'?'NO ADS':'YOUTUBE'}</span>
-            </div>
-        </div>`;
-        document.getElementById('v-list').innerHTML = vPop.map((s,i) => tpl(s, i, 'vpop')).join('');
-        document.getElementById('c-list').innerHTML = cPop.map((s,i) => tpl(s, i, 'cpop')).join('');
+        renderMusicVPop();
+        renderMusicCPop();
+    }
+
+    // LOGIC NÚT TOGGLE HIEUTHUHAI
+    function toggleHieuThuHai() {
+        isHieuMode = !isHieuMode;
+        const btn = document.getElementById('hieu-btn');
+        const vListEl = document.getElementById('v-list');
+
+        if(isHieuMode) {
+            btn.classList.add('scale-110', 'opacity-100', 'drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]');
+            btn.classList.remove('opacity-50');
+        } else {
+            btn.classList.remove('scale-110', 'opacity-100', 'drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]');
+            btn.classList.add('opacity-50');
+        }
+
+        // Hiệu ứng mờ dần (Fade Out) rồi đổi nhạc
+        vListEl.style.opacity = '0';
+        setTimeout(() => {
+            renderMusicVPop();
+            vListEl.style.opacity = '1'; // Sáng lại (Fade In)
+        }, 300);
     }
 
     var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
@@ -817,7 +875,8 @@
 
     function checkAutoPlay() {
         if(document.getElementById(`toggle-${currentList}`).checked) {
-            const listData = currentList === 'vpop' ? vPop : cPop;
+            // TỰ ĐỘNG LỌC PLAYLIST DỰA VÀO ĐANG Ở CHẾ ĐỘ NÀO
+            const listData = currentList === 'vpop' ? displayedVPop : cPop;
             const nextIdx = (currentIndex + 1) % listData.length;
             const nextSong = listData[nextIdx];
             playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb);
@@ -853,7 +912,6 @@
     function preloadMusicCache() {
         const allSongs = [...vPop, ...cPop].filter(s => s.type === 'mp4');
         allSongs.forEach(song => {
-            // Dùng fetch để ép trình duyệt tải ngầm file mp4 từ Catbox vào bộ nhớ Cache
             fetch(song.id, { mode: 'no-cors' }).catch(() => {});
         });
     }
@@ -864,11 +922,8 @@
         nextVocab(true); 
         nextParagraph(); 
         
-        // Kích hoạt tính năng tải ngầm âm thầm sau khi mở web 3 giây
         setTimeout(preloadMusicCache, 3000); 
     };
 </script>
 </body>
 </html>
-
-```
