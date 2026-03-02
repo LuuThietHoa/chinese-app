@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.4 HIEUTHUHAI Edition</title>
+    <title>Skyreign Hub | V40.5 HIEUTHUHAI Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -65,6 +65,10 @@
         /* UTILS */
         .hidden { display: none; } 
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
+
+        /* HIDE SCROLLBAR BUT KEEP SCROLLING */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body>
@@ -72,7 +76,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.4 HIEUTHUHAI EDITION</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.5 HIEUTHUHAI EDITION</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -272,11 +276,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="v-list" class="space-y-1 h-[430px] overflow-y-auto pr-2 transition-opacity duration-300"></div>
-                
-                <div class="flex justify-center items-center mt-4 border-t border-white/10 pt-4">
-                    <img src="hieuthuhai.png" id="hieu-btn" class="w-12 h-12 object-cover rounded-full cursor-pointer transition-all duration-300 opacity-50 hover:opacity-100 hover:scale-110" onclick="toggleHieuThuHai()" title="Chỉ nghe nhạc HIEUTHUHAI" alt="HIEUTHUHAI">
-                </div>
+                <div id="v-list" class="space-y-1 h-[430px] overflow-y-auto pr-2 transition-opacity duration-300 no-scrollbar"></div>
             </div>
 
             <div class="w-full md:w-2/4 flex flex-col">
@@ -286,7 +286,11 @@
                 </div>
                 <div class="mt-6 text-center">
                     <h4 id="now-playing" class="text-2xl font-light text-white uppercase tracking-tight">Skyreign Music</h4>
-                    <div class="h-[1px] w-12 bg-gray-700 mx-auto mt-4"></div>
+                    <div class="h-[1px] w-12 bg-gray-700 mx-auto mt-4 mb-6"></div>
+                    
+                    <div class="flex justify-center items-center gap-4">
+                        <img src="hieuthuhai.png" id="hieu-btn" class="w-12 h-12 object-cover rounded-full cursor-pointer transition-all duration-300 opacity-50 hover:opacity-100 hover:scale-110" onclick="toggleHieuThuHai()" title="Chỉ nghe nhạc HIEUTHUHAI" alt="HIEUTHUHAI">
+                        </div>
                 </div>
             </div>
 
@@ -301,7 +305,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="c-list" class="space-y-1 h-[430px] overflow-y-auto pr-2"></div>
+                <div id="c-list" class="space-y-1 h-[430px] overflow-y-auto pr-2 no-scrollbar"></div>
             </div>
         </div>
     </div>
@@ -415,12 +419,11 @@
         { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }
     ];
 
-    // MẢNG VPOP GỒM TẤT CẢ NHẠC CŨ VÀ MỚI (CÓ CỜ ISHIEU ĐỂ NHẬN DIỆN HIEUTHUHAI)
+    // ĐÃ XÓA "BÀI VPOP MỚI" VÀ CẬP NHẬT LẠI DANH SÁCH
     const vPop = [
         {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false},
         {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false},
         {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false},
-        {name:"BÀI VPOP MỚI",type:"mp4",id:"https://files.catbox.moe/woi0iy.mp4",thumb:"https://img.youtube.com/vi/ul3Ezn8m6IQ/mqdefault.jpg", isHieu: false},
         
         {name:"hieuthuhai - ngủ một mình ft. negav (prod. by kewtiie) | official mv",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true},
         {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn (prod. by Kewtiie) | OFFICIAL MV",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true},
@@ -783,7 +786,6 @@
     let isHieuMode = false;
     let displayedVPop = [];
     
-    // HÀM RENDER RIÊNG V-POP VỚI HIỆU ỨNG VÀ TRUNCATE TEXT
     function renderMusicVPop() {
         displayedVPop = isHieuMode ? vPop.filter(s => s.isHieu) : vPop;
         
@@ -801,7 +803,6 @@
         document.getElementById('v-list').innerHTML = displayedVPop.map((s,i) => tpl(s, i)).join('');
     }
 
-    // RENDER C-POP BÌNH THƯỜNG
     function renderMusicCPop() {
         const tpl = (s, idx) => {
             const safeName = s.name.replace(/'/g, "\\'");
@@ -835,11 +836,10 @@
             btn.classList.add('opacity-50');
         }
 
-        // Hiệu ứng mờ dần (Fade Out) rồi đổi nhạc
         vListEl.style.opacity = '0';
         setTimeout(() => {
             renderMusicVPop();
-            vListEl.style.opacity = '1'; // Sáng lại (Fade In)
+            vListEl.style.opacity = '1';
         }, 300);
     }
 
@@ -875,7 +875,6 @@
 
     function checkAutoPlay() {
         if(document.getElementById(`toggle-${currentList}`).checked) {
-            // TỰ ĐỘNG LỌC PLAYLIST DỰA VÀO ĐANG Ở CHẾ ĐỘ NÀO
             const listData = currentList === 'vpop' ? displayedVPop : cPop;
             const nextIdx = (currentIndex + 1) % listData.length;
             const nextSong = listData[nextIdx];
