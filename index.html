@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.5 HIEUTHUHAI Edition</title>
+    <title>Skyreign Hub | V40.6 Game HUD Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -76,7 +76,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.5 HIEUTHUHAI EDITION</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.6 GAME HUD EDITION</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -86,6 +86,7 @@
 
 <nav>
     <button onclick="switchTab('home')" class="nav-btn active" id="n-home">Home</button>
+    <button onclick="switchTab('game')" class="nav-btn" id="n-game">Game</button>
     <button onclick="switchTab('memo')" class="nav-btn" id="n-memo">Ngữ Pháp</button>
     <button onclick="switchTab('test')" class="nav-btn" id="n-test">Kiểm Tra</button>
     <button onclick="switchTab('work')" class="nav-btn" id="n-work">Lịch Làm</button>
@@ -112,7 +113,24 @@
                 <button onclick="switchTab('music')" class="p-8 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
                     <div class="font-bold text-xs uppercase tracking-[0.2em]">Giải Trí</div>
                 </button>
+                <button onclick="switchTab('game')" class="col-span-2 p-4 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
+                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Game HUD</div>
+                </button>
             </div>
+        </div>
+    </div>
+</div>
+
+<div id="game" class="tab-content">
+    <div class="fixed top-0 left-0 w-full h-full z-[-1]" style="background-image: url('bg.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        <div class="absolute inset-0 bg-black/20"></div>
+    </div>
+    
+    <div class="min-h-screen flex flex-col items-center justify-center pt-24 px-4 pb-24">
+        <div class="glass-card p-10 max-w-2xl w-full text-center border border-indigo-500/30">
+            <h2 class="text-3xl font-bold tracking-[0.3em] uppercase text-white mb-2 drop-shadow-md">Khu Vực Game</h2>
+            <p class="text-[10px] text-indigo-300 tracking-[0.2em] uppercase mb-6">HUD đang khởi tạo...</p>
+            <div class="h-[1px] w-24 bg-white/20 mx-auto"></div>
         </div>
     </div>
 </div>
@@ -290,7 +308,7 @@
                     
                     <div class="flex justify-center items-center gap-4">
                         <img src="hieuthuhai.png" id="hieu-btn" class="w-12 h-12 object-cover rounded-full cursor-pointer transition-all duration-300 opacity-50 hover:opacity-100 hover:scale-110" onclick="toggleHieuThuHai()" title="Chỉ nghe nhạc HIEUTHUHAI" alt="HIEUTHUHAI">
-                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -409,7 +427,7 @@
 
     const grammarRules = [
         { id: "g1", title: "S + 是 + N", structure: "S + 是 + N (Là)", ex: "我是学生", regex: /(.+)是(.+)/ },
-        { id: "g2", title: "S + 不 + 是 + N", structure: "S + 不 + 是 + N (Phủ định)", ex: "我不是老师", regex: /(.+)不是(.+)/ },
+        { id: "g2", title: "S + Không + 是 + N", structure: "S + Không + 是 + N (Phủ định)", ex: "我不是老师", regex: /(.+)不是(.+)/ },
         { id: "g3", title: "S + 是 + N + 吗?", structure: "S + 是 + N + 吗? (Nghi vấn)", ex: "你是中国人吗？", regex: /(.+)是(.+)吗[?？]?/ },
         { id: "g4", title: "N + 们", structure: "N + 们 (Số nhiều)", ex: "我们", regex: /(.+)们/ }
     ];
@@ -419,7 +437,6 @@
         { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }
     ];
 
-    // ĐÃ XÓA "BÀI VPOP MỚI" VÀ CẬP NHẬT LẠI DANH SÁCH
     const vPop = [
         {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false},
         {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false},
@@ -907,21 +924,11 @@
     function toggleReadingRef() { const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
     function checkReading() { if(document.getElementById('r-input').value.length > 5) { updateCoins(1); document.getElementById('r-msg').innerText = "OK (+1 Xu)"; } }
 
-    // --- CƠ CHẾ TẢI NGẦM (PRELOAD CACHE) ---
-    function preloadMusicCache() {
-        const allSongs = [...vPop, ...cPop].filter(s => s.type === 'mp4');
-        allSongs.forEach(song => {
-            fetch(song.id, { mode: 'no-cors' }).catch(() => {});
-        });
-    }
-
     window.onload = () => { 
         switchTab('home'); 
         renderMusic(); 
         nextVocab(true); 
         nextParagraph(); 
-        
-        setTimeout(preloadMusicCache, 3000); 
     };
 </script>
 </body>
