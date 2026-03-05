@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.6 Game HUD Edition</title>
+    <title>Skyreign Hub | V40.7 Game HUD Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     
@@ -76,7 +76,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.6 GAME HUD EDITION</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.7 GAME HUD EDITION</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -126,10 +126,18 @@
         <div class="absolute inset-0 bg-black/20"></div>
     </div>
     
-    <div class="min-h-screen flex flex-col items-center justify-center pt-24 px-4 pb-24">
+    <div id="hud-stats-container" class="absolute top-28 left-6 w-[350px] pointer-events-auto">
+        <img src="uistats.png" class="w-full h-auto object-contain pointer-events-none select-none" alt="UI Stats">
+        
+        <div id="draggable-name" class="absolute top-[20px] left-[50px] text-white font-bold tracking-wider text-sm cursor-grab select-none drop-shadow-md z-10" style="padding: 5px;">
+            Nicksoler
+        </div>
+    </div>
+
+    <div class="min-h-screen flex flex-col items-center justify-center pt-24 px-4 pb-24 pointer-events-none">
         <div class="glass-card p-10 max-w-2xl w-full text-center border border-indigo-500/30">
             <h2 class="text-3xl font-bold tracking-[0.3em] uppercase text-white mb-2 drop-shadow-md">Khu Vực Game</h2>
-            <p class="text-[10px] text-indigo-300 tracking-[0.2em] uppercase mb-6">HUD đang khởi tạo...</p>
+            <p class="text-[10px] text-indigo-300 tracking-[0.2em] uppercase mb-6">Sử dụng chuột kéo tên vào đúng vị trí ô trống, sau đó bấm chuột phải để lấy tọa độ.</p>
             <div class="h-[1px] w-24 bg-white/20 mx-auto"></div>
         </div>
     </div>
@@ -930,6 +938,46 @@
         nextVocab(true); 
         nextParagraph(); 
     };
+
+    // --- TOOL KÉO THẢ TÌM TỌA ĐỘ TRÊN HUD ---
+    const dragText = document.getElementById('draggable-name');
+    const container = document.getElementById('hud-stats-container');
+    let isDragging = false;
+    let offsetX = 0, offsetY = 0;
+
+    dragText.addEventListener('mousedown', (e) => {
+        if(e.button !== 0) return; // Chỉ nhận click chuột trái
+        isDragging = true;
+        dragText.style.cursor = 'grabbing';
+        
+        const rect = dragText.getBoundingClientRect();
+        offsetX = e.clientX - rect.left;
+        offsetY = e.clientY - rect.top;
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const containerRect = container.getBoundingClientRect();
+        
+        let newX = e.clientX - containerRect.left - offsetX;
+        let newY = e.clientY - containerRect.top - offsetY;
+
+        dragText.style.left = newX + 'px';
+        dragText.style.top = newY + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+        isDragging = false;
+        dragText.style.cursor = 'grab';
+    });
+
+    dragText.addEventListener('contextmenu', (e) => {
+        e.preventDefault(); // Chặn menu chuột phải mặc định của trình duyệt
+        const currentTop = dragText.style.top || '0px';
+        const currentLeft = dragText.style.left || '0px';
+        alert(`Tọa độ hiện tại:\nTOP: ${currentTop}\nLEFT: ${currentLeft}\n\n👉 Copy 2 dòng này đem qua đưa tui nhé!`);
+    });
+
 </script>
 </body>
 </html>
