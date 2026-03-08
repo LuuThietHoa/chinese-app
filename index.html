@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.8 Game HUD Edition</title>
+    <title>Skyreign Hub | V40.9 Master Update</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
         /* CORE SETUP */
@@ -73,10 +74,14 @@
 </head>
 <body>
 
+<audio id="sfx-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
+<audio id="sfx-correct" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" preload="auto"></audio>
+<audio id="sfx-wrong" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3" preload="auto"></audio>
+
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.8 GAME HUD EDITION</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.9 MASTER UPDATE</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -128,7 +133,6 @@
     
     <div id="hud-stats-container" class="absolute top-28 left-6 w-[350px] pointer-events-auto">
         <img src="uistats.png" class="w-full h-auto object-contain pointer-events-none select-none" alt="UI Stats">
-        
         <div id="player-name" class="absolute text-white font-bold tracking-wider text-sm select-none drop-shadow-md z-10" style="top: 224px; left: 137px; padding: 5px;">
             Nicksoler
         </div>
@@ -156,7 +160,8 @@
             <div class="flex justify-between items-end mb-6 border-b border-white/10 pb-4">
                 <h2 class="text-3xl font-light uppercase tracking-widest text-white">Lịch Làm Việc</h2>
                 <div class="flex gap-2">
-                    <select id="week-selector" onchange="changeWeek()" class="bg-black text-xs uppercase p-2 border border-white/20 outline-none">
+                    <button onclick="clearAllSchedules()" class="text-[10px] font-bold border border-red-500/50 text-red-400 hover:bg-red-900/20 px-4 py-2 rounded transition">Xóa Lịch</button>
+                    <select id="week-selector" onchange="changeWeek()" class="bg-black text-xs uppercase p-2 border border-white/20 outline-none rounded">
                         <option value="1">Tuần 1</option>
                         <option value="2">Tuần 2</option>
                         <option value="3">Tuần 3</option>
@@ -210,9 +215,11 @@
                             <input type="text" id="w-time" class="w-full bg-transparent border-b border-white/20 py-1 text-lg outline-none" placeholder="...">
                             <div class="mt-2 flex flex-wrap gap-1">
                                 <span onclick="setVal('w-time','07h00-15h30')" class="time-chip text-yellow-300 border-yellow-300/30">07h00-15h30</span>
+                                <span onclick="setVal('w-time','08h30-13h00')" class="time-chip">08h30-13h00</span>
                                 <span onclick="setVal('w-time','08h30-15h30')" class="time-chip">08h30-15h30</span>
                                 <span onclick="setVal('w-time','11h00-15h30')" class="time-chip">11h00-15h30</span>
                                 <span onclick="setVal('w-time','15h30-22h30')" class="time-chip">15h30-22h30</span>
+                                <span onclick="setVal('w-time','17h00-22h30')" class="time-chip">17h00-22h30</span>
                                 <span onclick="setVal('w-time','18h00-22h30')" class="time-chip">18h00-22h30</span>
                             </div>
                         </div>
@@ -240,9 +247,11 @@
                             <input type="text" id="w-time-2" class="w-full bg-transparent border-b border-white/20 py-1 text-lg outline-none" placeholder="...">
                             <div class="mt-2 flex flex-wrap gap-1">
                                 <span onclick="setVal('w-time-2','07h00-15h30')" class="time-chip text-yellow-300 border-yellow-300/30">07h00-15h30</span>
+                                <span onclick="setVal('w-time-2','08h30-13h00')" class="time-chip">08h30-13h00</span>
                                 <span onclick="setVal('w-time-2','08h30-15h30')" class="time-chip">08h30-15h30</span>
                                 <span onclick="setVal('w-time-2','11h00-15h30')" class="time-chip">11h00-15h30</span>
                                 <span onclick="setVal('w-time-2','15h30-22h30')" class="time-chip">15h30-22h30</span>
+                                <span onclick="setVal('w-time-2','17h00-22h30')" class="time-chip">17h00-22h30</span>
                                 <span onclick="setVal('w-time-2','18h00-22h30')" class="time-chip">18h00-22h30</span>
                             </div>
                         </div>
@@ -252,36 +261,40 @@
                 </div>
             </div>
 
-            <div id="work-result" class="hidden">
-                <div class="overflow-x-auto">
-                    <table class="schedule-table">
-                        <thead>
-                            <tr>
-                                <th>Thứ</th>
-                                <th>Ngày</th>
-                                <th>Vị Trí</th>
-                                <th>Giờ Làm</th>
-                                <th>Số Giờ</th>
-                            </tr>
-                        </thead>
-                        <tbody id="work-tbody"></tbody>
-                    </table>
-                </div>
-                
-                <div class="mt-6 p-6 bg-white/5 border border-white/10 flex justify-between items-center rounded-lg">
-                    <div>
-                        <p class="text-[10px] uppercase text-gray-400 tracking-widest">Tổng lương tuần (25k/h)</p>
-                        <p id="total-salary" class="text-2xl font-mono text-green-400">0 VNĐ</p>
+            <div id="work-result-container" class="hidden">
+                <div id="work-capture-area" class="bg-[#0f172a] p-6 rounded-xl border border-white/10">
+                    <h3 class="text-center text-xl font-bold uppercase tracking-widest text-indigo-400 mb-4">LỊCH LÀM VIỆC - <span id="display-week-num">TUẦN 1</span></h3>
+                    <div class="overflow-x-auto">
+                        <table class="schedule-table">
+                            <thead>
+                                <tr>
+                                    <th>Thứ</th>
+                                    <th>Ngày</th>
+                                    <th>Vị Trí</th>
+                                    <th>Giờ Làm</th>
+                                    <th>Số Giờ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="work-tbody"></tbody>
+                        </table>
                     </div>
-                    <div class="text-right">
-                         <p class="text-[10px] uppercase text-gray-400 tracking-widest">Tổng giờ (Đã trừ giờ ăn)</p>
-                         <p id="total-hours" class="text-xl font-mono text-white">0h</p>
+                    
+                    <div class="mt-6 p-6 bg-white/5 border border-white/10 flex justify-between items-center rounded-lg">
+                        <div>
+                            <p class="text-[10px] uppercase text-gray-400 tracking-widest">Tổng lương (25k/h)</p>
+                            <p id="total-salary" class="text-2xl font-mono text-green-400">0 VNĐ</p>
+                        </div>
+                        <div class="text-right">
+                             <p class="text-[10px] uppercase text-gray-400 tracking-widest">Tổng giờ (Trừ ăn)</p>
+                             <p id="total-hours" class="text-xl font-mono text-white">0h</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="mt-6 flex gap-4 justify-end">
-                    <button onclick="editCurrentSchedule()" class="px-6 py-3 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Chỉnh sửa lại</button>
-                    <button onclick="createNextWeek()" class="px-6 py-3 bg-indigo-600 rounded text-[10px] font-bold uppercase hover:bg-indigo-500 transition">Tạo Tuần Tiếp Theo ➔</button>
+                <div class="mt-6 flex flex-wrap gap-4 justify-end">
+                    <button onclick="downloadSchedule()" class="px-6 py-3 bg-green-600 rounded text-[10px] font-bold uppercase hover:bg-green-500 transition">📸 Tải Ảnh Lịch</button>
+                    <button onclick="editCurrentSchedule()" class="px-6 py-3 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Sửa lại</button>
+                    <button onclick="createNextWeek()" class="px-6 py-3 bg-indigo-600 rounded text-[10px] font-bold uppercase hover:bg-indigo-500 transition">Tạo Tuần Sau ➔</button>
                 </div>
             </div>
         </div>
@@ -425,12 +438,46 @@
 </div>
 
 <script>
-    // --- GLOBAL DATA ---
+    // --- AUDIO SYSTEM ---
+    function playSound(type) {
+        let audio;
+        if(type === 'click') audio = document.getElementById('sfx-click');
+        if(type === 'correct') audio = document.getElementById('sfx-correct');
+        if(type === 'wrong') audio = document.getElementById('sfx-wrong');
+        
+        if(audio) {
+            audio.currentTime = 0;
+            audio.play().catch(e => console.log("Trình duyệt chặn autoplay âm thanh:", e));
+        }
+    }
+
+    // --- GLOBAL DATA (CẬP NHẬT 101 TỪ MỚI) ---
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" },
         { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "老师", py: "lǎoshī", mn: "thầy cô" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn học" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" },
         { hz: "是", py: "shì", mn: "là" }, { hz: "有", py: "yǒu", mn: "có" }, { hz: "在", py: "zài", mn: "ở" }, { hz: "要", py: "yào", mn: "muốn" }, { hz: "喜欢", py: "xǐhuan", mn: "thích" }, { hz: "爱", py: "ài", mn: "yêu" }, { hz: "吃", py: "chī", mn: "ăn" }, { hz: "喝", py: "hē", mn: "uống" }, { hz: "去", py: "qù", mn: "đi" }, { hz: "来", py: "lái", mn: "đến" },
-        { hz: "不", py: "bù", mn: "không" }, { hz: "没", py: "méi", mn: "chưa" }, { hz: "很", py: "hěn", mn: "rất" }, { hz: "太", py: "tài", mn: "quá" }, { hz: "都", py: "dōu", mn: "đều" }, { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của" }, { hz: "吗", py: "ma", mn: "không?" }, { hz: "呢", py: "ne", mn: "nhỉ" }, { hz: "了", py: "le", mn: "rồi" }, { hz: "什么", py: "shénme", mn: "cái gì" }
+        { hz: "不", py: "bù", mn: "không" }, { hz: "没", py: "méi", mn: "chưa" }, { hz: "很", py: "hěn", mn: "rất" }, { hz: "太", py: "tài", mn: "quá" }, { hz: "都", py: "dōu", mn: "đều" }, { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của" }, { hz: "吗", py: "ma", mn: "không" }, { hz: "呢", py: "ne", mn: "nhỉ" }, { hz: "了", py: "le", mn: "rồi" }, { hz: "什么", py: "shénme", mn: "cái gì" },
+        // TỪ VỰNG MỚI BỔ SUNG
+        { hz: "爱好", py: "àihào", mn: "yêu thích" }, { hz: "吧", py: "ba", mn: "nhé" }, { hz: "白", py: "bái", mn: "màu trắng" }, { hz: "白天", py: "báitiān", mn: "ban ngày" }, { hz: "百", py: "bǎi", mn: "một trăm" },
+        { hz: "班", py: "bān", mn: "lớp học" }, { hz: "半", py: "bàn", mn: "một nửa" }, { hz: "帮", py: "bāng", mn: "giúp đỡ" }, { hz: "包", py: "bāo", mn: "bao" }, { hz: "包子", py: "bāozǐ", mn: "bánh bao" },
+        { hz: "北边", py: "běibian", mn: "phía bắc" }, { hz: "本", py: "běn", mn: "cuốn" }, { hz: "比", py: "bǐ", mn: "hơn" }, { hz: "别", py: "bié", mn: "đừng" }, { hz: "别的", py: "bié de", mn: "khác" },
+        { hz: "病", py: "bìng", mn: "bệnh" }, { hz: "不客气", py: "búkèqi", mn: "không có gì" }, { hz: "不用", py: "búyòng", mn: "không cần" }, { hz: "差", py: "chà", mn: "kém" }, { hz: "常", py: "cháng", mn: "thường" },
+        { hz: "尝尝", py: "cháng cháng", mn: "nếm" }, { hz: "唱", py: "chàng", mn: "hát" }, { hz: "车", py: "chē", mn: "xe" }, { hz: "车票", py: "chēpiào", mn: "vé xe" }, { hz: "车上", py: "chē shàng", mn: "trên xe" },
+        { hz: "车站", py: "chēzhàn", mn: "trạm xe" }, { hz: "出", py: "chū", mn: "đi" }, { hz: "出来", py: "chūlái", mn: "ra đây" }, { hz: "床", py: "chuáng", mn: "giường" }, { hz: "次", py: "cì", mn: "lần" },
+        { hz: "从", py: "cóng", mn: "từ" }, { hz: "打", py: "dǎ", mn: "đánh" }, { hz: "打车", py: "dǎchē", mn: "bắt xe" }, { hz: "打电话", py: "dǎ diànhuà", mn: "gọi điện thoại" }, { hz: "打开", py: "dǎkāi", mn: "mở ra" },
+        { hz: "打球", py: "dǎqiú", mn: "đánh bóng" }, { hz: "大学", py: "dàxué", mn: "đại học" }, { hz: "到", py: "dào", mn: "đến" }, { hz: "得到", py: "dédào", mn: "đạt được" }, { hz: "地", py: "de", mn: "mà" },
+        { hz: "等", py: "děng", mn: "đợi" }, { hz: "地", py: "dì", mn: "đất" }, { hz: "地点", py: "dìdiǎn", mn: "địa điểm" }, { hz: "地方", py: "dìfāng", mn: "nơi chốn" }, { hz: "地上", py: "dìshàng", mn: "mặt đất" },
+        { hz: "地图", py: "dìtú", mn: "bản đồ" }, { hz: "弟弟", py: "dìdi", mn: "em trai" }, { hz: "第", py: "dì", mn: "thứ tự" }, { hz: "电", py: "diàn", mn: "điện" }, { hz: "电话", py: "diànhuà", mn: "điện thoại" },
+        { hz: "电影", py: "diànyǐng", mn: "phim ảnh" }, { hz: "电影院", py: "diànyǐngyuàn", mn: "rạp chiếu phim" }, { hz: "东", py: "dōng", mn: "hướng đông" }, { hz: "动", py: "dòng", mn: "cử động" }, { hz: "动作", py: "dòngzuò", mn: "động tác" },
+        { hz: "读书", py: "dúshū", mn: "học bài" }, { hz: "饿", py: "è", mn: "đói" }, { hz: "房间", py: "fángjiān", mn: "căn phòng" }, { hz: "房子", py: "fángzi", mn: "căn nhà" }, { hz: "放", py: "fàng", mn: "đặt" },
+        { hz: "放假", py: "fàngjià", mn: "nghỉ lễ" }, { hz: "放学", py: "fàngxué", mn: "tan học" }, { hz: "飞", py: "fēi", mn: "bay" }, { hz: "飞机", py: "fēijī", mn: "máy bay" }, { hz: "风", py: "fēng", mn: "gió" },
+        { hz: "干", py: "gān", mn: "khô" }, { hz: "干净", py: "gānjìng", mn: "sạch sẽ" }, { hz: "干", py: "gàn", mn: "làm" }, { hz: "干什么", py: "gàn shénme", mn: "làm gì thế" }, { hz: "高", py: "gāo", mn: "cao" },
+        { hz: "告诉", py: "gàosu", mn: "nói" }, { hz: "哥哥", py: "gēge", mn: "anh trai" }, { hz: "歌", py: "gē", mn: "bài hát" }, { hz: "跟", py: "gēn", mn: "cùng" }, { hz: "工人", py: "gōngrén", mn: "công nhân" },
+        { hz: "工作", py: "gōngzuò", mn: "công việc" }, { hz: "关", py: "guān", mn: "đóng" }, { hz: "关上", py: "guān shàng", mn: "đóng lại" }, { hz: "贵", py: "guì", mn: "đắt" }, { hz: "国", py: "guó", mn: "nước" },
+        { hz: "国外", py: "guó wài", mn: "nước ngoài" }, { hz: "过", py: "guò", mn: "qua" }, { hz: "孩子", py: "hái zi", mn: "trẻ em" }, { hz: "汉语", py: "Hàn yǔ", mn: "tiếng hán" }, { hz: "汉字", py: "Hàn zì", mn: "chữ hán" },
+        { hz: "好玩儿", py: "hǎowánr", mn: "thú vị" }, { hz: "后", py: "hòu", mn: "đằng sau" }, { hz: "后天", py: "hòutiān", mn: "ngày hôm sau" }, { hz: "花", py: "huā", mn: "hoa" }, { hz: "话", py: "huà", mn: "lời nói" },
+        { hz: "坏", py: "huài", mn: "hư hỏng" }, { hz: "还", py: "huán", mn: "trả lại" }, { hz: "回答", py: "huídá", mn: "trả lời" }, { hz: "回到", py: "huídào", mn: "trở về" }, { hz: "火车", py: "huǒchē", mn: "tàu hỏa" },
+        { hz: "机场", py: "jīchǎng", mn: "sân bay" }, { hz: "机票", py: "jīpiào", mn: "vé máy bay" }, { hz: "鸡蛋", py: "jīdàn", mn: "trứng gà" }, { hz: "记", py: "jì", mn: "nhớ" }, { hz: "记得", py: "jìde", mn: "ghi nhớ" }, { hz: "记住", py: "jìzhù", mn: "nhớ kĩ" }
     ];
 
     const grammarRules = [
@@ -442,7 +489,9 @@
 
     const readingData = [
         { id: 1, zh: "你好！我叫刘铁花。我是学生。我家有五口人：爸爸、妈妈、哥哥、女儿和我。", key: "xin chào tôi tên lưu thiết hoa tôi là học sinh nhà tôi có năm người bố mẹ anh trai con gái và tôi", vi_display: "Xin chào! Tôi tên Lưu Thiết Hoa. Tôi là học sinh. Nhà tôi có 5 người: Bố, mẹ, anh trai, con gái và tôi." },
-        { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }
+        { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." },
+        { id: 3, zh: "弟弟很喜欢吃包子。他每天早上都吃两个白包子。吃完包子，他去学校上课。", key: "em trai rất thích ăn bánh bao cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng ăn xong bánh bao cậu ấy đi trường học đi học", vi_display: "Em trai rất thích ăn bánh bao. Cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng. Ăn xong bánh bao, cậu ấy đi trường học." },
+        { id: 4, zh: "后天我们要去国外旅行。爸爸已经买好了机票。我们在机场等飞机。", key: "ngày hôm sau chúng tôi phải đi nước ngoài du lịch bố đã mua xong vé máy bay chúng tôi ở sân bay đợi máy bay", vi_display: "Ngày mốt chúng tôi sẽ đi du lịch nước ngoài. Bố đã mua xong vé máy bay. Chúng tôi đang đợi máy bay ở sân bay." }
     ];
 
     const vPop = [
@@ -450,11 +499,11 @@
         {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false},
         {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false},
         
-        {name:"hieuthuhai - ngủ một mình ft. negav (prod. by kewtiie) | official mv",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true},
-        {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn (prod. by Kewtiie) | OFFICIAL MV",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true},
-        {name:"HIEUTHUHAI - Không Thể Say (prod. by Kewtiie) l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true},
-        {name:"Exit Sign - HIEUTHUHAI ft. marzuz | Live at GENfest 23 | Fancam Focus | Live Performance",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true},
-        {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik ft. Orange | Anh Trai Say Hi",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true}
+        {name:"hieuthuhai - ngủ một mình ft. negav",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true},
+        {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true},
+        {name:"HIEUTHUHAI - Không Thể Say l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true},
+        {name:"Exit Sign - HIEUTHUHAI ft. marzuz",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true},
+        {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true}
     ];
     
     const cPop = [
@@ -470,6 +519,7 @@
     function updateCoins(amount) { userCoins += amount; localStorage.setItem('skyCoins', userCoins); document.getElementById('coin-display').innerText = userCoins; }
 
     function switchTab(id) {
+        playSound('click');
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.add('active');
@@ -485,6 +535,7 @@
     let currentTestSentence = "";
     
     function startGrammarTest() {
+        playSound('click');
         document.getElementById('test-grammar').classList.remove('hidden');
         document.getElementById('test-fill').classList.add('hidden');
         
@@ -516,10 +567,12 @@
 
     function checkStructure(id) {
         if(id === currentTestRule.id) {
+            playSound('correct');
             document.getElementById('tg-step1').classList.add('hidden');
             document.getElementById('tg-step2').classList.remove('hidden');
             document.getElementById('tg-feedback').innerText = "Đúng cấu trúc!";
         } else {
+            playSound('wrong');
             alert("Sai rồi! Hãy nhìn kỹ câu hỏi.");
         }
     }
@@ -527,9 +580,11 @@
     function checkSubject() {
         const val = document.getElementById('tg-sub-input').value.trim();
         if(currentTestSentence.includes(val) && val.length > 0) {
+            playSound('correct');
             document.getElementById('tg-step2').classList.add('hidden');
             document.getElementById('tg-step3').classList.remove('hidden');
         } else {
+            playSound('wrong');
             alert("Chưa đúng chủ ngữ!");
         }
     }
@@ -537,9 +592,11 @@
     function checkNoun() {
         const val = document.getElementById('tg-noun-input').value.trim();
         if(currentTestSentence.includes(val) && val.length > 0) {
+            playSound('correct');
             document.getElementById('tg-step3').classList.add('hidden');
             document.getElementById('tg-step4').classList.remove('hidden');
         } else {
+            playSound('wrong');
             alert("Chưa đúng danh từ!");
         }
     }
@@ -551,35 +608,43 @@
         const isChinese = /[\u4e00-\u9fa5]/.test(val);
 
         if(match && isChinese) {
+            playSound('correct');
             updateCoins(1);
             feedback.innerText = "TUYỆT VỜI! (+1 COIN)";
             feedback.classList.replace("text-red-400", "text-green-400");
             setTimeout(startGrammarTest, 2000);
         } else {
+            playSound('wrong');
             feedback.innerText = "Sai cấu trúc hoặc không phải tiếng Trung!";
             feedback.classList.add("text-red-400");
         }
     }
 
     function startFillTest() {
+        playSound('click');
         document.getElementById('test-grammar').classList.add('hidden');
         document.getElementById('test-fill').classList.remove('hidden');
         generateFillTest();
     }
 
     function generateFillTest() {
-        const subjects = ["我", "你", "他"];
-        const verbs = ["喜欢", "想", "去", "吃", "喝"];
-        const nouns = ["苹果", "茶", "中国菜", "学校", "北京"];
+        // Tích hợp từ mới vào hội thoại
+        const subjects = ["我", "你", "他", "弟弟", "哥哥", "妈妈"];
+        const verbs = ["喜欢", "想", "去", "吃", "喝", "打", "告诉", "看"];
+        const nouns = ["苹果", "茶", "包子", "鸡蛋", "电影", "大学", "朋友", "汉字"];
+        const places = ["学校", "家", "车站", "机场", "国外"];
+        
         const S = subjects[Math.floor(Math.random() * subjects.length)];
         const V = verbs[Math.floor(Math.random() * verbs.length)];
-        const N = nouns[Math.floor(Math.random() * nouns.length)];
+        const N = (V === "去") ? places[Math.floor(Math.random() * places.length)] : nouns[Math.floor(Math.random() * nouns.length)];
         
         const hideTarget = Math.random() > 0.5 ? V : N;
         const dialogue = `A: ${S === '我' ? '你' : '我'}${V}什么？<br>B: ${S}${V === hideTarget ? '____' : V}${N === hideTarget ? '____' : N}。`;
         
         document.getElementById('tf-dialogue').innerHTML = dialogue;
-        let opts = [hideTarget, "什么", "吗", "不"];
+        let opts = [hideTarget, "什么", "吗", "不", "很", "太"];
+        opts = opts.sort(() => Math.random() - 0.5).slice(0, 4); // Lấy 4 đáp án random trong đó có đáp án đúng
+        if(!opts.includes(hideTarget)) opts[0] = hideTarget; // Đảm bảo luôn có đáp án đúng
         opts = opts.sort(() => Math.random() - 0.5);
         
         document.getElementById('tf-options').innerHTML = opts.map(o => 
@@ -590,11 +655,13 @@
 
     function checkFill(ans, correct) {
         if(ans === correct) {
+            playSound('correct');
             updateCoins(1);
             document.getElementById('tf-msg').innerText = "CHÍNH XÁC! (+1 COIN)";
             document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-green-400";
             setTimeout(generateFillTest, 1000);
         } else {
+            playSound('wrong');
             document.getElementById('tf-msg').innerText = "SAI RỒI!";
             document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-red-400";
         }
@@ -609,6 +676,7 @@
     
     function changeWeek() {
         currentWeek = parseInt(document.getElementById('week-selector').value);
+        document.getElementById('display-week-num').innerText = "TUẦN " + currentWeek;
         loadWorkSchedule();
     }
 
@@ -622,6 +690,20 @@
             scheduleData = JSON.parse(saved);
             renderScheduleResult();
         } else {
+            resetWorkSchedule();
+        }
+    }
+    
+    function clearAllSchedules() {
+        if(confirm("Bạn có chắc chắn muốn xóa TOÀN BỘ dữ liệu lịch làm việc của tất cả 4 tuần không?")) {
+            localStorage.removeItem('skyWork_W1');
+            localStorage.removeItem('skyWork_W2');
+            localStorage.removeItem('skyWork_W3');
+            localStorage.removeItem('skyWork_W4');
+            alert("Đã xóa toàn bộ lịch!");
+            currentWeek = 1;
+            document.getElementById('week-selector').value = 1;
+            document.getElementById('display-week-num').innerText = "TUẦN 1";
             resetWorkSchedule();
         }
     }
@@ -651,7 +733,7 @@
         workStep = 0;
         scheduleData = [];
         document.getElementById('work-wizard').classList.remove('hidden');
-        document.getElementById('work-result').classList.add('hidden');
+        document.getElementById('work-result-container').classList.add('hidden');
         
         setVal('w-date', startDate); 
         setVal('w-pos',''); 
@@ -693,6 +775,7 @@
         const selector = document.getElementById('week-selector');
         if(currentWeek > 4) currentWeek = 1; 
         selector.value = currentWeek;
+        document.getElementById('display-week-num').innerText = "TUẦN " + currentWeek;
 
         resetWorkSchedule(nextStartDate);
     }
@@ -759,10 +842,14 @@
         const deductionShifts = [
            "07h00-15h30",
            "08h30-15h30",
-           "15h30-22h30"
+           "15h30-22h30",
+           "08h30-13h00", // Cập nhật danh sách trừ giờ nếu ca này cũng nghỉ ăn (tùy bạn quy định)
+           "17h00-22h30"
         ];
         
-        for(let s of deductionShifts) {
+        // Tạm thời chỉ giữ nguyên quy tắc cũ cho các ca dài trên 7 tiếng
+        const longShifts = ["07h00-15h30", "08h30-15h30", "15h30-22h30"];
+        for(let s of longShifts) {
             if(cleanStr.includes(s)) {
                 duration -= 0.5;
                 break; 
@@ -774,7 +861,7 @@
 
     function renderScheduleResult() {
         document.getElementById('work-wizard').classList.add('hidden');
-        document.getElementById('work-result').classList.remove('hidden');
+        document.getElementById('work-result-container').classList.remove('hidden');
         const tbody = document.getElementById('work-tbody');
         let totalH = 0;
         
@@ -803,6 +890,21 @@
         
         document.getElementById('total-hours').innerText = totalH.toFixed(1) + "h";
         document.getElementById('total-salary').innerText = (totalH * 25000).toLocaleString('vi-VN') + " VNĐ";
+    }
+
+    // TÍNH NĂNG TẢI ẢNH LỊCH XUỐNG
+    function downloadSchedule() {
+        playSound('click');
+        const captureArea = document.getElementById('work-capture-area');
+        html2canvas(captureArea, {
+            backgroundColor: "#0f172a", // Giữ nền tối
+            scale: 2 // Tăng độ nét cho ảnh
+        }).then(canvas => {
+            const link = document.createElement('a');
+            link.download = `LichLamViec_Tuan${currentWeek}.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        });
     }
 
     // --- MUSIC LOGIC ---
@@ -848,6 +950,7 @@
     }
 
     function toggleHieuThuHai() {
+        playSound('click');
         isHieuMode = !isHieuMode;
         const btn = document.getElementById('hieu-btn');
         const vListEl = document.getElementById('v-list');
@@ -919,17 +1022,36 @@
     let vIdx = 0; let vMode = 0;
     function changeVocabMode() { vMode = (vMode+1)%3; document.getElementById('v-mode-btn').innerText = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"][vMode]; nextVocab(true); }
     function nextVocab(rand) { if(rand) vIdx = Math.floor(Math.random()*vocabData.length); const i = vocabData[vIdx]; document.getElementById('v-question').innerText = vMode===0?i.hz:(vMode===1?i.mn.toUpperCase():i.hz); document.getElementById('v-input').value = ""; document.getElementById('v-msg').innerText = ""; }
+    
     function checkVocab() { 
         const i = vocabData[vIdx]; const v = document.getElementById('v-input').value.toLowerCase().trim();
         let ok = (vMode===0 && v===i.mn.toLowerCase()) || (vMode===1 && v===i.hz) || (vMode===2 && v===i.py);
-        if(ok) { updateCoins(1); document.getElementById('v-msg').innerText = "CHÍNH XÁC!"; setTimeout(()=>nextVocab(true),1000); }
-        else { document.getElementById('v-msg').innerText = "SAI RỒI"; }
+        
+        if(ok) { 
+            playSound('correct');
+            updateCoins(1); 
+            document.getElementById('v-msg').innerText = "CHÍNH XÁC!"; 
+            document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400";
+            setTimeout(()=>nextVocab(true),1000); 
+        } else { 
+            playSound('wrong');
+            document.getElementById('v-msg').innerText = "SAI RỒI"; 
+            document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400";
+        }
     }
     
     let rIdx = 0;
     function nextParagraph() { rIdx = (rIdx+1)%readingData.length; document.getElementById('r-text').innerText = readingData[rIdx].zh; document.getElementById('r-input').value=""; }
     function toggleReadingRef() { const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
-    function checkReading() { if(document.getElementById('r-input').value.length > 5) { updateCoins(1); document.getElementById('r-msg').innerText = "OK (+1 Xu)"; } }
+    function checkReading() { 
+        if(document.getElementById('r-input').value.length > 5) { 
+            playSound('correct');
+            updateCoins(1); 
+            document.getElementById('r-msg').innerText = "OK (+1 Xu)"; 
+        } else {
+            playSound('wrong');
+        }
+    }
 
     window.onload = () => { 
         switchTab('home'); 
