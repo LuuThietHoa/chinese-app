@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.9 Master Update</title>
+    <title>Skyreign Hub | V40.11 Master Vocab Update</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -24,8 +24,8 @@
         .glass-card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         
         /* NAVIGATION */
-        nav { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; display: flex; background: rgba(0,0,0,0.95); padding: 15px; backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1); overflow-x: auto; justify-content: center; gap: 10px; }
-        .nav-btn { padding: 10px 20px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; color: #64748b; white-space: nowrap; background: transparent; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; }
+        nav { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; display: flex; background: rgba(0,0,0,0.95); padding: 15px; backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1); overflow-x: auto; justify-content: flex-start; gap: 10px; }
+        .nav-btn { padding: 10px 20px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; color: #64748b; white-space: nowrap; background: transparent; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; flex-shrink: 0; }
         .nav-btn:hover { color: white; border-color: white; }
         .nav-btn.active { background: white; color: black; border-color: white; box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
         
@@ -42,7 +42,7 @@
         }
         @keyframes shine { to { background-position: 200% center; } }
 
-        input, textarea { background: rgba(0,0,0,0.3) !important; color: white !important; font-family: monospace; }
+        input, textarea, select { background: rgba(0,0,0,0.3) !important; color: white !important; font-family: monospace; }
         
         /* SCHEDULE TABLE */
         .schedule-table { width: 100%; border-collapse: separate; border-spacing: 0 4px; margin-top: 20px; font-size: 12px; }
@@ -70,6 +70,9 @@
         /* HIDE SCROLLBAR BUT KEEP SCROLLING */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* LIBRARY GRID */
+        .lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
     </style>
 </head>
 <body>
@@ -81,7 +84,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.9 MASTER UPDATE</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.11 MASTER VOCAB</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -89,36 +92,48 @@
     </div>
 </div>
 
-<nav>
+<nav id="main-nav" class="no-scrollbar">
     <button onclick="switchTab('home')" class="nav-btn active" id="n-home">Home</button>
     <button onclick="switchTab('game')" class="nav-btn" id="n-game">Game</button>
+    <button onclick="switchTab('library')" class="nav-btn" id="n-library">Thư Viện</button>
+    <button onclick="switchTab('names')" class="nav-btn" id="n-names">Học Tên</button>
+    <button onclick="switchTab('voice')" class="nav-btn" id="n-voice">Luyện Nói</button>
+    <button onclick="switchTab('vocab')" class="nav-btn" id="n-vocab">Học Từ</button>
     <button onclick="switchTab('memo')" class="nav-btn" id="n-memo">Ngữ Pháp</button>
+    <button onclick="switchTab('reading')" class="nav-btn" id="n-reading">Đọc Hiểu</button>
     <button onclick="switchTab('test')" class="nav-btn" id="n-test">Kiểm Tra</button>
     <button onclick="switchTab('work')" class="nav-btn" id="n-work">Lịch Làm</button>
-    <button onclick="switchTab('vocab')" class="nav-btn" id="n-vocab">Học Từ</button>
-    <button onclick="switchTab('reading')" class="nav-btn" id="n-reading">Đọc Hiểu</button>
     <button onclick="switchTab('music')" class="nav-btn" id="n-music">Music</button>
 </nav>
 
 <div id="home" class="tab-content active">
     <div class="min-h-screen flex flex-col items-center justify-center p-4">
-        <div class="glass-card p-12 text-center max-w-lg w-full">
+        <div class="glass-card p-12 text-center max-w-2xl w-full">
             <h2 class="text-4xl font-light mb-2 tracking-tighter">Chào Thiết Hoa</h2>
             <div class="h-1 w-20 bg-indigo-500 mx-auto mb-8"></div>
-            <div class="grid grid-cols-2 gap-4">
-                <button onclick="switchTab('work')" class="p-8 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
-                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Xếp Lịch</div>
+            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <button onclick="switchTab('vocab')" class="p-6 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
+                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Học Từ</div>
                 </button>
-                <button onclick="switchTab('memo')" class="p-8 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
-                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Ngữ Pháp</div>
+                <button onclick="switchTab('voice')" class="p-6 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
+                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Luyện Nói</div>
                 </button>
-                <button onclick="switchTab('vocab')" class="p-8 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
-                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Từ Vựng</div>
+                <button onclick="switchTab('test')" class="p-6 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
+                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Kiểm Tra</div>
                 </button>
-                <button onclick="switchTab('music')" class="p-8 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
+                <button onclick="switchTab('library')" class="p-6 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
+                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Thư Viện</div>
+                </button>
+                <button onclick="switchTab('names')" class="p-6 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
+                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Học Tên</div>
+                </button>
+                <button onclick="switchTab('music')" class="p-6 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
                     <div class="font-bold text-xs uppercase tracking-[0.2em]">Giải Trí</div>
                 </button>
-                <button onclick="switchTab('game')" class="col-span-2 p-4 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
+                <button onclick="switchTab('work')" class="col-span-2 md:col-span-1 p-6 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
+                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Lịch Làm</div>
+                </button>
+                <button onclick="switchTab('game')" class="col-span-2 p-6 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
                     <div class="font-bold text-xs uppercase tracking-[0.2em]">Game HUD</div>
                 </button>
             </div>
@@ -147,6 +162,194 @@
     </div>
 </div>
 
+<div id="library" class="tab-content">
+    <div class="min-h-screen flex flex-col items-center pt-32 px-4 pb-24">
+        <div class="glass-card p-8 w-full max-w-5xl">
+            <div class="flex justify-between items-end mb-6 border-b border-white/10 pb-4">
+                <h2 class="text-2xl font-light uppercase tracking-widest text-white">Thư Viện Từ Vựng</h2>
+                <div class="text-[10px] bg-indigo-900 text-indigo-300 px-3 py-1 uppercase tracking-widest rounded">Tổng: <span id="lib-count" class="font-bold text-white">0</span> Từ</div>
+            </div>
+            <div id="lib-list" class="lib-grid max-h-[60vh] overflow-y-auto pr-2 no-scrollbar"></div>
+        </div>
+    </div>
+</div>
+
+<div id="names" class="tab-content">
+    <div class="min-h-screen flex flex-col items-center pt-32 px-4 pb-24">
+        <div class="glass-card p-10 w-full max-w-lg relative text-center">
+            <button onclick="changeNamesMode()" id="nm-mode-btn" class="text-[9px] mb-8 border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition">Mode: Việt ➔ Hán</button>
+            <div id="nm-question" class="text-5xl font-light text-center mb-12 tracking-tighter">...</div>
+            <input type="text" id="nm-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkNames()">
+            
+            <div class="flex gap-2">
+                <button onclick="checkNames()" class="w-full py-4 bg-white text-black font-bold text-xs uppercase tracking-[0.2em]">Kiểm Tra</button>
+                <button onclick="showNamesHint()" class="w-16 py-4 bg-white/10 hover:bg-white/30 text-white font-bold text-xs transition" title="Gợi ý">💡</button>
+            </div>
+            
+            <div class="text-center h-12 mt-4">
+                <p id="nm-msg" class="text-[10px] font-bold uppercase tracking-widest"></p>
+                <p id="nm-hint" class="text-[12px] text-yellow-400 mt-1 uppercase hidden"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="voice" class="tab-content">
+    <div class="min-h-screen flex flex-col items-center pt-32 px-4 pb-24">
+        <div class="glass-card p-10 w-full max-w-lg relative text-center">
+            <p class="text-[9px] uppercase tracking-widest text-indigo-300 mb-6">AI Chấm Điểm Phát Âm</p>
+            
+            <div id="voice-target" class="text-7xl font-bold text-white mb-2">...</div>
+            <div id="voice-py" class="text-xl text-gray-400 font-mono mb-2">...</div>
+            <div id="voice-mn" class="text-sm text-indigo-300 uppercase tracking-widest mb-10">...</div>
+            
+            <div class="relative inline-flex items-center justify-center mb-8">
+                <div id="voice-pulse" class="absolute w-24 h-24 bg-red-500 rounded-full opacity-0"></div>
+                <button onclick="startListening()" class="relative z-10 w-20 h-20 bg-gradient-to-r from-red-500 to-pink-600 rounded-full text-white text-3xl shadow-[0_0_20px_rgba(239,68,68,0.5)] hover:scale-105 transition flex items-center justify-center">
+                    🎤
+                </button>
+            </div>
+            
+            <div id="voice-feedback" class="h-16 text-sm mb-6 flex flex-col justify-center items-center px-4"></div>
+            
+            <button onclick="nextVoiceWord()" class="w-full py-4 border border-white/20 text-white font-bold text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition">Đổi Từ Khác</button>
+        </div>
+    </div>
+</div>
+
+<div id="vocab" class="tab-content">
+    <div class="min-h-screen flex flex-col items-center pt-32 px-4">
+        <div class="glass-card p-10 w-full max-w-lg relative text-center">
+            <div class="flex justify-between w-full mb-4">
+                <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition">Mode: Hán ➔ Việt</button>
+                <button onclick="toggleVocabRandom()" id="v-random-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition">Học: THỨ TỰ</button>
+            </div>
+            
+            <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">#1 / 173</p>
+            <div id="v-question" class="text-7xl font-light text-center mb-10 tracking-tighter">...</div>
+            
+            <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-2xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkVocab()">
+            
+            <div class="flex gap-2">
+                <button onclick="checkVocab()" class="w-full py-4 bg-white text-black font-bold text-xs uppercase tracking-[0.2em]">Kiểm Tra</button>
+                <button onclick="showVocabHint()" class="w-16 py-4 bg-white/10 hover:bg-white/30 text-white font-bold text-xs transition" title="Gợi ý">💡</button>
+            </div>
+            
+            <div id="v-feedback" class="text-center h-12 mt-4">
+                <p id="v-msg" class="text-[10px] font-bold uppercase tracking-widest"></p>
+                <p id="v-hint" class="text-[12px] text-yellow-400 mt-1 uppercase hidden"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="test" class="tab-content">
+    <div class="min-h-screen flex flex-col items-center pt-32 px-4 pb-24">
+        <div class="glass-card p-8 w-full max-w-3xl relative">
+            <div class="flex justify-center flex-wrap gap-2 mb-8">
+                <button onclick="switchTestMode('grammar')" class="px-6 py-2 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Ngữ Pháp</button>
+                <button onclick="switchTestMode('fill')" class="px-6 py-2 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Điền Từ</button>
+                <button onclick="switchTestMode('speed')" class="px-6 py-2 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-indigo-500 hover:border-indigo-500 transition text-indigo-300">Tốc Độ ⚡</button>
+            </div>
+            
+            <div id="test-grammar" class="hidden fade-in">
+                 <div class="text-center mb-6">
+                    <p class="text-[9px] text-gray-400 uppercase tracking-widest mb-2">AI Question</p>
+                    <h3 id="tg-question" class="text-3xl font-light text-white mb-2 fade-in">...</h3>
+                 </div>
+                 
+                 <div id="tg-step1" class="space-y-3">
+                    <p class="text-center text-xs text-indigo-300 mb-2">Bước 1: Chọn ngữ pháp đúng</p>
+                    <div class="grid grid-cols-1 gap-2" id="tg-options"></div>
+                 </div>
+
+                 <div id="tg-step2" class="hidden space-y-4 pt-4 fade-in">
+                    <p class="text-center text-xs text-indigo-300">Bước 2: Tìm Chủ Ngữ (S)</p>
+                    <input type="text" id="tg-sub-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none text-center" placeholder="Nhập S...">
+                    <button onclick="checkSubject()" class="w-full py-3 bg-white/10 text-white font-bold text-xs uppercase hover:bg-white/20">Xác nhận S</button>
+                 </div>
+
+                 <div id="tg-step3" class="hidden space-y-4 pt-4 fade-in">
+                    <p class="text-center text-xs text-indigo-300">Bước 3: Tìm Danh Từ (N)</p>
+                    <input type="text" id="tg-noun-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none text-center" placeholder="Nhập N...">
+                    <button onclick="checkNoun()" class="w-full py-3 bg-white/10 text-white font-bold text-xs uppercase hover:bg-white/20">Xác nhận N</button>
+                 </div>
+
+                 <div id="tg-step4" class="hidden space-y-4 pt-4 fade-in">
+                      <p class="text-center text-xs text-green-400">Bước 4: Tự đặt 1 câu dùng ngữ pháp này (Chữ Hán)</p>
+                      <input type="text" id="tg-make-sentence" class="w-full p-3 border-b border-white/20 bg-transparent text-center text-xl outline-none" placeholder="Viết câu...">
+                      <button onclick="checkAISentence()" class="w-full mt-3 py-3 bg-green-600 text-white font-bold text-xs uppercase hover:bg-green-500">AI Kiểm Tra (+1 Coin)</button>
+                 </div>
+                 <p id="tg-feedback" class="text-center text-xs font-bold h-6 mt-4 text-green-400"></p>
+            </div>
+
+            <div id="test-fill" class="hidden flex-col items-center fade-in">
+                 <div class="bg-white/5 p-6 rounded-lg w-full mb-6 text-center border border-white/10">
+                    <p id="tf-dialogue" class="text-xl leading-loose font-light"></p>
+                 </div>
+                 <div id="tf-options" class="flex flex-wrap gap-3 justify-center mb-6 w-full"></div>
+                 <p id="tf-msg" class="text-xs font-bold uppercase h-6 mb-4"></p>
+                 <button onclick="generateFillTest()" class="py-2 px-6 border border-white/20 text-[10px] uppercase hover:bg-white hover:text-black transition">Đổi câu khác</button>
+            </div>
+
+            <div id="test-speed" class="hidden flex-col items-center w-full fade-in">
+                <div id="ts-setup" class="w-full max-w-md space-y-6 flex flex-col items-center mx-auto">
+                    <div class="text-center w-full">
+                        <p class="text-[10px] text-indigo-400 uppercase tracking-widest mb-1">Thiết lập phạm vi</p>
+                        <div class="flex items-center justify-center gap-2 mb-2">
+                            <span class="text-xs text-gray-400">Từ</span>
+                            <input type="number" id="ts-start" value="1" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
+                            <span class="text-xs text-gray-400">đến</span>
+                            <input type="number" id="ts-end" value="173" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
+                        </div>
+                        <p class="text-[9px] text-gray-500 italic">(Tổng kho có <span id="ts-max-hint">0</span> từ)</p>
+                    </div>
+
+                    <div class="w-full text-center">
+                        <p class="text-[10px] text-indigo-400 uppercase tracking-widest mb-2">Cấp Độ</p>
+                        <select id="ts-level" class="w-full bg-white/5 border border-white/20 p-3 outline-none rounded">
+                            <option value="1" class="bg-black">Dễ (Hiện Hán ➔ Trả lời Việt)</option>
+                            <option value="2" class="bg-black">Trung Bình (Hiện Việt ➔ Trả lời Pinyin)</option>
+                            <option value="3" class="bg-black">Khó (Hiện Việt ➔ Trả lời Hán)</option>
+                        </select>
+                    </div>
+
+                    <div class="w-full text-center">
+                        <p class="text-[10px] text-indigo-400 uppercase tracking-widest mb-2">Thời gian (Phút)</p>
+                        <input type="number" id="ts-time" value="3" class="w-24 bg-transparent border-b border-white/20 text-center py-2 text-2xl outline-none">
+                    </div>
+
+                    <button onclick="startSpeedTest()" class="w-full py-4 mt-4 bg-indigo-600 text-white font-bold text-xs uppercase tracking-widest hover:bg-indigo-500 rounded transition shadow-[0_0_15px_rgba(79,70,229,0.5)]">BẮT ĐẦU CHẠY ĐUA</button>
+                </div>
+
+                <div id="ts-play" class="hidden w-full flex-col items-center">
+                    <div class="flex justify-between w-full items-center mb-8 border-b border-white/10 pb-4">
+                        <div class="text-left">
+                            <p class="text-[9px] text-gray-400 uppercase tracking-widest">Điểm</p>
+                            <p class="text-2xl font-mono text-green-400"><span id="ts-score-display">0</span>/<span id="ts-total-display">0</span></p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[9px] text-gray-400 uppercase tracking-widest">Thời Gian</p>
+                            <p id="ts-timer-display" class="text-3xl font-mono text-red-400 animate-pulse">00:00</p>
+                        </div>
+                    </div>
+
+                    <div id="ts-current-word" class="text-6xl font-light mb-10 text-center tracking-tighter">...</div>
+                    <input type="text" id="ts-input" class="w-full max-w-md bg-transparent border-b-2 border-indigo-500 py-3 text-center text-3xl outline-none mb-4" placeholder="Gõ & Enter..." onkeypress="if(event.key==='Enter') checkSpeedVocab()">
+                    <p id="ts-play-msg" class="text-[10px] text-red-400 uppercase tracking-widest h-4"></p>
+                </div>
+
+                <div id="ts-result" class="hidden w-full text-center py-10">
+                    <h3 class="text-4xl font-bold text-white mb-2">HẾT GIỜ!</h3>
+                    <p class="text-sm text-indigo-300 mb-6 uppercase tracking-widest">Kết Quả Cuộc Đua</p>
+                    <div class="text-6xl font-mono text-green-400 mb-8 drop-shadow-md" id="ts-final-score">0 / 0</div>
+                    <button onclick="resetSpeedTest()" class="px-8 py-3 border border-white/20 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition rounded">Chơi Lại Cấp Độ Này</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div id="memo" class="tab-content">
     <div class="min-h-screen flex flex-col items-center pt-32 px-4">
         <h2 class="text-xl font-light uppercase mb-8 tracking-[0.3em] text-indigo-300">Danh Sách Ngữ Pháp</h2>
@@ -160,7 +363,7 @@
             <div class="flex justify-between items-end mb-6 border-b border-white/10 pb-4">
                 <h2 class="text-3xl font-light uppercase tracking-widest text-white">Lịch Làm Việc</h2>
                 <div class="flex gap-2">
-                    <button onclick="clearAllSchedules()" class="text-[10px] font-bold border border-red-500/50 text-red-400 hover:bg-red-900/20 px-4 py-2 rounded transition">Xóa Lịch</button>
+                    <button onclick="clearAllSchedules()" class="text-[10px] font-bold border border-red-500/50 text-red-400 hover:bg-red-900/20 px-4 py-2 rounded transition">Xóa Toàn Bộ Lịch</button>
                     <select id="week-selector" onchange="changeWeek()" class="bg-black text-xs uppercase p-2 border border-white/20 outline-none rounded">
                         <option value="1">Tuần 1</option>
                         <option value="2">Tuần 2</option>
@@ -292,11 +495,31 @@
                 </div>
 
                 <div class="mt-6 flex flex-wrap gap-4 justify-end">
-                    <button onclick="downloadSchedule()" class="px-6 py-3 bg-green-600 rounded text-[10px] font-bold uppercase hover:bg-green-500 transition">📸 Tải Ảnh Lịch</button>
+                    <button onclick="downloadSchedule()" class="px-6 py-3 bg-green-600 rounded text-[10px] font-bold uppercase hover:bg-green-500 transition shadow-lg shadow-green-500/30">📸 Tải Ảnh Lịch</button>
                     <button onclick="editCurrentSchedule()" class="px-6 py-3 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Sửa lại</button>
                     <button onclick="createNextWeek()" class="px-6 py-3 bg-indigo-600 rounded text-[10px] font-bold uppercase hover:bg-indigo-500 transition">Tạo Tuần Sau ➔</button>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<div id="reading" class="tab-content">
+    <div class="min-h-screen flex flex-col items-center pt-32 px-4 pb-24">
+        <div class="glass-card p-8 w-full max-w-3xl relative">
+            <div class="flex justify-between items-center mb-6">
+                <span class="text-[10px] bg-green-900 text-green-300 px-3 py-1 uppercase tracking-widest rounded">Đoạn Văn</span>
+                <div class="flex gap-2">
+                    <button id="r-toggle-btn" onclick="toggleReadingRef()" class="text-[10px] font-bold border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition rounded">Đáp Án</button>
+                    <button onclick="nextParagraph()" class="text-[10px] font-bold border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition rounded">Bài Khác</button>
+                </div>
+            </div>
+            <div class="p-6 mb-6 h-64 overflow-y-auto bg-black/20 rounded border border-white/5">
+                <p id="r-text" class="text-xl leading-loose font-light text-gray-100">Loading...</p>
+            </div>
+            <textarea id="r-input" rows="3" class="w-full bg-white/5 border-b border-white/20 p-4 text-white outline-none mb-4 rounded" placeholder="Dịch..."></textarea>
+            <button onclick="checkReading()" class="w-full py-4 bg-indigo-600 text-white font-bold text-xs uppercase tracking-[0.2em] hover:bg-indigo-500 rounded transition">Chấm Điểm</button>
+            <p id="r-msg" class="text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4"></p>
         </div>
     </div>
 </div>
@@ -319,7 +542,7 @@
             </div>
 
             <div class="w-full md:w-2/4 flex flex-col">
-                <div class="aspect-video bg-black shadow-2xl relative border border-white/10">
+                <div class="aspect-video bg-black shadow-2xl relative border border-white/10 rounded-xl overflow-hidden">
                     <div id="player" class="w-full h-full"></div> 
                     <video id="mp4-player" controls playsinline class="hidden w-full h-full object-cover"></video>
                 </div>
@@ -350,93 +573,6 @@
     </div>
 </div>
 
-<div id="test" class="tab-content">
-    <div class="min-h-screen flex flex-col items-center pt-32 px-4">
-        <div class="glass-card p-8 w-full max-w-3xl relative">
-            <div class="flex justify-center gap-4 mb-8">
-                <button onclick="startGrammarTest()" class="px-6 py-2 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Ngữ Pháp (4 Bước)</button>
-                <button onclick="startFillTest()" class="px-6 py-2 border border-white/20 rounded text-[10px] font-bold uppercase hover:bg-white hover:text-black transition">Điền Từ (Hội Thoại)</button>
-            </div>
-            
-            <div id="test-grammar" class="hidden">
-                 <div class="text-center mb-6">
-                    <p class="text-[9px] text-gray-400 uppercase tracking-widest mb-2">AI Question</p>
-                    <h3 id="tg-question" class="text-3xl font-light text-white mb-2 fade-in">...</h3>
-                 </div>
-                 
-                 <div id="tg-step1" class="space-y-3">
-                    <p class="text-center text-xs text-indigo-300 mb-2">Bước 1: Chọn ngữ pháp đúng</p>
-                    <div class="grid grid-cols-1 gap-2" id="tg-options"></div>
-                 </div>
-
-                 <div id="tg-step2" class="hidden space-y-4 pt-4 fade-in">
-                    <p class="text-center text-xs text-indigo-300">Bước 2: Tìm Chủ Ngữ (S)</p>
-                    <input type="text" id="tg-sub-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none text-center" placeholder="Nhập S...">
-                    <button onclick="checkSubject()" class="w-full py-3 bg-white/10 text-white font-bold text-xs uppercase hover:bg-white/20">Xác nhận S</button>
-                 </div>
-
-                 <div id="tg-step3" class="hidden space-y-4 pt-4 fade-in">
-                    <p class="text-center text-xs text-indigo-300">Bước 3: Tìm Danh Từ (N)</p>
-                    <input type="text" id="tg-noun-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none text-center" placeholder="Nhập N...">
-                    <button onclick="checkNoun()" class="w-full py-3 bg-white/10 text-white font-bold text-xs uppercase hover:bg-white/20">Xác nhận N</button>
-                 </div>
-
-                 <div id="tg-step4" class="hidden space-y-4 pt-4 fade-in">
-                      <p class="text-center text-xs text-green-400">Bước 4: Tự đặt 1 câu dùng ngữ pháp này (Chữ Hán)</p>
-                      <input type="text" id="tg-make-sentence" class="w-full p-3 border-b border-white/20 bg-transparent text-center text-xl outline-none" placeholder="Viết câu...">
-                      <button onclick="checkAISentence()" class="w-full mt-3 py-3 bg-green-600 text-white font-bold text-xs uppercase hover:bg-green-500">AI Kiểm Tra (+1 Coin)</button>
-                 </div>
-                 
-                 <p id="tg-feedback" class="text-center text-xs font-bold h-6 mt-4 text-green-400"></p>
-            </div>
-
-            <div id="test-fill" class="hidden flex flex-col items-center">
-                 <div class="bg-white/5 p-6 rounded-lg w-full mb-6 text-center border border-white/10">
-                    <p id="tf-dialogue" class="text-xl leading-loose font-light"></p>
-                 </div>
-                 <div id="tf-options" class="flex flex-wrap gap-3 justify-center mb-6"></div>
-                 <p id="tf-msg" class="text-xs font-bold uppercase h-6 mb-4"></p>
-                 <button onclick="generateFillTest()" class="py-2 px-6 border border-white/20 text-[10px] uppercase hover:bg-white hover:text-black transition">Đổi câu khác</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="vocab" class="tab-content">
-    <div class="min-h-screen flex flex-col items-center pt-32 px-4">
-        <div class="glass-card p-10 w-full max-w-lg relative text-center">
-            <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[9px] mb-8 border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition">Mode: Hán ➔ Việt</button>
-            <div id="v-question" class="text-7xl font-light text-center mb-12 tracking-tighter">...</div>
-            <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-2xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkVocab()">
-            <button onclick="checkVocab()" class="w-full py-4 bg-white text-black font-bold text-xs uppercase tracking-[0.2em]">Kiểm Tra</button>
-            <div id="v-feedback" class="text-center h-12 mt-4">
-                <p id="v-msg" class="text-[10px] font-bold uppercase tracking-widest"></p>
-                <p id="v-hint" class="text-[12px] text-red-400 mt-1 uppercase hidden"></p>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="reading" class="tab-content">
-    <div class="min-h-screen flex flex-col items-center pt-32 px-4">
-        <div class="glass-card p-8 w-full max-w-3xl relative">
-            <div class="flex justify-between items-center mb-6">
-                <span class="text-[10px] bg-green-900 text-green-300 px-3 py-1 uppercase tracking-widest">Đoạn Văn</span>
-                <div class="flex gap-2">
-                    <button id="r-toggle-btn" onclick="toggleReadingRef()" class="text-[10px] font-bold border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition">Đáp Án</button>
-                    <button onclick="nextParagraph()" class="text-[10px] font-bold border border-white/20 px-3 py-1 hover:bg-white hover:text-black transition">Bài Khác</button>
-                </div>
-            </div>
-            <div class="p-6 mb-6 h-64 overflow-y-auto">
-                <p id="r-text" class="text-xl leading-loose font-light text-gray-100">Loading...</p>
-            </div>
-            <textarea id="r-input" rows="3" class="w-full bg-white/5 border-b border-white/20 p-4 text-white outline-none mb-4" placeholder="Dịch..."></textarea>
-            <button onclick="checkReading()" class="w-full py-4 bg-indigo-600 text-white font-bold text-xs uppercase tracking-[0.2em] hover:bg-indigo-500">Chấm Điểm</button>
-            <p id="r-msg" class="text-center text-[10px] mt-2 font-bold uppercase tracking-widest"></p>
-        </div>
-    </div>
-</div>
-
 <script>
     // --- AUDIO SYSTEM ---
     function playSound(type) {
@@ -447,17 +583,36 @@
         
         if(audio) {
             audio.currentTime = 0;
-            audio.play().catch(e => console.log("Trình duyệt chặn autoplay âm thanh:", e));
+            audio.play().catch(() => {});
         }
     }
 
-    // --- GLOBAL DATA (CẬP NHẬT 101 TỪ MỚI) ---
+    // --- FULL VOCABULARY DICTIONARY (173 WORDS) ---
     const vocabData = [
-        { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" },
-        { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "老师", py: "lǎoshī", mn: "thầy cô" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn học" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" },
-        { hz: "是", py: "shì", mn: "là" }, { hz: "有", py: "yǒu", mn: "có" }, { hz: "在", py: "zài", mn: "ở" }, { hz: "要", py: "yào", mn: "muốn" }, { hz: "喜欢", py: "xǐhuan", mn: "thích" }, { hz: "爱", py: "ài", mn: "yêu" }, { hz: "吃", py: "chī", mn: "ăn" }, { hz: "喝", py: "hē", mn: "uống" }, { hz: "去", py: "qù", mn: "đi" }, { hz: "来", py: "lái", mn: "đến" },
-        { hz: "不", py: "bù", mn: "không" }, { hz: "没", py: "méi", mn: "chưa" }, { hz: "很", py: "hěn", mn: "rất" }, { hz: "太", py: "tài", mn: "quá" }, { hz: "都", py: "dōu", mn: "đều" }, { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của" }, { hz: "吗", py: "ma", mn: "không" }, { hz: "呢", py: "ne", mn: "nhỉ" }, { hz: "了", py: "le", mn: "rồi" }, { hz: "什么", py: "shénme", mn: "cái gì" },
-        // TỪ VỰNG MỚI BỔ SUNG
+        { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, 
+        { hz: "谁", py: "shéi", mn: "ai" }, { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" }, 
+        { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" }, 
+        { hz: "先生", py: "xiānsheng", mn: "ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô" }, { hz: "零", py: "líng", mn: "số 0" }, { hz: "一", py: "yī", mn: "số 1" }, { hz: "二", py: "èr", mn: "số 2" }, 
+        { hz: "三", py: "sān", mn: "số 3" }, { hz: "四", py: "sì", mn: "số 4" }, { hz: "五", py: "wǔ", mn: "số 5" }, { hz: "六", py: "liù", mn: "số 6" }, { hz: "七", py: "qī", mn: "số 7" }, 
+        { hz: "八", py: "bā", mn: "số 8" }, { hz: "九", py: "jiǔ", mn: "số 9" }, { hz: "十", py: "shí", mn: "số 10" }, { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, 
+        { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" }, { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, 
+        { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" }, { hz: "号", py: "hào", mn: "ngày" }, { hz: "星期", py: "xīngqī", mn: "thứ" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, 
+        { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" }, { hz: "时候", py: "shíhou", mn: "khi lúc" }, { hz: "是", py: "shì", mn: "là" }, { hz: "有", py: "yǒu", mn: "có" }, 
+        { hz: "在", py: "zài", mn: "ở" }, { hz: "要", py: "yào", mn: "muốn" }, { hz: "喜欢", py: "xǐhuan", mn: "thích" }, { hz: "爱", py: "ài", mn: "yêu" }, { hz: "吃", py: "chī", mn: "ăn" }, 
+        { hz: "喝", py: "hē", mn: "uống" }, { hz: "去", py: "qù", mn: "đi" }, { hz: "来", py: "lái", mn: "đến" }, { hz: "想", py: "xiǎng", mn: "muốn" }, { hz: "看", py: "kàn", mn: "nhìn" }, 
+        { hz: "听", py: "tīng", mn: "nghe" }, { hz: "说", py: "shuō", mn: "nói" }, { hz: "读", py: "dú", mn: "đọc" }, { hz: "写", py: "xiě", mn: "viết" }, { hz: "做", py: "zuò", mn: "làm" }, 
+        { hz: "买", py: "mǎi", mn: "muua" }, { hz: "给", py: "gěi", mn: "cho" }, { hz: "回", py: "huí", mn: "về" }, { hz: "住", py: "zhù", mn: "sống" }, { hz: "认识", py: "rènshi", mn: "quen biết" }, 
+        { hz: "会", py: "huì", mn: "biết" }, { hz: "能", py: "néng", mn: "có thể" }, { hz: "好", py: "hǎo", mn: "tốt" }, { hz: "多", py: "duō", mn: "nhiều" }, { hz: "少", py: "shǎo", mn: "ít" }, 
+        { hz: "大", py: "dà", mn: "to" }, { hz: "小", py: "xiǎo", mn: "nhỏ" }, { hz: "冷", py: "lěng", mn: "lạnh" }, { hz: "热", py: "rè", mn: "nóng" }, { hz: "高兴", py: "gāoxìng", mn: "vui vẻ" }, 
+        { hz: "漂亮", py: "piàoliang", mn: "xinh đẹp" }, { hz: "对", py: "duì", mn: "đúng" }, { hz: "错", py: "cuò", mn: "sai" }, { hz: "忙", py: "máng", mn: "bận" }, { hz: "累", py: "lèi", mn: "mệt" }, 
+        { hz: "水", py: "shuǐ", mn: "nước" }, { hz: "饭", py: "fàn", mn: "cơm" }, { hz: "菜", py: "cài", mn: "món ăn" }, { hz: "茶", py: "chá", mn: "trà" }, { hz: "苹果", py: "píngguǒ", mn: "táo" }, 
+        { hz: "钱", py: "qián", mn: "tiền" }, { hz: "东西", py: "dōngxi", mn: "đồ đạc" }, { hz: "杯子", py: "bēizi", mn: "cái cốc" }, { hz: "衣服", py: "yīfu", mn: "quần áo" }, { hz: "书", py: "shū", mn: "sách" }, 
+        { hz: "桌子", py: "zhuōzi", mn: "cái bàn" }, { hz: "椅子", py: "yǐzi", mn: "cái ghế" }, { hz: "电脑", py: "diànnǎo", mn: "máy tính" }, { hz: "电视", py: "diànshì", mn: "tivi" }, { hz: "家", py: "jiā", mn: "nhà" }, 
+        { hz: "学校", py: "xuéxiào", mn: "trường học" }, { hz: "饭店", py: "fàndiàn", mn: "nhà hàng" }, { hz: "商店", py: "shāngdiàn", mn: "cửa hàng" }, { hz: "北京", py: "běijīng", mn: "bắc kinh" }, { hz: "中国", py: "zhōngguó", mn: "trung quốc" }, 
+        { hz: "不", py: "bù", mn: "không" }, { hz: "没", py: "méi", mn: "chưa" }, { hz: "很", py: "hěn", mn: "rất" }, { hz: "太", py: "tài", mn: "quá" }, { hz: "都", py: "dōu", mn: "đều" }, 
+        { hz: "和", py: "hé", mn: "và" }, { hz: "地", py: "de", mn: "mà" }, { hz: "吗", py: "ma", mn: "không" }, { hz: "呢", py: "ne", mn: "thì sao" }, { hz: "了", py: "le", mn: "rồi" }, 
+        { hz: "什么", py: "shénme", mn: "cái gì" }, { hz: "哪儿", py: "nǎr", mn: "ở đâu" }, { hz: "怎么", py: "zěnme", mn: "làm sao" }, { hz: "多少", py: "duōshao", mn: "bao nhiêu" }, { hz: "几", py: "jǐ", mn: "mấy" },
+        
         { hz: "爱好", py: "àihào", mn: "yêu thích" }, { hz: "吧", py: "ba", mn: "nhé" }, { hz: "白", py: "bái", mn: "màu trắng" }, { hz: "白天", py: "báitiān", mn: "ban ngày" }, { hz: "百", py: "bǎi", mn: "một trăm" },
         { hz: "班", py: "bān", mn: "lớp học" }, { hz: "半", py: "bàn", mn: "một nửa" }, { hz: "帮", py: "bāng", mn: "giúp đỡ" }, { hz: "包", py: "bāo", mn: "bao" }, { hz: "包子", py: "bāozǐ", mn: "bánh bao" },
         { hz: "北边", py: "běibian", mn: "phía bắc" }, { hz: "本", py: "běn", mn: "cuốn" }, { hz: "比", py: "bǐ", mn: "hơn" }, { hz: "别", py: "bié", mn: "đừng" }, { hz: "别的", py: "bié de", mn: "khác" },
@@ -465,19 +620,37 @@
         { hz: "尝尝", py: "cháng cháng", mn: "nếm" }, { hz: "唱", py: "chàng", mn: "hát" }, { hz: "车", py: "chē", mn: "xe" }, { hz: "车票", py: "chēpiào", mn: "vé xe" }, { hz: "车上", py: "chē shàng", mn: "trên xe" },
         { hz: "车站", py: "chēzhàn", mn: "trạm xe" }, { hz: "出", py: "chū", mn: "đi" }, { hz: "出来", py: "chūlái", mn: "ra đây" }, { hz: "床", py: "chuáng", mn: "giường" }, { hz: "次", py: "cì", mn: "lần" },
         { hz: "从", py: "cóng", mn: "từ" }, { hz: "打", py: "dǎ", mn: "đánh" }, { hz: "打车", py: "dǎchē", mn: "bắt xe" }, { hz: "打电话", py: "dǎ diànhuà", mn: "gọi điện thoại" }, { hz: "打开", py: "dǎkāi", mn: "mở ra" },
-        { hz: "打球", py: "dǎqiú", mn: "đánh bóng" }, { hz: "大学", py: "dàxué", mn: "đại học" }, { hz: "到", py: "dào", mn: "đến" }, { hz: "得到", py: "dédào", mn: "đạt được" }, { hz: "地", py: "de", mn: "mà" },
-        { hz: "等", py: "děng", mn: "đợi" }, { hz: "地", py: "dì", mn: "đất" }, { hz: "地点", py: "dìdiǎn", mn: "địa điểm" }, { hz: "地方", py: "dìfāng", mn: "nơi chốn" }, { hz: "地上", py: "dìshàng", mn: "mặt đất" },
-        { hz: "地图", py: "dìtú", mn: "bản đồ" }, { hz: "弟弟", py: "dìdi", mn: "em trai" }, { hz: "第", py: "dì", mn: "thứ tự" }, { hz: "电", py: "diàn", mn: "điện" }, { hz: "电话", py: "diànhuà", mn: "điện thoại" },
-        { hz: "电影", py: "diànyǐng", mn: "phim ảnh" }, { hz: "电影院", py: "diànyǐngyuàn", mn: "rạp chiếu phim" }, { hz: "东", py: "dōng", mn: "hướng đông" }, { hz: "动", py: "dòng", mn: "cử động" }, { hz: "动作", py: "dòngzuò", mn: "động tác" },
-        { hz: "读书", py: "dúshū", mn: "học bài" }, { hz: "饿", py: "è", mn: "đói" }, { hz: "房间", py: "fángjiān", mn: "căn phòng" }, { hz: "房子", py: "fángzi", mn: "căn nhà" }, { hz: "放", py: "fàng", mn: "đặt" },
-        { hz: "放假", py: "fàngjià", mn: "nghỉ lễ" }, { hz: "放学", py: "fàngxué", mn: "tan học" }, { hz: "飞", py: "fēi", mn: "bay" }, { hz: "飞机", py: "fēijī", mn: "máy bay" }, { hz: "风", py: "fēng", mn: "gió" },
-        { hz: "干", py: "gān", mn: "khô" }, { hz: "干净", py: "gānjìng", mn: "sạch sẽ" }, { hz: "干", py: "gàn", mn: "làm" }, { hz: "干什么", py: "gàn shénme", mn: "làm gì thế" }, { hz: "高", py: "gāo", mn: "cao" },
-        { hz: "告诉", py: "gàosu", mn: "nói" }, { hz: "哥哥", py: "gēge", mn: "anh trai" }, { hz: "歌", py: "gē", mn: "bài hát" }, { hz: "跟", py: "gēn", mn: "cùng" }, { hz: "工人", py: "gōngrén", mn: "công nhân" },
-        { hz: "工作", py: "gōngzuò", mn: "công việc" }, { hz: "关", py: "guān", mn: "đóng" }, { hz: "关上", py: "guān shàng", mn: "đóng lại" }, { hz: "贵", py: "guì", mn: "đắt" }, { hz: "国", py: "guó", mn: "nước" },
-        { hz: "国外", py: "guó wài", mn: "nước ngoài" }, { hz: "过", py: "guò", mn: "qua" }, { hz: "孩子", py: "hái zi", mn: "trẻ em" }, { hz: "汉语", py: "Hàn yǔ", mn: "tiếng hán" }, { hz: "汉字", py: "Hàn zì", mn: "chữ hán" },
-        { hz: "好玩儿", py: "hǎowánr", mn: "thú vị" }, { hz: "后", py: "hòu", mn: "đằng sau" }, { hz: "后天", py: "hòutiān", mn: "ngày hôm sau" }, { hz: "花", py: "huā", mn: "hoa" }, { hz: "话", py: "huà", mn: "lời nói" },
-        { hz: "坏", py: "huài", mn: "hư hỏng" }, { hz: "还", py: "huán", mn: "trả lại" }, { hz: "回答", py: "huídá", mn: "trả lời" }, { hz: "回到", py: "huídào", mn: "trở về" }, { hz: "火车", py: "huǒchē", mn: "tàu hỏa" },
-        { hz: "机场", py: "jīchǎng", mn: "sân bay" }, { hz: "机票", py: "jīpiào", mn: "vé máy bay" }, { hz: "鸡蛋", py: "jīdàn", mn: "trứng gà" }, { hz: "记", py: "jì", mn: "nhớ" }, { hz: "记得", py: "jìde", mn: "ghi nhớ" }, { hz: "记住", py: "jìzhù", mn: "nhớ kĩ" }
+        { hz: "打球", py: "dǎqiú", mn: "đánh bóng" }, { hz: "大学", py: "dàxué", mn: "đại học" }, { hz: "到", py: "dào", mn: "đến" }, { hz: "得到", py: "dédào", mn: "đạt được" }, { hz: "等", py: "děng", mn: "đợi" }, 
+        { hz: "地", py: "dì", mn: "đất" }, { hz: "地点", py: "dìdiǎn", mn: "địa điểm" }, { hz: "地方", py: "dìfāng", mn: "nơi chốn" }, { hz: "地上", py: "dìshàng", mn: "mặt đất" }, { hz: "地图", py: "dìtú", mn: "bản đồ" }, 
+        { hz: "弟弟", py: "dìdi", mn: "em trai" }, { hz: "第", py: "dì", mn: "thứ tự" }, { hz: "电", py: "diàn", mn: "điện" }, { hz: "电话", py: "diànhuà", mn: "điện thoại" }, { hz: "电影", py: "diànyǐng", mn: "phim ảnh" }, 
+        { hz: "电影院", py: "diànyǐngyuàn", mn: "rạp chiếu phim" }, { hz: "东", py: "dōng", mn: "hướng đông" }, { hz: "动", py: "dòng", mn: "cử động" }, { hz: "动作", py: "dòngzuò", mn: "động tác" }, { hz: "读书", py: "dúshū", mn: "học bài" }, 
+        { hz: "饿", py: "è", mn: "đói" }, { hz: "房间", py: "fángjiān", mn: "căn phòng" }, { hz: "房子", py: "fángzi", mn: "căn nhà" }, { hz: "放", py: "fàng", mn: "đặt" }, { hz: "放假", py: "fàngjià", mn: "nghỉ lễ" }, 
+        { hz: "放学", py: "fàngxué", mn: "tan học" }, { hz: "飞", py: "fēi", mn: "bay" }, { hz: "飞机", py: "fēijī", mn: "máy bay" }, { hz: "风", py: "fēng", mn: "gió" }, { hz: "干", py: "gān", mn: "khô" }, 
+        { hz: "干净", py: "gānjìng", mn: "sạch sẽ" }, { hz: "干", py: "gàn", mn: "làm" }, { hz: "干什么", py: "gàn shénme", mn: "làm gì thế" }, { hz: "高", py: "gāo", mn: "cao" }, { hz: "告诉", py: "gàosu", mn: "nói" }, 
+        { hz: "哥哥", py: "gēge", mn: "anh trai" }, { hz: "歌", py: "gē", mn: "bài hát" }, { hz: "跟", py: "gēn", mn: "cùng" }, { hz: "工人", py: "gōngrén", mn: "công nhân" }, { hz: "工作", py: "gōngzuò", mn: "công việc" }, 
+        { hz: "关", py: "guān", mn: "đóng" }, { hz: "关上", py: "guān shàng", mn: "đóng lại" }, { hz: "贵", py: "guì", mn: "đắt" }, { hz: "国", py: "guó", mn: "nước" }, { hz: "国外", py: "guó wài", mn: "nước ngoài" }, 
+        { hz: "过", py: "guò", mn: "qua" }, { hz: "孩子", py: "hái zi", mn: "trẻ em" }, { hz: "汉语", py: "Hàn yǔ", mn: "tiếng hán" }, { hz: "汉字", py: "Hàn zì", mn: "chữ hán" }, { hz: "好玩儿", py: "hǎowánr", mn: "thú vị" }, 
+        { hz: "后", py: "hòu", mn: "đằng sau" }, { hz: "后天", py: "hòutiān", mn: "ngày hôm sau" }, { hz: "花", py: "huā", mn: "hoa" }, { hz: "话", py: "huà", mn: "lời nói" }, { hz: "坏", py: "huài", mn: "hư hỏng" }, 
+        { hz: "还", py: "huán", mn: "trả lại" }, { hz: "回答", py: "huídá", mn: "trả lời" }, { hz: "回到", py: "huídào", mn: "trở về" }, { hz: "火车", py: "huǒchē", mn: "tàu hỏa" }, { hz: "机场", py: "jīchǎng", mn: "sân bay" }, 
+        { hz: "机票", py: "jīpiào", mn: "vé máy bay" }, { hz: "鸡蛋", py: "jīdàn", mn: "trứng gà" }, { hz: "记", py: "jì", mn: "nhớ" }, { hz: "记得", py: "jìde", mn: "ghi nhớ" }, { hz: "记住", py: "jìzhù", mn: "nhớ kĩ" },
+        { hz: "加", py: "jiā", mn: "cộng" }, { hz: "件", py: "jiàn", mn: "chiếc" }, { hz: "健康", py: "jiànkāng", mn: "khỏe mạnh" }, { hz: "见面", py: "jiànmiàn", mn: "gặp mặt" }, { hz: "讲", py: "jiǎng", mn: "giảng" }, 
+        { hz: "教", py: "jiāo", mn: "dạy" }, { hz: "脚", py: "jiǎo", mn: "chân" }, { hz: "叫", py: "jiào", mn: "gọi tên" }, { hz: "教室", py: "jiàoshì", mn: "lớp học" }, { hz: "接待", py: "jiēdài", mn: "tiếp đón" }, 
+        { hz: "接", py: "jiē", mn: "đón" }, { hz: "近", py: "jìn", mn: "gần" }, { hz: "进", py: "jìn", mn: "vào" }, { hz: "进来", py: "jìnlái", mn: "vào đây" }, { hz: "进去", py: "jìnqù", mn: "vào đó" }, 
+        { hz: "久", py: "jiǔ", mn: "lâu" }, { hz: "旧", py: "jiù", mn: "cũ" }, { hz: "就", py: "jiù", mn: "thì liền" }, { hz: "觉得", py: "juéde", mn: "cảm thấy" }, { hz: "咖啡", py: "kāfēi", mn: "cà phê" }, 
+        { hz: "开始", py: "kāishǐ", mn: "bắt đầu" }, { hz: "考试", py: "kǎoshì", mn: "thi cử" }
+    ];
+
+    // DỮ LIỆU TÊN TIẾNG TRUNG
+    const namesData = [
+        { vi: "Lưu Thiết Hoa", hz: "刘铁华", py: "Liú Tiěhuá" },
+        { vi: "Hà Mỹ Mỹ", hz: "何美美", py: "Hé Měiměi" },
+        { vi: "Bùi Lê Ngọc Linh", hz: "裴黎玉玲", py: "Péi Lí Yùlíng" },
+        { vi: "Lưu Thiết Vinh", hz: "刘铁荣", py: "Liú Tiěróng" },
+        { vi: "A Mỹ Linh", hz: "阿美玲", py: "Ā Měilíng" },
+        { vi: "Hà Gia Bảo", hz: "何家宝", py: "Hé Jiābǎo" },
+        { vi: "Diệp Thanh Thanh", hz: "叶青青", py: "Yè Qīngqīng" },
+        { vi: "Lê Bá Trần Hoàng", hz: "黎伯陈黄", py: "Lí Bó Chénhuáng" },
+        { vi: "Nguyễn Thị Phương Nguyên", hz: "阮氏芳原", py: "Ruǎn Shì Fāngyuán" }
     ];
 
     const grammarRules = [
@@ -498,14 +671,12 @@
         {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false},
         {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false},
         {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false},
-        
         {name:"hieuthuhai - ngủ một mình ft. negav",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true},
         {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true},
         {name:"HIEUTHUHAI - Không Thể Say l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true},
         {name:"Exit Sign - HIEUTHUHAI ft. marzuz",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true},
         {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true}
     ];
-    
     const cPop = [
         {name:"Mang Chủng",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"},
         {name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"},
@@ -523,128 +694,238 @@
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        document.getElementById('n-' + id).classList.add('active');
+        const navBtn = document.getElementById('n-' + id);
+        if(navBtn) navBtn.classList.add('active');
+        
         if (id === 'vocab' && document.getElementById('v-question').innerText === "...") nextVocab(true);
         if (id === 'reading' && document.getElementById('r-text').innerText === "Loading...") nextParagraph();
         if (id === 'memo') renderGrammarList();
         if (id === 'work') loadWorkSchedule();
+        if (id === 'library') renderLibrary();
+        if (id === 'names' && document.getElementById('nm-question').innerText === "...") nextNames(true);
+        if (id === 'voice' && document.getElementById('voice-target').innerText === "...") nextVoiceWord();
+        if (id === 'test') switchTestMode('grammar'); 
     }
 
-    // --- TEST TAB LOGIC ---
-    let currentTestRule = null;
-    let currentTestSentence = "";
-    
-    function startGrammarTest() {
+    // --- 1. THƯ VIỆN TỪ VỰNG ---
+    function renderLibrary() {
+        document.getElementById('lib-count').innerText = vocabData.length;
+        const html = vocabData.map((v, i) => `
+            <div class="bg-white/5 p-3 rounded border border-white/10 flex flex-col justify-between hover:bg-white/10 transition">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs text-gray-500 font-mono">#${i+1}</span>
+                    <span class="text-lg font-bold text-white">${v.hz}</span>
+                </div>
+                <div class="text-xs text-indigo-300 font-mono">${v.py}</div>
+                <div class="text-[10px] text-gray-400 uppercase mt-1 tracking-widest">${v.mn}</div>
+            </div>
+        `).join('');
+        document.getElementById('lib-list').innerHTML = html;
+    }
+
+    // --- 2. HỌC VỀ TÊN ---
+    let nmIdx = 0; let nmMode = 0;
+    function changeNamesMode() {
         playSound('click');
-        document.getElementById('test-grammar').classList.remove('hidden');
-        document.getElementById('test-fill').classList.add('hidden');
+        nmMode = (nmMode + 1) % 3; 
+        document.getElementById('nm-mode-btn').innerText = ["Việt ➔ Hán", "Hán ➔ Việt", "Việt ➔ Pinyin"][nmMode]; 
+        nextNames(true); 
+    }
+    function nextNames(rand) { 
+        if(rand) nmIdx = Math.floor(Math.random() * namesData.length); 
+        const n = namesData[nmIdx]; 
+        document.getElementById('nm-question').innerText = nmMode===0 ? n.vi : (nmMode===1 ? n.hz : n.vi); 
+        document.getElementById('nm-input').value = ""; 
+        document.getElementById('nm-msg').innerText = ""; 
+        document.getElementById('nm-hint').classList.add('hidden');
+    }
+    function showNamesHint() {
+        playSound('click');
+        const n = namesData[nmIdx];
+        let ans = nmMode===0 ? n.hz : (nmMode===1 ? n.vi : n.py);
+        document.getElementById('nm-hint').innerText = "Gợi ý: " + ans;
+        document.getElementById('nm-hint').classList.remove('hidden');
+    }
+    function checkNames() { 
+        const n = namesData[nmIdx]; 
+        const v = document.getElementById('nm-input').value.toLowerCase().trim();
+        let ok = (nmMode===0 && v===n.hz) || (nmMode===1 && v===n.vi.toLowerCase()) || (nmMode===2 && v===n.py.toLowerCase());
         
-        document.getElementById('tg-step1').classList.remove('hidden');
-        document.getElementById('tg-step2').classList.add('hidden');
-        document.getElementById('tg-step3').classList.add('hidden');
-        document.getElementById('tg-step4').classList.add('hidden');
-        document.getElementById('tg-sub-input').value = "";
-        document.getElementById('tg-noun-input').value = "";
-        document.getElementById('tg-make-sentence').value = "";
-        document.getElementById('tg-feedback').innerText = "";
+        if(ok) { 
+            playSound('correct'); updateCoins(1); 
+            document.getElementById('nm-msg').innerText = "CHÍNH XÁC!"; 
+            document.getElementById('nm-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400";
+            setTimeout(()=>nextNames(true), 1000); 
+        } else { 
+            playSound('wrong'); 
+            document.getElementById('nm-msg').innerText = "SAI RỒI"; 
+            document.getElementById('nm-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400";
+        }
+    }
 
-        currentTestRule = grammarRules[Math.floor(Math.random() * 3)];
-        const subs = ["我","你","他","爸爸","妈妈"];
-        const nouns = ["学生","老师","医生","好人"];
-        const S = subs[Math.floor(Math.random() * subs.length)];
-        const N = nouns[Math.floor(Math.random() * nouns.length)];
+    // --- 3. LUYỆN NÓI AI ---
+    let voiceIdx = 0;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition;
+    
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition();
+        recognition.lang = 'zh-CN';
+        recognition.interimResults = false;
         
-        if(currentTestRule.id === "g1") currentTestSentence = S + "是" + N;
-        if(currentTestRule.id === "g2") currentTestSentence = S + "不是" + N;
-        if(currentTestRule.id === "g3") currentTestSentence = S + "是" + N + "吗？";
+        recognition.onstart = function() {
+            document.getElementById('voice-pulse').classList.remove('opacity-0');
+            document.getElementById('voice-pulse').classList.add('animate-ping');
+            document.getElementById('voice-feedback').innerHTML = "<span class='text-gray-400'>Đang lắng nghe... (Hãy nói đi)</span>";
+        };
         
-        document.getElementById('tg-question').innerText = currentTestSentence;
-
-        document.getElementById('tg-options').innerHTML = grammarRules.slice(0,3).map(r => 
-            `<button onclick="checkStructure('${r.id}')" class="p-3 bg-white/5 border border-white/20 rounded text-xs hover:bg-white hover:text-black transition text-left">${r.structure}</button>`
-        ).join('');
+        recognition.onend = function() {
+            document.getElementById('voice-pulse').classList.add('opacity-0');
+            document.getElementById('voice-pulse').classList.remove('animate-ping');
+        };
+        
+        recognition.onresult = function(event) {
+            const spoken = event.results[0][0].transcript.trim();
+            const target = vocabData[voiceIdx].hz;
+            const cleanSpoken = spoken.replace(/[.,?!。，？！]/g, "");
+            
+            if(cleanSpoken === target || cleanSpoken.includes(target) || target.includes(cleanSpoken)) {
+                playSound('correct'); updateCoins(1);
+                document.getElementById('voice-feedback').innerHTML = `<span class='text-green-400 font-bold'>Giỏi quá! AI nghe được: "${cleanSpoken}"</span>`;
+                setTimeout(() => nextVoiceWord(), 2000);
+            } else {
+                playSound('wrong');
+                document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Sai rồi. Bạn đọc là: "${cleanSpoken}"<br>Cần đọc là: "${target}"</span>`;
+            }
+        };
+        
+        recognition.onerror = function(event) {
+            document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Lỗi mic: ${event.error}</span>`;
+            document.getElementById('voice-pulse').classList.add('opacity-0');
+            document.getElementById('voice-pulse').classList.remove('animate-ping');
+        };
     }
 
-    function checkStructure(id) {
-        if(id === currentTestRule.id) {
-            playSound('correct');
-            document.getElementById('tg-step1').classList.add('hidden');
-            document.getElementById('tg-step2').classList.remove('hidden');
-            document.getElementById('tg-feedback').innerText = "Đúng cấu trúc!";
-        } else {
-            playSound('wrong');
-            alert("Sai rồi! Hãy nhìn kỹ câu hỏi.");
+    function nextVoiceWord() {
+        playSound('click');
+        voiceIdx = Math.floor(Math.random() * vocabData.length);
+        document.getElementById('voice-target').innerText = vocabData[voiceIdx].hz;
+        document.getElementById('voice-py').innerText = vocabData[voiceIdx].py;
+        document.getElementById('voice-mn').innerText = vocabData[voiceIdx].mn;
+        document.getElementById('voice-feedback').innerHTML = "";
+    }
+
+    function startListening() {
+        if (!SpeechRecognition) {
+            alert("Trình duyệt của bạn không hỗ trợ Nhận diện giọng nói. Hãy dùng Google Chrome!");
+            return;
+        }
+        playSound('click');
+        recognition.start();
+    }
+
+    // --- 4. TỪ VỰNG GỐC CÓ RANDOM / THỨ TỰ ---
+    let vIdx = -1; let vMode = 0; let isVocabRandom = false;
+    
+    function changeVocabMode() { 
+        playSound('click'); vMode = (vMode+1)%3; 
+        document.getElementById('v-mode-btn').innerText = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"][vMode]; 
+        nextVocab(true); 
+    }
+    
+    function toggleVocabRandom() {
+        playSound('click');
+        isVocabRandom = !isVocabRandom;
+        document.getElementById('v-random-btn').innerText = isVocabRandom ? "Học: NGẪU NHIÊN" : "Học: THỨ TỰ";
+        document.getElementById('v-random-btn').className = isVocabRandom ? "text-[9px] border border-indigo-500 text-indigo-300 px-3 py-1 uppercase tracking-widest hover:bg-indigo-500 hover:text-white transition" : "text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition";
+    }
+
+    function nextVocab(moveNext = false) { 
+        if(moveNext) {
+            if(isVocabRandom) {
+                vIdx = Math.floor(Math.random() * vocabData.length);
+            } else {
+                vIdx = (vIdx + 1) % vocabData.length;
+            }
+        } else if (vIdx === -1) {
+            vIdx = 0; // init
+        }
+        
+        const i = vocabData[vIdx]; 
+        document.getElementById('v-progress').innerText = `#${vIdx + 1} / ${vocabData.length}`;
+        document.getElementById('v-question').innerText = vMode===0?i.hz:(vMode===1?i.mn.toUpperCase():i.hz); 
+        document.getElementById('v-input').value = ""; 
+        document.getElementById('v-msg').innerText = ""; 
+        document.getElementById('v-hint').classList.add('hidden');
+    }
+    
+    function showVocabHint() {
+        playSound('click');
+        const i = vocabData[vIdx];
+        let ans = vMode===0 ? i.mn : (vMode===1 ? i.hz : i.py);
+        document.getElementById('v-hint').innerText = "Gợi ý: " + ans;
+        document.getElementById('v-hint').classList.remove('hidden');
+    }
+    
+    function checkVocab() { 
+        const i = vocabData[vIdx]; const v = document.getElementById('v-input').value.toLowerCase().trim();
+        let ok = (vMode===0 && v===i.mn.toLowerCase()) || (vMode===1 && v===i.hz) || (vMode===2 && v===i.py.toLowerCase());
+        if(ok) { 
+            playSound('correct'); updateCoins(1); 
+            document.getElementById('v-msg').innerText = "CHÍNH XÁC!"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400";
+            setTimeout(()=>nextVocab(true),1000); 
+        } else { 
+            playSound('wrong'); document.getElementById('v-msg').innerText = "SAI RỒI"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400";
         }
     }
 
-    function checkSubject() {
-        const val = document.getElementById('tg-sub-input').value.trim();
-        if(currentTestSentence.includes(val) && val.length > 0) {
-            playSound('correct');
-            document.getElementById('tg-step2').classList.add('hidden');
-            document.getElementById('tg-step3').classList.remove('hidden');
-        } else {
-            playSound('wrong');
-            alert("Chưa đúng chủ ngữ!");
-        }
-    }
-
-    function checkNoun() {
-        const val = document.getElementById('tg-noun-input').value.trim();
-        if(currentTestSentence.includes(val) && val.length > 0) {
-            playSound('correct');
-            document.getElementById('tg-step3').classList.add('hidden');
-            document.getElementById('tg-step4').classList.remove('hidden');
-        } else {
-            playSound('wrong');
-            alert("Chưa đúng danh từ!");
-        }
-    }
-
-    function checkAISentence() {
-        const val = document.getElementById('tg-make-sentence').value.trim();
-        const feedback = document.getElementById('tg-feedback');
-        const match = val.match(currentTestRule.regex);
-        const isChinese = /[\u4e00-\u9fa5]/.test(val);
-
-        if(match && isChinese) {
-            playSound('correct');
-            updateCoins(1);
-            feedback.innerText = "TUYỆT VỜI! (+1 COIN)";
-            feedback.classList.replace("text-red-400", "text-green-400");
-            setTimeout(startGrammarTest, 2000);
-        } else {
-            playSound('wrong');
-            feedback.innerText = "Sai cấu trúc hoặc không phải tiếng Trung!";
-            feedback.classList.add("text-red-400");
-        }
-    }
-
-    function startFillTest() {
+    // --- 5. TỐC ĐỘ (SPEED TEST) & CÁC TAB KIỂM TRA ---
+    function switchTestMode(mode) {
         playSound('click');
         document.getElementById('test-grammar').classList.add('hidden');
-        document.getElementById('test-fill').classList.remove('hidden');
-        generateFillTest();
+        document.getElementById('test-fill').classList.add('hidden');
+        document.getElementById('test-speed').classList.add('hidden');
+        document.getElementById(`test-${mode}`).classList.remove('hidden');
+        
+        if(mode === 'grammar') startGrammarTest();
+        if(mode === 'fill') generateFillTest();
+        if(mode === 'speed') resetSpeedTest();
     }
 
+    // ĐIỀN TỪ HỘI THOẠI (ĐÃ UPDATE KHO TỪ ĐA DẠNG)
     function generateFillTest() {
-        // Tích hợp từ mới vào hội thoại
-        const subjects = ["我", "你", "他", "弟弟", "哥哥", "妈妈"];
-        const verbs = ["喜欢", "想", "去", "吃", "喝", "打", "告诉", "看"];
-        const nouns = ["苹果", "茶", "包子", "鸡蛋", "电影", "大学", "朋友", "汉字"];
-        const places = ["学校", "家", "车站", "机场", "国外"];
+        const subjects = ["我", "你", "他", "她", "老师", "学生", "同学", "朋友", "先生", "小姐", "爸爸", "妈妈", "哥哥", "弟弟", "工人"];
+        const verbs = ["喜欢", "想", "去", "吃", "喝", "看", "买", "做", "学", "打", "告诉", "教", "认识", "觉得", "记"];
+        const nouns = ["苹果", "茶", "水", "饭", "菜", "咖啡", "衣服", "书", "电脑", "电视", "包子", "鸡蛋", "钱", "汉语", "汉字"];
+        const places = ["学校", "家", "饭店", "商店", "北京", "中国", "车站", "机场", "国外", "大学", "房间", "教室"];
+        const adjectives = ["好", "多", "少", "大", "小", "冷", "热", "高兴", "漂亮", "忙", "累", "贵", "健康", "旧"];
         
         const S = subjects[Math.floor(Math.random() * subjects.length)];
-        const V = verbs[Math.floor(Math.random() * verbs.length)];
-        const N = (V === "去") ? places[Math.floor(Math.random() * places.length)] : nouns[Math.floor(Math.random() * nouns.length)];
+        const type = Math.floor(Math.random() * 3); // 3 loại câu hội thoại
+        let dialogue = ""; let hideTarget = ""; let fakeOpts = [];
         
-        const hideTarget = Math.random() > 0.5 ? V : N;
-        const dialogue = `A: ${S === '我' ? '你' : '我'}${V}什么？<br>B: ${S}${V === hideTarget ? '____' : V}${N === hideTarget ? '____' : N}。`;
+        if (type === 0) { // Động từ + Danh từ
+            const V = verbs[Math.floor(Math.random() * 5)]; // Chọn mấy từ hành động dễ
+            const N = nouns[Math.floor(Math.random() * nouns.length)];
+            hideTarget = Math.random() > 0.5 ? V : N;
+            dialogue = `A: ${S === '我' ? '你' : '我'}${V}什么？<br>B: ${S}${V === hideTarget ? '____' : V}${N === hideTarget ? '____' : N}。`;
+            fakeOpts = ["什么", "吗", "不", "很", "太"];
+        } else if (type === 1) { // Đi + Địa điểm
+            const P = places[Math.floor(Math.random() * places.length)];
+            hideTarget = P;
+            dialogue = `A: ${S === '我' ? '你' : '我'}去哪儿？<br>B: ${S}去____。`;
+            fakeOpts = ["去", "来", "在", "哪儿", "怎么"];
+        } else { // Danh từ + Tính từ
+            const N2 = nouns[Math.floor(Math.random() * nouns.length)];
+            const Adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+            hideTarget = Math.random() > 0.5 ? N2 : Adj;
+            dialogue = `A: ${N2 === hideTarget ? '____' : N2}怎么样？<br>B: ${N2 === hideTarget ? '____' : N2}很${Adj === hideTarget ? '____' : Adj}。`;
+            fakeOpts = ["很", "太", "不", "多", "少"];
+        }
         
         document.getElementById('tf-dialogue').innerHTML = dialogue;
-        let opts = [hideTarget, "什么", "吗", "不", "很", "太"];
-        opts = opts.sort(() => Math.random() - 0.5).slice(0, 4); // Lấy 4 đáp án random trong đó có đáp án đúng
-        if(!opts.includes(hideTarget)) opts[0] = hideTarget; // Đảm bảo luôn có đáp án đúng
+        let opts = fakeOpts.sort(() => Math.random() - 0.5).slice(0, 4); 
+        if(!opts.includes(hideTarget)) opts[0] = hideTarget; 
         opts = opts.sort(() => Math.random() - 0.5);
         
         document.getElementById('tf-options').innerHTML = opts.map(o => 
@@ -653,411 +934,229 @@
         document.getElementById('tf-msg').innerText = "";
     }
 
-    function checkFill(ans, correct) {
-        if(ans === correct) {
-            playSound('correct');
-            updateCoins(1);
-            document.getElementById('tf-msg').innerText = "CHÍNH XÁC! (+1 COIN)";
-            document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-green-400";
-            setTimeout(generateFillTest, 1000);
+    // SPEED TEST
+    let tsTimer; let tsTimeLeft; let tsData = []; let tsCurrentIdx = 0; let tsScore = 0; let tsLevel = 1;
+
+    function resetSpeedTest() {
+        clearInterval(tsTimer);
+        document.getElementById('ts-setup').classList.remove('hidden');
+        document.getElementById('ts-play').classList.add('hidden');
+        document.getElementById('ts-result').classList.add('hidden');
+        document.getElementById('ts-max-hint').innerText = vocabData.length;
+        document.getElementById('ts-end').value = vocabData.length; 
+    }
+
+    function startSpeedTest() {
+        playSound('click');
+        const start = parseInt(document.getElementById('ts-start').value) || 1;
+        const end = parseInt(document.getElementById('ts-end').value) || vocabData.length;
+        tsTimeLeft = (parseInt(document.getElementById('ts-time').value) || 1) * 60;
+        tsLevel = parseInt(document.getElementById('ts-level').value);
+        
+        if(start < 1 || end > vocabData.length || start > end) {
+            alert(`Phạm vi từ không hợp lệ! Vui lòng nhập từ 1 đến ${vocabData.length}`); return;
+        }
+        
+        tsData = vocabData.slice(start - 1, end).sort(() => Math.random() - 0.5);
+        tsCurrentIdx = 0; tsScore = 0;
+        
+        document.getElementById('ts-setup').classList.add('hidden');
+        document.getElementById('ts-play').classList.remove('hidden');
+        document.getElementById('ts-play').classList.add('flex');
+        document.getElementById('ts-total-display').innerText = tsData.length;
+        document.getElementById('ts-score-display').innerText = 0;
+        document.getElementById('ts-play-msg').innerText = "";
+        
+        updateTsWord();
+        
+        tsTimer = setInterval(() => {
+            tsTimeLeft--;
+            let m = Math.floor(tsTimeLeft / 60).toString().padStart(2, '0');
+            let s = (tsTimeLeft % 60).toString().padStart(2, '0');
+            document.getElementById('ts-timer-display').innerText = `${m}:${s}`;
+            if(tsTimeLeft <= 0) endSpeedTest();
+        }, 1000);
+    }
+
+    function updateTsWord() {
+        if(tsCurrentIdx >= tsData.length) { endSpeedTest(); return; }
+        let item = tsData[tsCurrentIdx];
+        let q = "";
+        if(tsLevel === 1) q = item.hz; 
+        if(tsLevel === 2) q = item.mn.toUpperCase(); 
+        if(tsLevel === 3) q = item.mn.toUpperCase(); 
+        
+        document.getElementById('ts-current-word').innerText = q;
+        document.getElementById('ts-input').value = "";
+        document.getElementById('ts-input').focus();
+    }
+
+    function checkSpeedVocab() {
+        let item = tsData[tsCurrentIdx];
+        let v = document.getElementById('ts-input').value.toLowerCase().trim();
+        let msgEl = document.getElementById('ts-play-msg');
+        
+        let ok = false;
+        if(tsLevel === 1 && v === item.mn.toLowerCase()) ok = true; 
+        if(tsLevel === 2 && v === item.py.toLowerCase()) ok = true; 
+        if(tsLevel === 3 && v === item.hz) ok = true; 
+        
+        if(ok) {
+            playSound('correct'); tsScore++; updateCoins(1); tsCurrentIdx++;
+            document.getElementById('ts-score-display').innerText = tsScore;
+            msgEl.innerText = "";
+            updateTsWord();
         } else {
             playSound('wrong');
-            document.getElementById('tf-msg').innerText = "SAI RỒI!";
-            document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-red-400";
+            document.getElementById('ts-input').value = "";
+            msgEl.innerText = "SAI RỒI! THỬ LẠI!";
         }
+    }
+
+    function endSpeedTest() {
+        clearInterval(tsTimer);
+        document.getElementById('ts-play').classList.add('hidden');
+        document.getElementById('ts-play').classList.remove('flex');
+        document.getElementById('ts-result').classList.remove('hidden');
+        document.getElementById('ts-final-score').innerText = `${tsScore} / ${tsData.length}`;
     }
 
     // --- WORK SCHEDULE LOGIC ---
     const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
-    let workStep = 0;
-    let currentWeek = 1;
-    let scheduleData = [];
-    let isDoubleShift = false; 
+    let workStep = 0; let currentWeek = 1; let scheduleData = []; let isDoubleShift = false; 
     
-    function changeWeek() {
-        currentWeek = parseInt(document.getElementById('week-selector').value);
-        document.getElementById('display-week-num').innerText = "TUẦN " + currentWeek;
-        loadWorkSchedule();
-    }
-
+    function changeWeek() { currentWeek = parseInt(document.getElementById('week-selector').value); document.getElementById('display-week-num').innerText = "TUẦN " + currentWeek; loadWorkSchedule(); }
     function loadWorkSchedule() {
-        const key = `skyWork_W${currentWeek}`;
-        const saved = localStorage.getItem(key);
-        
+        const key = `skyWork_W${currentWeek}`; const saved = localStorage.getItem(key);
         document.getElementById('btn-cancel-edit').classList.add('hidden');
-
-        if (saved) {
-            scheduleData = JSON.parse(saved);
-            renderScheduleResult();
-        } else {
-            resetWorkSchedule();
-        }
+        if (saved) { scheduleData = JSON.parse(saved); renderScheduleResult(); } else { resetWorkSchedule(); }
     }
-    
     function clearAllSchedules() {
+        playSound('click');
         if(confirm("Bạn có chắc chắn muốn xóa TOÀN BỘ dữ liệu lịch làm việc của tất cả 4 tuần không?")) {
-            localStorage.removeItem('skyWork_W1');
-            localStorage.removeItem('skyWork_W2');
-            localStorage.removeItem('skyWork_W3');
-            localStorage.removeItem('skyWork_W4');
-            alert("Đã xóa toàn bộ lịch!");
-            currentWeek = 1;
-            document.getElementById('week-selector').value = 1;
-            document.getElementById('display-week-num').innerText = "TUẦN 1";
-            resetWorkSchedule();
+            localStorage.removeItem('skyWork_W1'); localStorage.removeItem('skyWork_W2'); localStorage.removeItem('skyWork_W3'); localStorage.removeItem('skyWork_W4');
+            alert("Đã xóa toàn bộ lịch!"); currentWeek = 1; document.getElementById('week-selector').value = 1; document.getElementById('display-week-num').innerText = "TUẦN 1"; resetWorkSchedule();
         }
     }
-
     function setVal(id, val) { document.getElementById(id).value = val; }
-    
     function toggleDoubleShift() {
-        isDoubleShift = !isDoubleShift;
-        const section2 = document.getElementById('section-ca-2');
-        const btn = document.getElementById('btn-toggle-double');
-        
-        if(isDoubleShift) {
-            section2.classList.remove('hidden');
-            section2.classList.add('fade-in');
-            btn.classList.add('bg-indigo-500', 'text-white');
-            btn.innerText = "- Bỏ chế độ 2 Ca";
-        } else {
-            section2.classList.add('hidden');
-            btn.classList.remove('bg-indigo-500', 'text-white');
-            btn.innerText = "+ Làm 2 Ca / Full";
-            setVal('w-pos-2', '');
-            setVal('w-time-2', '');
-        }
+        playSound('click'); isDoubleShift = !isDoubleShift; const section2 = document.getElementById('section-ca-2'); const btn = document.getElementById('btn-toggle-double');
+        if(isDoubleShift) { section2.classList.remove('hidden'); section2.classList.add('fade-in'); btn.classList.add('bg-indigo-500', 'text-white'); btn.innerText = "- Bỏ chế độ 2 Ca"; } 
+        else { section2.classList.add('hidden'); btn.classList.remove('bg-indigo-500', 'text-white'); btn.innerText = "+ Làm 2 Ca / Full"; setVal('w-pos-2', ''); setVal('w-time-2', ''); }
     }
-
     function resetWorkSchedule(startDate = '') {
-        workStep = 0;
-        scheduleData = [];
-        document.getElementById('work-wizard').classList.remove('hidden');
-        document.getElementById('work-result-container').classList.add('hidden');
-        
-        setVal('w-date', startDate); 
-        setVal('w-pos',''); 
-        setVal('w-time','');
-        
-        if(isDoubleShift) toggleDoubleShift(); 
-        
-        updateWizardUI();
+        workStep = 0; scheduleData = []; document.getElementById('work-wizard').classList.remove('hidden'); document.getElementById('work-result-container').classList.add('hidden');
+        setVal('w-date', startDate); setVal('w-pos',''); setVal('w-time','');
+        if(isDoubleShift) toggleDoubleShift(); updateWizardUI();
     }
-
-    function editCurrentSchedule() {
-        let firstDate = '';
-        if(scheduleData.length > 0) firstDate = scheduleData[0].date;
-        resetWorkSchedule(firstDate);
-        document.getElementById('btn-cancel-edit').classList.remove('hidden');
-    }
-
-    function cancelEdit() {
-        loadWorkSchedule();
-    }
-
+    function editCurrentSchedule() { playSound('click'); let firstDate = ''; if(scheduleData.length > 0) firstDate = scheduleData[0].date; resetWorkSchedule(firstDate); document.getElementById('btn-cancel-edit').classList.remove('hidden'); }
+    function cancelEdit() { playSound('click'); loadWorkSchedule(); }
     function createNextWeek() {
-        let lastDateOfWeek = '';
-        if(scheduleData.length > 0) {
-            lastDateOfWeek = scheduleData[scheduleData.length - 1].date;
-        }
-
+        playSound('click');
+        let lastDateOfWeek = ''; if(scheduleData.length > 0) { lastDateOfWeek = scheduleData[scheduleData.length - 1].date; }
         let nextStartDate = '';
         if(lastDateOfWeek && lastDateOfWeek.includes('/')) {
-            let [d, m] = lastDateOfWeek.split('/').map(Number);
-            let dateObj = new Date(2026, m - 1, d);
-            dateObj.setDate(dateObj.getDate() + 1);
-            let newD = dateObj.getDate();
-            let newM = dateObj.getMonth() + 1;
-            nextStartDate = `${newD}/${newM}`;
+            let [d, m] = lastDateOfWeek.split('/').map(Number); let dateObj = new Date(2026, m - 1, d); dateObj.setDate(dateObj.getDate() + 1); nextStartDate = `${dateObj.getDate()}/${dateObj.getMonth() + 1}`;
         }
-
-        currentWeek++;
-        const selector = document.getElementById('week-selector');
-        if(currentWeek > 4) currentWeek = 1; 
-        selector.value = currentWeek;
-        document.getElementById('display-week-num').innerText = "TUẦN " + currentWeek;
-
+        currentWeek++; const selector = document.getElementById('week-selector'); if(currentWeek > 4) currentWeek = 1; selector.value = currentWeek; document.getElementById('display-week-num').innerText = "TUẦN " + currentWeek;
         resetWorkSchedule(nextStartDate);
     }
-
     function updateWizardUI() {
-        document.getElementById('w-day-title').innerText = workDays[workStep];
-        document.getElementById('w-step-num').innerText = workStep + 1;
-        
+        document.getElementById('w-day-title').innerText = workDays[workStep]; document.getElementById('w-step-num').innerText = workStep + 1;
         if(workStep > 0 && scheduleData.length > 0) {
-            const prevDate = scheduleData[workStep-1].date;
-            const parts = prevDate.split('/');
+            const prevDate = scheduleData[workStep-1].date; const parts = prevDate.split('/');
             if(parts.length === 2) {
-                let d = parseInt(parts[0]);
-                let m = parseInt(parts[1]);
-                let dateObj = new Date(2026, m - 1, d);
-                dateObj.setDate(dateObj.getDate() + 1);
-                
-                let nextD = dateObj.getDate();
-                let nextM = dateObj.getMonth() + 1;
-                document.getElementById('w-date').value = `${nextD}/${nextM}`;
+                let d = parseInt(parts[0]); let m = parseInt(parts[1]); let dateObj = new Date(2026, m - 1, d); dateObj.setDate(dateObj.getDate() + 1);
+                document.getElementById('w-date').value = `${dateObj.getDate()}/${dateObj.getMonth() + 1}`;
             }
         }
     }
-
     function nextWorkStep() {
-        const date = document.getElementById('w-date').value || "N/A";
-        const pos = document.getElementById('w-pos').value || "N/A";
-        const time = document.getElementById('w-time').value || "N/A";
-        
-        let pos2 = "";
-        let time2 = "";
-        if(isDoubleShift) {
-            pos2 = document.getElementById('w-pos-2').value || "";
-            time2 = document.getElementById('w-time-2').value || "";
-        }
-        
+        playSound('click');
+        const date = document.getElementById('w-date').value || "N/A"; const pos = document.getElementById('w-pos').value || "N/A"; const time = document.getElementById('w-time').value || "N/A";
+        let pos2 = ""; let time2 = ""; if(isDoubleShift) { pos2 = document.getElementById('w-pos-2').value || ""; time2 = document.getElementById('w-time-2').value || ""; }
         scheduleData.push({ day: workDays[workStep], date, pos, time, pos2, time2, hasCa2: isDoubleShift });
-        
         workStep++;
-        
-        if(workStep >= 7) {
-            localStorage.setItem(`skyWork_W${currentWeek}`, JSON.stringify(scheduleData));
-            renderScheduleResult();
-        } else {
-            setVal('w-pos',''); 
-            setVal('w-time','');
-            if(isDoubleShift) toggleDoubleShift(); 
-            updateWizardUI();
-        }
+        if(workStep >= 7) { localStorage.setItem(`skyWork_W${currentWeek}`, JSON.stringify(scheduleData)); renderScheduleResult(); } 
+        else { setVal('w-pos',''); setVal('w-time',''); if(isDoubleShift) toggleDoubleShift(); updateWizardUI(); }
     }
-
     function calcHours(timeStr) {
-        if(!timeStr || !timeStr.includes('-')) return 0;
-        const cleanStr = timeStr.replace(/\s/g, ''); 
-        const t = cleanStr.replace(/h/g, '.').replace(/:/g, '.').split('-');
-        
-        let duration = 0;
-        if(t.length === 2) {
-             const start = parseFloat(t[0]);
-             const end = parseFloat(t[1]);
-             duration = end - start; 
-        }
-
-        const deductionShifts = [
-           "07h00-15h30",
-           "08h30-15h30",
-           "15h30-22h30",
-           "08h30-13h00", // Cập nhật danh sách trừ giờ nếu ca này cũng nghỉ ăn (tùy bạn quy định)
-           "17h00-22h30"
-        ];
-        
-        // Tạm thời chỉ giữ nguyên quy tắc cũ cho các ca dài trên 7 tiếng
-        const longShifts = ["07h00-15h30", "08h30-15h30", "15h30-22h30"];
-        for(let s of longShifts) {
-            if(cleanStr.includes(s)) {
-                duration -= 0.5;
-                break; 
-            }
-        }
-
+        if(!timeStr || !timeStr.includes('-')) return 0; const cleanStr = timeStr.replace(/\s/g, ''); const t = cleanStr.replace(/h/g, '.').replace(/:/g, '.').split('-');
+        let duration = 0; if(t.length === 2) { const start = parseFloat(t[0]); const end = parseFloat(t[1]); duration = end - start; }
+        const longShifts = ["07h00-15h30", "08h30-15h30", "15h30-22h30", "08h30-13h00", "17h00-22h30"];
+        for(let s of longShifts) { if(cleanStr.includes(s)) { duration -= 0.5; break; } }
         return duration > 0 ? duration : 0;
     }
-
     function renderScheduleResult() {
-        document.getElementById('work-wizard').classList.add('hidden');
-        document.getElementById('work-result-container').classList.remove('hidden');
-        const tbody = document.getElementById('work-tbody');
-        let totalH = 0;
-        
+        document.getElementById('work-wizard').classList.add('hidden'); document.getElementById('work-result-container').classList.remove('hidden');
+        const tbody = document.getElementById('work-tbody'); let totalH = 0;
         tbody.innerHTML = scheduleData.map(d => {
-            let h1 = (d.pos !== 'OFF') ? calcHours(d.time) : 0;
-            let h2 = (d.hasCa2 && d.pos2) ? calcHours(d.time2) : 0;
-            let dayTotal = h1 + h2;
-            totalH += dayTotal;
-            
-            let displayPos = `<span class="font-bold">${d.pos}</span>`;
-            let displayTime = d.time;
-            
-            if(d.hasCa2 && d.pos2) {
-                displayPos += `<br><span class="text-indigo-300 text-[10px]">+ ${d.pos2}</span>`;
-                displayTime += `<br><span class="text-indigo-300 text-[10px]">${d.time2}</span>`;
-            }
-
-            return `<tr class="${d.pos === 'OFF' ? 'text-red-400' : ''}">
-                <td class="font-bold text-gray-400">${d.day}</td>
-                <td>${d.date}</td>
-                <td class="uppercase font-bold tracking-widest text-xs">${displayPos}</td>
-                <td>${displayTime}</td>
-                <td>${d.pos === 'OFF' ? '-' : (dayTotal > 0 ? dayTotal.toFixed(1) + 'h' : '?')}</td>
-            </tr>`;
+            let h1 = (d.pos !== 'OFF') ? calcHours(d.time) : 0; let h2 = (d.hasCa2 && d.pos2) ? calcHours(d.time2) : 0; let dayTotal = h1 + h2; totalH += dayTotal;
+            let displayPos = `<span class="font-bold">${d.pos}</span>`; let displayTime = d.time;
+            if(d.hasCa2 && d.pos2) { displayPos += `<br><span class="text-indigo-300 text-[10px]">+ ${d.pos2}</span>`; displayTime += `<br><span class="text-indigo-300 text-[10px]">${d.time2}</span>`; }
+            return `<tr class="${d.pos === 'OFF' ? 'text-red-400' : ''}"> <td class="font-bold text-gray-400">${d.day}</td> <td>${d.date}</td> <td class="uppercase font-bold tracking-widest text-xs">${displayPos}</td> <td>${displayTime}</td> <td>${d.pos === 'OFF' ? '-' : (dayTotal > 0 ? dayTotal.toFixed(1) + 'h' : '?')}</td> </tr>`;
         }).join('');
-        
-        document.getElementById('total-hours').innerText = totalH.toFixed(1) + "h";
-        document.getElementById('total-salary').innerText = (totalH * 25000).toLocaleString('vi-VN') + " VNĐ";
+        document.getElementById('total-hours').innerText = totalH.toFixed(1) + "h"; document.getElementById('total-salary').innerText = (totalH * 25000).toLocaleString('vi-VN') + " VNĐ";
     }
-
-    // TÍNH NĂNG TẢI ẢNH LỊCH XUỐNG
     function downloadSchedule() {
         playSound('click');
-        const captureArea = document.getElementById('work-capture-area');
-        html2canvas(captureArea, {
-            backgroundColor: "#0f172a", // Giữ nền tối
-            scale: 2 // Tăng độ nét cho ảnh
-        }).then(canvas => {
-            const link = document.createElement('a');
-            link.download = `LichLamViec_Tuan${currentWeek}.png`;
-            link.href = canvas.toDataURL();
-            link.click();
+        html2canvas(document.getElementById('work-capture-area'), { backgroundColor: "#0f172a", scale: 2 }).then(canvas => {
+            const link = document.createElement('a'); link.download = `LichLamViec_Tuan${currentWeek}.png`; link.href = canvas.toDataURL(); link.click();
         });
     }
 
     // --- MUSIC LOGIC ---
-    let currentList = 'vpop'; 
-    let currentIndex = 0;
-    let isHieuMode = false;
-    let displayedVPop = [];
-    
+    let currentList = 'vpop'; let currentIndex = 0; let isHieuMode = false; let displayedVPop = [];
     function renderMusicVPop() {
         displayedVPop = isHieuMode ? vPop.filter(s => s.isHieu) : vPop;
-        
         const tpl = (s, idx) => {
             const safeName = s.name.replace(/'/g, "\\'");
             return `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${safeName}', ${idx}, 'vpop', '${s.thumb}')">
                 <img src="${s.thumb}" class="flex-shrink-0">
-                <div class="flex-1 overflow-hidden">
-                    <h4 class="text-[10px] font-bold uppercase text-white tracking-widest truncate" title="${s.name}">${s.name}</h4>
-                    <span class="text-[8px] text-gray-500">${s.type==='mp4'?'NO ADS':'YOUTUBE'}</span>
-                </div>
+                <div class="flex-1 overflow-hidden"> <h4 class="text-[10px] font-bold uppercase text-white tracking-widest truncate" title="${s.name}">${s.name}</h4> <span class="text-[8px] text-gray-500">${s.type==='mp4'?'NO ADS':'YOUTUBE'}</span> </div>
             </div>`;
         };
-        
         document.getElementById('v-list').innerHTML = displayedVPop.map((s,i) => tpl(s, i)).join('');
     }
-
     function renderMusicCPop() {
         const tpl = (s, idx) => {
             const safeName = s.name.replace(/'/g, "\\'");
             return `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${safeName}', ${idx}, 'cpop', '${s.thumb}')">
                 <img src="${s.thumb}" class="flex-shrink-0">
-                <div class="flex-1 overflow-hidden">
-                    <h4 class="text-[10px] font-bold uppercase text-white tracking-widest truncate" title="${s.name}">${s.name}</h4>
-                    <span class="text-[8px] text-gray-500">${s.type==='mp4'?'NO ADS':'YOUTUBE'}</span>
-                </div>
+                <div class="flex-1 overflow-hidden"> <h4 class="text-[10px] font-bold uppercase text-white tracking-widest truncate" title="${s.name}">${s.name}</h4> <span class="text-[8px] text-gray-500">${s.type==='mp4'?'NO ADS':'YOUTUBE'}</span> </div>
             </div>`;
         };
         document.getElementById('c-list').innerHTML = cPop.map((s,i) => tpl(s, i)).join('');
     }
-
-    function renderMusic() {
-        renderMusicVPop();
-        renderMusicCPop();
-    }
-
+    function renderMusic() { renderMusicVPop(); renderMusicCPop(); }
     function toggleHieuThuHai() {
-        playSound('click');
-        isHieuMode = !isHieuMode;
-        const btn = document.getElementById('hieu-btn');
-        const vListEl = document.getElementById('v-list');
-
-        if(isHieuMode) {
-            btn.classList.add('scale-110', 'opacity-100', 'drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]');
-            btn.classList.remove('opacity-50');
-        } else {
-            btn.classList.remove('scale-110', 'opacity-100', 'drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]');
-            btn.classList.add('opacity-50');
-        }
-
-        vListEl.style.opacity = '0';
-        setTimeout(() => {
-            renderMusicVPop();
-            vListEl.style.opacity = '1';
-        }, 300);
+        playSound('click'); isHieuMode = !isHieuMode; const btn = document.getElementById('hieu-btn'); const vListEl = document.getElementById('v-list');
+        if(isHieuMode) { btn.classList.add('scale-110', 'opacity-100', 'drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]'); btn.classList.remove('opacity-50'); } 
+        else { btn.classList.remove('scale-110', 'opacity-100', 'drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]'); btn.classList.add('opacity-50'); }
+        vListEl.style.opacity = '0'; setTimeout(() => { renderMusicVPop(); vListEl.style.opacity = '1'; }, 300);
     }
-
     var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    var player; 
-    function onYouTubeIframeAPIReady() { 
-        player = new YT.Player('player', { height: '100%', width: '100%', videoId: '', events: { 'onStateChange': onPlayerStateChange } }); 
-    }
+    var player; function onYouTubeIframeAPIReady() { player = new YT.Player('player', { height: '100%', width: '100%', videoId: '', events: { 'onStateChange': onPlayerStateChange } }); }
     function onPlayerStateChange(event) { if (event.data === YT.PlayerState.ENDED) checkAutoPlay(); }
     document.getElementById('mp4-player').addEventListener('ended', checkAutoPlay);
-
     function playMedia(src, type, name, idx, listType, thumb) {
-        currentList = listType; currentIndex = idx;
-        document.getElementById('now-playing').innerText = name;
-        const yt = document.getElementById('player');
-        const mp4 = document.getElementById('mp4-player');
-        
-        if(player && player.stopVideo) player.stopVideo();
-        mp4.pause();
-        
-        if(type === 'mp4') { 
-            yt.classList.add('hidden'); 
-            mp4.classList.remove('hidden'); 
-            mp4.src = src; 
-            mp4.play(); 
-        } 
-        else { 
-            mp4.classList.add('hidden'); 
-            yt.classList.remove('hidden'); 
-            player.loadVideoById(src); 
-        }
+        playSound('click'); currentList = listType; currentIndex = idx; document.getElementById('now-playing').innerText = name;
+        const yt = document.getElementById('player'); const mp4 = document.getElementById('mp4-player');
+        if(player && player.stopVideo) player.stopVideo(); mp4.pause();
+        if(type === 'mp4') { yt.classList.add('hidden'); mp4.classList.remove('hidden'); mp4.src = src; mp4.play(); } 
+        else { mp4.classList.add('hidden'); yt.classList.remove('hidden'); player.loadVideoById(src); }
     }
-
     function checkAutoPlay() {
         if(document.getElementById(`toggle-${currentList}`).checked) {
-            const listData = currentList === 'vpop' ? displayedVPop : cPop;
-            const nextIdx = (currentIndex + 1) % listData.length;
-            const nextSong = listData[nextIdx];
+            const listData = currentList === 'vpop' ? displayedVPop : cPop; const nextIdx = (currentIndex + 1) % listData.length; const nextSong = listData[nextIdx];
             playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb);
         }
     }
 
-    // --- OTHER ---
-    function renderGrammarList() {
-        document.getElementById('grammar-list').innerHTML = grammarRules.map(r => `
-            <div class="bg-white/5 p-6 border-l-2 border-indigo-500">
-                <h3 class="text-lg font-light text-white mb-2">${r.title}</h3>
-                <code class="block bg-black/20 p-2 text-pink-300 mb-2 font-mono text-xs">${r.structure}</code>
-                <p class="text-xs text-gray-400 italic">Ví dụ: ${r.ex}</p>
-            </div>`).join('');
-    }
-
-    let vIdx = 0; let vMode = 0;
-    function changeVocabMode() { vMode = (vMode+1)%3; document.getElementById('v-mode-btn').innerText = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"][vMode]; nextVocab(true); }
-    function nextVocab(rand) { if(rand) vIdx = Math.floor(Math.random()*vocabData.length); const i = vocabData[vIdx]; document.getElementById('v-question').innerText = vMode===0?i.hz:(vMode===1?i.mn.toUpperCase():i.hz); document.getElementById('v-input').value = ""; document.getElementById('v-msg').innerText = ""; }
-    
-    function checkVocab() { 
-        const i = vocabData[vIdx]; const v = document.getElementById('v-input').value.toLowerCase().trim();
-        let ok = (vMode===0 && v===i.mn.toLowerCase()) || (vMode===1 && v===i.hz) || (vMode===2 && v===i.py);
-        
-        if(ok) { 
-            playSound('correct');
-            updateCoins(1); 
-            document.getElementById('v-msg').innerText = "CHÍNH XÁC!"; 
-            document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400";
-            setTimeout(()=>nextVocab(true),1000); 
-        } else { 
-            playSound('wrong');
-            document.getElementById('v-msg').innerText = "SAI RỒI"; 
-            document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400";
-        }
-    }
-    
-    let rIdx = 0;
-    function nextParagraph() { rIdx = (rIdx+1)%readingData.length; document.getElementById('r-text').innerText = readingData[rIdx].zh; document.getElementById('r-input').value=""; }
-    function toggleReadingRef() { const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
-    function checkReading() { 
-        if(document.getElementById('r-input').value.length > 5) { 
-            playSound('correct');
-            updateCoins(1); 
-            document.getElementById('r-msg').innerText = "OK (+1 Xu)"; 
-        } else {
-            playSound('wrong');
-        }
-    }
-
+    // Khởi động
     window.onload = () => { 
         switchTab('home'); 
         renderMusic(); 
-        nextVocab(true); 
-        nextParagraph(); 
     };
 
 </script>
