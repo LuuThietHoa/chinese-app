@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.12 Master Clean Update</title>
+    <title>Skyreign Hub | V40.13 HUD Tool & Sequential Preload</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -73,6 +73,18 @@
         
         /* LIBRARY GRID */
         .lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
+
+        /* DRAG TOOL STYLES */
+        .drag-tool {
+            position: absolute;
+            resize: both;
+            overflow: hidden;
+            cursor: grab;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px dashed rgba(255,255,255,0.5);
+            z-index: 20;
+        }
+        .drag-tool:active { cursor: grabbing; border-color: #68D391; }
     </style>
 </head>
 <body>
@@ -84,7 +96,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.12 MASTER CLEAN</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.13 HUD TOOL & SEQUENTIAL LOAD</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -151,12 +163,23 @@
         <div id="player-name" class="absolute text-white font-bold tracking-wider text-sm select-none drop-shadow-md z-10" style="top: 224px; left: 137px; padding: 5px;">
             Nicksoler
         </div>
+        
+        <div id="drag-kc" class="drag-tool" style="top: 0px; left: 0px; width: 40px; height: 40px;">
+            <img src="kc.png" class="w-full h-full object-contain pointer-events-none select-none">
+        </div>
+
+        <div id="drag-coin" class="drag-tool" style="top: 50px; left: 0px; width: 40px; height: 40px;">
+            <img src="coin.png" class="w-full h-full object-contain pointer-events-none select-none">
+        </div>
     </div>
 
     <div class="min-h-screen flex flex-col items-center justify-center pt-24 px-4 pb-24 pointer-events-none">
         <div class="glass-card p-10 max-w-2xl w-full text-center border border-indigo-500/30">
             <h2 class="text-3xl font-bold tracking-[0.3em] uppercase text-white mb-2 drop-shadow-md">Khu Vực Game</h2>
-            <p class="text-[10px] text-green-300 tracking-[0.2em] uppercase mb-6">HUD Đã được cố định thành công!</p>
+            <p class="text-[10px] text-yellow-400 tracking-[0.2em] uppercase mb-2">HƯỚNG DẪN SETUP TOOL</p>
+            <p class="text-xs text-gray-300">1. Kéo thả hình KC và Coin để di chuyển.</p>
+            <p class="text-xs text-gray-300">2. Nắm góc phải bên dưới của khung đứt nét để Phóng to/Thu nhỏ.</p>
+            <p class="text-xs text-gray-300 mb-6">3. Click chuột phải vào hình để lấy Tọa Độ Gửi Cho Tui!</p>
             <div class="h-[1px] w-24 bg-white/20 mx-auto"></div>
         </div>
     </div>
@@ -696,12 +719,37 @@
         const navBtn = document.getElementById('n-' + id);
         if(navBtn) navBtn.classList.add('active');
         
-        // Lazy actions on click (if not initialized yet)
+        // Lazy actions on click
         if (id === 'voice' && document.getElementById('voice-target').innerText === "...") nextVoiceWord();
-        if (id === 'test') switchTestMode('grammar'); 
+        if (id === 'test' && document.getElementById('test-grammar').classList.contains('hidden')) switchTestMode('grammar'); 
     }
 
-    // Khởi tạo toàn bộ dữ liệu 1 lần lúc load để tránh lỗi kẹt Loading
+    // --- CƠ CHẾ TẢI NGẦM XẾP HÀNG (SEQUENTIAL PRELOAD) ---
+    function startSequentialPreload() {
+        const mp4Songs = [...vPop, ...cPop].filter(s => s.type === 'mp4').map(s => s.id);
+        let currentIndex = 0;
+
+        function loadNextVideo() {
+            if (currentIndex >= mp4Songs.length) {
+                console.log("Đã tải ngầm xong toàn bộ nhạc!");
+                return; // Xong
+            }
+            const url = mp4Songs[currentIndex];
+            fetch(url, { mode: 'no-cors' }) // Tải âm thầm lưu vào disk cache
+                .then(() => {
+                    currentIndex++;
+                    loadNextVideo(); // Tải xong bài này mới gọi bài tiếp theo
+                })
+                .catch(() => {
+                    currentIndex++;
+                    loadNextVideo(); // Bỏ qua nếu lỗi, tải bài tiếp theo
+                });
+        }
+        
+        loadNextVideo();
+    }
+
+    // Khởi tạo toàn bộ dữ liệu 1 lần lúc load
     window.onload = () => { 
         renderMusic(); 
         renderLibrary();
@@ -711,6 +759,9 @@
         nextParagraph(); 
         loadWorkSchedule();
         switchTab('home'); 
+
+        // Kích hoạt Tải Ngầm Xếp Hàng sau 3 giây (để mạng không bị nghẽn lúc mới mở web)
+        setTimeout(startSequentialPreload, 3000);
     };
 
     // --- 1. THƯ VIỆN TỪ VỰNG ---
@@ -922,7 +973,6 @@
         
         document.getElementById('tg-question').innerText = currentTestSentence;
 
-        // Randomize options ensuring the correct one is present
         let opts = [...grammarRules].sort(() => Math.random() - 0.5).slice(0, 3);
         if(!opts.includes(currentTestRule)) opts[0] = currentTestRule;
         opts = opts.sort(() => Math.random() - 0.5);
@@ -1281,6 +1331,56 @@
             playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb);
         }
     }
+
+    // --- TOOL KÉO THẢ TÌM TỌA ĐỘ TRÊN HUD ---
+    const draggables = [document.getElementById('drag-kc'), document.getElementById('drag-coin')];
+    
+    draggables.forEach(el => {
+        if(!el) return;
+        let isDragging = false;
+        let offsetX = 0, offsetY = 0;
+
+        el.addEventListener('mousedown', (e) => {
+            // Nhận diện nếu đang click vào góc dưới bên phải để resize thì KHÔNG kéo
+            const rect = el.getBoundingClientRect();
+            const isResize = (e.clientX > rect.right - 15) && (e.clientY > rect.bottom - 15);
+            if (isResize || e.button !== 0) return; 
+
+            isDragging = true;
+            el.style.cursor = 'grabbing';
+            
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const containerRect = document.getElementById('hud-stats-container').getBoundingClientRect();
+            
+            let newX = e.clientX - containerRect.left - offsetX;
+            let newY = e.clientY - containerRect.top - offsetY;
+
+            el.style.left = newX + 'px';
+            el.style.top = newY + 'px';
+        });
+
+        document.addEventListener('mouseup', () => {
+            if(isDragging) {
+                isDragging = false;
+                el.style.cursor = 'grab';
+            }
+        });
+
+        el.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            const currentTop = el.style.top || '0px';
+            const currentLeft = el.style.left || '0px';
+            const currentWidth = el.offsetWidth + 'px';
+            const currentHeight = el.offsetHeight + 'px';
+            alert(`${el.id.replace('drag-','').toUpperCase()}:\nTOP: ${currentTop}\nLEFT: ${currentLeft}\nWIDTH: ${currentWidth}\nHEIGHT: ${currentHeight}\n\n👉 Copy 4 dòng này đem qua đưa tui nhé!`);
+        });
+    });
+
 </script>
 </body>
 </html>
