@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.17 HUD Customizer</title>
+    <title>Skyreign Hub | V40.18 HUD BG Unlock</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -94,8 +94,8 @@
 
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
-        <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.17 HUD CUSTOMIZER</span>
+        <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.18 HUD BG UNLOCK</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -120,7 +120,7 @@
 
 <div id="home" class="tab-content active">
     <div class="min-h-screen flex flex-col items-center justify-center p-4">
-        <div class="glass-card p-12 text-center max-w-3xl w-full">
+        <div class="glass-card p-12 text-center max-w-3xl w-full mt-10">
             <h2 class="text-4xl font-light mb-2 tracking-tighter">Chào Thiết Hoa</h2>
             <div class="h-1 w-20 bg-indigo-500 mx-auto mb-8"></div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -156,8 +156,9 @@
     </div>
 </div>
 
-<div id="game" class="tab-content relative w-full h-full min-h-screen">
-    <div id="hud-stats-container" class="fixed inset-0 pointer-events-none bg-[#0a0a0a]">
+<div id="game" class="tab-content relative w-full h-full min-h-screen bg-[#0a0a0a]">
+    
+    <div id="hud-stats-container" class="fixed inset-0 pointer-events-none z-0">
         
         <div id="drag-bg" class="drag-tool pointer-events-auto" style="top: 0px; left: 0px; width: 1376px; height: 768px; z-index: 1;">
             <img src="bg.gif" class="w-full h-full object-cover pointer-events-none select-none" alt="Background GIF">
@@ -178,10 +179,6 @@
         <div id="drag-coin" class="drag-tool pointer-events-auto" style="top: 120px; left: 450px; width: 40px; height: 40px; z-index: 20;">
             <img src="coin.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Coin">
         </div>
-    </div>
-    
-    <div class="fixed bottom-24 right-6 z-50 pointer-events-auto">
-        <button onclick="alert('HƯỚNG DẪN DÀNH CHO SẾP:\n1. Nắm chuột rê để di chuyển (Ảnh nền, chữ, icon... đều kéo được).\n2. Nắm cái góc vuông mờ bên dưới góc phải của viền đứt nét để Phóng To/Thu Nhỏ.\n3. CLICK CHUỘT PHẢI vào một hình để nó nhả thông số Tọa Độ & Kích thước nha!')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] px-4 py-3 rounded uppercase tracking-widest font-bold shadow-lg shadow-indigo-500/50 transition">❓ Cách Dùng Tool HUD</button>
     </div>
 </div>
 
@@ -352,7 +349,7 @@
                             <span class="text-xs text-gray-400">Từ</span>
                             <input type="number" id="ts-start" value="1" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
                             <span class="text-xs text-gray-400">đến</span>
-                            <input type="number" id="ts-end" value="216" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
+                            <input type="number" id="ts-end" value="237" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
                         </div>
                         <p class="text-[9px] text-gray-500 italic">(Tổng kho có <span id="ts-max-hint">0</span> từ)</p>
                     </div>
@@ -635,7 +632,7 @@
         if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
     }
 
-    // --- FULL VOCABULARY DICTIONARY (237 WORDS - MAPPED EXACTLY) ---
+    // --- FULL VOCABULARY DICTIONARY (216 WORDS - MAPPED EXACTLY) ---
     const vocabData = [
         // I. Đại từ (17 từ)
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" },
@@ -760,28 +757,14 @@
         // Tàng hình Header khi vào tab Game HUD
         const mainHeader = document.getElementById('main-header');
         if(id === 'game') {
-            mainHeader.style.display = 'none';
+            mainHeader.style.opacity = '0';
         } else {
-            mainHeader.style.display = 'flex';
+            mainHeader.style.opacity = '1';
         }
         
         if (id === 'listen' && document.getElementById('listen-msg').innerText === "") generateListenSentence();
         if (id === 'voice' && document.getElementById('voice-target').innerText === "...") nextVoiceWord();
         if (id === 'test' && document.getElementById('test-grammar').classList.contains('hidden')) switchTestMode('grammar'); 
-    }
-
-    function startSequentialPreload() {
-        const mp4Songs = [...vPop, ...cPop].filter(s => s.type === 'mp4').map(s => s.id);
-        let currentIndex = 0;
-
-        function loadNextVideo() {
-            if (currentIndex >= mp4Songs.length) return;
-            const url = mp4Songs[currentIndex];
-            fetch(url, { mode: 'no-cors' })
-                .then(() => { currentIndex++; loadNextVideo(); })
-                .catch(() => { currentIndex++; loadNextVideo(); });
-        }
-        loadNextVideo();
     }
 
     window.onload = () => { 
@@ -794,7 +777,6 @@
         loadWorkSchedule();
         generateListenSentence();
         switchTab('home'); 
-        setTimeout(startSequentialPreload, 3000);
     };
 
     // --- LUYỆN NGHE PHẢN XẠ NHANH CÓ DỊCH NGHĨA ---
@@ -1069,7 +1051,7 @@
     function checkAutoPlay() { if(document.getElementById(`toggle-${currentList}`).checked) { const listData = currentList === 'vpop' ? displayedVPop : cPop; const nextIdx = (currentIndex + 1) % listData.length; const nextSong = listData[nextIdx]; playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb); } }
 
     // HUD TOOLS
-    const draggables = [document.getElementById('drag-kc'), document.getElementById('drag-coin'), document.getElementById('drag-uiG'), document.getElementById('drag-name')];
+    const draggables = [document.getElementById('drag-bg'), document.getElementById('drag-kc'), document.getElementById('drag-coin'), document.getElementById('drag-uiG'), document.getElementById('drag-name')];
     draggables.forEach(el => {
         if(!el) return; let isDragging = false; let offsetX = 0, offsetY = 0;
         el.addEventListener('mousedown', (e) => { const rect = el.getBoundingClientRect(); const isResize = (e.clientX > rect.right - 15) && (e.clientY > rect.bottom - 15); if (isResize || e.button !== 0) return; isDragging = true; el.style.cursor = 'grabbing'; offsetX = e.clientX - rect.left; offsetY = e.clientY - rect.top; });
