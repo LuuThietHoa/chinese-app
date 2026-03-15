@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.16 Smart Listening AI</title>
+    <title>Skyreign Hub | V40.17 HUD Customizer</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -93,12 +93,12 @@
 <audio id="sfx-correct" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" preload="auto"></audio>
 <audio id="sfx-wrong" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3" preload="auto"></audio>
 
-<div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
-    <div class="pointer-events-auto">
-        <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.16 LOGICAL LISTENING</span>
+<div id="top-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
+    <div id="top-logo" class="pointer-events-auto transition-opacity duration-300">
+        <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.17 HUD CUSTOMIZER</span>
     </div>
-    <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
+    <div id="top-balance" class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10 transition-opacity duration-300">
         <span class="text-yellow-400 text-xs">BALANCE</span>
         <span id="coin-display" class="text-xl font-mono font-bold text-white tabular-nums">0</span>
     </div>
@@ -121,7 +121,7 @@
 
 <div id="home" class="tab-content active">
     <div class="min-h-screen flex flex-col items-center justify-center p-4">
-        <div class="glass-card p-12 text-center max-w-3xl w-full">
+        <div class="glass-card p-12 text-center max-w-3xl w-full mt-10">
             <h2 class="text-4xl font-light mb-2 tracking-tighter">Chào Thiết Hoa</h2>
             <div class="h-1 w-20 bg-indigo-500 mx-auto mb-8"></div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -149,8 +149,8 @@
                 <button onclick="switchTab('music')" class="p-6 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
                     <div class="font-bold text-xs uppercase tracking-[0.2em]">Giải Trí</div>
                 </button>
-                <button onclick="switchTab('game')" class="col-span-2 md:col-span-4 p-4 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500">
-                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Game HUD</div>
+                <button onclick="switchTab('game')" class="col-span-2 md:col-span-4 p-4 bg-white/5 hover:bg-white text-gray-300 hover:text-black border border-white/10 rounded-sm transition duration-500 shadow-[0_0_15px_rgba(255,255,255,0.1)]">
+                    <div class="font-bold text-xs uppercase tracking-[0.2em]">Vào Game HUD</div>
                 </button>
             </div>
         </div>
@@ -158,34 +158,26 @@
 </div>
 
 <div id="game" class="tab-content">
-    <div class="fixed top-0 left-0 w-full h-full z-[-1]" style="background-image: url('bg.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-        <div class="absolute inset-0 bg-black/20"></div>
+    <div class="fixed top-0 left-0 w-full h-full z-[-1]" style="background-image: url('bg.gif'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+        <div class="absolute inset-0 bg-black/10"></div>
     </div>
     
-    <div id="hud-stats-container" class="absolute top-28 left-6 w-[350px] pointer-events-auto">
-        <img src="uistats.png" class="w-full h-auto object-contain pointer-events-none select-none" alt="UI Stats">
+    <div id="hud-stats-container" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
         
-        <div id="player-name" class="absolute text-white font-bold tracking-wider text-sm select-none drop-shadow-md z-10" style="top: 224px; left: 137px; padding: 5px;">
-            Nicksoler
-        </div>
-        
-        <div id="drag-kc" class="drag-tool" style="top: 0px; left: 0px; width: 40px; height: 40px;">
-            <img src="kc.png" class="w-full h-full object-contain pointer-events-none select-none">
+        <div id="drag-uiG" class="drag-tool pointer-events-auto" style="top: 100px; left: 100px; width: 300px; height: 100px;">
+            <img src="uiG.png" class="w-full h-full object-contain pointer-events-none select-none" alt="UI G">
         </div>
 
-        <div id="drag-coin" class="drag-tool" style="top: 50px; left: 0px; width: 40px; height: 40px;">
-            <img src="coin.png" class="w-full h-full object-contain pointer-events-none select-none">
+        <div id="drag-name" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 250px; left: 100px; width: 120px; height: 40px; padding: 5px;">
+            <span class="text-white font-bold tracking-wider text-sm select-none drop-shadow-md">NicksolEr</span>
         </div>
-    </div>
+        
+        <div id="drag-kc" class="drag-tool pointer-events-auto" style="top: 100px; left: 450px; width: 40px; height: 40px;">
+            <img src="kc.png" class="w-full h-full object-contain pointer-events-none select-none" alt="KC">
+        </div>
 
-    <div class="min-h-screen flex flex-col items-center justify-center pt-24 px-4 pb-24 pointer-events-none">
-        <div class="glass-card p-10 max-w-2xl w-full text-center border border-indigo-500/30">
-            <h2 class="text-3xl font-bold tracking-[0.3em] uppercase text-white mb-2 drop-shadow-md">Khu Vực Game</h2>
-            <p class="text-[10px] text-yellow-400 tracking-[0.2em] uppercase mb-2">HƯỚNG DẪN SETUP TOOL</p>
-            <p class="text-xs text-gray-300">1. Kéo thả hình KC và Coin để di chuyển.</p>
-            <p class="text-xs text-gray-300">2. Nắm góc phải bên dưới của khung đứt nét để Phóng to/Thu nhỏ.</p>
-            <p class="text-xs text-gray-300 mb-6">3. Click chuột phải vào hình để lấy Tọa Độ Gửi Cho Tui!</p>
-            <div class="h-[1px] w-24 bg-white/20 mx-auto"></div>
+        <div id="drag-coin" class="drag-tool pointer-events-auto" style="top: 150px; left: 450px; width: 40px; height: 40px;">
+            <img src="coin.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Coin">
         </div>
     </div>
 </div>
@@ -282,7 +274,7 @@
                 <button onclick="toggleVocabRandom()" id="v-random-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Học: THỨ TỰ</button>
             </div>
             
-            <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">#1 / 237</p>
+            <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">#1 / 216</p>
             <div id="v-question" class="text-7xl font-light text-center mb-10 tracking-tighter">...</div>
             
             <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-2xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkVocab()">
@@ -357,7 +349,7 @@
                             <span class="text-xs text-gray-400">Từ</span>
                             <input type="number" id="ts-start" value="1" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
                             <span class="text-xs text-gray-400">đến</span>
-                            <input type="number" id="ts-end" value="237" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
+                            <input type="number" id="ts-end" value="216" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
                         </div>
                         <p class="text-[9px] text-gray-500 italic">(Tổng kho có <span id="ts-max-hint">0</span> từ)</p>
                     </div>
@@ -640,32 +632,46 @@
         if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
     }
 
-    // --- FULL VOCABULARY DICTIONARY (216 WORDS) ---
+    // --- FULL VOCABULARY DICTIONARY (216 WORDS - MAPPED EXACTLY) ---
     const vocabData = [
+        // I. Đại từ (17 từ)
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" },
         { hz: "谁", py: "shéi", mn: "ai" }, { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" },
         { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" },
         { hz: "先生", py: "xiānsheng", mn: "ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô" },
+        
+        // II. Số đếm & Thời gian (26 từ)
         { hz: "零", py: "líng", mn: "số 0" }, { hz: "一", py: "yī", mn: "số 1" }, { hz: "二", py: "èr", mn: "số 2" }, { hz: "三", py: "sān", mn: "số 3" }, { hz: "四", py: "sì", mn: "số 4" },
         { hz: "五", py: "wǔ", mn: "số 5" }, { hz: "六", py: "liù", mn: "số 6" }, { hz: "七", py: "qī", mn: "số 7" }, { hz: "八", py: "bā", mn: "số 8" }, { hz: "九", py: "jiǔ", mn: "số 9" },
         { hz: "十", py: "shí", mn: "số 10" }, { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" },
         { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" },
         { hz: "号", py: "hào", mn: "ngày" }, { hz: "星期", py: "xīngqī", mn: "tuần" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" },
-        { hz: "时候", py: "shíhou", mn: "khi lúc" }, { hz: "是", py: "shì", mn: "là" }, { hz: "有", py: "yǒu", mn: "có" }, { hz: "在", py: "zài", mn: "ở" }, { hz: "要", py: "yào", mn: "muốn/cần" }, { hz: "喜欢", py: "xǐhuan", mn: "thích" },
+        { hz: "时候", py: "shíhou", mn: "khi lúc" },
+
+        // III. Động từ & Hành động (24 từ)
+        { hz: "是", py: "shì", mn: "là" }, { hz: "有", py: "yǒu", mn: "có" }, { hz: "在", py: "zài", mn: "ở" }, { hz: "要", py: "yào", mn: "muốn/cần" }, { hz: "喜欢", py: "xǐhuan", mn: "thích" },
         { hz: "爱", py: "ài", mn: "yêu" }, { hz: "吃", py: "chī", mn: "ăn" }, { hz: "喝", py: "hē", mn: "uống" }, { hz: "去", py: "qù", mn: "đi" }, { hz: "来", py: "lái", mn: "đến" },
         { hz: "想", py: "xiǎng", mn: "muốn/nghĩ" }, { hz: "看", py: "kàn", mn: "nhìn/xem" }, { hz: "听", py: "tīng", mn: "nghe" }, { hz: "说", py: "shuō", mn: "nói" }, { hz: "读", py: "dú", mn: "đọc" },
         { hz: "写", py: "xiě", mn: "viết" }, { hz: "做", py: "zuò", mn: "làm" }, { hz: "买", py: "mǎi", mn: "mua" }, { hz: "给", py: "gěi", mn: "cho/đưa" }, { hz: "回", py: "huí", mn: "về" },
         { hz: "住", py: "zhù", mn: "sống" }, { hz: "认识", py: "rènshi", mn: "quen biết" }, { hz: "会", py: "huì", mn: "biết" }, { hz: "能", py: "néng", mn: "có thể" },
+
+        // IV. Tính từ & Trạng thái (13 từ)
         { hz: "好", py: "hǎo", mn: "tốt/khỏe" }, { hz: "多", py: "duō", mn: "nhiều" }, { hz: "少", py: "shǎo", mn: "ít" }, { hz: "大", py: "dà", mn: "to/lớn" }, { hz: "小", py: "xiǎo", mn: "nhỏ" },
         { hz: "冷", py: "lěng", mn: "lạnh" }, { hz: "热", py: "rè", mn: "nóng" }, { hz: "高兴", py: "gāoxìng", mn: "vui vẻ" }, { hz: "漂亮", py: "piàoliang", mn: "xinh đẹp" }, { hz: "对", py: "duì", mn: "đúng" },
         { hz: "错", py: "cuò", mn: "sai" }, { hz: "忙", py: "máng", mn: "bận" }, { hz: "累", py: "lèi", mn: "mệt" },
+
+        // V. Đồ vật & Địa điểm (20 từ)
         { hz: "水", py: "shuǐ", mn: "nước" }, { hz: "饭", py: "fàn", mn: "cơm" }, { hz: "菜", py: "cài", mn: "món ăn" }, { hz: "茶", py: "chá", mn: "trà" }, { hz: "苹果", py: "píngguǒ", mn: "táo" },
         { hz: "钱", py: "qián", mn: "tiền" }, { hz: "东西", py: "dōngxi", mn: "đồ đạc" }, { hz: "杯子", py: "bēizi", mn: "cái cốc" }, { hz: "衣服", py: "yīfu", mn: "quần áo" }, { hz: "书", py: "shū", mn: "sách" },
         { hz: "桌子", py: "zhuōzi", mn: "cái bàn" }, { hz: "椅子", py: "yǐzi", mn: "cái ghế" }, { hz: "电脑", py: "diànnǎo", mn: "máy tính" }, { hz: "电视", py: "diànshì", mn: "tivi" }, { hz: "家", py: "jiā", mn: "nhà" },
         { hz: "学校", py: "xuéxiào", mn: "trường học" }, { hz: "饭店", py: "fàndiàn", mn: "nhà hàng" }, { hz: "商店", py: "shāngdiàn", mn: "cửa hàng" }, { hz: "北京", py: "běijīng", mn: "Bắc Kinh" }, { hz: "中国", py: "zhōngguó", mn: "Trung Quốc" },
+
+        // VI. Từ hư cấu & Ngữ pháp (16 từ)
         { hz: "不", py: "bù", mn: "không" }, { hz: "没", py: "méi", mn: "chưa/không" }, { hz: "很", py: "hěn", mn: "rất" }, { hz: "太", py: "tài", mn: "quá/lắm" }, { hz: "都", py: "dōu", mn: "đều" },
         { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của" }, { hz: "地", py: "de", mn: "một cách" }, { hz: "吗", py: "ma", mn: "không?" }, { hz: "呢", py: "ne", mn: "thì sao" }, { hz: "了", py: "le", mn: "rồi" },
         { hz: "什么", py: "shénme", mn: "cái gì" }, { hz: "哪儿", py: "nǎr", mn: "ở đâu" }, { hz: "怎么", py: "zěnme", mn: "làm sao" }, { hz: "多少", py: "duōshao", mn: "bao nhiêu" }, { hz: "几", py: "jǐ", mn: "mấy" },
+
+        // VII. 121 Từ Bổ Sung (101 từ đánh số + 22 từ cuối đoạn)
         { hz: "爱好", py: "àihào", mn: "yêu thích" }, { hz: "吧", py: "ba", mn: "nhé" }, { hz: "白", py: "bái", mn: "màu trắng" }, { hz: "白天", py: "báitiān", mn: "ban ngày" }, { hz: "百", py: "bǎi", mn: "một trăm" },
         { hz: "班", py: "bān", mn: "lớp học" }, { hz: "半", py: "bàn", mn: "một nửa" }, { hz: "帮", py: "bāng", mn: "giúp đỡ" }, { hz: "包", py: "bāo", mn: "bao" }, { hz: "包子", py: "bāozǐ", mn: "bánh bao" },
         { hz: "北边", py: "běibian", mn: "phía bắc" }, { hz: "本", py: "běn", mn: "cuốn/vở" }, { hz: "比", py: "bǐ", mn: "hơn/so với" }, { hz: "别", py: "bié", mn: "đừng" }, { hz: "别的", py: "bié de", mn: "cái khác" },
@@ -833,7 +839,7 @@
                 break; 
             case 2: 
                 sentence = `${T}${S}很${Adj}`; 
-                vi_sentence = `${time_vi[T]} ${subj_vi[S].toLowerCase()} rất ${adj_vi[Adj]}.`;
+                vi_sentence = `${time_vi[T]} ${subj_vi[S].toLowerCase()} rất ${adj_vi[Adj].toLowerCase()}.`;
                 break; 
             case 3: 
                 sentence = `${S}和${S2}${V_m}${P}`; 
@@ -861,7 +867,7 @@
                 break; 
             case 9: 
                 sentence = `${S}觉得${N_f}很${Adj}`; 
-                vi_sentence = `${subj_vi[S]} cảm thấy ${nf_vi[N_f]} rất ${adj_vi[Adj]}.`;
+                vi_sentence = `${subj_vi[S]} cảm thấy ${nf_vi[N_f]} rất ${adj_vi[Adj].toLowerCase()}.`;
                 break; 
         }
 
