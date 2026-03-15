@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.14 Master Listening AI</title>
+    <title>Skyreign Hub | V40.15 Master Listening Meaning</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -96,7 +96,7 @@
 <div class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 bg-gradient-to-b from-black/90 to-transparent pointer-events-none">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.14 MASTER LISTENING AI</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.15 LISTENING + MEANING</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -257,16 +257,16 @@
                 🎧
             </button>
             
-            <input type="text" id="listen-input" placeholder="Gõ Pinyin hoặc Hán Tự bạn nghe được..." class="w-full bg-transparent border-b-2 border-indigo-500 py-3 text-center text-xl outline-none mb-8 transition focus:border-white" onkeypress="if(event.key==='Enter') checkListen()">
+            <input type="text" id="listen-input" placeholder="Gõ Hán Tự bạn nghe được..." class="w-full bg-transparent border-b-2 border-indigo-500 py-3 text-center text-xl outline-none mb-8 transition focus:border-white" onkeypress="if(event.key==='Enter') checkListen()">
             
             <div class="flex gap-2">
                 <button onclick="checkListen()" class="w-full py-4 bg-white text-black font-bold text-xs uppercase tracking-[0.2em] rounded-sm">Kiểm Tra</button>
                 <button onclick="showListenHint()" class="w-16 py-4 bg-white/10 hover:bg-white/30 text-white font-bold text-xs transition rounded-sm" title="Gợi ý">💡</button>
             </div>
             
-            <div id="listen-feedback" class="text-center h-16 mt-6 flex flex-col justify-center items-center">
-                <p id="listen-msg" class="text-[10px] font-bold uppercase tracking-widest"></p>
-                <p id="listen-hint" class="text-lg text-yellow-400 mt-1 hidden font-mono"></p>
+            <div id="listen-feedback" class="text-center h-20 mt-6 flex flex-col justify-center items-center">
+                <p id="listen-msg" class="text-[10px] font-bold uppercase tracking-widest leading-relaxed"></p>
+                <p id="listen-hint" class="text-lg text-yellow-400 mt-1 hidden font-mono leading-tight"></p>
             </div>
             
             <button onclick="generateListenSentence()" class="w-full mt-4 py-3 border border-white/20 text-gray-400 text-xs uppercase tracking-[0.2em] hover:bg-white/10 transition rounded-sm">Đổi Câu Khác (Random)</button>
@@ -359,7 +359,7 @@
                             <span class="text-xs text-gray-400">đến</span>
                             <input type="number" id="ts-end" value="237" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
                         </div>
-                        <p class="text-[9px] text-gray-500 italic">(Tổng kho có <span id="ts-max-hint">237</span> từ)</p>
+                        <p class="text-[9px] text-gray-500 italic">(Tổng kho có <span id="ts-max-hint">0</span> từ)</p>
                     </div>
 
                     <div class="w-full text-center">
@@ -606,6 +606,7 @@
                 <div class="mt-6 text-center">
                     <h4 id="now-playing" class="text-2xl font-light text-white uppercase tracking-tight">Skyreign Music</h4>
                     <div class="h-[1px] w-12 bg-gray-700 mx-auto mt-4 mb-6"></div>
+                    
                     <div class="flex justify-center items-center gap-4">
                         <img src="hieuthuhai.png" id="hieu-btn" class="w-12 h-12 object-cover rounded-full cursor-pointer transition-all duration-300 opacity-50 hover:opacity-100 hover:scale-110" onclick="toggleHieuThuHai()" title="Chỉ nghe nhạc HIEUTHUHAI" alt="HIEUTHUHAI">
                     </div>
@@ -630,7 +631,7 @@
 </div>
 
 <script>
-    // --- AUDIO SYSTEM ---
+    // --- KHỞI TẠO CÁC HÀM TIỆN ÍCH DÙNG CHUNG ---
     function playSound(type) {
         let audio;
         if(type === 'click') audio = document.getElementById('sfx-click');
@@ -749,7 +750,6 @@
         {name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"}
     ];
 
-    // --- SYSTEM ---
     let userCoins = parseInt(localStorage.getItem('skyCoins')) || 0;
     document.getElementById('coin-display').innerText = userCoins;
     function updateCoins(amount) { userCoins += amount; localStorage.setItem('skyCoins', userCoins); document.getElementById('coin-display').innerText = userCoins; }
@@ -762,16 +762,15 @@
         const navBtn = document.getElementById('n-' + id);
         if(navBtn) navBtn.classList.add('active');
         
-        // Lazy actions on click
         if (id === 'listen' && document.getElementById('listen-msg').innerText === "") generateListenSentence();
         if (id === 'voice' && document.getElementById('voice-target').innerText === "...") nextVoiceWord();
         if (id === 'test' && document.getElementById('test-grammar').classList.contains('hidden')) switchTestMode('grammar'); 
     }
 
-    // --- CƠ CHẾ TẢI NGẦM XẾP HÀNG (SEQUENTIAL PRELOAD) ---
     function startSequentialPreload() {
         const mp4Songs = [...vPop, ...cPop].filter(s => s.type === 'mp4').map(s => s.id);
         let currentIndex = 0;
+
         function loadNextVideo() {
             if (currentIndex >= mp4Songs.length) return;
             const url = mp4Songs[currentIndex];
@@ -782,7 +781,6 @@
         loadNextVideo();
     }
 
-    // Khởi tạo
     window.onload = () => { 
         renderMusic(); 
         renderLibrary();
@@ -796,53 +794,97 @@
         setTimeout(startSequentialPreload, 3000);
     };
 
-    // --- TÍNH NĂNG MỚI: LUYỆN NGHE PHẢN XẠ NHANH ---
+    // --- LUYỆN NGHE PHẢN XẠ NHANH CÓ DỊCH NGHĨA ---
     let currentListenHz = "";
+    let currentListenVi = "";
     
     function generateListenSentence() {
         playSound('click');
-        const subjects = ["我", "你", "他", "她", "我们", "爸爸", "妈妈", "老师", "学生", "哥哥", "弟弟", "朋友", "先生", "小姐"];
-        const times = ["现在", "今天", "明天", "昨天", "上午", "中午", "下午", "白天"];
-        const verbs_move = ["去", "来", "回", "出", "到"];
-        const verbs_action = ["吃", "喝", "买", "看", "做", "听", "说", "读", "写", "打", "找"];
-        const verbs_feel = ["喜欢", "想", "爱", "觉得", "会", "能"];
-        const places = ["学校", "家", "饭店", "商店", "北京", "中国", "车站", "机场", "国外", "大学", "房间", "医院"];
-        const nouns_food = ["水", "饭", "菜", "茶", "苹果", "鸡蛋", "包子", "咖啡"];
-        const nouns_obj = ["书", "电脑", "电视", "衣服", "钱", "杯子", "桌子", "椅子", "手机", "地图", "车票"];
-        const adjectives = ["好", "多", "少", "大", "小", "冷", "热", "高兴", "漂亮", "忙", "累", "贵", "旧", "干净"];
-        const adverbs = ["很", "太", "不", "没", "都", "常"];
+        
+        // Dictionary for translation
+        const subj_vi = {"我":"Tôi", "你":"Bạn", "他":"Anh ấy", "她":"Cô ấy", "我们":"Chúng tôi", "爸爸":"Bố", "妈妈":"Mẹ", "老师":"Giáo viên", "学生":"Học sinh", "哥哥":"Anh trai", "弟弟":"Em trai", "朋友":"Bạn bè", "先生":"Ông", "小姐":"Cô"};
+        const time_vi = {"现在":"Bây giờ", "今天":"Hôm nay", "明天":"Ngày mai", "昨天":"Hôm qua", "上午":"Buổi sáng", "中午":"Buổi trưa", "下午":"Buổi chiều", "白天":"Ban ngày"};
+        const vm_vi = {"去":"đi", "来":"đến", "回":"về", "出":"ra", "到":"đến"};
+        const va_vi = {"吃":"ăn", "喝":"uống", "买":"mua", "看":"xem", "做":"làm", "听":"nghe", "说":"nói", "读":"đọc", "写":"viết", "打":"đánh/gọi"};
+        const vf_vi = {"喜欢":"thích", "想":"muốn", "爱":"yêu", "觉得":"cảm thấy", "会":"biết", "能":"có thể"};
+        const pl_vi = {"学校":"trường học", "家":"nhà", "饭店":"nhà hàng", "商店":"cửa hàng", "北京":"Bắc Kinh", "中国":"Trung Quốc", "车站":"trạm xe", "机场":"sân bay", "国外":"nước ngoài", "大学":"đại học", "房间":"căn phòng", "教室":"lớp học"};
+        const nf_vi = {"水":"nước", "饭":"cơm", "菜":"đồ ăn", "茶":"trà", "苹果":"táo", "鸡蛋":"trứng gà", "包子":"bánh bao", "咖啡":"cà phê"};
+        const no_vi = {"书":"sách", "电脑":"máy tính", "电视":"tivi", "衣服":"quần áo", "钱":"tiền", "杯子":"cái cốc", "桌子":"cái bàn", "椅子":"cái ghế", "地图":"bản đồ", "车票":"vé xe"};
+        const adj_vi = {"好":"tốt/khỏe", "多":"nhiều", "少":"ít", "大":"to", "小":"nhỏ", "冷":"lạnh", "热":"nóng", "高兴":"vui vẻ", "漂亮":"xinh đẹp", "忙":"bận", "累":"mệt", "贵":"đắt", "旧":"cũ", "干净":"sạch sẽ"};
+
+        const subjects = Object.keys(subj_vi);
+        const times = Object.keys(time_vi);
+        const verbs_move = Object.keys(vm_vi);
+        const verbs_action = Object.keys(va_vi);
+        const verbs_feel = Object.keys(vf_vi);
+        const places = Object.keys(pl_vi);
+        const nouns_food = Object.keys(nf_vi);
+        const nouns_obj = Object.keys(no_vi);
+        const adjectives = Object.keys(adj_vi);
 
         const S = subjects[Math.floor(Math.random() * subjects.length)];
         const S2 = subjects[Math.floor(Math.random() * subjects.length)];
         const T = times[Math.floor(Math.random() * times.length)];
         const V_m = verbs_move[Math.floor(Math.random() * verbs_move.length)];
         const V_a = verbs_action[Math.floor(Math.random() * verbs_action.length)];
-        const V_f = verbs_feel[Math.floor(Math.random() * verbs_feel.length)];
         const P = places[Math.floor(Math.random() * places.length)];
         const N_f = nouns_food[Math.floor(Math.random() * nouns_food.length)];
         const N_o = nouns_obj[Math.floor(Math.random() * nouns_obj.length)];
         const Adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-        const Adv = adverbs[Math.floor(Math.random() * adverbs.length)];
         
         let sentence = "";
-        const type = Math.floor(Math.random() * 10); // Cỗ máy xào nấu 10 cấu trúc câu
+        let vi_sentence = "";
+        const type = Math.floor(Math.random() * 10); 
         
         switch(type) {
-            case 0: sentence = `${S}${T}${V_m}${P}`; break; // Tôi hôm nay đi Bắc Kinh
-            case 1: sentence = `${S}${V_f}${V_a}${N_f}`; break; // Anh ấy thích ăn táo
-            case 2: sentence = `${T}${S}很${Adj}`; break; // Hôm nay tôi rất mệt
-            case 3: sentence = `${S}和${S2}${V_m}${P}`; break; // Tôi và bạn đi nhà hàng
-            case 4: sentence = `${S}在${P}${V_a}${N_o}`; break; // Mẹ ở nhà xem Tivi
-            case 5: sentence = `${S}${V_a}${N_o}吗？`; break; // Bạn mua sách không?
-            case 6: sentence = `${S}不${V_a}${N_f}`; break; // Tôi không uống cà phê
-            case 7: sentence = `${P}有${N_o}`; break; // Phòng có máy tính
-            case 8: sentence = `${S}${T}要${V_a}${N_o}`; break; // Ngày mai tôi muốn mua quần áo
-            case 9: sentence = `${S}觉得${N_f}很${Adj}`; break; // Tôi cảm thấy món ăn rất ngon
+            case 0: 
+                sentence = `${S}${T}${V_m}${P}`; 
+                vi_sentence = `${subj_vi[S]} ${time_vi[T].toLowerCase()} ${vm_vi[V_m]} ${pl_vi[P]}.`;
+                break; 
+            case 1: 
+                const V_a_1 = ["吃", "喝", "买"][Math.floor(Math.random() * 3)];
+                const V_f_1 = ["喜欢", "想"][Math.floor(Math.random() * 2)];
+                sentence = `${S}${V_f_1}${V_a_1}${N_f}`; 
+                vi_sentence = `${subj_vi[S]} ${vf_vi[V_f_1]} ${va_vi[V_a_1]} ${nf_vi[N_f]}.`;
+                break; 
+            case 2: 
+                sentence = `${T}${S}很${Adj}`; 
+                vi_sentence = `${time_vi[T]} ${subj_vi[S].toLowerCase()} rất ${adj_vi[Adj]}.`;
+                break; 
+            case 3: 
+                sentence = `${S}和${S2}${V_m}${P}`; 
+                vi_sentence = `${subj_vi[S]} và ${subj_vi[S2].toLowerCase()} ${vm_vi[V_m]} ${pl_vi[P]}.`;
+                break; 
+            case 4: 
+                sentence = `${S}在${P}${V_a}${N_o}`; 
+                vi_sentence = `${subj_vi[S]} ở ${pl_vi[P]} ${va_vi[V_a]} ${no_vi[N_o]}.`;
+                break; 
+            case 5: 
+                sentence = `${S}${V_a}${N_o}吗？`; 
+                vi_sentence = `${subj_vi[S]} ${va_vi[V_a]} ${no_vi[N_o]} không?`;
+                break; 
+            case 6: 
+                sentence = `${S}不${V_a}${N_f}`; 
+                vi_sentence = `${subj_vi[S]} không ${va_vi[V_a]} ${nf_vi[N_f]}.`;
+                break; 
+            case 7: 
+                sentence = `${P}有${N_o}`; 
+                vi_sentence = `Ở ${pl_vi[P]} có ${no_vi[N_o]}.`;
+                break; 
+            case 8: 
+                sentence = `${S}${T}要${V_a}${N_o}`; 
+                vi_sentence = `${time_vi[T]} ${subj_vi[S].toLowerCase()} muốn ${va_vi[V_a]} ${no_vi[N_o]}.`;
+                break; 
+            case 9: 
+                sentence = `${S}觉得${N_f}很${Adj}`; 
+                vi_sentence = `${subj_vi[S]} cảm thấy ${nf_vi[N_f]} rất ${adj_vi[Adj]}.`;
+                break; 
         }
 
         currentListenHz = sentence;
+        currentListenVi = vi_sentence;
         document.getElementById('listen-input').value = "";
-        document.getElementById('listen-msg').innerText = "Đã tạo câu mới! Bấm nút Play để nghe.";
+        document.getElementById('listen-msg').innerHTML = "Đã tạo câu mới! Bấm nút 🎧 để nghe.";
         document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-indigo-300";
         document.getElementById('listen-hint').classList.add('hidden');
     }
@@ -851,7 +893,7 @@
         if ('speechSynthesis' in window) {
             const utterance = new SpeechSynthesisUtterance(currentListenHz);
             utterance.lang = 'zh-CN';
-            utterance.rate = 1.3; // TỐC ĐỘ NHANH ĐỂ LUYỆN NHĨ
+            utterance.rate = 1.3; 
             window.speechSynthesis.speak(utterance);
         } else {
             alert("Trình duyệt không hỗ trợ phát âm thanh. Vui lòng dùng Chrome.");
@@ -860,23 +902,22 @@
 
     function showListenHint() {
         playSound('click');
-        document.getElementById('listen-hint').innerText = currentListenHz;
+        document.getElementById('listen-hint').innerHTML = `${currentListenHz}<br><span class="text-white text-xs font-normal opacity-80">${currentListenVi}</span>`;
         document.getElementById('listen-hint').classList.remove('hidden');
     }
 
     function checkListen() {
         const val = document.getElementById('listen-input').value.trim();
-        // Kiểm tra đúng Hán tự, bỏ dấu câu khi check
         const cleanVal = val.replace(/[.,?!。，？！]/g, "");
         const cleanTarget = currentListenHz.replace(/[.,?!。，？！]/g, "");
         
         if(cleanVal === cleanTarget) {
-            playSound('correct'); updateCoins(2); // Thưởng 2 xu vì khó
-            document.getElementById('listen-msg').innerText = "QUÁ XUẤT SẮC! (+2 COIN)";
-            document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400";
-            document.getElementById('listen-hint').innerText = currentListenHz;
+            playSound('correct'); updateCoins(2);
+            document.getElementById('listen-msg').innerHTML = `QUÁ XUẤT SẮC! (+2 COIN)<br><span class="text-white font-normal text-xs normal-case mt-1 block opacity-80">Nghĩa là: ${currentListenVi}</span>`;
+            document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400 leading-relaxed";
+            document.getElementById('listen-hint').innerHTML = `${currentListenHz}<br><span class="text-white text-xs font-normal opacity-80">${currentListenVi}</span>`;
             document.getElementById('listen-hint').classList.remove('hidden');
-            setTimeout(generateListenSentence, 2000);
+            setTimeout(generateListenSentence, 3000); // 3 giây để đọc tiếng Việt trước khi nhảy câu mới
         } else {
             playSound('wrong');
             document.getElementById('listen-msg').innerText = "SAI RỒI! BẤM 🎧 NGHE LẠI HOẶC XEM GỢI Ý.";
@@ -902,123 +943,40 @@
 
     // --- 2. HỌC VỀ TÊN ---
     let nmIdx = 0; let nmMode = 0;
-    function changeNamesMode() {
-        playSound('click'); nmMode = (nmMode + 1) % 3; 
-        document.getElementById('nm-mode-btn').innerText = ["Việt ➔ Hán", "Hán ➔ Việt", "Việt ➔ Pinyin"][nmMode]; 
-        nextNames(true); 
-    }
-    function nextNames(rand) { 
-        if(rand) nmIdx = Math.floor(Math.random() * namesData.length); 
-        const n = namesData[nmIdx]; 
-        document.getElementById('nm-question').innerText = nmMode===0 ? n.vi : (nmMode===1 ? n.hz : n.vi); 
-        document.getElementById('nm-input').value = ""; 
-        document.getElementById('nm-msg').innerText = ""; 
-        document.getElementById('nm-hint').classList.add('hidden');
-    }
-    function showNamesHint() {
-        playSound('click'); const n = namesData[nmIdx]; let ans = nmMode===0 ? n.hz : (nmMode===1 ? n.vi : n.py);
-        document.getElementById('nm-hint').innerText = "Gợi ý: " + ans; document.getElementById('nm-hint').classList.remove('hidden');
-    }
-    function checkNames() { 
-        const n = namesData[nmIdx]; const v = document.getElementById('nm-input').value.toLowerCase().trim();
-        let ok = (nmMode===0 && v===n.hz) || (nmMode===1 && v===n.vi.toLowerCase()) || (nmMode===2 && v===n.py.toLowerCase());
-        if(ok) { 
-            playSound('correct'); updateCoins(1); 
-            document.getElementById('nm-msg').innerText = "CHÍNH XÁC!"; document.getElementById('nm-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400";
-            setTimeout(()=>nextNames(true), 1000); 
-        } else { 
-            playSound('wrong'); 
-            document.getElementById('nm-msg').innerText = "SAI RỒI"; document.getElementById('nm-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400";
-        }
-    }
+    function changeNamesMode() { playSound('click'); nmMode = (nmMode + 1) % 3; document.getElementById('nm-mode-btn').innerText = ["Việt ➔ Hán", "Hán ➔ Việt", "Việt ➔ Pinyin"][nmMode]; nextNames(true); }
+    function nextNames(rand) { if(rand) nmIdx = Math.floor(Math.random() * namesData.length); const n = namesData[nmIdx]; document.getElementById('nm-question').innerText = nmMode===0 ? n.vi : (nmMode===1 ? n.hz : n.vi); document.getElementById('nm-input').value = ""; document.getElementById('nm-msg').innerText = ""; document.getElementById('nm-hint').classList.add('hidden'); }
+    function showNamesHint() { playSound('click'); const n = namesData[nmIdx]; let ans = nmMode===0 ? n.hz : (nmMode===1 ? n.vi : n.py); document.getElementById('nm-hint').innerText = "Gợi ý: " + ans; document.getElementById('nm-hint').classList.remove('hidden'); }
+    function checkNames() { const n = namesData[nmIdx]; const v = document.getElementById('nm-input').value.toLowerCase().trim(); let ok = (nmMode===0 && v===n.hz) || (nmMode===1 && v===n.vi.toLowerCase()) || (nmMode===2 && v===n.py.toLowerCase()); if(ok) { playSound('correct'); updateCoins(1); document.getElementById('nm-msg').innerText = "CHÍNH XÁC!"; document.getElementById('nm-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400"; setTimeout(()=>nextNames(true), 1000); } else { playSound('wrong'); document.getElementById('nm-msg').innerText = "SAI RỒI"; document.getElementById('nm-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; } }
 
     // --- 3. LUYỆN NÓI AI ---
-    let voiceIdx = 0;
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    let recognition;
-    
+    let voiceIdx = 0; const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; let recognition;
     if (SpeechRecognition) {
-        recognition = new SpeechRecognition();
-        recognition.lang = 'zh-CN';
-        recognition.interimResults = false;
-        
-        recognition.onstart = function() {
-            document.getElementById('voice-pulse').classList.remove('opacity-0'); document.getElementById('voice-pulse').classList.add('animate-ping');
-            document.getElementById('voice-feedback').innerHTML = "<span class='text-gray-400'>Đang lắng nghe... (Hãy nói đi)</span>";
-        };
-        recognition.onend = function() {
-            document.getElementById('voice-pulse').classList.add('opacity-0'); document.getElementById('voice-pulse').classList.remove('animate-ping');
-        };
+        recognition = new SpeechRecognition(); recognition.lang = 'zh-CN'; recognition.interimResults = false;
+        recognition.onstart = function() { document.getElementById('voice-pulse').classList.remove('opacity-0'); document.getElementById('voice-pulse').classList.add('animate-ping'); document.getElementById('voice-feedback').innerHTML = "<span class='text-gray-400'>Đang lắng nghe... (Hãy nói đi)</span>"; };
+        recognition.onend = function() { document.getElementById('voice-pulse').classList.add('opacity-0'); document.getElementById('voice-pulse').classList.remove('animate-ping'); };
         recognition.onresult = function(event) {
             const spoken = event.results[0][0].transcript.trim(); const target = vocabData[voiceIdx].hz; const cleanSpoken = spoken.replace(/[.,?!。，？！]/g, "");
             if(cleanSpoken === target || cleanSpoken.includes(target) || target.includes(cleanSpoken)) {
-                playSound('correct'); updateCoins(1);
-                document.getElementById('voice-feedback').innerHTML = `<span class='text-green-400 font-bold'>Giỏi quá! AI nghe được: "${cleanSpoken}"</span>`;
-                setTimeout(() => nextVoiceWord(), 2000);
-            } else {
-                playSound('wrong');
-                document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Sai rồi. Bạn đọc là: "${cleanSpoken}"<br>Cần đọc là: "${target}"</span>`;
-            }
+                playSound('correct'); updateCoins(1); document.getElementById('voice-feedback').innerHTML = `<span class='text-green-400 font-bold'>Giỏi quá! AI nghe được: "${cleanSpoken}"</span>`; setTimeout(() => nextVoiceWord(), 2000);
+            } else { playSound('wrong'); document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Sai rồi. Bạn đọc là: "${cleanSpoken}"<br>Cần đọc là: "${target}"</span>`; }
         };
-        recognition.onerror = function(event) {
-            document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Lỗi mic: ${event.error}</span>`;
-            document.getElementById('voice-pulse').classList.add('opacity-0'); document.getElementById('voice-pulse').classList.remove('animate-ping');
-        };
+        recognition.onerror = function(event) { document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Lỗi mic: ${event.error}</span>`; document.getElementById('voice-pulse').classList.add('opacity-0'); document.getElementById('voice-pulse').classList.remove('animate-ping'); };
     }
-    function nextVoiceWord() {
-        playSound('click'); voiceIdx = Math.floor(Math.random() * vocabData.length);
-        document.getElementById('voice-target').innerText = vocabData[voiceIdx].hz;
-        document.getElementById('voice-py').innerText = vocabData[voiceIdx].py;
-        document.getElementById('voice-mn').innerText = vocabData[voiceIdx].mn;
-        document.getElementById('voice-feedback').innerHTML = "";
-    }
-    function startListening() {
-        if (!SpeechRecognition) { alert("Trình duyệt của bạn không hỗ trợ Nhận diện giọng nói. Hãy dùng Google Chrome!"); return; }
-        playSound('click'); recognition.start();
-    }
+    function nextVoiceWord() { playSound('click'); voiceIdx = Math.floor(Math.random() * vocabData.length); document.getElementById('voice-target').innerText = vocabData[voiceIdx].hz; document.getElementById('voice-py').innerText = vocabData[voiceIdx].py; document.getElementById('voice-mn').innerText = vocabData[voiceIdx].mn; document.getElementById('voice-feedback').innerHTML = ""; }
+    function startListening() { if (!SpeechRecognition) { alert("Trình duyệt của bạn không hỗ trợ Nhận diện giọng nói. Hãy dùng Google Chrome!"); return; } playSound('click'); recognition.start(); }
 
-    // --- 4. HỌC TỪ VỰNG GỐC ---
+    // --- 4. TỪ VỰNG GỐC CÓ RANDOM / THỨ TỰ ---
     let vIdx = -1; let vMode = 0; let isVocabRandom = false;
-    
-    function changeVocabMode() { 
-        playSound('click'); vMode = (vMode+1)%3; 
-        document.getElementById('v-mode-btn').innerText = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"][vMode]; 
-        nextVocab(false); 
-    }
-    
-    function toggleVocabRandom() {
-        playSound('click'); isVocabRandom = !isVocabRandom;
-        document.getElementById('v-random-btn').innerText = isVocabRandom ? "Học: NGẪU NHIÊN" : "Học: THỨ TỰ";
-        document.getElementById('v-random-btn').className = isVocabRandom ? "text-[9px] border border-indigo-500 text-indigo-300 px-3 py-1 uppercase tracking-widest hover:bg-indigo-500 hover:text-white transition rounded" : "text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded";
-    }
-
+    function changeVocabMode() { playSound('click'); vMode = (vMode+1)%3; document.getElementById('v-mode-btn').innerText = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"][vMode]; nextVocab(false); }
+    function toggleVocabRandom() { playSound('click'); isVocabRandom = !isVocabRandom; document.getElementById('v-random-btn').innerText = isVocabRandom ? "Học: NGẪU NHIÊN" : "Học: THỨ TỰ"; document.getElementById('v-random-btn').className = isVocabRandom ? "text-[9px] border border-indigo-500 text-indigo-300 px-3 py-1 uppercase tracking-widest hover:bg-indigo-500 hover:text-white transition rounded" : "text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded"; }
     function nextVocab(moveNext = false) { 
-        if(moveNext) {
-            if(isVocabRandom) vIdx = Math.floor(Math.random() * vocabData.length);
-            else vIdx = (vIdx + 1) % vocabData.length;
-        } else if (vIdx === -1) { vIdx = 0; }
-        
-        const i = vocabData[vIdx]; 
-        document.getElementById('v-progress').innerText = `#${vIdx + 1} / ${vocabData.length}`;
-        document.getElementById('v-question').innerText = vMode===0?i.hz:(vMode===1?i.mn.toUpperCase():i.hz); 
-        document.getElementById('v-input').value = ""; document.getElementById('v-msg').innerText = ""; document.getElementById('v-hint').classList.add('hidden');
+        if(moveNext) { if(isVocabRandom) vIdx = Math.floor(Math.random() * vocabData.length); else vIdx = (vIdx + 1) % vocabData.length; } else if (vIdx === -1) { vIdx = 0; }
+        const i = vocabData[vIdx]; document.getElementById('v-progress').innerText = `#${vIdx + 1} / ${vocabData.length}`; document.getElementById('v-question').innerText = vMode===0?i.hz:(vMode===1?i.mn.toUpperCase():i.hz); document.getElementById('v-input').value = ""; document.getElementById('v-msg').innerText = ""; document.getElementById('v-hint').classList.add('hidden');
     }
-    
-    function showVocabHint() {
-        playSound('click'); const i = vocabData[vIdx]; let ans = vMode===0 ? i.mn : (vMode===1 ? i.hz : i.py);
-        document.getElementById('v-hint').innerText = "Gợi ý: " + ans; document.getElementById('v-hint').classList.remove('hidden');
-    }
-    
+    function showVocabHint() { playSound('click'); const i = vocabData[vIdx]; let ans = vMode===0 ? i.mn : (vMode===1 ? i.hz : i.py); document.getElementById('v-hint').innerText = "Gợi ý: " + ans; document.getElementById('v-hint').classList.remove('hidden'); }
     function checkVocab() { 
-        const i = vocabData[vIdx]; const v = document.getElementById('v-input').value.toLowerCase().trim();
-        let ok = (vMode===0 && v===i.mn.toLowerCase()) || (vMode===1 && v===i.hz) || (vMode===2 && v===i.py.toLowerCase());
-        if(ok) { 
-            playSound('correct'); updateCoins(1); 
-            document.getElementById('v-msg').innerText = "CHÍNH XÁC!"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400";
-            setTimeout(()=>nextVocab(true),1000); 
-        } else { 
-            playSound('wrong'); document.getElementById('v-msg').innerText = "SAI RỒI"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400";
-        }
+        const i = vocabData[vIdx]; const v = document.getElementById('v-input').value.toLowerCase().trim(); let ok = (vMode===0 && v===i.mn.toLowerCase()) || (vMode===1 && v===i.hz) || (vMode===2 && v===i.py.toLowerCase());
+        if(ok) { playSound('correct'); updateCoins(1); document.getElementById('v-msg').innerText = "CHÍNH XÁC!"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400"; setTimeout(()=>nextVocab(true),1000); } else { playSound('wrong'); document.getElementById('v-msg').innerText = "SAI RỒI"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; }
     }
 
     // --- 5. TỐC ĐỘ (SPEED TEST) & CÁC TAB KIỂM TRA ---
@@ -1028,194 +986,58 @@
         document.getElementById(`test-${mode}`).classList.remove('hidden');
         if(mode === 'grammar') startGrammarTest(); if(mode === 'fill') generateFillTest(); if(mode === 'speed') resetSpeedTest();
     }
-
-    // NGỮ PHÁP (GRAMMAR TEST)
     function startGrammarTest() {
         document.getElementById('tg-step1').classList.remove('hidden'); document.getElementById('tg-step2').classList.add('hidden'); document.getElementById('tg-step3').classList.add('hidden'); document.getElementById('tg-step4').classList.add('hidden');
         document.getElementById('tg-sub-input').value = ""; document.getElementById('tg-noun-input').value = ""; document.getElementById('tg-make-sentence').value = ""; document.getElementById('tg-feedback').innerText = "";
-
         currentTestRule = grammarRules[Math.floor(Math.random() * grammarRules.length)];
         const subs = ["我","你","他","爸爸","妈妈"]; const nouns = ["学生","老师","医生","好人"];
         const S = subs[Math.floor(Math.random() * subs.length)]; const N = nouns[Math.floor(Math.random() * nouns.length)];
-        
-        if(currentTestRule.id === "g1") currentTestSentence = S + "是" + N;
-        if(currentTestRule.id === "g2") currentTestSentence = S + "不是" + N;
-        if(currentTestRule.id === "g3") currentTestSentence = S + "是" + N + "吗？";
-        if(currentTestRule.id === "g4") currentTestSentence = "我们"; 
-        
+        if(currentTestRule.id === "g1") currentTestSentence = S + "是" + N; if(currentTestRule.id === "g2") currentTestSentence = S + "不是" + N; if(currentTestRule.id === "g3") currentTestSentence = S + "是" + N + "吗？"; if(currentTestRule.id === "g4") currentTestSentence = "我们"; 
         document.getElementById('tg-question').innerText = currentTestSentence;
-
-        let opts = [...grammarRules].sort(() => Math.random() - 0.5).slice(0, 3);
-        if(!opts.includes(currentTestRule)) opts[0] = currentTestRule;
-        opts = opts.sort(() => Math.random() - 0.5);
-
-        document.getElementById('tg-options').innerHTML = opts.map(r => 
-            `<button onclick="checkStructure('${r.id}')" class="p-3 bg-white/5 border border-white/20 rounded text-xs hover:bg-white hover:text-black transition text-left">${r.structure}</button>`
-        ).join('');
+        let opts = [...grammarRules].sort(() => Math.random() - 0.5).slice(0, 3); if(!opts.includes(currentTestRule)) opts[0] = currentTestRule; opts = opts.sort(() => Math.random() - 0.5);
+        document.getElementById('tg-options').innerHTML = opts.map(r => `<button onclick="checkStructure('${r.id}')" class="p-3 bg-white/5 border border-white/20 rounded text-xs hover:bg-white hover:text-black transition text-left">${r.structure}</button>`).join('');
     }
-
-    function checkStructure(id) {
-        if(id === currentTestRule.id) { playSound('correct'); document.getElementById('tg-step1').classList.add('hidden'); document.getElementById('tg-step2').classList.remove('hidden'); document.getElementById('tg-feedback').innerText = "Đúng cấu trúc!"; } 
-        else { playSound('wrong'); alert("Sai rồi! Hãy nhìn kỹ câu hỏi."); }
-    }
-    function checkSubject() {
-        const val = document.getElementById('tg-sub-input').value.trim();
-        if(currentTestSentence.includes(val) && val.length > 0) { playSound('correct'); document.getElementById('tg-step2').classList.add('hidden'); document.getElementById('tg-step3').classList.remove('hidden'); } 
-        else { playSound('wrong'); alert("Chưa đúng chủ ngữ!"); }
-    }
-    function checkNoun() {
-        const val = document.getElementById('tg-noun-input').value.trim();
-        if(currentTestSentence.includes(val) && val.length > 0) { playSound('correct'); document.getElementById('tg-step3').classList.add('hidden'); document.getElementById('tg-step4').classList.remove('hidden'); } 
-        else { playSound('wrong'); alert("Chưa đúng danh từ!"); }
-    }
-    function checkAISentence() {
-        const val = document.getElementById('tg-make-sentence').value.trim(); const feedback = document.getElementById('tg-feedback');
-        const match = val.match(currentTestRule.regex); const isChinese = /[\u4e00-\u9fa5]/.test(val);
-        if(match && isChinese) {
-            playSound('correct'); updateCoins(1); feedback.innerText = "TUYỆT VỜI! (+1 COIN)"; feedback.classList.replace("text-red-400", "text-green-400");
-            setTimeout(startGrammarTest, 2000);
-        } else {
-            playSound('wrong'); feedback.innerText = "Sai cấu trúc hoặc không phải tiếng Trung!"; feedback.classList.add("text-red-400");
-        }
-    }
-
-    // ĐIỀN TỪ HỘI THOẠI
+    function checkStructure(id) { if(id === currentTestRule.id) { playSound('correct'); document.getElementById('tg-step1').classList.add('hidden'); document.getElementById('tg-step2').classList.remove('hidden'); document.getElementById('tg-feedback').innerText = "Đúng cấu trúc!"; } else { playSound('wrong'); alert("Sai rồi! Hãy nhìn kỹ câu hỏi."); } }
+    function checkSubject() { const val = document.getElementById('tg-sub-input').value.trim(); if(currentTestSentence.includes(val) && val.length > 0) { playSound('correct'); document.getElementById('tg-step2').classList.add('hidden'); document.getElementById('tg-step3').classList.remove('hidden'); } else { playSound('wrong'); alert("Chưa đúng chủ ngữ!"); } }
+    function checkNoun() { const val = document.getElementById('tg-noun-input').value.trim(); if(currentTestSentence.includes(val) && val.length > 0) { playSound('correct'); document.getElementById('tg-step3').classList.add('hidden'); document.getElementById('tg-step4').classList.remove('hidden'); } else { playSound('wrong'); alert("Chưa đúng danh từ!"); } }
+    function checkAISentence() { const val = document.getElementById('tg-make-sentence').value.trim(); const feedback = document.getElementById('tg-feedback'); const match = val.match(currentTestRule.regex); const isChinese = /[\u4e00-\u9fa5]/.test(val); if(match && isChinese) { playSound('correct'); updateCoins(1); feedback.innerText = "TUYỆT VỜI! (+1 COIN)"; feedback.classList.replace("text-red-400", "text-green-400"); setTimeout(startGrammarTest, 2000); } else { playSound('wrong'); feedback.innerText = "Sai cấu trúc hoặc không phải tiếng Trung!"; feedback.classList.add("text-red-400"); } }
     function generateFillTest() {
         const subjects = ["我", "你", "他", "她", "老师", "学生", "同学", "朋友", "先生", "小姐", "爸爸", "妈妈", "哥哥", "弟弟", "工人"];
         const verbs = ["喜欢", "想", "去", "吃", "喝", "看", "买", "做", "学", "打", "告诉", "教", "认识", "觉得", "记"];
         const nouns = ["苹果", "茶", "水", "饭", "菜", "咖啡", "衣服", "书", "电脑", "电视", "包子", "鸡蛋", "钱", "汉语", "汉字"];
         const places = ["学校", "家", "饭店", "商店", "北京", "中国", "车站", "机场", "国外", "大学", "房间", "教室"];
         const adjectives = ["好", "多", "少", "大", "小", "冷", "热", "高兴", "漂亮", "忙", "累", "贵", "健康", "旧"];
-        
-        const S = subjects[Math.floor(Math.random() * subjects.length)];
-        const type = Math.floor(Math.random() * 3); 
-        let dialogue = ""; let hideTarget = ""; let fakeOpts = [];
-        
-        if (type === 0) { 
-            const V = verbs[Math.floor(Math.random() * 5)]; 
-            const N = nouns[Math.floor(Math.random() * nouns.length)];
-            hideTarget = Math.random() > 0.5 ? V : N;
-            dialogue = `A: ${S === '我' ? '你' : '我'}${V}什么？<br>B: ${S}${V === hideTarget ? '____' : V}${N === hideTarget ? '____' : N}。`;
-            fakeOpts = ["什么", "吗", "不", "很", "太"];
-        } else if (type === 1) { 
-            const P = places[Math.floor(Math.random() * places.length)];
-            hideTarget = P;
-            dialogue = `A: ${S === '我' ? '你' : '我'}去哪儿？<br>B: ${S}去____。`;
-            fakeOpts = ["去", "来", "在", "哪儿", "怎么"];
-        } else { 
-            const N2 = nouns[Math.floor(Math.random() * nouns.length)];
-            const Adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-            hideTarget = Math.random() > 0.5 ? N2 : Adj;
-            dialogue = `A: ${N2 === hideTarget ? '____' : N2}怎么样？<br>B: ${N2 === hideTarget ? '____' : N2}很${Adj === hideTarget ? '____' : Adj}。`;
-            fakeOpts = ["很", "太", "不", "多", "少"];
-        }
-        
-        document.getElementById('tf-dialogue').innerHTML = dialogue;
-        let opts = fakeOpts.sort(() => Math.random() - 0.5).slice(0, 4); 
-        if(!opts.includes(hideTarget)) opts[0] = hideTarget; 
-        opts = opts.sort(() => Math.random() - 0.5);
-        
-        document.getElementById('tf-options').innerHTML = opts.map(o => 
-            `<button onclick="checkFill('${o}', '${hideTarget}')" class="px-4 py-2 border border-white/20 rounded hover:bg-white hover:text-black font-bold">${o}</button>`
-        ).join('');
-        document.getElementById('tf-msg').innerText = "";
+        const S = subjects[Math.floor(Math.random() * subjects.length)]; const type = Math.floor(Math.random() * 3); let dialogue = ""; let hideTarget = ""; let fakeOpts = [];
+        if (type === 0) { const V = verbs[Math.floor(Math.random() * 5)]; const N = nouns[Math.floor(Math.random() * nouns.length)]; hideTarget = Math.random() > 0.5 ? V : N; dialogue = `A: ${S === '我' ? '你' : '我'}${V}什么？<br>B: ${S}${V === hideTarget ? '____' : V}${N === hideTarget ? '____' : N}。`; fakeOpts = ["什么", "吗", "不", "很", "太"]; } 
+        else if (type === 1) { const P = places[Math.floor(Math.random() * places.length)]; hideTarget = P; dialogue = `A: ${S === '我' ? '你' : '我'}去哪儿？<br>B: ${S}去____。`; fakeOpts = ["去", "来", "在", "哪儿", "怎么"]; } 
+        else { const N2 = nouns[Math.floor(Math.random() * nouns.length)]; const Adj = adjectives[Math.floor(Math.random() * adjectives.length)]; hideTarget = Math.random() > 0.5 ? N2 : Adj; dialogue = `A: ${N2 === hideTarget ? '____' : N2}怎么样？<br>B: ${N2 === hideTarget ? '____' : N2}很${Adj === hideTarget ? '____' : Adj}。`; fakeOpts = ["很", "太", "不", "多", "少"]; }
+        document.getElementById('tf-dialogue').innerHTML = dialogue; let opts = fakeOpts.sort(() => Math.random() - 0.5).slice(0, 4); if(!opts.includes(hideTarget)) opts[0] = hideTarget; opts = opts.sort(() => Math.random() - 0.5);
+        document.getElementById('tf-options').innerHTML = opts.map(o => `<button onclick="checkFill('${o}', '${hideTarget}')" class="px-4 py-2 border border-white/20 rounded hover:bg-white hover:text-black font-bold">${o}</button>`).join(''); document.getElementById('tf-msg').innerText = "";
     }
+    function checkFill(ans, correct) { if(ans === correct) { playSound('correct'); updateCoins(1); document.getElementById('tf-msg').innerText = "CHÍNH XÁC! (+1 COIN)"; document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-green-400"; setTimeout(generateFillTest, 1000); } else { playSound('wrong'); document.getElementById('tf-msg').innerText = "SAI RỒI!"; document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-red-400"; } }
 
-    function checkFill(ans, correct) {
-        if(ans === correct) {
-            playSound('correct'); updateCoins(1);
-            document.getElementById('tf-msg').innerText = "CHÍNH XÁC! (+1 COIN)"; document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-green-400";
-            setTimeout(generateFillTest, 1000);
-        } else {
-            playSound('wrong'); document.getElementById('tf-msg').innerText = "SAI RỒI!"; document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-red-400";
-        }
-    }
-
-    // SPEED TEST
     let tsTimer; let tsTimeLeft; let tsData = []; let tsCurrentIdx = 0; let tsScore = 0; let tsLevel = 1;
-
-    function resetSpeedTest() {
-        clearInterval(tsTimer);
-        document.getElementById('ts-setup').classList.remove('hidden'); document.getElementById('ts-play').classList.add('hidden'); document.getElementById('ts-result').classList.add('hidden');
-        document.getElementById('ts-max-hint').innerText = vocabData.length; document.getElementById('ts-end').value = vocabData.length; 
-    }
-
+    function resetSpeedTest() { clearInterval(tsTimer); document.getElementById('ts-setup').classList.remove('hidden'); document.getElementById('ts-play').classList.add('hidden'); document.getElementById('ts-result').classList.add('hidden'); document.getElementById('ts-max-hint').innerText = vocabData.length; document.getElementById('ts-end').value = vocabData.length; }
     function startSpeedTest() {
-        playSound('click');
-        const start = parseInt(document.getElementById('ts-start').value) || 1;
-        const end = parseInt(document.getElementById('ts-end').value) || vocabData.length;
-        tsTimeLeft = (parseInt(document.getElementById('ts-time').value) || 1) * 60;
-        tsLevel = parseInt(document.getElementById('ts-level').value);
-        
+        playSound('click'); const start = parseInt(document.getElementById('ts-start').value) || 1; const end = parseInt(document.getElementById('ts-end').value) || vocabData.length; tsTimeLeft = (parseInt(document.getElementById('ts-time').value) || 1) * 60; tsLevel = parseInt(document.getElementById('ts-level').value);
         if(start < 1 || end > vocabData.length || start > end) { alert(`Phạm vi từ không hợp lệ! Vui lòng nhập từ 1 đến ${vocabData.length}`); return; }
-        
-        tsData = vocabData.slice(start - 1, end).sort(() => Math.random() - 0.5);
-        tsCurrentIdx = 0; tsScore = 0;
-        
-        document.getElementById('ts-setup').classList.add('hidden'); document.getElementById('ts-play').classList.remove('hidden'); document.getElementById('ts-play').classList.add('flex');
-        document.getElementById('ts-total-display').innerText = tsData.length; document.getElementById('ts-score-display').innerText = 0; document.getElementById('ts-play-msg').innerText = "";
-        
+        tsData = vocabData.slice(start - 1, end).sort(() => Math.random() - 0.5); tsCurrentIdx = 0; tsScore = 0;
+        document.getElementById('ts-setup').classList.add('hidden'); document.getElementById('ts-play').classList.remove('hidden'); document.getElementById('ts-play').classList.add('flex'); document.getElementById('ts-total-display').innerText = tsData.length; document.getElementById('ts-score-display').innerText = 0; document.getElementById('ts-play-msg').innerText = "";
         updateTsWord();
-        
-        tsTimer = setInterval(() => {
-            tsTimeLeft--;
-            let m = Math.floor(tsTimeLeft / 60).toString().padStart(2, '0'); let s = (tsTimeLeft % 60).toString().padStart(2, '0');
-            document.getElementById('ts-timer-display').innerText = `${m}:${s}`;
-            if(tsTimeLeft <= 0) endSpeedTest();
-        }, 1000);
+        tsTimer = setInterval(() => { tsTimeLeft--; let m = Math.floor(tsTimeLeft / 60).toString().padStart(2, '0'); let s = (tsTimeLeft % 60).toString().padStart(2, '0'); document.getElementById('ts-timer-display').innerText = `${m}:${s}`; if(tsTimeLeft <= 0) endSpeedTest(); }, 1000);
     }
+    function updateTsWord() { if(tsCurrentIdx >= tsData.length) { endSpeedTest(); return; } let item = tsData[tsCurrentIdx]; let q = ""; if(tsLevel === 1) q = item.hz; if(tsLevel === 2) q = item.mn.toUpperCase(); if(tsLevel === 3) q = item.mn.toUpperCase(); document.getElementById('ts-current-word').innerText = q; document.getElementById('ts-input').value = ""; document.getElementById('ts-input').focus(); }
+    function checkSpeedVocab() { let item = tsData[tsCurrentIdx]; let v = document.getElementById('ts-input').value.toLowerCase().trim(); let msgEl = document.getElementById('ts-play-msg'); let ok = false; if(tsLevel === 1 && v === item.mn.toLowerCase()) ok = true; if(tsLevel === 2 && v === item.py.toLowerCase()) ok = true; if(tsLevel === 3 && v === item.hz) ok = true; if(ok) { playSound('correct'); tsScore++; updateCoins(1); tsCurrentIdx++; document.getElementById('ts-score-display').innerText = tsScore; msgEl.innerText = ""; updateTsWord(); } else { playSound('wrong'); document.getElementById('ts-input').value = ""; msgEl.innerText = "SAI RỒI! THỬ LẠI!"; } }
+    function endSpeedTest() { clearInterval(tsTimer); document.getElementById('ts-play').classList.add('hidden'); document.getElementById('ts-play').classList.remove('flex'); document.getElementById('ts-result').classList.remove('hidden'); document.getElementById('ts-final-score').innerText = `${tsScore} / ${tsData.length}`; }
 
-    function updateTsWord() {
-        if(tsCurrentIdx >= tsData.length) { endSpeedTest(); return; }
-        let item = tsData[tsCurrentIdx]; let q = "";
-        if(tsLevel === 1) q = item.hz; if(tsLevel === 2) q = item.mn.toUpperCase(); if(tsLevel === 3) q = item.mn.toUpperCase(); 
-        document.getElementById('ts-current-word').innerText = q; document.getElementById('ts-input').value = ""; document.getElementById('ts-input').focus();
-    }
-
-    function checkSpeedVocab() {
-        let item = tsData[tsCurrentIdx]; let v = document.getElementById('ts-input').value.toLowerCase().trim(); let msgEl = document.getElementById('ts-play-msg');
-        let ok = false;
-        if(tsLevel === 1 && v === item.mn.toLowerCase()) ok = true; 
-        if(tsLevel === 2 && v === item.py.toLowerCase()) ok = true; 
-        if(tsLevel === 3 && v === item.hz) ok = true; 
-        
-        if(ok) {
-            playSound('correct'); tsScore++; updateCoins(1); tsCurrentIdx++; document.getElementById('ts-score-display').innerText = tsScore; msgEl.innerText = ""; updateTsWord();
-        } else {
-            playSound('wrong'); document.getElementById('ts-input').value = ""; msgEl.innerText = "SAI RỒI! THỬ LẠI!";
-        }
-    }
-
-    function endSpeedTest() {
-        clearInterval(tsTimer);
-        document.getElementById('ts-play').classList.add('hidden'); document.getElementById('ts-play').classList.remove('flex'); document.getElementById('ts-result').classList.remove('hidden');
-        document.getElementById('ts-final-score').innerText = `${tsScore} / ${tsData.length}`;
-    }
-
-    // --- OTHER (GRAMMAR, READING, WORK SCHEDULE, MUSIC, HUD TOOLS) ---
-    function renderGrammarList() {
-        document.getElementById('grammar-list').innerHTML = grammarRules.map(r => `
-            <div class="bg-white/5 p-6 border-l-2 border-indigo-500">
-                <h3 class="text-lg font-light text-white mb-2">${r.title}</h3>
-                <code class="block bg-black/20 p-2 text-pink-300 mb-2 font-mono text-xs">${r.structure}</code>
-                <p class="text-xs text-gray-400 italic">Ví dụ: ${r.ex}</p>
-            </div>`).join('');
-    }
-
-    let rIdx = 0;
-    function nextParagraph() { playSound('click'); rIdx = (rIdx+1)%readingData.length; document.getElementById('r-text').innerText = readingData[rIdx].zh; document.getElementById('r-input').value=""; document.getElementById('r-msg').innerText=""; }
+    // --- OTHER ---
+    function renderGrammarList() { document.getElementById('grammar-list').innerHTML = grammarRules.map(r => `<div class="bg-white/5 p-6 border-l-2 border-indigo-500"> <h3 class="text-lg font-light text-white mb-2">${r.title}</h3> <code class="block bg-black/20 p-2 text-pink-300 mb-2 font-mono text-xs">${r.structure}</code> <p class="text-xs text-gray-400 italic">Ví dụ: ${r.ex}</p> </div>`).join(''); }
+    let rIdx = 0; function nextParagraph() { playSound('click'); rIdx = (rIdx+1)%readingData.length; document.getElementById('r-text').innerText = readingData[rIdx].zh; document.getElementById('r-input').value=""; document.getElementById('r-msg').innerText=""; }
     function toggleReadingRef() { playSound('click'); const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
-    function checkReading() { 
-        if(document.getElementById('r-input').value.length > 5) { 
-            playSound('correct'); updateCoins(1); document.getElementById('r-msg').innerText = "OK (+1 Xu)"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-green-400";
-        } else {
-            playSound('wrong'); document.getElementById('r-msg').innerText = "DỊCH QUÁ NGẮN!"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-red-400";
-        }
-    }
+    function checkReading() { if(document.getElementById('r-input').value.length > 5) { playSound('correct'); updateCoins(1); document.getElementById('r-msg').innerText = "OK (+1 Xu)"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-green-400"; } else { playSound('wrong'); document.getElementById('r-msg').innerText = "DỊCH QUÁ NGẮN!"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-red-400"; } }
 
     // LỊCH LÀM VIỆC
-    const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"];
-    let workStep = 0; let currentWeek = 1; let scheduleData = []; let isDoubleShift = false; 
+    const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"]; let workStep = 0; let currentWeek = 1; let scheduleData = []; let isDoubleShift = false; 
     function changeWeek() { currentWeek = parseInt(document.getElementById('week-selector').value); document.getElementById('display-week-num').innerText = "TUẦN " + currentWeek; loadWorkSchedule(); }
     function loadWorkSchedule() { const key = `skyWork_W${currentWeek}`; const saved = localStorage.getItem(key); document.getElementById('btn-cancel-edit').classList.add('hidden'); if (saved) { scheduleData = JSON.parse(saved); renderScheduleResult(); } else { resetWorkSchedule(); } }
     function clearAllSchedules() { playSound('click'); if(confirm("Bạn có chắc chắn muốn xóa TOÀN BỘ lịch?")) { localStorage.removeItem('skyWork_W1'); localStorage.removeItem('skyWork_W2'); localStorage.removeItem('skyWork_W3'); localStorage.removeItem('skyWork_W4'); currentWeek = 1; document.getElementById('week-selector').value = 1; document.getElementById('display-week-num').innerText = "TUẦN 1"; resetWorkSchedule(); } }
