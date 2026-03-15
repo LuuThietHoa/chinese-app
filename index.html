@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.18 HUD BG Unlock</title>
+    <title>Skyreign Hub | V40.19 MP4 Background</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -82,6 +82,7 @@
             cursor: grab;
             background: rgba(255, 255, 255, 0.1);
             border: 1px dashed rgba(255,255,255,0.5);
+            z-index: 20;
         }
         .drag-tool:active { cursor: grabbing; border-color: #68D391; }
     </style>
@@ -95,7 +96,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.18 HUD BG UNLOCK</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.19 MP4 BACKGROUND</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -161,7 +162,7 @@
     <div id="hud-stats-container" class="fixed inset-0 pointer-events-none z-0">
         
         <div id="drag-bg" class="drag-tool pointer-events-auto" style="top: 0px; left: 0px; width: 1376px; height: 768px; z-index: 1;">
-            <img src="bg.gif" class="w-full h-full object-cover pointer-events-none select-none" alt="Background GIF">
+            <video src="bg.mp4" autoplay loop muted playsinline class="w-full h-full object-cover pointer-events-none select-none"></video>
         </div>
 
         <div id="drag-uiG" class="drag-tool pointer-events-auto" style="top: 50px; left: 50px; width: 350px; height: 150px; z-index: 10;">
@@ -632,15 +633,13 @@
         if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
     }
 
-    // --- FULL VOCABULARY DICTIONARY (216 WORDS - MAPPED EXACTLY) ---
+    // --- FULL VOCABULARY DICTIONARY (237 WORDS - MAPPED EXACTLY) ---
     const vocabData = [
-        // I. Đại từ (17 từ)
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" },
         { hz: "谁", py: "shéi", mn: "ai" }, { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" },
         { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" },
         { hz: "先生", py: "xiānsheng", mn: "ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô" },
         
-        // II. Số đếm & Thời gian (26 từ)
         { hz: "零", py: "líng", mn: "số 0" }, { hz: "一", py: "yī", mn: "số 1" }, { hz: "二", py: "èr", mn: "số 2" }, { hz: "三", py: "sān", mn: "số 3" }, { hz: "四", py: "sì", mn: "số 4" },
         { hz: "五", py: "wǔ", mn: "số 5" }, { hz: "六", py: "liù", mn: "số 6" }, { hz: "七", py: "qī", mn: "số 7" }, { hz: "八", py: "bā", mn: "số 8" }, { hz: "九", py: "jiǔ", mn: "số 9" },
         { hz: "十", py: "shí", mn: "số 10" }, { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" },
@@ -648,37 +647,32 @@
         { hz: "号", py: "hào", mn: "ngày" }, { hz: "星期", py: "xīngqī", mn: "tuần" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" },
         { hz: "时候", py: "shíhou", mn: "khi lúc" },
 
-        // III. Động từ & Hành động (24 từ)
         { hz: "是", py: "shì", mn: "là" }, { hz: "有", py: "yǒu", mn: "có" }, { hz: "在", py: "zài", mn: "ở" }, { hz: "要", py: "yào", mn: "muốn/cần" }, { hz: "喜欢", py: "xǐhuan", mn: "thích" },
         { hz: "爱", py: "ài", mn: "yêu" }, { hz: "吃", py: "chī", mn: "ăn" }, { hz: "喝", py: "hē", mn: "uống" }, { hz: "去", py: "qù", mn: "đi" }, { hz: "来", py: "lái", mn: "đến" },
         { hz: "想", py: "xiǎng", mn: "muốn/nghĩ" }, { hz: "看", py: "kàn", mn: "nhìn/xem" }, { hz: "听", py: "tīng", mn: "nghe" }, { hz: "说", py: "shuō", mn: "nói" }, { hz: "读", py: "dú", mn: "đọc" },
         { hz: "写", py: "xiě", mn: "viết" }, { hz: "做", py: "zuò", mn: "làm" }, { hz: "买", py: "mǎi", mn: "mua" }, { hz: "给", py: "gěi", mn: "cho/đưa" }, { hz: "回", py: "huí", mn: "về" },
         { hz: "住", py: "zhù", mn: "sống" }, { hz: "认识", py: "rènshi", mn: "quen biết" }, { hz: "会", py: "huì", mn: "biết" }, { hz: "能", py: "néng", mn: "có thể" },
 
-        // IV. Tính từ & Trạng thái (13 từ)
         { hz: "好", py: "hǎo", mn: "tốt/khỏe" }, { hz: "多", py: "duō", mn: "nhiều" }, { hz: "少", py: "shǎo", mn: "ít" }, { hz: "大", py: "dà", mn: "to/lớn" }, { hz: "小", py: "xiǎo", mn: "nhỏ" },
         { hz: "冷", py: "lěng", mn: "lạnh" }, { hz: "热", py: "rè", mn: "nóng" }, { hz: "高兴", py: "gāoxìng", mn: "vui vẻ" }, { hz: "漂亮", py: "piàoliang", mn: "xinh đẹp" }, { hz: "对", py: "duì", mn: "đúng" },
         { hz: "错", py: "cuò", mn: "sai" }, { hz: "忙", py: "máng", mn: "bận" }, { hz: "累", py: "lèi", mn: "mệt" },
 
-        // V. Đồ vật & Địa điểm (20 từ)
         { hz: "水", py: "shuǐ", mn: "nước" }, { hz: "饭", py: "fàn", mn: "cơm" }, { hz: "菜", py: "cài", mn: "món ăn" }, { hz: "茶", py: "chá", mn: "trà" }, { hz: "苹果", py: "píngguǒ", mn: "táo" },
         { hz: "钱", py: "qián", mn: "tiền" }, { hz: "东西", py: "dōngxi", mn: "đồ đạc" }, { hz: "杯子", py: "bēizi", mn: "cái cốc" }, { hz: "衣服", py: "yīfu", mn: "quần áo" }, { hz: "书", py: "shū", mn: "sách" },
         { hz: "桌子", py: "zhuōzi", mn: "cái bàn" }, { hz: "椅子", py: "yǐzi", mn: "cái ghế" }, { hz: "电脑", py: "diànnǎo", mn: "máy tính" }, { hz: "电视", py: "diànshì", mn: "tivi" }, { hz: "家", py: "jiā", mn: "nhà" },
         { hz: "学校", py: "xuéxiào", mn: "trường học" }, { hz: "饭店", py: "fàndiàn", mn: "nhà hàng" }, { hz: "商店", py: "shāngdiàn", mn: "cửa hàng" }, { hz: "北京", py: "běijīng", mn: "Bắc Kinh" }, { hz: "中国", py: "zhōngguó", mn: "Trung Quốc" },
 
-        // VI. Từ hư cấu & Ngữ pháp (16 từ)
         { hz: "不", py: "bù", mn: "không" }, { hz: "没", py: "méi", mn: "chưa/không" }, { hz: "很", py: "hěn", mn: "rất" }, { hz: "太", py: "tài", mn: "quá/lắm" }, { hz: "都", py: "dōu", mn: "đều" },
-        { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của (trợ từ)" }, { hz: "地", py: "de", mn: "một cách" }, { hz: "吗", py: "ma", mn: "không?" }, { hz: "呢", py: "ne", mn: "thì sao" }, { hz: "了", py: "le", mn: "rồi" },
+        { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của" }, { hz: "地", py: "de", mn: "một cách" }, { hz: "吗", py: "ma", mn: "không?" }, { hz: "呢", py: "ne", mn: "thì sao" }, { hz: "了", py: "le", mn: "rồi" },
         { hz: "什么", py: "shénme", mn: "cái gì" }, { hz: "哪儿", py: "nǎr", mn: "ở đâu" }, { hz: "怎么", py: "zěnme", mn: "làm sao" }, { hz: "多少", py: "duōshao", mn: "bao nhiêu" }, { hz: "几", py: "jǐ", mn: "mấy" },
 
-        // VII. 121 Từ Bổ Sung (101 từ đánh số + 22 từ cuối đoạn)
         { hz: "爱好", py: "àihào", mn: "yêu thích" }, { hz: "吧", py: "ba", mn: "nhé" }, { hz: "白", py: "bái", mn: "màu trắng" }, { hz: "白天", py: "báitiān", mn: "ban ngày" }, { hz: "百", py: "bǎi", mn: "một trăm" },
         { hz: "班", py: "bān", mn: "lớp học" }, { hz: "半", py: "bàn", mn: "một nửa" }, { hz: "帮", py: "bāng", mn: "giúp đỡ" }, { hz: "包", py: "bāo", mn: "bao" }, { hz: "包子", py: "bāozǐ", mn: "bánh bao" },
         { hz: "北边", py: "běibian", mn: "phía bắc" }, { hz: "本", py: "běn", mn: "cuốn/vở" }, { hz: "比", py: "bǐ", mn: "hơn/so với" }, { hz: "别", py: "bié", mn: "đừng" }, { hz: "别的", py: "bié de", mn: "cái khác" },
         { hz: "病", py: "bìng", mn: "bệnh/ốm" }, { hz: "不客气", py: "búkèqi", mn: "không có gì" }, { hz: "不用", py: "búyòng", mn: "không cần" }, { hz: "差", py: "chà", mn: "kém/tệ" }, { hz: "常", py: "cháng", mn: "thường xuyên" },
         { hz: "尝尝", py: "cháng cháng", mn: "nếm thử" }, { hz: "唱", py: "chàng", mn: "hát" }, { hz: "车", py: "chē", mn: "xe" }, { hz: "车票", py: "chēpiào", mn: "vé xe" }, { hz: "车上", py: "chē shàng", mn: "trên xe" },
         { hz: "车站", py: "chēzhàn", mn: "trạm xe" }, { hz: "出", py: "chū", mn: "ra/đi" }, { hz: "出来", py: "chūlái", mn: "ra đây" }, { hz: "床", py: "chuáng", mn: "giường" }, { hz: "次", py: "cì", mn: "lần/lượt" },
-        { hz: "从", py: "cóng", mn: "từ" }, { hz: "打", py: "dǎ", mn: "đánh/gõ" }, { hz: "打车", py: "dǎchē", mn: "bắt xe" }, { hz: "打电话", py: "dǎ diànhuà", mn: "gọi điện thoại" }, { hz: "打开", py: "dǎkāi", mn: "mở ra" },
+        { hz: "从", py: "cóng", mn: "từ" }, { hz: "打", py: "dǎ", mn: "đánh/gõ" }, { hz: "打车", py: "dǎchē", mn: "bắt xe" }, { hz: "打电话", py: "dǎ diànhuà", mn: "gọi điện thoại" }, { hz: "打开", py: "dǎkāi", mn: "m mở ra" },
         { hz: "打球", py: "dǎqiú", mn: "chơi bóng" }, { hz: "大学", py: "dàxué", mn: "đại học" }, { hz: "到", py: "dào", mn: "đến" }, { hz: "得到", py: "dédào", mn: "đạt được" }, { hz: "等", py: "děng", mn: "đợi/chờ" }, 
         { hz: "地", py: "dì", mn: "đất" }, { hz: "地点", py: "dìdiǎn", mn: "địa điểm" }, { hz: "地方", py: "dìfāng", mn: "nơi chốn" }, { hz: "地上", py: "dìshàng", mn: "mặt đất" }, { hz: "地图", py: "dìtú", mn: "bản đồ" }, 
         { hz: "弟弟", py: "dìdi", mn: "em trai" }, { hz: "第", py: "dì", mn: "thứ tự" }, { hz: "电", py: "diàn", mn: "điện" }, { hz: "电话", py: "diànhuà", mn: "điện thoại" }, { hz: "电影", py: "diànyǐng", mn: "phim ảnh" }, 
@@ -767,6 +761,20 @@
         if (id === 'test' && document.getElementById('test-grammar').classList.contains('hidden')) switchTestMode('grammar'); 
     }
 
+    function startSequentialPreload() {
+        const mp4Songs = [...vPop, ...cPop].filter(s => s.type === 'mp4').map(s => s.id);
+        let currentIndex = 0;
+
+        function loadNextVideo() {
+            if (currentIndex >= mp4Songs.length) return;
+            const url = mp4Songs[currentIndex];
+            fetch(url, { mode: 'no-cors' })
+                .then(() => { currentIndex++; loadNextVideo(); })
+                .catch(() => { currentIndex++; loadNextVideo(); });
+        }
+        loadNextVideo();
+    }
+
     window.onload = () => { 
         renderMusic(); 
         renderLibrary();
@@ -777,6 +785,7 @@
         loadWorkSchedule();
         generateListenSentence();
         switchTab('home'); 
+        setTimeout(startSequentialPreload, 3000);
     };
 
     // --- LUYỆN NGHE PHẢN XẠ NHANH CÓ DỊCH NGHĨA ---
