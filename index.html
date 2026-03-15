@@ -82,7 +82,6 @@
             cursor: grab;
             background: rgba(255, 255, 255, 0.1);
             border: 1px dashed rgba(255,255,255,0.5);
-            z-index: 20;
         }
         .drag-tool:active { cursor: grabbing; border-color: #68D391; }
     </style>
@@ -93,12 +92,12 @@
 <audio id="sfx-correct" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" preload="auto"></audio>
 <audio id="sfx-wrong" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3" preload="auto"></audio>
 
-<div id="top-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
-    <div id="top-logo" class="pointer-events-auto transition-opacity duration-300">
-        <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
+<div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
+    <div class="pointer-events-auto">
+        <h1 class="text-xl font-bold tracking-[0.3em] uppercase">Skyreign</h1>
         <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.17 HUD CUSTOMIZER</span>
     </div>
-    <div id="top-balance" class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10 transition-opacity duration-300">
+    <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
         <span id="coin-display" class="text-xl font-mono font-bold text-white tabular-nums">0</span>
     </div>
@@ -106,7 +105,7 @@
 
 <nav id="main-nav" class="no-scrollbar">
     <button onclick="switchTab('home')" class="nav-btn active" id="n-home">Home</button>
-    <button onclick="switchTab('game')" class="nav-btn" id="n-game">Game</button>
+    <button onclick="switchTab('game')" class="nav-btn" id="n-game">Game HUD</button>
     <button onclick="switchTab('library')" class="nav-btn" id="n-library">Thư Viện</button>
     <button onclick="switchTab('names')" class="nav-btn" id="n-names">Học Tên</button>
     <button onclick="switchTab('voice')" class="nav-btn" id="n-voice">Luyện Nói</button>
@@ -121,7 +120,7 @@
 
 <div id="home" class="tab-content active">
     <div class="min-h-screen flex flex-col items-center justify-center p-4">
-        <div class="glass-card p-12 text-center max-w-3xl w-full mt-10">
+        <div class="glass-card p-12 text-center max-w-3xl w-full">
             <h2 class="text-4xl font-light mb-2 tracking-tighter">Chào Thiết Hoa</h2>
             <div class="h-1 w-20 bg-indigo-500 mx-auto mb-8"></div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -157,28 +156,32 @@
     </div>
 </div>
 
-<div id="game" class="tab-content">
-    <div class="fixed top-0 left-0 w-full h-full z-[-1]" style="background-image: url('bg.gif'); background-size: cover; background-position: center; background-repeat: no-repeat;">
-        <div class="absolute inset-0 bg-black/10"></div>
-    </div>
-    
-    <div id="hud-stats-container" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0">
+<div id="game" class="tab-content relative w-full h-full min-h-screen">
+    <div id="hud-stats-container" class="fixed inset-0 pointer-events-none bg-[#0a0a0a]">
         
-        <div id="drag-uiG" class="drag-tool pointer-events-auto" style="top: 100px; left: 100px; width: 300px; height: 100px;">
+        <div id="drag-bg" class="drag-tool pointer-events-auto" style="top: 0px; left: 0px; width: 1376px; height: 768px; z-index: 1;">
+            <img src="bg.gif" class="w-full h-full object-cover pointer-events-none select-none" alt="Background GIF">
+        </div>
+
+        <div id="drag-uiG" class="drag-tool pointer-events-auto" style="top: 50px; left: 50px; width: 350px; height: 150px; z-index: 10;">
             <img src="uiG.png" class="w-full h-full object-contain pointer-events-none select-none" alt="UI G">
         </div>
 
-        <div id="drag-name" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 250px; left: 100px; width: 120px; height: 40px; padding: 5px;">
-            <span class="text-white font-bold tracking-wider text-sm select-none drop-shadow-md">NicksolEr</span>
+        <div id="drag-name" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 80px; left: 80px; width: 120px; height: 40px; z-index: 20;">
+            <span class="text-white font-bold tracking-wider text-sm select-none drop-shadow-md pointer-events-none">NicksolEr</span>
         </div>
         
-        <div id="drag-kc" class="drag-tool pointer-events-auto" style="top: 100px; left: 450px; width: 40px; height: 40px;">
+        <div id="drag-kc" class="drag-tool pointer-events-auto" style="top: 50px; left: 450px; width: 40px; height: 40px; z-index: 20;">
             <img src="kc.png" class="w-full h-full object-contain pointer-events-none select-none" alt="KC">
         </div>
 
-        <div id="drag-coin" class="drag-tool pointer-events-auto" style="top: 150px; left: 450px; width: 40px; height: 40px;">
+        <div id="drag-coin" class="drag-tool pointer-events-auto" style="top: 120px; left: 450px; width: 40px; height: 40px; z-index: 20;">
             <img src="coin.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Coin">
         </div>
+    </div>
+    
+    <div class="fixed bottom-24 right-6 z-50 pointer-events-auto">
+        <button onclick="alert('HƯỚNG DẪN DÀNH CHO SẾP:\n1. Nắm chuột rê để di chuyển (Ảnh nền, chữ, icon... đều kéo được).\n2. Nắm cái góc vuông mờ bên dưới góc phải của viền đứt nét để Phóng To/Thu Nhỏ.\n3. CLICK CHUỘT PHẢI vào một hình để nó nhả thông số Tọa Độ & Kích thước nha!')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] px-4 py-3 rounded uppercase tracking-widest font-bold shadow-lg shadow-indigo-500/50 transition">❓ Cách Dùng Tool HUD</button>
     </div>
 </div>
 
@@ -632,7 +635,7 @@
         if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
     }
 
-    // --- FULL VOCABULARY DICTIONARY (216 WORDS - MAPPED EXACTLY) ---
+    // --- FULL VOCABULARY DICTIONARY (237 WORDS - MAPPED EXACTLY) ---
     const vocabData = [
         // I. Đại từ (17 từ)
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" },
@@ -668,7 +671,7 @@
 
         // VI. Từ hư cấu & Ngữ pháp (16 từ)
         { hz: "不", py: "bù", mn: "không" }, { hz: "没", py: "méi", mn: "chưa/không" }, { hz: "很", py: "hěn", mn: "rất" }, { hz: "太", py: "tài", mn: "quá/lắm" }, { hz: "都", py: "dōu", mn: "đều" },
-        { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của" }, { hz: "地", py: "de", mn: "một cách" }, { hz: "吗", py: "ma", mn: "không?" }, { hz: "呢", py: "ne", mn: "thì sao" }, { hz: "了", py: "le", mn: "rồi" },
+        { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của (trợ từ)" }, { hz: "地", py: "de", mn: "một cách" }, { hz: "吗", py: "ma", mn: "không?" }, { hz: "呢", py: "ne", mn: "thì sao" }, { hz: "了", py: "le", mn: "rồi" },
         { hz: "什么", py: "shénme", mn: "cái gì" }, { hz: "哪儿", py: "nǎr", mn: "ở đâu" }, { hz: "怎么", py: "zěnme", mn: "làm sao" }, { hz: "多少", py: "duōshao", mn: "bao nhiêu" }, { hz: "几", py: "jǐ", mn: "mấy" },
 
         // VII. 121 Từ Bổ Sung (101 từ đánh số + 22 từ cuối đoạn)
@@ -753,6 +756,14 @@
         document.getElementById(id).classList.add('active');
         const navBtn = document.getElementById('n-' + id);
         if(navBtn) navBtn.classList.add('active');
+
+        // Tàng hình Header khi vào tab Game HUD
+        const mainHeader = document.getElementById('main-header');
+        if(id === 'game') {
+            mainHeader.style.display = 'none';
+        } else {
+            mainHeader.style.display = 'flex';
+        }
         
         if (id === 'listen' && document.getElementById('listen-msg').innerText === "") generateListenSentence();
         if (id === 'voice' && document.getElementById('voice-target').innerText === "...") nextVoiceWord();
@@ -762,6 +773,7 @@
     function startSequentialPreload() {
         const mp4Songs = [...vPop, ...cPop].filter(s => s.type === 'mp4').map(s => s.id);
         let currentIndex = 0;
+
         function loadNextVideo() {
             if (currentIndex >= mp4Songs.length) return;
             const url = mp4Songs[currentIndex];
@@ -1057,7 +1069,7 @@
     function checkAutoPlay() { if(document.getElementById(`toggle-${currentList}`).checked) { const listData = currentList === 'vpop' ? displayedVPop : cPop; const nextIdx = (currentIndex + 1) % listData.length; const nextSong = listData[nextIdx]; playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb); } }
 
     // HUD TOOLS
-    const draggables = [document.getElementById('drag-kc'), document.getElementById('drag-coin')];
+    const draggables = [document.getElementById('drag-kc'), document.getElementById('drag-coin'), document.getElementById('drag-uiG'), document.getElementById('drag-name')];
     draggables.forEach(el => {
         if(!el) return; let isDragging = false; let offsetX = 0, offsetY = 0;
         el.addEventListener('mousedown', (e) => { const rect = el.getBoundingClientRect(); const isResize = (e.clientX > rect.right - 15) && (e.clientY > rect.bottom - 15); if (isResize || e.button !== 0) return; isDragging = true; el.style.cursor = 'grabbing'; offsetX = e.clientX - rect.left; offsetY = e.clientY - rect.top; });
