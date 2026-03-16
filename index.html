@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.34 Ultimate Fixed</title>
+    <title>Skyreign Hub | V40.35 Ultimate Perfection</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
-        /* CORE SETUP */
         :root { --glass: rgba(255, 255, 255, 0.05); }
         body {
             font-family: 'Space Grotesk', 'Noto Sans SC', sans-serif;
@@ -20,10 +19,8 @@
         }
         @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         
-        /* UI ELEMENTS */
         .glass-card { background: var(--glass); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
         
-        /* NAVIGATION */
         nav { position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; display: flex; background: rgba(0,0,0,0.95); padding: 15px; backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1); overflow-x: auto; justify-content: flex-start; gap: 10px; }
         .nav-btn { padding: 10px 20px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; transition: 0.3s; color: #64748b; white-space: nowrap; background: transparent; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; flex-shrink: 0; }
         .nav-btn:hover { color: white; border-color: white; }
@@ -33,57 +30,32 @@
         .tab-content.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* MODERN TEXT EFFECT */
-        .modern-text {
-            font-weight: 300; text-transform: uppercase; letter-spacing: 4px;
-            background: linear-gradient(90deg, #fff, #a5b4fc, #f472b6, #fff);
-            background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent;
-            animation: shine 5s linear infinite; text-shadow: 0 0 20px rgba(165, 180, 252, 0.3);
-        }
+        .modern-text { font-weight: 300; text-transform: uppercase; letter-spacing: 4px; background: linear-gradient(90deg, #fff, #a5b4fc, #f472b6, #fff); background-size: 200% auto; -webkit-background-clip: text; background-clip: text; color: transparent; animation: shine 5s linear infinite; text-shadow: 0 0 20px rgba(165, 180, 252, 0.3); }
         @keyframes shine { to { background-position: 200% center; } }
 
-        input, textarea, select { background: rgba(0,0,0,0.3) !important; color: white !important; font-family: monospace; }
+        input, textarea, select { background: rgba(0,0,0,0.3) !important; color: white !important; font-family: monospace; outline: none; }
         
-        /* SCHEDULE TABLE */
         .schedule-table { width: 100%; border-collapse: separate; border-spacing: 0 4px; margin-top: 20px; font-size: 12px; }
         .schedule-table th { padding: 12px; text-transform: uppercase; color: #94a3b8; font-size: 9px; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); }
         .schedule-table td { padding: 15px; background: rgba(255,255,255,0.03); text-align: center; border: none; }
         .time-chip { display: inline-block; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 8px 12px; margin: 4px; border-radius: 4px; font-size: 10px; cursor: pointer; transition: 0.2s; text-transform: uppercase; letter-spacing: 1px; }
         .time-chip:hover { background: white; color: black; }
         
-        /* MUSIC LIST */
         .song-item { display: flex; gap: 12px; padding: 12px; border-radius: 8px; background: transparent; cursor: pointer; transition: 0.2s; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .song-item:hover { background: rgba(255,255,255,0.1); padding-left: 20px; }
         .song-item img { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; }
         
-        /* VIDEO PLAYER FIX */
         video { width: 100%; height: 100%; background: black; object-fit: contain; }
         
-        /* UTILS */
         .hidden { display: none !important; } 
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
         
-        /* FONT TU TIÊN */
         .font-tutien { font-family: 'Cinzel', serif; }
-
-        /* CSS CHO NÚT GẠT CÔNG TẮC ON/OFF */
         .switch-toggle input:checked + div { background-color: #4f46e5; }
         .switch-toggle input:checked + div > div { transform: translateX(100%); }
-
-        /* DRAG TOOL STYLES */
-        .drag-tool {
-            position: absolute;
-            resize: both;
-            overflow: hidden;
-            cursor: grab;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px dashed rgba(104, 211, 145, 0.8);
-            z-index: 50;
-        }
-        .drag-tool:active { cursor: grabbing; border-color: #fff; }
     </style>
 </head>
 <body>
@@ -135,7 +107,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.34 ULTIMATE FIXED SYSTEM</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.35 ULTIMATE PERFECTION</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -180,53 +152,41 @@
 
 <div id="game" class="tab-content relative w-full h-full min-h-screen bg-[#0a0a0a]">
     <div id="hud-stats-container" class="fixed inset-0 pointer-events-none z-0">
-        
         <div id="fixed-bg" class="absolute pointer-events-none" style="top: 2px; left: 236px; width: 2154px; height: 1191px; z-index: 1;">
             <video src="bg.mp4" autoplay loop muted playsinline class="w-full h-full object-cover"></video>
         </div>
-
         <div id="fixed-uiG" class="absolute pointer-events-none" style="top: 1px; left: 150px; width: 466px; height: 230px; z-index: 10;">
             <img src="uiG.png" class="w-full h-full object-contain" alt="UI G">
         </div>
-
         <div id="fixed-name" class="absolute flex items-center justify-center pointer-events-none" style="top: 159px; left: 279px; width: 198px; height: 77px; z-index: 20;">
             <span id="player-name-hud" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none">NicksolEr</span>
         </div>
-        
         <div id="fixed-bac" class="absolute flex items-center justify-center pointer-events-none" style="top: 63px; left: 2133px; width: 150px; height: 40px; z-index: 30;">
             <span id="val-bac" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none">0</span>
         </div>
-
         <div id="fixed-vang" class="absolute flex items-center justify-center pointer-events-none" style="top: 105px; left: 2069px; width: 321px; height: 176px; z-index: 30;">
             <span id="val-vang" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none">0</span>
         </div>
-
         <div id="fixed-nuoc" class="absolute flex items-center justify-center pointer-events-none" style="top: 267px; left: 2189px; width: 146px; height: 58px; z-index: 30;">
             <span id="val-nuoc-display" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none"><span id="val-nuoc">0</span>/156</span>
         </div>
-
         <div id="fixed-setting" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 942px; left: 2156px; width: 308px; height: 308px; z-index: 50;" onclick="openSettings()">
             <img src="setting.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Setting">
         </div>
-
-        <div id="drag-nhanvat" class="drag-tool pointer-events-auto" style="top: 809px; left: 1446px; width: 459px; height: 461px; z-index: 40;">
-            <img src="nhanvat.png" class="w-full h-full object-contain pointer-events-none select-none hover:scale-105 hover:brightness-125 transition" alt="Nhan Vat">
+        <div id="fixed-nhanvat" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 809px; left: 1446px; width: 459px; height: 461px; z-index: 40;">
+            <img src="nhanvat.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Nhan Vat">
         </div>
-
-        <div id="drag-hoavien" class="drag-tool pointer-events-auto" style="top: 864px; left: 1121px; width: 385px; height: 298px; z-index: 40;">
-            <img src="hoavien.png" class="w-full h-full object-contain pointer-events-none select-none hover:scale-105 hover:brightness-125 transition" alt="Hoa Vien">
+        <div id="fixed-hoavien" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 864px; left: 1121px; width: 385px; height: 298px; z-index: 40;">
+            <img src="hoavien.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Hoa Vien">
         </div>
-
-        <div id="drag-cuahang" class="drag-tool pointer-events-auto" style="top: 833px; left: 910px; width: 442px; height: 416px; z-index: 40;">
-            <img src="cuahang.png" class="w-full h-full object-contain pointer-events-none select-none hover:scale-105 hover:brightness-125 transition" alt="Cua Hang">
+        <div id="fixed-cuahang" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 833px; left: 910px; width: 442px; height: 416px; z-index: 40;">
+            <img src="cuahang.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Cua Hang">
         </div>
-
-        <div id="drag-tuido" class="drag-tool pointer-events-auto" style="top: 815px; left: 765px; width: 374px; height: 454px; z-index: 40;">
-            <img src="tuido.png" class="w-full h-full object-contain pointer-events-none select-none hover:scale-105 hover:brightness-125 transition" alt="Tui Do">
+        <div id="fixed-tuido" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 815px; left: 765px; width: 374px; height: 454px; z-index: 40;">
+            <img src="tuido.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Tui Do">
         </div>
-
-        <div id="drag-suutam" class="drag-tool pointer-events-auto" style="top: 856px; left: 1299px; width: 382px; height: 364px; z-index: 50;">
-            <img src="suutam.png" class="w-full h-full object-contain pointer-events-none select-none hover:scale-105 hover:brightness-125 transition" alt="Suu Tam">
+        <div id="fixed-suutam" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 856px; left: 1299px; width: 382px; height: 364px; z-index: 40;">
+            <img src="suutam.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Suu Tam">
         </div>
     </div>
 </div>
@@ -252,12 +212,11 @@
             <input type="text" id="nm-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkNames()">
             
             <div class="flex gap-2">
-                <button onclick="checkNames()" class="w-full py-4 bg-white text-black font-bold text-xs uppercase tracking-[0.2em]">Kiểm Tra</button>
-                <button onclick="showNamesHint()" class="w-16 py-4 bg-white/10 hover:bg-white/30 text-white font-bold text-xs transition" title="Gợi ý">💡</button>
+                <button onclick="checkNames()" class="w-full py-4 bg-white text-black font-bold text-xs uppercase tracking-[0.2em] rounded-sm">Kiểm Tra</button>
+                <button onclick="showNamesHint()" class="w-16 py-4 bg-white/10 hover:bg-white/30 text-white font-bold text-xs transition rounded-sm" title="Gợi ý">💡</button>
             </div>
-            <div class="text-center h-12 mt-4">
-                <p id="nm-msg" class="text-[10px] font-bold uppercase tracking-widest"></p>
-                <p id="nm-hint" class="text-[12px] text-yellow-400 mt-1 uppercase hidden"></p>
+            <div class="text-center h-16 mt-4 flex items-center justify-center">
+                <div id="nm-msg" class="text-[10px] font-bold uppercase tracking-widest"></div>
             </div>
         </div>
     </div>
@@ -278,7 +237,7 @@
             </div>
             
             <div id="voice-feedback" class="h-16 text-sm mb-6 flex flex-col justify-center items-center px-4"></div>
-            <button onclick="nextVoiceWord()" class="w-full py-4 border border-white/20 text-white font-bold text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition">Đổi Từ Khác</button>
+            <button onclick="nextVoiceWord()" class="w-full py-4 border border-white/20 text-white font-bold text-xs uppercase tracking-[0.2em] hover:bg-white hover:text-black transition rounded-sm">Đổi Từ Khác</button>
         </div>
     </div>
 </div>
@@ -322,7 +281,7 @@
                 <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Mode: Hán ➔ Việt</button>
                 <button onclick="toggleVocabRandom()" id="v-random-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Học: THỨ TỰ</button>
             </div>
-            <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">Khoảng: 1-237 | STT: 1/237 (Kho: #1)</p>
+            <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">Khoảng: 1-237 | STT: 1/237 (Từ: #1)</p>
             <div id="v-question" class="text-7xl font-light text-center mb-10 tracking-tighter">...</div>
             <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-2xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkVocab()">
             <div class="flex gap-2">
@@ -347,16 +306,36 @@
             </div>
             
             <div id="test-grammar" class="hidden fade-in">
-                 <div class="text-center mb-6"><p class="text-[9px] text-gray-400 uppercase tracking-widest mb-2">AI Question</p><h3 id="tg-question" class="text-3xl font-light text-white mb-2 fade-in">...</h3></div>
-                 <div id="tg-step1" class="space-y-3"><p class="text-center text-xs text-indigo-300 mb-2">Bước 1: Chọn ngữ pháp đúng</p><div class="grid grid-cols-1 gap-2" id="tg-options"></div></div>
-                 <div id="tg-step2" class="hidden space-y-4 pt-4 fade-in"><p class="text-center text-xs text-indigo-300">Bước 2: Tìm Chủ Ngữ (S)</p><input type="text" id="tg-sub-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none text-center" placeholder="Nhập S..."><button onclick="checkSubject()" class="w-full py-3 bg-white/10 text-white font-bold text-xs uppercase hover:bg-white/20">Xác nhận S</button></div>
-                 <div id="tg-step3" class="hidden space-y-4 pt-4 fade-in"><p class="text-center text-xs text-indigo-300">Bước 3: Tìm Danh Từ (N)</p><input type="text" id="tg-noun-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none text-center" placeholder="Nhập N..."><button onclick="checkNoun()" class="w-full py-3 bg-white/10 text-white font-bold text-xs uppercase hover:bg-white/20">Xác nhận N</button></div>
-                 <div id="tg-step4" class="hidden space-y-4 pt-4 fade-in"><p class="text-center text-xs text-green-400">Bước 4: Tự đặt 1 câu dùng ngữ pháp này (Chữ Hán)</p><input type="text" id="tg-make-sentence" class="w-full p-3 border-b border-white/20 bg-transparent text-center text-xl outline-none" placeholder="Viết câu..."><button onclick="checkAISentence()" class="w-full mt-3 py-3 bg-green-600 text-white font-bold text-xs uppercase hover:bg-green-500">AI Kiểm Tra (+1 Coin)</button></div>
+                 <div class="text-center mb-6">
+                    <p class="text-[9px] text-gray-400 uppercase tracking-widest mb-2">AI Question</p>
+                    <h3 id="tg-question" class="text-3xl font-light text-white mb-2 fade-in">...</h3>
+                 </div>
+                 <div id="tg-step1" class="space-y-3">
+                    <p class="text-center text-xs text-indigo-300 mb-2">Bước 1: Chọn ngữ pháp đúng</p>
+                    <div class="grid grid-cols-1 gap-2" id="tg-options"></div>
+                 </div>
+                 <div id="tg-step2" class="hidden space-y-4 pt-4 fade-in">
+                    <p class="text-center text-xs text-indigo-300">Bước 2: Tìm Chủ Ngữ (S)</p>
+                    <input type="text" id="tg-sub-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none text-center" placeholder="Nhập S...">
+                    <button onclick="checkSubject()" class="w-full py-3 bg-white/10 text-white font-bold text-xs uppercase hover:bg-white/20">Xác nhận S</button>
+                 </div>
+                 <div id="tg-step3" class="hidden space-y-4 pt-4 fade-in">
+                    <p class="text-center text-xs text-indigo-300">Bước 3: Tìm Danh Từ (N)</p>
+                    <input type="text" id="tg-noun-input" class="w-full p-3 border-b border-white/20 bg-transparent outline-none text-center" placeholder="Nhập N...">
+                    <button onclick="checkNoun()" class="w-full py-3 bg-white/10 text-white font-bold text-xs uppercase hover:bg-white/20">Xác nhận N</button>
+                 </div>
+                 <div id="tg-step4" class="hidden space-y-4 pt-4 fade-in">
+                      <p class="text-center text-xs text-green-400">Bước 4: Tự đặt 1 câu dùng ngữ pháp này (Chữ Hán)</p>
+                      <input type="text" id="tg-make-sentence" class="w-full p-3 border-b border-white/20 bg-transparent text-center text-xl outline-none" placeholder="Viết câu...">
+                      <button onclick="checkAISentence()" class="w-full mt-3 py-3 bg-green-600 text-white font-bold text-xs uppercase hover:bg-green-500">AI Kiểm Tra (+1 Coin)</button>
+                 </div>
                  <p id="tg-feedback" class="text-center text-xs font-bold h-6 mt-4 text-green-400"></p>
             </div>
 
             <div id="test-fill" class="hidden flex-col items-center fade-in">
-                 <div class="bg-white/5 p-6 rounded-lg w-full mb-6 text-center border border-white/10"><p id="tf-dialogue" class="text-xl leading-loose font-light"></p></div>
+                 <div class="bg-white/5 p-6 rounded-lg w-full mb-6 text-center border border-white/10">
+                    <p id="tf-dialogue" class="text-xl leading-loose font-light"></p>
+                 </div>
                  <div id="tf-options" class="flex flex-wrap gap-3 justify-center mb-6 w-full"></div>
                  <p id="tf-msg" class="text-xs font-bold uppercase h-6 mb-4"></p>
                  <button onclick="generateFillTest()" class="py-2 px-6 border border-white/20 text-[10px] uppercase hover:bg-white hover:text-black transition">Đổi câu khác</button>
@@ -367,26 +346,46 @@
                     <div class="text-center w-full">
                         <p class="text-[10px] text-indigo-400 uppercase tracking-widest mb-1">Thiết lập phạm vi</p>
                         <div class="flex items-center justify-center gap-2 mb-2">
-                            <span class="text-xs text-gray-400">Từ</span><input type="number" id="ts-start" value="1" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
-                            <span class="text-xs text-gray-400">đến</span><input type="number" id="ts-end" value="237" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
+                            <span class="text-xs text-gray-400">Từ</span>
+                            <input type="number" id="ts-start" value="1" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
+                            <span class="text-xs text-gray-400">đến</span>
+                            <input type="number" id="ts-end" value="237" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
                         </div>
                         <p class="text-[9px] text-gray-500 italic">(Tổng kho có <span id="ts-max-hint">237</span> từ)</p>
                     </div>
-                    <div class="w-full text-center"><p class="text-[10px] text-indigo-400 uppercase tracking-widest mb-2">Cấp Độ</p><select id="ts-level" class="w-full bg-white/5 border border-white/20 p-3 outline-none rounded"><option value="1" class="bg-black">Dễ (Hiện Hán ➔ Trả lời Việt)</option><option value="2" class="bg-black">Trung Bình (Hiện Việt ➔ Trả lời Pinyin)</option><option value="3" class="bg-black">Khó (Hiện Việt ➔ Trả lời Hán)</option></select></div>
-                    <div class="w-full text-center"><p class="text-[10px] text-indigo-400 uppercase tracking-widest mb-2">Thời gian (Phút)</p><input type="number" id="ts-time" value="3" class="w-24 bg-transparent border-b border-white/20 text-center py-2 text-2xl outline-none"></div>
+                    <div class="w-full text-center">
+                        <p class="text-[10px] text-indigo-400 uppercase tracking-widest mb-2">Cấp Độ</p>
+                        <select id="ts-level" class="w-full bg-white/5 border border-white/20 p-3 outline-none rounded">
+                            <option value="1" class="bg-black">Dễ (Hiện Hán ➔ Trả lời Việt)</option>
+                            <option value="2" class="bg-black">Trung Bình (Hiện Việt ➔ Trả lời Pinyin)</option>
+                            <option value="3" class="bg-black">Khó (Hiện Việt ➔ Trả lời Hán)</option>
+                        </select>
+                    </div>
+                    <div class="w-full text-center">
+                        <p class="text-[10px] text-indigo-400 uppercase tracking-widest mb-2">Thời gian (Phút)</p>
+                        <input type="number" id="ts-time" value="3" class="w-24 bg-transparent border-b border-white/20 text-center py-2 text-2xl outline-none">
+                    </div>
                     <button onclick="startSpeedTest()" class="w-full py-4 mt-4 bg-indigo-600 text-white font-bold text-xs uppercase tracking-widest hover:bg-indigo-500 rounded transition shadow-[0_0_15px_rgba(79,70,229,0.5)]">BẮT ĐẦU CHẠY ĐUA</button>
                 </div>
                 <div id="ts-play" class="hidden w-full flex-col items-center">
                     <div class="flex justify-between w-full items-center mb-8 border-b border-white/10 pb-4">
-                        <div class="text-left"><p class="text-[9px] text-gray-400 uppercase tracking-widest">Điểm</p><p class="text-2xl font-mono text-green-400"><span id="ts-score-display">0</span>/<span id="ts-total-display">0</span></p></div>
-                        <div class="text-right"><p class="text-[9px] text-gray-400 uppercase tracking-widest">Thời Gian</p><p id="ts-timer-display" class="text-3xl font-mono text-red-400 animate-pulse">00:00</p></div>
+                        <div class="text-left">
+                            <p class="text-[9px] text-gray-400 uppercase tracking-widest">Điểm</p>
+                            <p class="text-2xl font-mono text-green-400"><span id="ts-score-display">0</span>/<span id="ts-total-display">0</span></p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[9px] text-gray-400 uppercase tracking-widest">Thời Gian</p>
+                            <p id="ts-timer-display" class="text-3xl font-mono text-red-400 animate-pulse">00:00</p>
+                        </div>
                     </div>
                     <div id="ts-current-word" class="text-6xl font-light mb-10 text-center tracking-tighter">...</div>
                     <input type="text" id="ts-input" class="w-full max-w-md bg-transparent border-b-2 border-indigo-500 py-3 text-center text-3xl outline-none mb-4" placeholder="Gõ & Enter..." onkeypress="if(event.key==='Enter') checkSpeedVocab()">
                     <p id="ts-play-msg" class="text-[10px] text-red-400 uppercase tracking-widest h-4"></p>
                 </div>
                 <div id="ts-result" class="hidden w-full text-center py-10">
-                    <h3 class="text-4xl font-bold text-white mb-2">HẾT GIỜ!</h3><p class="text-sm text-indigo-300 mb-6 uppercase tracking-widest">Kết Quả Cuộc Đua</p><div class="text-6xl font-mono text-green-400 mb-8 drop-shadow-md" id="ts-final-score">0 / 0</div>
+                    <h3 class="text-4xl font-bold text-white mb-2">HẾT GIỜ!</h3>
+                    <p class="text-sm text-indigo-300 mb-6 uppercase tracking-widest">Kết Quả Cuộc Đua</p>
+                    <div class="text-6xl font-mono text-green-400 mb-8 drop-shadow-md" id="ts-final-score">0 / 0</div>
                     <button onclick="resetSpeedTest()" class="px-8 py-3 border border-white/20 text-xs uppercase tracking-widest hover:bg-white hover:text-black transition rounded">Chơi Lại Cấp Độ Này</button>
                 </div>
             </div>
@@ -561,7 +560,7 @@
 </div>
 
 <script>
-    // --- KHAI BÁO BIẾN DỮ LIỆU Ở TRÊN CÙNG ĐỂ CHỐNG LỖI ---
+    // --- 1. KHAI BÁO DỮ LIỆU ĐỂ CHỐNG LỖI TẢI TRANG ---
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" }, { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" }, { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" }, { hz: "先生", py: "xiānsheng", mn: "ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô" },
         { hz: "零", py: "líng", mn: "số 0" }, { hz: "一", py: "yī", mn: "số 1" }, { hz: "二", py: "èr", mn: "số 2" }, { hz: "三", py: "sān", mn: "số 3" }, { hz: "四", py: "sì", mn: "số 4" }, { hz: "五", py: "wǔ", mn: "số 5" }, { hz: "六", py: "liù", mn: "số 6" }, { hz: "七", py: "qī", mn: "số 7" }, { hz: "八", py: "bā", mn: "số 8" }, { hz: "九", py: "jiǔ", mn: "số 9" }, { hz: "十", py: "shí", mn: "số 10" }, { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" }, { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" }, { hz: "号", py: "hào", mn: "ngày" }, { hz: "星期", py: "xīngqī", mn: "tuần" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" }, { hz: "时候", py: "shíhou", mn: "khi lúc" },
@@ -588,161 +587,23 @@
         { hz: "久", py: "jiǔ", mn: "lâu" }, { hz: "旧", py: "jiù", mn: "cũ" }, { hz: "就", py: "jiù", mn: "thì/liền" }, { hz: "觉得", py: "juéde", mn: "cảm thấy" }, { hz: "咖啡", py: "kāfēi", mn: "cà phê" }, 
         { hz: "开始", py: "kāishǐ", mn: "bắt đầu" }, { hz: "考试", py: "kǎoshì", mn: "thi cử" }
     ];
+
     const namesData = [ { vi: "Lưu Thiết Hoa", hz: "刘铁华", py: "Liú Tiěhuá" }, { vi: "Hà Mỹ Mỹ", hz: "何美美", py: "Hé Měiměi" }, { vi: "Bùi Lê Ngọc Linh", hz: "裴黎玉玲", py: "Péi Lí Yùlíng" }, { vi: "Lưu Thiết Vinh", hz: "刘铁荣", py: "Liú Tiěróng" }, { vi: "A Mỹ Linh", hz: "阿美玲", py: "Ā Měilíng" }, { vi: "Hà Gia Bảo", hz: "何家宝", py: "Hé Jiābǎo" }, { vi: "Diệp Thanh Thanh", hz: "叶青青", py: "Yè Qīngqīng" }, { vi: "Lê Bá Trần Hoàng", hz: "黎伯陈黄", py: "Lí Bó Chénhuáng" }, { vi: "Nguyễn Thị Phương Nguyên", hz: "阮氏芳原", py: "Ruǎn Shì Fāngyuán" } ];
     const grammarRules = [ { id: "g1", title: "S + 是 + N", structure: "S + 是 + N (Là)", ex: "我是学生", regex: /(.+)是(.+)/ }, { id: "g2", title: "S + 不 + 是 + N", structure: "S + 不 + 是 + N (Phủ định)", ex: "我不是老师", regex: /(.+)不是(.+)/ }, { id: "g3", title: "S + 是 + N + 吗?", structure: "S + 是 + N + 吗? (Nghi vấn)", ex: "你是中国人吗？", regex: /(.+)是(.+)吗[?？]?/ }, { id: "g4", title: "N + 们", structure: "N + 们 (Số nhiều)", ex: "我们", regex: /(.+)们/ } ];
     const readingData = [ { id: 1, zh: "你好！我叫刘铁花。我是学生。我家有五口人：爸爸、妈妈、哥哥、女儿和我。", key: "xin chào tôi tên lưu thiết hoa tôi là học sinh nhà tôi có năm người bố mẹ anh trai con gái và tôi", vi_display: "Xin chào! Tôi tên Lưu Thiết Hoa. Tôi là học sinh. Nhà tôi có 5 người: Bố, mẹ, anh trai, con gái và tôi." }, { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }, { id: 3, zh: "弟弟很喜欢吃包子。他每天早上都吃两个白包子。吃完包子，他去学校上课。", key: "em trai rất thích ăn bánh bao cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng ăn xong bánh bao cậu ấy đi trường học đi học", vi_display: "Em trai rất thích ăn bánh bao. Cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng. Ăn xong bánh bao, cậu ấy đi trường học." }, { id: 4, zh: "后天我们要去国外旅行。爸爸已经买好了机票。我们在机场等飞机。", key: "ngày hôm sau chúng tôi phải đi nước ngoài du lịch bố đã mua xong vé máy bay chúng tôi ở sân bay đợi máy bay", vi_display: "Ngày mốt chúng tôi sẽ đi du lịch nước ngoài. Bố đã mua xong vé máy bay. Chúng tôi đang đợi máy bay ở sân bay." } ];
     const vPop = [ {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false}, {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false}, {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false}, {name:"hieuthuhai - ngủ một mình ft. negav",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Không Thể Say l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true}, {name:"Exit Sign - HIEUTHUHAI ft. marzuz",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true}, {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true} ];
     const cPop = [ {name:"Mang Chủng",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"}, {name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"}, {name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"}, {name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"} ];
 
-    // --- TIẾN ĐỘ HỌC TẬP ---
+</script>
+
+<script>
+    // --- 2. TIẾN ĐỘ HỌC TẬP (CHECKLISTS) ---
     let listenProgress = 0; const listenMax = 50;
     let namesProgress = 0; const namesMax = 10;
     let voiceProgress = 0; const voiceMax = 20;
     let readingProgress = 0; const readingMax = 10;
 
-    // --- GLOBAL SYSTEMS ---
-    function playSound(type) {
-        let audio;
-        if(type === 'click') audio = document.getElementById('sfx-click');
-        if(type === 'correct') audio = document.getElementById('sfx-correct');
-        if(type === 'wrong') audio = document.getElementById('sfx-wrong');
-        if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
-    }
-
-    let userCoins = parseInt(localStorage.getItem('skyCoins')) || 0;
-    document.getElementById('coin-display').innerText = userCoins;
-    function updateCoins(amount) { userCoins += amount; localStorage.setItem('skyCoins', userCoins); document.getElementById('coin-display').innerText = userCoins; }
-
-    function switchTab(id) {
-        playSound('click');
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        const navBtn = document.getElementById('n-' + id);
-        if(navBtn) navBtn.classList.add('active');
-
-        const mainHeader = document.getElementById('main-header');
-        if(id === 'game') {
-            mainHeader.style.opacity = '0';
-            if(localStorage.getItem('bgmOn') !== 'false') document.getElementById('bgm-game').play().catch(()=>{});
-        } else {
-            mainHeader.style.opacity = '1';
-            document.getElementById('bgm-game').pause();
-        }
-        
-        if (id === 'listen' && document.getElementById('listen-msg').innerText === "") generateListenSentence();
-        if (id === 'voice' && document.getElementById('voice-target').innerText === "...") nextVoiceWord();
-        if (id === 'test' && document.getElementById('test-grammar').classList.contains('hidden')) switchTestMode('grammar'); 
-    }
-
-    function startSequentialPreload() {
-        const mp4Songs = [...vPop, ...cPop].filter(s => s.type === 'mp4').map(s => s.id);
-        let currentIndex = 0;
-        function loadNextVideo() {
-            if (currentIndex >= mp4Songs.length) return;
-            fetch(mp4Songs[currentIndex], { mode: 'no-cors' }).then(() => { currentIndex++; loadNextVideo(); }).catch(() => { currentIndex++; loadNextVideo(); });
-        }
-        loadNextVideo();
-    }
-
-    let stamina = parseInt(localStorage.getItem('skyStamina')) || 0;
-    let lastUpdate = parseInt(localStorage.getItem('skyStaminaTime')) || Date.now();
-
-    function updateStamina() {
-        const now = Date.now();
-        const elapsedMs = now - lastUpdate;
-        const minutesPassed = Math.floor(elapsedMs / 900000); 
-        
-        if (minutesPassed > 0) {
-            if (stamina < 156) {
-                stamina += minutesPassed;
-                if (stamina > 156) stamina = 156;
-                lastUpdate += minutesPassed * 900000;
-                localStorage.setItem('skyStamina', stamina);
-                localStorage.setItem('skyStaminaTime', lastUpdate);
-            } else {
-                lastUpdate = now;
-                localStorage.setItem('skyStaminaTime', lastUpdate);
-            }
-        }
-        const valNuoc = document.getElementById('val-nuoc');
-        if (valNuoc) valNuoc.innerText = stamina;
-    }
-    
-    let selectedColorClass = localStorage.getItem('playerColor') || 'text-amber-100';
-    let savedName = localStorage.getItem('playerName') || 'NicksolEr';
-
-    function openSettings() {
-        playSound('click');
-        document.getElementById('settings-modal').classList.remove('hidden');
-        document.getElementById('setting-name-input').value = savedName;
-        document.getElementById('name-preview').innerText = savedName;
-        document.getElementById('name-preview').className = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass}`;
-        document.getElementById('bgm-toggle').checked = localStorage.getItem('bgmOn') !== 'false';
-    }
-
-    function closeSettings() {
-        playSound('click');
-        document.getElementById('settings-modal').classList.add('hidden');
-    }
-
-    function toggleBGM() {
-        playSound('click');
-        const isOn = document.getElementById('bgm-toggle').checked;
-        localStorage.setItem('bgmOn', isOn);
-        const bgm = document.getElementById('bgm-game');
-        if(isOn) bgm.play().catch(()=>{}); else bgm.pause();
-    }
-
-    function updateNamePreview() {
-        const name = document.getElementById('setting-name-input').value || 'NicksolEr';
-        document.getElementById('name-preview').innerText = name;
-    }
-
-    function selectColor(colorClass, element) {
-        playSound('click');
-        selectedColorClass = colorClass;
-        document.getElementById('name-preview').className = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${colorClass}`;
-        const swatches = document.getElementById('color-picker').children;
-        for(let s of swatches) s.classList.replace('border-white', 'border-transparent');
-        element.classList.replace('border-transparent', 'border-white');
-    }
-
-    function saveSettings() {
-        playSound('correct');
-        savedName = document.getElementById('setting-name-input').value || 'NicksolEr';
-        localStorage.setItem('playerName', savedName);
-        localStorage.setItem('playerColor', selectedColorClass);
-        const hudClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none`;
-        document.getElementById('player-name-hud').innerText = savedName;
-        document.getElementById('player-name-hud').className = hudClass;
-        document.getElementById('val-bac').className = hudClass;
-        document.getElementById('val-vang').className = hudClass;
-        document.getElementById('val-nuoc-display').className = hudClass;
-        closeSettings();
-    }
-
-    window.onload = () => { 
-        renderMusic(); renderLibrary(); renderGrammarList(); nextVocab(true); nextNames(true); nextParagraph(); loadWorkSchedule(); generateListenSentence();
-        const hudClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none`;
-        document.getElementById('player-name-hud').innerText = savedName;
-        document.getElementById('player-name-hud').className = hudClass;
-        document.getElementById('val-bac').className = hudClass;
-        document.getElementById('val-vang').className = hudClass;
-        document.getElementById('val-nuoc-display').className = hudClass;
-
-        document.getElementById('listen-progress').innerText = `Tiến độ: ${listenProgress}/${listenMax}`;
-        document.getElementById('names-progress').innerText = `Tiến độ: ${namesProgress}/${namesMax}`;
-        document.getElementById('voice-progress').innerText = `Tiến độ: ${voiceProgress}/${voiceMax}`;
-        document.getElementById('reading-progress').innerText = `Tiến độ: ${readingProgress}/${readingMax}`;
-
-        setInterval(updateStamina, 1000);
-        updateStamina();
-        switchTab('home'); 
-        setTimeout(startSequentialPreload, 3000);
-    };
-
-    // --- HỌC TỪ VỰNG CHỌN KHOẢNG TỪ ---
+    // --- 3. HỌC TỪ VỰNG CHỌN KHOẢNG TỪ ---
     let vIdx = -1; let vMode = 0; let isVocabRandom = false;
     let vStartBound = 1; let vEndBound = vocabData.length;
 
@@ -751,6 +612,7 @@
         let s = parseInt(document.getElementById('v-start-input').value) || 1;
         let e = parseInt(document.getElementById('v-end-input').value) || vocabData.length;
         if(s < 1) s = 1; if(e > vocabData.length) e = vocabData.length; if(s > e) s = e;
+        
         document.getElementById('v-start-input').value = s;
         document.getElementById('v-end-input').value = e;
         vStartBound = s; 
@@ -797,37 +659,47 @@
         } else { playSound('wrong'); document.getElementById('v-msg').innerText = "SAI RỒI"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; } 
     }
 
-    // --- HỌC TÊN ---
+    // --- 4. HỌC TÊN THÔNG MINH ---
     let nmIdx = 0; let nmMode = 0;
-    function changeNamesMode() { playSound('click'); nmMode = (nmMode + 1) % 3; document.getElementById('nm-mode-btn').innerText = ["Việt ➔ Hán", "Hán ➔ Việt", "Việt ➔ Pinyin"][nmMode]; nextNames(true); }
+    // Đã sửa lại chỉ có 2 chế độ: Việt -> Hán và Hán -> Việt. Pinyin sẽ hiện ở gợi ý.
+    function changeNamesMode() { playSound('click'); nmMode = (nmMode + 1) % 2; document.getElementById('nm-mode-btn').innerText = ["Việt ➔ Hán", "Hán ➔ Việt"][nmMode]; nextNames(true); }
     function nextNames(rand) { 
         if(rand) nmIdx = Math.floor(Math.random() * namesData.length); 
         const n = namesData[nmIdx]; 
-        document.getElementById('nm-question').innerText = nmMode===0 ? n.vi : (nmMode===1 ? n.hz : n.vi); 
+        document.getElementById('nm-question').innerText = nmMode===0 ? n.vi : n.hz; 
         document.getElementById('nm-input').value = ""; 
-        document.getElementById('nm-msg').innerText = ""; 
+        document.getElementById('nm-msg').innerHTML = ""; 
         document.getElementById('nm-hint').classList.add('hidden'); 
     }
     function showNamesHint() { 
-        playSound('click'); const n = namesData[nmIdx]; let ans = nmMode===0 ? n.hz : (nmMode===1 ? n.vi : n.py); 
-        document.getElementById('nm-hint').innerHTML = `Gợi ý: ${ans} <br><span class="text-[10px] text-gray-400 normal-case">(Pinyin: ${n.py})</span>`; 
+        playSound('click'); const n = namesData[nmIdx]; let ans = nmMode===0 ? n.hz : n.vi; 
+        // Hiển thị thêm Pinyin
+        document.getElementById('nm-hint').innerHTML = `Gợi ý: ${ans} <br><span class="text-[10px] text-gray-400 normal-case font-mono">(Pinyin: ${n.py})</span>`; 
         document.getElementById('nm-hint').classList.remove('hidden'); 
     }
     function checkNames() { 
-        const n = namesData[nmIdx]; const v = document.getElementById('nm-input').value.toLowerCase().trim(); let ok = (nmMode===0 && v===n.hz) || (nmMode===1 && v===n.vi.toLowerCase()) || (nmMode===2 && v===n.py.toLowerCase()); 
+        const n = namesData[nmIdx]; const v = document.getElementById('nm-input').value.toLowerCase().trim(); 
+        let ok = false;
+        if(nmMode === 0 && v === n.hz) ok = true;
+        if(nmMode === 1 && v === n.vi.toLowerCase()) ok = true;
+        
+        let pinyinInfo = `<br><span class="text-gray-400 font-mono text-[10px] normal-case">Pinyin: ${n.py}</span>`;
+
         if(ok) { 
             playSound('correct'); updateCoins(1); 
             if(namesProgress < namesMax) namesProgress++;
             document.getElementById('names-progress').innerText = `Tiến độ: ${namesProgress}/${namesMax}`;
-            document.getElementById('nm-msg').innerText = "CHÍNH XÁC!"; 
-            document.getElementById('nm-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400"; 
-            setTimeout(()=>nextNames(true), 1000); 
+            document.getElementById('nm-msg').innerHTML = "CHÍNH XÁC!" + pinyinInfo; 
+            document.getElementById('nm-msg').className = "text-xs font-bold uppercase tracking-widest text-green-400 mt-2 block"; 
+            setTimeout(()=>nextNames(true), 2000); 
         } else { 
-            playSound('wrong'); document.getElementById('nm-msg').innerText = "SAI RỒI"; document.getElementById('nm-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; 
+            playSound('wrong'); 
+            document.getElementById('nm-msg').innerHTML = "SAI RỒI!" + pinyinInfo; 
+            document.getElementById('nm-msg').className = "text-xs font-bold uppercase tracking-widest text-red-400 mt-2 block"; 
         } 
     }
 
-    // --- LUYỆN NÓI AI ---
+    // --- 5. LUYỆN NÓI AI ---
     let voiceIdx = 0; const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; let recognition;
     if (SpeechRecognition) {
         recognition = new SpeechRecognition(); recognition.lang = 'zh-CN'; recognition.interimResults = false;
@@ -850,7 +722,7 @@
     function nextVoiceWord() { playSound('click'); voiceIdx = Math.floor(Math.random() * vocabData.length); document.getElementById('voice-target').innerText = vocabData[voiceIdx].hz; document.getElementById('voice-py').innerText = vocabData[voiceIdx].py; document.getElementById('voice-mn').innerText = vocabData[voiceIdx].mn; document.getElementById('voice-feedback').innerHTML = ""; }
     function startListening() { if (!SpeechRecognition) { alert("Trình duyệt của bạn không hỗ trợ Nhận diện giọng nói. Hãy dùng Chrome!"); return; } playSound('click'); recognition.start(); }
 
-    // --- LUYỆN NGHE PHẢN XẠ NHANH ---
+    // --- 6. LUYỆN NGHE PHẢN XẠ NHANH ---
     let currentListenHz = ""; let currentListenVi = "";
     function generateListenSentence() {
         playSound('click');
@@ -885,7 +757,7 @@
         } else { playSound('wrong'); document.getElementById('listen-msg').innerText = "SAI RỒI! BẤM 🎧 NGHE LẠI HOẶC XEM GỢI Ý."; document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; }
     }
 
-    // --- ĐỌC HIỂU ---
+    // --- 7. ĐỌC HIỂU ---
     let rIdx = 0; 
     function nextParagraph() { playSound('click'); rIdx = (rIdx+1)%readingData.length; document.getElementById('r-text').innerText = readingData[rIdx].zh; document.getElementById('r-input').value=""; document.getElementById('r-msg').innerText=""; }
     function toggleReadingRef() { playSound('click'); const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
@@ -900,7 +772,7 @@
         } 
     }
 
-    // --- KIỂM TRA ---
+    // --- 8. KIỂM TRA TỔNG HỢP ---
     function switchTestMode(mode) { playSound('click'); document.getElementById('test-grammar').classList.add('hidden'); document.getElementById('test-fill').classList.add('hidden'); document.getElementById('test-speed').classList.add('hidden'); document.getElementById(`test-${mode}`).classList.remove('hidden'); if(mode === 'grammar') startGrammarTest(); if(mode === 'fill') generateFillTest(); if(mode === 'speed') resetSpeedTest(); }
     function startGrammarTest() { document.getElementById('tg-step1').classList.remove('hidden'); document.getElementById('tg-step2').classList.add('hidden'); document.getElementById('tg-step3').classList.add('hidden'); document.getElementById('tg-step4').classList.add('hidden'); document.getElementById('tg-sub-input').value = ""; document.getElementById('tg-noun-input').value = ""; document.getElementById('tg-make-sentence').value = ""; document.getElementById('tg-feedback').innerText = ""; currentTestRule = grammarRules[Math.floor(Math.random() * grammarRules.length)]; const subs = ["我","你","他","爸爸","妈妈"]; const nouns = ["学生","老师","医生","好人"]; const S = subs[Math.floor(Math.random() * subs.length)]; const N = nouns[Math.floor(Math.random() * nouns.length)]; if(currentTestRule.id === "g1") currentTestSentence = S + "是" + N; if(currentTestRule.id === "g2") currentTestSentence = S + "不是" + N; if(currentTestRule.id === "g3") currentTestSentence = S + "是" + N + "吗？"; if(currentTestRule.id === "g4") currentTestSentence = "我们"; document.getElementById('tg-question').innerText = currentTestSentence; let opts = [...grammarRules].sort(() => Math.random() - 0.5).slice(0, 3); if(!opts.includes(currentTestRule)) opts[0] = currentTestRule; opts = opts.sort(() => Math.random() - 0.5); document.getElementById('tg-options').innerHTML = opts.map(r => `<button onclick="checkStructure('${r.id}')" class="p-3 bg-white/5 border border-white/20 rounded text-xs hover:bg-white hover:text-black transition text-left">${r.structure}</button>`).join(''); }
     function checkStructure(id) { if(id === currentTestRule.id) { playSound('correct'); document.getElementById('tg-step1').classList.add('hidden'); document.getElementById('tg-step2').classList.remove('hidden'); document.getElementById('tg-feedback').innerText = "Đúng cấu trúc!"; } else { playSound('wrong'); alert("Sai rồi! Hãy nhìn kỹ câu hỏi."); } }
@@ -917,57 +789,32 @@
     function checkSpeedVocab() { let item = tsData[tsCurrentIdx]; let v = document.getElementById('ts-input').value.toLowerCase().trim(); let msgEl = document.getElementById('ts-play-msg'); let ok = false; if(tsLevel === 1 && v === item.mn.toLowerCase()) ok = true; if(tsLevel === 2 && v === item.py.toLowerCase()) ok = true; if(tsLevel === 3 && v === item.hz) ok = true; if(ok) { playSound('correct'); tsScore++; updateCoins(1); tsCurrentIdx++; document.getElementById('ts-score-display').innerText = tsScore; msgEl.innerText = ""; updateTsWord(); } else { playSound('wrong'); document.getElementById('ts-input').value = ""; msgEl.innerText = "SAI RỒI! THỬ LẠI!"; } }
     function endSpeedTest() { clearInterval(tsTimer); document.getElementById('ts-play').classList.add('hidden'); document.getElementById('ts-play').classList.remove('flex'); document.getElementById('ts-result').classList.remove('hidden'); document.getElementById('ts-final-score').innerText = `${tsScore} / ${tsData.length}`; }
 
-    // LỊCH LÀM VIỆC
-    const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"]; let workStep = 0; let currentWeek = 1; let scheduleData = []; let isDoubleShift = false; 
-    function changeWeek() { currentWeek = parseInt(document.getElementById('week-selector').value); document.getElementById('display-week-num').innerText = "TUẦN " + currentWeek; loadWorkSchedule(); }
-    function loadWorkSchedule() { const key = `skyWork_W${currentWeek}`; const saved = localStorage.getItem(key); document.getElementById('btn-cancel-edit').classList.add('hidden'); if (saved) { scheduleData = JSON.parse(saved); renderScheduleResult(); } else { resetWorkSchedule(); } }
-    function clearAllSchedules() { playSound('click'); if(confirm("Bạn có chắc chắn muốn xóa TOÀN BỘ lịch?")) { localStorage.removeItem('skyWork_W1'); localStorage.removeItem('skyWork_W2'); localStorage.removeItem('skyWork_W3'); localStorage.removeItem('skyWork_W4'); currentWeek = 1; document.getElementById('week-selector').value = 1; document.getElementById('display-week-num').innerText = "TUẦN 1"; resetWorkSchedule(); } }
-    function setVal(id, val) { document.getElementById(id).value = val; }
-    function toggleDoubleShift() { playSound('click'); isDoubleShift = !isDoubleShift; const section2 = document.getElementById('section-ca-2'); const btn = document.getElementById('btn-toggle-double'); if(isDoubleShift) { section2.classList.remove('hidden'); section2.classList.add('fade-in'); btn.classList.add('bg-indigo-500', 'text-white'); btn.innerText = "- Bỏ chế độ 2 Ca"; } else { section2.classList.add('hidden'); btn.classList.remove('bg-indigo-500', 'text-white'); btn.innerText = "+ Làm 2 Ca / Full"; setVal('w-pos-2', ''); setVal('w-time-2', ''); } }
-    function resetWorkSchedule(startDate = '') { workStep = 0; scheduleData = []; document.getElementById('work-wizard').classList.remove('hidden'); document.getElementById('work-result-container').classList.add('hidden'); setVal('w-date', startDate); setVal('w-pos',''); setVal('w-time',''); if(isDoubleShift) toggleDoubleShift(); updateWizardUI(); }
-    function editCurrentSchedule() { playSound('click'); let firstDate = ''; if(scheduleData.length > 0) firstDate = scheduleData[0].date; resetWorkSchedule(firstDate); document.getElementById('btn-cancel-edit').classList.remove('hidden'); }
-    function cancelEdit() { playSound('click'); loadWorkSchedule(); }
-    function createNextWeek() { playSound('click'); let lastDateOfWeek = ''; if(scheduleData.length > 0) { lastDateOfWeek = scheduleData[scheduleData.length - 1].date; } let nextStartDate = ''; if(lastDateOfWeek && lastDateOfWeek.includes('/')) { let [d, m] = lastDateOfWeek.split('/').map(Number); let dateObj = new Date(2026, m - 1, d); dateObj.setDate(dateObj.getDate() + 1); nextStartDate = `${dateObj.getDate()}/${dateObj.getMonth() + 1}`; } currentWeek++; const selector = document.getElementById('week-selector'); if(currentWeek > 4) currentWeek = 1; selector.value = currentWeek; document.getElementById('display-week-num').innerText = "TUẦN " + currentWeek; resetWorkSchedule(nextStartDate); }
-    function updateWizardUI() { document.getElementById('w-day-title').innerText = workDays[workStep]; document.getElementById('w-step-num').innerText = workStep + 1; if(workStep > 0 && scheduleData.length > 0) { const prevDate = scheduleData[workStep-1].date; const parts = prevDate.split('/'); if(parts.length === 2) { let d = parseInt(parts[0]); let m = parseInt(parts[1]); let dateObj = new Date(2026, m - 1, d); dateObj.setDate(dateObj.getDate() + 1); document.getElementById('w-date').value = `${dateObj.getDate()}/${dateObj.getMonth() + 1}`; } } }
-    function nextWorkStep() { playSound('click'); const date = document.getElementById('w-date').value || "N/A"; const pos = document.getElementById('w-pos').value || "N/A"; const time = document.getElementById('w-time').value || "N/A"; let pos2 = ""; let time2 = ""; if(isDoubleShift) { pos2 = document.getElementById('w-pos-2').value || ""; time2 = document.getElementById('w-time-2').value || ""; } scheduleData.push({ day: workDays[workStep], date, pos, time, pos2, time2, hasCa2: isDoubleShift }); workStep++; if(workStep >= 7) { localStorage.setItem(`skyWork_W${currentWeek}`, JSON.stringify(scheduleData)); renderScheduleResult(); } else { setVal('w-pos',''); setVal('w-time',''); if(isDoubleShift) toggleDoubleShift(); updateWizardUI(); } }
-    function calcHours(timeStr) { if(!timeStr || !timeStr.includes('-')) return 0; const cleanStr = timeStr.replace(/\s/g, ''); const t = cleanStr.replace(/h/g, '.').replace(/:/g, '.').split('-'); let duration = 0; if(t.length === 2) { const start = parseFloat(t[0]); const end = parseFloat(t[1]); duration = end - start; } const longShifts = ["07h00-15h30", "08h30-15h30", "15h30-22h30", "08h30-13h00", "17h00-22h30"]; for(let s of longShifts) { if(cleanStr.includes(s)) { duration -= 0.5; break; } } return duration > 0 ? duration : 0; }
-    function renderScheduleResult() { document.getElementById('work-wizard').classList.add('hidden'); document.getElementById('work-result-container').classList.remove('hidden'); const tbody = document.getElementById('work-tbody'); let totalH = 0; tbody.innerHTML = scheduleData.map(d => { let h1 = (d.pos !== 'OFF') ? calcHours(d.time) : 0; let h2 = (d.hasCa2 && d.pos2) ? calcHours(d.time2) : 0; let dayTotal = h1 + h2; totalH += dayTotal; let displayPos = `<span class="font-bold">${d.pos}</span>`; let displayTime = d.time; if(d.hasCa2 && d.pos2) { displayPos += `<br><span class="text-indigo-300 text-[10px]">+ ${d.pos2}</span>`; displayTime += `<br><span class="text-indigo-300 text-[10px]">${d.time2}</span>`; } return `<tr class="${d.pos === 'OFF' ? 'text-red-400' : ''}"> <td class="font-bold text-gray-400">${d.day}</td> <td>${d.date}</td> <td class="uppercase font-bold tracking-widest text-xs">${displayPos}</td> <td>${displayTime}</td> <td>${d.pos === 'OFF' ? '-' : (dayTotal > 0 ? dayTotal.toFixed(1) + 'h' : '?')}</td> </tr>`; }).join(''); document.getElementById('total-hours').innerText = totalH.toFixed(1) + "h"; document.getElementById('total-salary').innerText = (totalH * 25000).toLocaleString('vi-VN') + " VNĐ"; }
-    function downloadSchedule() { playSound('click'); html2canvas(document.getElementById('work-capture-area'), { backgroundColor: "#0f172a", scale: 2 }).then(canvas => { const link = document.createElement('a'); link.download = `LichLamViec_Tuan${currentWeek}.png`; link.href = canvas.toDataURL(); link.click(); }); }
+    // KHỞI ĐỘNG HỆ THỐNG
+    window.onload = () => { 
+        renderMusic(); 
+        renderLibrary(); 
+        renderGrammarList(); 
+        
+        const hudClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none`;
+        document.getElementById('player-name-hud').innerText = savedName;
+        document.getElementById('player-name-hud').className = hudClass;
+        document.getElementById('val-bac').className = hudClass;
+        document.getElementById('val-vang').className = hudClass;
+        document.getElementById('val-nuoc-display').className = hudClass;
 
-    // TÍCH HỢP CÔNG CỤ KÉO THẢ CHO CÁC NÚT TRONG GAME HUD
-    const draggables = [
-        document.getElementById('drag-hoavien'),
-        document.getElementById('drag-nhanvat'),
-        document.getElementById('drag-tuido'),
-        document.getElementById('drag-cuahang'),
-        document.getElementById('drag-suutam')
-    ];
-    
-    draggables.forEach(el => {
-        if(!el) return; let isDragging = false; let offsetX = 0, offsetY = 0;
-        el.addEventListener('mousedown', (e) => { 
-            const rect = el.getBoundingClientRect(); 
-            const isResize = (e.clientX > rect.right - 15) && (e.clientY > rect.bottom - 15); 
-            if (isResize || e.button !== 0) return; 
-            isDragging = true; 
-            el.style.cursor = 'grabbing'; 
-            offsetX = e.clientX - rect.left; 
-            offsetY = e.clientY - rect.top; 
-        });
-        document.addEventListener('mousemove', (e) => { 
-            if (!isDragging) return; 
-            const containerRect = document.getElementById('hud-stats-container').getBoundingClientRect(); 
-            el.style.left = (e.clientX - containerRect.left - offsetX) + 'px'; 
-            el.style.top = (e.clientY - containerRect.top - offsetY) + 'px'; 
-        });
-        document.addEventListener('mouseup', () => { 
-            if(isDragging) { isDragging = false; el.style.cursor = 'grab'; } 
-        });
-        el.addEventListener('contextmenu', (e) => { 
-            e.preventDefault(); 
-            alert(`${el.id.replace('drag-','').toUpperCase()}:\nTOP: ${el.style.top || '0px'}\nLEFT: ${el.style.left || '0px'}\nWIDTH: ${el.offsetWidth + 'px'}\nHEIGHT: ${el.offsetHeight + 'px'}\n\n👉 Copy 4 dòng này đem qua đưa tui nhé!`); 
-        });
-    });
+        applyVocabRange();
+        nextNames(true); 
+        nextParagraph(); 
+        loadWorkSchedule(); 
+        generateListenSentence();
+        
+        setInterval(updateStamina, 1000);
+        updateStamina();
+        
+        switchTab('home'); 
+        setTimeout(startSequentialPreload, 3000);
+    };
+
 </script>
 </body>
 </html>
