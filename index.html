@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.26 HUD Modules</title>
+    <title>Skyreign Hub | V40.27 HUD Module Locked</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -66,8 +66,12 @@
         /* UTILS */
         .hidden { display: none !important; } 
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
+
+        /* HIDE SCROLLBAR BUT KEEP SCROLLING */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* LIBRARY GRID */
         .lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
         
         /* FONT TU TIÊN */
@@ -81,7 +85,7 @@
             cursor: grab;
             background: rgba(255, 255, 255, 0.1);
             border: 2px dashed rgba(104, 211, 145, 0.8);
-            z-index: 20;
+            z-index: 50;
         }
         .drag-tool:active { cursor: grabbing; border-color: #fff; }
     </style>
@@ -136,7 +140,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.26 HUD MODULES</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.27 HUD MODULE LOCKED</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -229,20 +233,24 @@
             <img src="setting.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Setting">
         </div>
 
-        <div id="drag-hoavien" class="drag-tool pointer-events-auto" style="top: 300px; left: 600px; width: 100px; height: 100px; z-index: 40;">
-            <img src="hoavien.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Hoa Vien">
-        </div>
-        
-        <div id="drag-nhanvat" class="drag-tool pointer-events-auto" style="top: 300px; left: 750px; width: 100px; height: 100px; z-index: 40;">
+        <div id="fixed-nhanvat" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 809px; left: 1446px; width: 459px; height: 461px; z-index: 40;">
             <img src="nhanvat.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Nhan Vat">
         </div>
 
-        <div id="drag-tuido" class="drag-tool pointer-events-auto" style="top: 450px; left: 600px; width: 100px; height: 100px; z-index: 40;">
+        <div id="fixed-hoavien" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 864px; left: 1121px; width: 385px; height: 298px; z-index: 40;">
+            <img src="hoavien.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Hoa Vien">
+        </div>
+
+        <div id="fixed-cuahang" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 833px; left: 910px; width: 442px; height: 416px; z-index: 40;">
+            <img src="cuahang.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Cua Hang">
+        </div>
+
+        <div id="fixed-tuido" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 815px; left: 765px; width: 374px; height: 454px; z-index: 40;">
             <img src="tuido.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Tui Do">
         </div>
 
-        <div id="drag-cuahang" class="drag-tool pointer-events-auto" style="top: 450px; left: 750px; width: 100px; height: 100px; z-index: 40;">
-            <img src="cuahang.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Cua Hang">
+        <div id="drag-suutam" class="drag-tool pointer-events-auto" style="top: 800px; left: 500px; width: 150px; height: 150px; z-index: 50;">
+            <img src="suutam.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Suu Tam">
         </div>
 
     </div>
@@ -748,7 +756,7 @@
         { hz: "是", py: "shì", mn: "là" }, { hz: "有", py: "yǒu", mn: "có" }, { hz: "在", py: "zài", mn: "ở" }, { hz: "要", py: "yào", mn: "muốn/cần" }, { hz: "喜欢", py: "xǐhuan", mn: "thích" }, { hz: "爱", py: "ài", mn: "yêu" }, { hz: "吃", py: "chī", mn: "ăn" }, { hz: "喝", py: "hē", mn: "uống" }, { hz: "去", py: "qù", mn: "đi" }, { hz: "来", py: "lái", mn: "đến" }, { hz: "想", py: "xiǎng", mn: "muốn/nghĩ" }, { hz: "看", py: "kàn", mn: "nhìn/xem" }, { hz: "听", py: "tīng", mn: "nghe" }, { hz: "说", py: "shuō", mn: "nói" }, { hz: "读", py: "dú", mn: "đọc" }, { hz: "写", py: "xiě", mn: "viết" }, { hz: "做", py: "zuò", mn: "làm" }, { hz: "买", py: "mǎi", mn: "mua" }, { hz: "给", py: "gěi", mn: "cho/đưa" }, { hz: "回", py: "huí", mn: "về" }, { hz: "住", py: "zhù", mn: "sống" }, { hz: "认识", py: "rènshi", mn: "quen biết" }, { hz: "会", py: "huì", mn: "biết" }, { hz: "能", py: "néng", mn: "có thể" },
         { hz: "好", py: "hǎo", mn: "tốt/khỏe" }, { hz: "多", py: "duō", mn: "nhiều" }, { hz: "少", py: "shǎo", mn: "ít" }, { hz: "大", py: "dà", mn: "to/lớn" }, { hz: "小", py: "xiǎo", mn: "nhỏ" }, { hz: "冷", py: "lěng", mn: "lạnh" }, { hz: "热", py: "rè", mn: "nóng" }, { hz: "高兴", py: "gāoxìng", mn: "vui vẻ" }, { hz: "漂亮", py: "piàoliang", mn: "xinh đẹp" }, { hz: "对", py: "duì", mn: "đúng" }, { hz: "错", py: "cuò", mn: "sai" }, { hz: "忙", py: "máng", mn: "bận" }, { hz: "累", py: "lèi", mn: "mệt" },
         { hz: "水", py: "shuǐ", mn: "nước" }, { hz: "饭", py: "fàn", mn: "cơm" }, { hz: "菜", py: "cài", mn: "món ăn" }, { hz: "茶", py: "chá", mn: "trà" }, { hz: "苹果", py: "píngguǒ", mn: "táo" }, { hz: "钱", py: "qián", mn: "tiền" }, { hz: "东西", py: "dōngxi", mn: "đồ đạc" }, { hz: "杯子", py: "bēizi", mn: "cái cốc" }, { hz: "衣服", py: "yīfu", mn: "quần áo" }, { hz: "书", py: "shū", mn: "sách" }, { hz: "桌子", py: "zhuōzi", mn: "cái bàn" }, { hz: "椅子", py: "yǐzi", mn: "cái ghế" }, { hz: "电脑", py: "diànnǎo", mn: "máy tính" }, { hz: "电视", py: "diànshì", mn: "tivi" }, { hz: "家", py: "jiā", mn: "nhà" }, { hz: "学校", py: "xuéxiào", mn: "trường học" }, { hz: "饭店", py: "fàndiàn", mn: "nhà hàng" }, { hz: "商店", py: "shāngdiàn", mn: "cửa hàng" }, { hz: "北京", py: "běijīng", mn: "Bắc Kinh" }, { hz: "中国", py: "zhōngguó", mn: "Trung Quốc" },
-        { hz: "不", py: "bù", mn: "không" }, { hz: "没", py: "méi", mn: "chưa/không" }, { hz: "很", py: "hěn", mn: "rất" }, { hz: "太", py: "tài", mn: "quá/lắm" }, { hz: "都", py: "dōu", mn: "đều" }, { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của" }, { hz: "地", py: "de", mn: "một cách" }, { hz: "吗", py: "ma", mn: "không?" }, { hz: "呢", py: "ne", mn: "thì sao" }, { hz: "了", py: "le", mn: "rồi" }, { hz: "什么", py: "shénme", mn: "cái gì" }, { hz: "哪儿", py: "nǎr", mn: "ở đâu" }, { hz: "怎么", py: "zěnme", mn: "làm sao" }, { hz: "多少", py: "duōshao", mn: "bao nhiêu" }, { hz: "几", py: "jǐ", mn: "mấy" },
+        { hz: "不", py: "bù", mn: "không" }, { hz: "没", py: "méi", mn: "chưa/không" }, { hz: "很", py: "hěn", mn: "rất" }, { hz: "太", py: "tài", mn: "quá/lắm" }, { hz: "都", py: "dōu", mn: "đều" }, { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của (trợ từ)" }, { hz: "地", py: "de", mn: "một cách" }, { hz: "吗", py: "ma", mn: "không?" }, { hz: "呢", py: "ne", mn: "thì sao" }, { hz: "了", py: "le", mn: "rồi" }, { hz: "什么", py: "shénme", mn: "cái gì" }, { hz: "哪儿", py: "nǎr", mn: "ở đâu" }, { hz: "怎么", py: "zěnme", mn: "làm sao" }, { hz: "多少", py: "duōshao", mn: "bao nhiêu" }, { hz: "几", py: "jǐ", mn: "mấy" },
         { hz: "爱好", py: "àihào", mn: "yêu thích" }, { hz: "吧", py: "ba", mn: "nhé" }, { hz: "白", py: "bái", mn: "màu trắng" }, { hz: "白天", py: "báitiān", mn: "ban ngày" }, { hz: "百", py: "bǎi", mn: "một trăm" }, { hz: "班", py: "bān", mn: "lớp học" }, { hz: "半", py: "bàn", mn: "một nửa" }, { hz: "帮", py: "bāng", mn: "giúp đỡ" }, { hz: "包", py: "bāo", mn: "bao" }, { hz: "包子", py: "bāozǐ", mn: "bánh bao" }, { hz: "北边", py: "běibian", mn: "phía bắc" }, { hz: "本", py: "běn", mn: "cuốn/vở" }, { hz: "比", py: "bǐ", mn: "hơn/so với" }, { hz: "别", py: "bié", mn: "đừng" }, { hz: "别的", py: "bié de", mn: "cái khác" }, { hz: "病", py: "bìng", mn: "bệnh/ốm" }, { hz: "不客气", py: "búkèqi", mn: "không có gì" }, { hz: "不用", py: "búyòng", mn: "không cần" }, { hz: "差", py: "chà", mn: "kém/tệ" }, { hz: "常", py: "cháng", mn: "thường xuyên" }, { hz: "尝尝", py: "cháng cháng", mn: "nếm thử" }, { hz: "唱", py: "chàng", mn: "hát" }, { hz: "车", py: "chē", mn: "xe" }, { hz: "车票", py: "chēpiào", mn: "vé xe" }, { hz: "车上", py: "chē shàng", mn: "trên xe" }, { hz: "车站", py: "chēzhàn", mn: "trạm xe" }, { hz: "出", py: "chū", mn: "ra/đi" }, { hz: "出来", py: "chūlái", mn: "ra đây" }, { hz: "床", py: "chuáng", mn: "giường" }, { hz: "次", py: "cì", mn: "lần/lượt" }, { hz: "从", py: "cóng", mn: "từ" }, { hz: "打", py: "dǎ", mn: "đánh/gõ" }, { hz: "打车", py: "dǎchē", mn: "bắt xe" }, { hz: "打电话", py: "dǎ diànhuà", mn: "gọi điện thoại" }, { hz: "打开", py: "dǎkāi", mn: "mở ra" }, { hz: "打球", py: "dǎqiú", mn: "chơi bóng" }, { hz: "大学", py: "dàxué", mn: "đại học" }, { hz: "到", py: "dào", mn: "đến" }, { hz: "得到", py: "dédào", mn: "đạt được" }, { hz: "等", py: "děng", mn: "đợi/chờ" }, 
         { hz: "地", py: "dì", mn: "đất" }, { hz: "地点", py: "dìdiǎn", mn: "địa điểm" }, { hz: "地方", py: "dìfāng", mn: "nơi chốn" }, { hz: "地上", py: "dìshàng", mn: "mặt đất" }, { hz: "地图", py: "dìtú", mn: "bản đồ" }, 
         { hz: "弟弟", py: "dìdi", mn: "em trai" }, { hz: "第", py: "dì", mn: "thứ tự" }, { hz: "电", py: "diàn", mn: "điện" }, { hz: "电话", py: "diànhuà", mn: "điện thoại" }, { hz: "电影", py: "diànyǐng", mn: "phim ảnh" }, 
@@ -777,12 +785,6 @@
     ];
     const readingData = [
         { id: 1, zh: "你好！我叫刘铁花。我是学生。我家有五口人：爸爸、妈妈、哥哥、女儿和我。", key: "xin chào tôi tên lưu thiết hoa tôi là học sinh nhà tôi có năm người bố mẹ anh trai con gái và tôi", vi_display: "Xin chào! Tôi tên Lưu Thiết Hoa. Tôi là học sinh. Nhà tôi có 5 người: Bố, mẹ, anh trai, con gái và tôi." }, { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }, { id: 3, zh: "弟弟很喜欢吃包子。他每天早上都吃两个白包子。吃完包子，他去学校上课。", key: "em trai rất thích ăn bánh bao cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng ăn xong bánh bao cậu ấy đi trường học đi học", vi_display: "Em trai rất thích ăn bánh bao. Cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng. Ăn xong bánh bao, cậu ấy đi trường học." }, { id: 4, zh: "后天我们要去国外旅行。爸爸已经买好了机票。我们在机场等飞机。", key: "ngày hôm sau chúng tôi phải đi nước ngoài du lịch bố đã mua xong vé máy bay chúng tôi ở sân bay đợi máy bay", vi_display: "Ngày mốt chúng tôi sẽ đi du lịch nước ngoài. Bố đã mua xong vé máy bay. Chúng tôi đang đợi máy bay ở sân bay." }
-    ];
-    const vPop = [
-        {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false}, {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false}, {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false}, {name:"hieuthuhai - ngủ một mình ft. negav",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Không Thể Say l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true}, {name:"Exit Sign - HIEUTHUHAI ft. marzuz",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true}, {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true}
-    ];
-    const cPop = [
-        {name:"Mang Chủng",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"}, {name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"}, {name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"}, {name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"}
     ];
 
     let currentListenHz = ""; let currentListenVi = "";
@@ -815,12 +817,13 @@
         } else { playSound('wrong'); document.getElementById('listen-msg').innerText = "SAI RỒI! BẤM 🎧 NGHE LẠI HOẶC XEM GỢI Ý."; document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; }
     }
 
-    // TÍCH HỢP CÔNG CỤ KÉO THẢ
+    // DRAG LOGIC CHO 4 NÚT MỚI: HOAVIEN, NHANVAT, TUIDO, CUAHANG, SUUTAM
     const draggables = [
         document.getElementById('drag-hoavien'),
         document.getElementById('drag-nhanvat'),
         document.getElementById('drag-tuido'),
-        document.getElementById('drag-cuahang')
+        document.getElementById('drag-cuahang'),
+        document.getElementById('drag-suutam')
     ];
     
     draggables.forEach(el => {
@@ -848,7 +851,6 @@
             alert(`${el.id.replace('drag-','').toUpperCase()}:\nTOP: ${el.style.top || '0px'}\nLEFT: ${el.style.left || '0px'}\nWIDTH: ${el.offsetWidth + 'px'}\nHEIGHT: ${el.offsetHeight + 'px'}\n\n👉 Copy 4 dòng này đem qua đưa tui nhé!`); 
         });
     });
-
 </script>
 </body>
 </html>
