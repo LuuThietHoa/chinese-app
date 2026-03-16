@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.27 HUD Module Locked</title>
+    <title>Skyreign Hub | V40.28 Clean Architecture</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -59,23 +59,19 @@
         /* VIDEO PLAYER FIX */
         video { width: 100%; height: 100%; background: black; object-fit: contain; }
         
-        /* TOGGLE SWITCH */
-        .toggle-checkbox:checked { right: 0; border-color: #68D391; }
-        .toggle-checkbox:checked + .toggle-label { background-color: #68D391; }
-        
         /* UTILS */
         .hidden { display: none !important; } 
         .fade-in { animation: fadeIn 0.5s ease-in-out; }
-
-        /* HIDE SCROLLBAR BUT KEEP SCROLLING */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        /* LIBRARY GRID */
         .lib-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; }
         
         /* FONT TU TIÊN */
         .font-tutien { font-family: 'Cinzel', serif; }
+
+        /* CSS NÚT GẠT */
+        .switch-toggle input:checked + div { background-color: #4f46e5; }
+        .switch-toggle input:checked + div > div { transform: translateX(100%); }
 
         /* DRAG TOOL STYLES */
         .drag-tool {
@@ -140,7 +136,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.27 HUD MODULE LOCKED</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.28 CLEAN ARCHITECTURE</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -202,7 +198,6 @@
 </div>
 
 <div id="game" class="tab-content relative w-full h-full min-h-screen bg-[#0a0a0a]">
-    
     <div id="hud-stats-container" class="fixed inset-0 pointer-events-none z-0">
         
         <div id="fixed-bg" class="absolute pointer-events-none" style="top: 2px; left: 236px; width: 2154px; height: 1191px; z-index: 1;">
@@ -336,7 +331,7 @@
                 <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Mode: Hán ➔ Việt</button>
                 <button onclick="toggleVocabRandom()" id="v-random-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Học: THỨ TỰ</button>
             </div>
-            <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">#1 / 216</p>
+            <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">#1 / 237</p>
             <div id="v-question" class="text-7xl font-light text-center mb-10 tracking-tighter">...</div>
             <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-2xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkVocab()">
             <div class="flex gap-2">
@@ -406,7 +401,7 @@
                             <span class="text-xs text-gray-400">đến</span>
                             <input type="number" id="ts-end" value="237" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
                         </div>
-                        <p class="text-[9px] text-gray-500 italic">(Tổng kho có <span id="ts-max-hint">0</span> từ)</p>
+                        <p class="text-[9px] text-gray-500 italic">(Tổng kho có <span id="ts-max-hint">237</span> từ)</p>
                     </div>
                     <div class="w-full text-center">
                         <p class="text-[10px] text-indigo-400 uppercase tracking-widest mb-2">Cấp Độ</p>
@@ -614,6 +609,7 @@
 </div>
 
 <script>
+    // --- SCRIPTS LOGIC ---
     function playSound(type) {
         let audio;
         if(type === 'click') audio = document.getElementById('sfx-click');
@@ -653,19 +649,60 @@
         let currentIndex = 0;
         function loadNextVideo() {
             if (currentIndex >= mp4Songs.length) return;
-            const url = mp4Songs[currentIndex];
-            fetch(url, { mode: 'no-cors' }).then(() => { currentIndex++; loadNextVideo(); }).catch(() => { currentIndex++; loadNextVideo(); });
+            fetch(mp4Songs[currentIndex], { mode: 'no-cors' }).then(() => { currentIndex++; loadNextVideo(); }).catch(() => { currentIndex++; loadNextVideo(); });
         }
         loadNextVideo();
     }
 
+    // SETTINGS 
+    let selectedColorClass = localStorage.getItem('playerColor') || 'text-amber-100';
+    let savedName = localStorage.getItem('playerName') || 'NicksolEr';
+
+    function openSettings() {
+        playSound('click');
+        document.getElementById('settings-modal').classList.remove('hidden');
+        document.getElementById('setting-name-input').value = savedName;
+        document.getElementById('name-preview').innerText = savedName;
+        document.getElementById('name-preview').className = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass}`;
+        document.getElementById('bgm-toggle').checked = localStorage.getItem('bgmOn') !== 'false';
+    }
+    function closeSettings() { playSound('click'); document.getElementById('settings-modal').classList.add('hidden'); }
+    function toggleBGM() {
+        playSound('click');
+        const isOn = document.getElementById('bgm-toggle').checked;
+        localStorage.setItem('bgmOn', isOn);
+        if(isOn) document.getElementById('bgm-game').play().catch(()=>{}); else document.getElementById('bgm-game').pause();
+    }
+    function updateNamePreview() { document.getElementById('name-preview').innerText = document.getElementById('setting-name-input').value || 'NicksolEr'; }
+    function selectColor(colorClass, element) {
+        playSound('click'); selectedColorClass = colorClass;
+        document.getElementById('name-preview').className = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${colorClass}`;
+        const swatches = document.getElementById('color-picker').children;
+        for(let s of swatches) s.classList.replace('border-white', 'border-transparent');
+        element.classList.replace('border-transparent', 'border-white');
+    }
+    function saveSettings() {
+        playSound('correct');
+        savedName = document.getElementById('setting-name-input').value || 'NicksolEr';
+        localStorage.setItem('playerName', savedName);
+        localStorage.setItem('playerColor', selectedColorClass);
+        const hudClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass}`;
+        document.getElementById('player-name-hud').innerText = savedName;
+        document.getElementById('player-name-hud').className = hudClass + " pointer-events-none";
+        document.getElementById('val-bac').className = hudClass + " pointer-events-none";
+        document.getElementById('val-vang').className = hudClass + " pointer-events-none";
+        document.getElementById('val-nuoc-display').className = hudClass + " pointer-events-none";
+        closeSettings();
+    }
+
+    // THỂ LỰC (NƯỚC)
     let stamina = parseInt(localStorage.getItem('skyStamina')) || 0;
     let lastUpdate = parseInt(localStorage.getItem('skyStaminaTime')) || Date.now();
 
     function updateStamina() {
         const now = Date.now();
         const elapsedMs = now - lastUpdate;
-        const minutesPassed = Math.floor(elapsedMs / 900000); 
+        const minutesPassed = Math.floor(elapsedMs / 900000); // 15 phút 
         
         if (minutesPassed > 0) {
             if (stamina < 156) {
@@ -682,74 +719,27 @@
         const valNuoc = document.getElementById('val-nuoc');
         if (valNuoc) valNuoc.innerText = stamina;
     }
-    
-    let selectedColorClass = localStorage.getItem('playerColor') || 'text-amber-100';
-    let savedName = localStorage.getItem('playerName') || 'NicksolEr';
 
-    function openSettings() {
-        playSound('click');
-        document.getElementById('settings-modal').classList.remove('hidden');
-        document.getElementById('setting-name-input').value = savedName;
-        document.getElementById('name-preview').innerText = savedName;
-        document.getElementById('name-preview').className = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass}`;
-        document.getElementById('bgm-toggle').checked = localStorage.getItem('bgmOn') !== 'false';
-    }
-
-    function closeSettings() {
-        playSound('click');
-        document.getElementById('settings-modal').classList.add('hidden');
-    }
-
-    function toggleBGM() {
-        playSound('click');
-        const isOn = document.getElementById('bgm-toggle').checked;
-        localStorage.setItem('bgmOn', isOn);
-        const bgm = document.getElementById('bgm-game');
-        if(isOn) bgm.play().catch(()=>{}); else bgm.pause();
-    }
-
-    function updateNamePreview() {
-        const name = document.getElementById('setting-name-input').value || 'NicksolEr';
-        document.getElementById('name-preview').innerText = name;
-    }
-
-    function selectColor(colorClass, element) {
-        playSound('click');
-        selectedColorClass = colorClass;
-        document.getElementById('name-preview').className = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${colorClass}`;
-        const swatches = document.getElementById('color-picker').children;
-        for(let s of swatches) s.classList.replace('border-white', 'border-transparent');
-        element.classList.replace('border-transparent', 'border-white');
-    }
-
-    function saveSettings() {
-        playSound('correct');
-        savedName = document.getElementById('setting-name-input').value || 'NicksolEr';
-        localStorage.setItem('playerName', savedName);
-        localStorage.setItem('playerColor', selectedColorClass);
-        const hudClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none`;
-        document.getElementById('player-name-hud').innerText = savedName;
-        document.getElementById('player-name-hud').className = hudClass;
-        document.getElementById('val-bac').className = hudClass;
-        document.getElementById('val-vang').className = hudClass;
-        document.getElementById('val-nuoc-display').className = hudClass;
-        closeSettings();
-    }
-
+    // KHỞI ĐỘNG
     window.onload = () => { 
         renderMusic(); renderLibrary(); renderGrammarList(); nextVocab(true); nextNames(true); nextParagraph(); loadWorkSchedule(); generateListenSentence();
+        
+        // Nạp Settings
         const hudClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none`;
         document.getElementById('player-name-hud').innerText = savedName;
         document.getElementById('player-name-hud').className = hudClass;
         document.getElementById('val-bac').className = hudClass;
         document.getElementById('val-vang').className = hudClass;
         document.getElementById('val-nuoc-display').className = hudClass;
+
         setInterval(updateStamina, 1000);
         updateStamina();
+        
         switchTab('home'); 
         setTimeout(startSequentialPreload, 3000);
     };
 
+    // --- DICTIONARY ---
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" }, { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" }, { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" }, { hz: "先生", py: "xiānsheng", mn: "ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô" },
         { hz: "零", py: "líng", mn: "số 0" }, { hz: "一", py: "yī", mn: "số 1" }, { hz: "二", py: "èr", mn: "số 2" }, { hz: "三", py: "sān", mn: "số 3" }, { hz: "四", py: "sì", mn: "số 4" }, { hz: "五", py: "wǔ", mn: "số 5" }, { hz: "六", py: "liù", mn: "số 6" }, { hz: "七", py: "qī", mn: "số 7" }, { hz: "八", py: "bā", mn: "số 8" }, { hz: "九", py: "jiǔ", mn: "số 9" }, { hz: "十", py: "shí", mn: "số 10" }, { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" }, { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" }, { hz: "号", py: "hào", mn: "ngày" }, { hz: "星期", py: "xīngqī", mn: "tuần" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" }, { hz: "时候", py: "shíhou", mn: "khi lúc" },
@@ -777,16 +767,13 @@
         { hz: "开始", py: "kāishǐ", mn: "bắt đầu" }, { hz: "考试", py: "kǎoshì", mn: "thi cử" }
     ];
 
-    const namesData = [
-        { vi: "Lưu Thiết Hoa", hz: "刘铁华", py: "Liú Tiěhuá" }, { vi: "Hà Mỹ Mỹ", hz: "何美美", py: "Hé Měiměi" }, { vi: "Bùi Lê Ngọc Linh", hz: "裴黎玉玲", py: "Péi Lí Yùlíng" }, { vi: "Lưu Thiết Vinh", hz: "刘铁荣", py: "Liú Tiěróng" }, { vi: "A Mỹ Linh", hz: "阿美玲", py: "Ā Měilíng" }, { vi: "Hà Gia Bảo", hz: "何家宝", py: "Hé Jiābǎo" }, { vi: "Diệp Thanh Thanh", hz: "叶青青", py: "Yè Qīngqīng" }, { vi: "Lê Bá Trần Hoàng", hz: "黎伯陈黄", py: "Lí Bó Chénhuáng" }, { vi: "Nguyễn Thị Phương Nguyên", hz: "阮氏芳原", py: "Ruǎn Shì Fāngyuán" }
-    ];
-    const grammarRules = [
-        { id: "g1", title: "S + 是 + N", structure: "S + 是 + N (Là)", ex: "我是学生", regex: /(.+)是(.+)/ }, { id: "g2", title: "S + 不 + 是 + N", structure: "S + 不 + 是 + N (Phủ định)", ex: "我不是老师", regex: /(.+)不是(.+)/ }, { id: "g3", title: "S + 是 + N + 吗?", structure: "S + 是 + N + 吗? (Nghi vấn)", ex: "你是中国人吗？", regex: /(.+)是(.+)吗[?？]?/ }, { id: "g4", title: "N + 们", structure: "N + 们 (Số nhiều)", ex: "我们", regex: /(.+)们/ }
-    ];
-    const readingData = [
-        { id: 1, zh: "你好！我叫刘铁花。我是学生。我家有五口人：爸爸、妈妈、哥哥、女儿和我。", key: "xin chào tôi tên lưu thiết hoa tôi là học sinh nhà tôi có năm người bố mẹ anh trai con gái và tôi", vi_display: "Xin chào! Tôi tên Lưu Thiết Hoa. Tôi là học sinh. Nhà tôi có 5 người: Bố, mẹ, anh trai, con gái và tôi." }, { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }, { id: 3, zh: "弟弟很喜欢吃包子。他每天早上都吃两个白包子。吃完包子，他去学校上课。", key: "em trai rất thích ăn bánh bao cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng ăn xong bánh bao cậu ấy đi trường học đi học", vi_display: "Em trai rất thích ăn bánh bao. Cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng. Ăn xong bánh bao, cậu ấy đi trường học." }, { id: 4, zh: "后天我们要去国外旅行。爸爸已经买好了机票。我们在机场等飞机。", key: "ngày hôm sau chúng tôi phải đi nước ngoài du lịch bố đã mua xong vé máy bay chúng tôi ở sân bay đợi máy bay", vi_display: "Ngày mốt chúng tôi sẽ đi du lịch nước ngoài. Bố đã mua xong vé máy bay. Chúng tôi đang đợi máy bay ở sân bay." }
-    ];
+    const namesData = [ { vi: "Lưu Thiết Hoa", hz: "刘铁华", py: "Liú Tiěhuá" }, { vi: "Hà Mỹ Mỹ", hz: "何美美", py: "Hé Měiměi" }, { vi: "Bùi Lê Ngọc Linh", hz: "裴黎玉玲", py: "Péi Lí Yùlíng" }, { vi: "Lưu Thiết Vinh", hz: "刘铁荣", py: "Liú Tiěróng" }, { vi: "A Mỹ Linh", hz: "阿美玲", py: "Ā Měilíng" }, { vi: "Hà Gia Bảo", hz: "何家宝", py: "Hé Jiābǎo" }, { vi: "Diệp Thanh Thanh", hz: "叶青青", py: "Yè Qīngqīng" }, { vi: "Lê Bá Trần Hoàng", hz: "黎伯陈黄", py: "Lí Bó Chénhuáng" }, { vi: "Nguyễn Thị Phương Nguyên", hz: "阮氏芳原", py: "Ruǎn Shì Fāngyuán" } ];
+    const grammarRules = [ { id: "g1", title: "S + 是 + N", structure: "S + 是 + N (Là)", ex: "我是学生", regex: /(.+)是(.+)/ }, { id: "g2", title: "S + 不 + 是 + N", structure: "S + 不 + 是 + N (Phủ định)", ex: "我不是老师", regex: /(.+)不是(.+)/ }, { id: "g3", title: "S + 是 + N + 吗?", structure: "S + 是 + N + 吗? (Nghi vấn)", ex: "你是中国人吗？", regex: /(.+)是(.+)吗[?？]?/ }, { id: "g4", title: "N + 们", structure: "N + 们 (Số nhiều)", ex: "我们", regex: /(.+)们/ } ];
+    const readingData = [ { id: 1, zh: "你好！我叫刘铁花。我是学生。我家有五口人：爸爸、妈妈、哥哥、女儿和我。", key: "xin chào tôi tên lưu thiết hoa tôi là học sinh nhà tôi có năm người bố mẹ anh trai con gái và tôi", vi_display: "Xin chào! Tôi tên Lưu Thiết Hoa. Tôi là học sinh. Nhà tôi có 5 người: Bố, mẹ, anh trai, con gái và tôi." }, { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }, { id: 3, zh: "弟弟很喜欢吃包子。他每天早上都吃两个白包子。吃完包子，他去学校上课。", key: "em trai rất thích ăn bánh bao cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng ăn xong bánh bao cậu ấy đi trường học đi học", vi_display: "Em trai rất thích ăn bánh bao. Cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng. Ăn xong bánh bao, cậu ấy đi trường học." }, { id: 4, zh: "后天我们要去国外旅行。爸爸已经买好了机票。我们在机场等飞机。", key: "ngày hôm sau chúng tôi phải đi nước ngoài du lịch bố đã mua xong vé máy bay chúng tôi ở sân bay đợi máy bay", vi_display: "Ngày mốt chúng tôi sẽ đi du lịch nước ngoài. Bố đã mua xong vé máy bay. Chúng tôi đang đợi máy bay ở sân bay." } ];
+    const vPop = [ {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false}, {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false}, {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false}, {name:"hieuthuhai - ngủ một mình ft. negav",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Không Thể Say l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true}, {name:"Exit Sign - HIEUTHUHAI ft. marzuz",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true}, {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true} ];
+    const cPop = [ {name:"Mang Chủng",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"}, {name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"}, {name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"}, {name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"} ];
 
+    // --- CÁC HÀM CŨ GIỮ NGUYÊN HOÀN TOÀN ---
     let currentListenHz = ""; let currentListenVi = "";
     function generateListenSentence() {
         playSound('click');
@@ -809,7 +796,7 @@
         currentListenHz = sentence; currentListenVi = vi_sentence;
         document.getElementById('listen-input').value = ""; document.getElementById('listen-msg').innerHTML = "Đã tạo câu mới! Bấm nút 🎧 để nghe."; document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-indigo-300"; document.getElementById('listen-hint').classList.add('hidden');
     }
-    function playListenAudio() { if ('speechSynthesis' in window) { const utterance = new SpeechSynthesisUtterance(currentListenHz); utterance.lang = 'zh-CN'; utterance.rate = 1.3; window.speechSynthesis.speak(utterance); } else { alert("Trình duyệt không hỗ trợ phát âm thanh."); } }
+    function playListenAudio() { if ('speechSynthesis' in window) { const utterance = new SpeechSynthesisUtterance(currentListenHz); utterance.lang = 'zh-CN'; utterance.rate = 1.3; window.speechSynthesis.speak(utterance); } else { alert("Trình duyệt không hỗ trợ phát âm thanh. Vui lòng dùng Chrome."); } }
     function showListenHint() { playSound('click'); document.getElementById('listen-hint').innerHTML = `${currentListenHz}<br><span class="text-white text-xs font-normal opacity-80">${currentListenVi}</span>`; document.getElementById('listen-hint').classList.remove('hidden'); }
     function checkListen() {
         const val = document.getElementById('listen-input').value.trim(); const cleanVal = val.replace(/[.,?!。，？！]/g, ""); const cleanTarget = currentListenHz.replace(/[.,?!。，？！]/g, "");
@@ -817,40 +804,96 @@
         } else { playSound('wrong'); document.getElementById('listen-msg').innerText = "SAI RỒI! BẤM 🎧 NGHE LẠI HOẶC XEM GỢI Ý."; document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; }
     }
 
-    // DRAG LOGIC CHO 4 NÚT MỚI: HOAVIEN, NHANVAT, TUIDO, CUAHANG, SUUTAM
+    function renderLibrary() { document.getElementById('lib-count').innerText = vocabData.length; const html = vocabData.map((v, i) => `<div class="bg-white/5 p-3 rounded border border-white/10 flex flex-col justify-between hover:bg-white/10 transition"> <div class="flex justify-between items-center mb-1"> <span class="text-xs text-gray-500 font-mono">#${i+1}</span> <span class="text-lg font-bold text-white">${v.hz}</span> </div> <div class="text-xs text-indigo-300 font-mono">${v.py}</div> <div class="text-[10px] text-gray-400 uppercase mt-1 tracking-widest">${v.mn}</div> </div>`).join(''); document.getElementById('lib-list').innerHTML = html; }
+    let nmIdx = 0; let nmMode = 0;
+    function changeNamesMode() { playSound('click'); nmMode = (nmMode + 1) % 3; document.getElementById('nm-mode-btn').innerText = ["Việt ➔ Hán", "Hán ➔ Việt", "Việt ➔ Pinyin"][nmMode]; nextNames(true); }
+    function nextNames(rand) { if(rand) nmIdx = Math.floor(Math.random() * namesData.length); const n = namesData[nmIdx]; document.getElementById('nm-question').innerText = nmMode===0 ? n.vi : (nmMode===1 ? n.hz : n.vi); document.getElementById('nm-input').value = ""; document.getElementById('nm-msg').innerText = ""; document.getElementById('nm-hint').classList.add('hidden'); }
+    function showNamesHint() { playSound('click'); const n = namesData[nmIdx]; let ans = nmMode===0 ? n.hz : (nmMode===1 ? n.vi : n.py); document.getElementById('nm-hint').innerText = "Gợi ý: " + ans; document.getElementById('nm-hint').classList.remove('hidden'); }
+    function checkNames() { const n = namesData[nmIdx]; const v = document.getElementById('nm-input').value.toLowerCase().trim(); let ok = (nmMode===0 && v===n.hz) || (nmMode===1 && v===n.vi.toLowerCase()) || (nmMode===2 && v===n.py.toLowerCase()); if(ok) { playSound('correct'); updateCoins(1); document.getElementById('nm-msg').innerText = "CHÍNH XÁC!"; document.getElementById('nm-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400"; setTimeout(()=>nextNames(true), 1000); } else { playSound('wrong'); document.getElementById('nm-msg').innerText = "SAI RỒI"; document.getElementById('nm-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; } }
+
+    let voiceIdx = 0; const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; let recognition;
+    if (SpeechRecognition) {
+        recognition = new SpeechRecognition(); recognition.lang = 'zh-CN'; recognition.interimResults = false;
+        recognition.onstart = function() { document.getElementById('voice-pulse').classList.remove('opacity-0'); document.getElementById('voice-pulse').classList.add('animate-ping'); document.getElementById('voice-feedback').innerHTML = "<span class='text-gray-400'>Đang lắng nghe... (Hãy nói đi)</span>"; };
+        recognition.onend = function() { document.getElementById('voice-pulse').classList.add('opacity-0'); document.getElementById('voice-pulse').classList.remove('animate-ping'); };
+        recognition.onresult = function(event) {
+            const spoken = event.results[0][0].transcript.trim(); const target = vocabData[voiceIdx].hz; const cleanSpoken = spoken.replace(/[.,?!。，？！]/g, "");
+            if(cleanSpoken === target || cleanSpoken.includes(target) || target.includes(cleanSpoken)) { playSound('correct'); updateCoins(1); document.getElementById('voice-feedback').innerHTML = `<span class='text-green-400 font-bold'>Giỏi quá! AI nghe được: "${cleanSpoken}"</span>`; setTimeout(() => nextVoiceWord(), 2000); } else { playSound('wrong'); document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Sai rồi. Bạn đọc là: "${cleanSpoken}"<br>Cần đọc là: "${target}"</span>`; }
+        };
+        recognition.onerror = function(event) { document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Lỗi mic: ${event.error}</span>`; document.getElementById('voice-pulse').classList.add('opacity-0'); document.getElementById('voice-pulse').classList.remove('animate-ping'); };
+    }
+    function nextVoiceWord() { playSound('click'); voiceIdx = Math.floor(Math.random() * vocabData.length); document.getElementById('voice-target').innerText = vocabData[voiceIdx].hz; document.getElementById('voice-py').innerText = vocabData[voiceIdx].py; document.getElementById('voice-mn').innerText = vocabData[voiceIdx].mn; document.getElementById('voice-feedback').innerHTML = ""; }
+    function startListening() { if (!SpeechRecognition) { alert("Trình duyệt của bạn không hỗ trợ Nhận diện giọng nói. Hãy dùng Chrome!"); return; } playSound('click'); recognition.start(); }
+
+    let vIdx = -1; let vMode = 0; let isVocabRandom = false;
+    function changeVocabMode() { playSound('click'); vMode = (vMode+1)%3; document.getElementById('v-mode-btn').innerText = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"][vMode]; nextVocab(false); }
+    function toggleVocabRandom() { playSound('click'); isVocabRandom = !isVocabRandom; document.getElementById('v-random-btn').innerText = isVocabRandom ? "Học: NGẪU NHIÊN" : "Học: THỨ TỰ"; document.getElementById('v-random-btn').className = isVocabRandom ? "text-[9px] border border-indigo-500 text-indigo-300 px-3 py-1 uppercase tracking-widest hover:bg-indigo-500 hover:text-white transition rounded" : "text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded"; }
+    function nextVocab(moveNext = false) { 
+        if(moveNext) { if(isVocabRandom) vIdx = Math.floor(Math.random() * vocabData.length); else vIdx = (vIdx + 1) % vocabData.length; } else if (vIdx === -1) { vIdx = 0; } const i = vocabData[vIdx]; document.getElementById('v-progress').innerText = `#${vIdx + 1} / ${vocabData.length}`; document.getElementById('v-question').innerText = vMode===0?i.hz:(vMode===1?i.mn.toUpperCase():i.hz); document.getElementById('v-input').value = ""; document.getElementById('v-msg').innerText = ""; document.getElementById('v-hint').classList.add('hidden');
+    }
+    function showVocabHint() { playSound('click'); const i = vocabData[vIdx]; let ans = vMode===0 ? i.mn : (vMode===1 ? i.hz : i.py); document.getElementById('v-hint').innerText = "Gợi ý: " + ans; document.getElementById('v-hint').classList.remove('hidden'); }
+    function checkVocab() { const i = vocabData[vIdx]; const v = document.getElementById('v-input').value.toLowerCase().trim(); let ok = (vMode===0 && v===i.mn.toLowerCase()) || (vMode===1 && v===i.hz) || (vMode===2 && v===i.py.toLowerCase()); if(ok) { playSound('correct'); updateCoins(1); document.getElementById('v-msg').innerText = "CHÍNH XÁC!"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400"; setTimeout(()=>nextVocab(true),1000); } else { playSound('wrong'); document.getElementById('v-msg').innerText = "SAI RỒI"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; } }
+
+    function switchTestMode(mode) { playSound('click'); document.getElementById('test-grammar').classList.add('hidden'); document.getElementById('test-fill').classList.add('hidden'); document.getElementById('test-speed').classList.add('hidden'); document.getElementById(`test-${mode}`).classList.remove('hidden'); if(mode === 'grammar') startGrammarTest(); if(mode === 'fill') generateFillTest(); if(mode === 'speed') resetSpeedTest(); }
+    function startGrammarTest() { document.getElementById('tg-step1').classList.remove('hidden'); document.getElementById('tg-step2').classList.add('hidden'); document.getElementById('tg-step3').classList.add('hidden'); document.getElementById('tg-step4').classList.add('hidden'); document.getElementById('tg-sub-input').value = ""; document.getElementById('tg-noun-input').value = ""; document.getElementById('tg-make-sentence').value = ""; document.getElementById('tg-feedback').innerText = ""; currentTestRule = grammarRules[Math.floor(Math.random() * grammarRules.length)]; const subs = ["我","你","他","爸爸","妈妈"]; const nouns = ["学生","老师","医生","好人"]; const S = subs[Math.floor(Math.random() * subs.length)]; const N = nouns[Math.floor(Math.random() * nouns.length)]; if(currentTestRule.id === "g1") currentTestSentence = S + "是" + N; if(currentTestRule.id === "g2") currentTestSentence = S + "不是" + N; if(currentTestRule.id === "g3") currentTestSentence = S + "是" + N + "吗？"; if(currentTestRule.id === "g4") currentTestSentence = "我们"; document.getElementById('tg-question').innerText = currentTestSentence; let opts = [...grammarRules].sort(() => Math.random() - 0.5).slice(0, 3); if(!opts.includes(currentTestRule)) opts[0] = currentTestRule; opts = opts.sort(() => Math.random() - 0.5); document.getElementById('tg-options').innerHTML = opts.map(r => `<button onclick="checkStructure('${r.id}')" class="p-3 bg-white/5 border border-white/20 rounded text-xs hover:bg-white hover:text-black transition text-left">${r.structure}</button>`).join(''); }
+    function checkStructure(id) { if(id === currentTestRule.id) { playSound('correct'); document.getElementById('tg-step1').classList.add('hidden'); document.getElementById('tg-step2').classList.remove('hidden'); document.getElementById('tg-feedback').innerText = "Đúng cấu trúc!"; } else { playSound('wrong'); alert("Sai rồi! Hãy nhìn kỹ câu hỏi."); } }
+    function checkSubject() { const val = document.getElementById('tg-sub-input').value.trim(); if(currentTestSentence.includes(val) && val.length > 0) { playSound('correct'); document.getElementById('tg-step2').classList.add('hidden'); document.getElementById('tg-step3').classList.remove('hidden'); } else { playSound('wrong'); alert("Chưa đúng chủ ngữ!"); } }
+    function checkNoun() { const val = document.getElementById('tg-noun-input').value.trim(); if(currentTestSentence.includes(val) && val.length > 0) { playSound('correct'); document.getElementById('tg-step3').classList.add('hidden'); document.getElementById('tg-step4').classList.remove('hidden'); } else { playSound('wrong'); alert("Chưa đúng danh từ!"); } }
+    function checkAISentence() { const val = document.getElementById('tg-make-sentence').value.trim(); const feedback = document.getElementById('tg-feedback'); const match = val.match(currentTestRule.regex); const isChinese = /[\u4e00-\u9fa5]/.test(val); if(match && isChinese) { playSound('correct'); updateCoins(1); feedback.innerText = "TUYỆT VỜI! (+1 COIN)"; feedback.classList.replace("text-red-400", "text-green-400"); setTimeout(startGrammarTest, 2000); } else { playSound('wrong'); feedback.innerText = "Sai cấu trúc hoặc không phải tiếng Trung!"; feedback.classList.add("text-red-400"); } }
+    function generateFillTest() { const subjects = ["我", "你", "他", "她", "老师", "学生", "同学", "朋友", "先生", "小姐", "爸爸", "妈妈", "哥哥", "弟弟", "工人"]; const verbs = ["喜欢", "想", "去", "吃", "喝", "看", "买", "做", "学", "打", "告诉", "教", "认识", "觉得", "记"]; const nouns = ["苹果", "茶", "水", "饭", "菜", "咖啡", "衣服", "书", "电脑", "电视", "包子", "鸡蛋", "钱", "汉语", "汉字"]; const places = ["学校", "家", "饭店", "商店", "北京", "中国", "车站", "机场", "国外", "大学", "房间", "教室"]; const adjectives = ["好", "多", "少", "大", "小", "冷", "热", "高兴", "漂亮", "忙", "累", "贵", "健康", "旧"]; const S = subjects[Math.floor(Math.random() * subjects.length)]; const type = Math.floor(Math.random() * 3); let dialogue = ""; let hideTarget = ""; let fakeOpts = []; if (type === 0) { const V = verbs[Math.floor(Math.random() * 5)]; const N = nouns[Math.floor(Math.random() * nouns.length)]; hideTarget = Math.random() > 0.5 ? V : N; dialogue = `A: ${S === '我' ? '你' : '我'}${V}什么？<br>B: ${S}${V === hideTarget ? '____' : V}${N === hideTarget ? '____' : N}。`; fakeOpts = ["什么", "吗", "不", "很", "太"]; } else if (type === 1) { const P = places[Math.floor(Math.random() * places.length)]; hideTarget = P; dialogue = `A: ${S === '我' ? '你' : '我'}去哪儿？<br>B: ${S}去____。`; fakeOpts = ["去", "来", "在", "哪儿", "怎么"]; } else { const N2 = nouns[Math.floor(Math.random() * nouns.length)]; const Adj = adjectives[Math.floor(Math.random() * adjectives.length)]; hideTarget = Math.random() > 0.5 ? N2 : Adj; dialogue = `A: ${N2 === hideTarget ? '____' : N2}怎么样？<br>B: ${N2 === hideTarget ? '____' : N2}很${Adj === hideTarget ? '____' : Adj}。`; fakeOpts = ["很", "太", "不", "多", "少"]; } document.getElementById('tf-dialogue').innerHTML = dialogue; let opts = fakeOpts.sort(() => Math.random() - 0.5).slice(0, 4); if(!opts.includes(hideTarget)) opts[0] = hideTarget; opts = opts.sort(() => Math.random() - 0.5); document.getElementById('tf-options').innerHTML = opts.map(o => `<button onclick="checkFill('${o}', '${hideTarget}')" class="px-4 py-2 border border-white/20 rounded hover:bg-white hover:text-black font-bold">${o}</button>`).join(''); document.getElementById('tf-msg').innerText = ""; }
+    function checkFill(ans, correct) { if(ans === correct) { playSound('correct'); updateCoins(1); document.getElementById('tf-msg').innerText = "CHÍNH XÁC! (+1 COIN)"; document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-green-400"; setTimeout(generateFillTest, 1000); } else { playSound('wrong'); document.getElementById('tf-msg').innerText = "SAI RỒI!"; document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-red-400"; } }
+
+    let tsTimer; let tsTimeLeft; let tsData = []; let tsCurrentIdx = 0; let tsScore = 0; let tsLevel = 1;
+    function resetSpeedTest() { clearInterval(tsTimer); document.getElementById('ts-setup').classList.remove('hidden'); document.getElementById('ts-play').classList.add('hidden'); document.getElementById('ts-result').classList.add('hidden'); document.getElementById('ts-max-hint').innerText = vocabData.length; document.getElementById('ts-end').value = vocabData.length; }
+    function startSpeedTest() { playSound('click'); const start = parseInt(document.getElementById('ts-start').value) || 1; const end = parseInt(document.getElementById('ts-end').value) || vocabData.length; tsTimeLeft = (parseInt(document.getElementById('ts-time').value) || 1) * 60; tsLevel = parseInt(document.getElementById('ts-level').value); if(start < 1 || end > vocabData.length || start > end) { alert(`Phạm vi từ không hợp lệ! Vui lòng nhập từ 1 đến ${vocabData.length}`); return; } tsData = vocabData.slice(start - 1, end).sort(() => Math.random() - 0.5); tsCurrentIdx = 0; tsScore = 0; document.getElementById('ts-setup').classList.add('hidden'); document.getElementById('ts-play').classList.remove('hidden'); document.getElementById('ts-play').classList.add('flex'); document.getElementById('ts-total-display').innerText = tsData.length; document.getElementById('ts-score-display').innerText = 0; document.getElementById('ts-play-msg').innerText = ""; updateTsWord(); tsTimer = setInterval(() => { tsTimeLeft--; let m = Math.floor(tsTimeLeft / 60).toString().padStart(2, '0'); let s = (tsTimeLeft % 60).toString().padStart(2, '0'); document.getElementById('ts-timer-display').innerText = `${m}:${s}`; if(tsTimeLeft <= 0) endSpeedTest(); }, 1000); }
+    function updateTsWord() { if(tsCurrentIdx >= tsData.length) { endSpeedTest(); return; } let item = tsData[tsCurrentIdx]; let q = ""; if(tsLevel === 1) q = item.hz; if(tsLevel === 2) q = item.mn.toUpperCase(); if(tsLevel === 3) q = item.mn.toUpperCase(); document.getElementById('ts-current-word').innerText = q; document.getElementById('ts-input').value = ""; document.getElementById('ts-input').focus(); }
+    function checkSpeedVocab() { let item = tsData[tsCurrentIdx]; let v = document.getElementById('ts-input').value.toLowerCase().trim(); let msgEl = document.getElementById('ts-play-msg'); let ok = false; if(tsLevel === 1 && v === item.mn.toLowerCase()) ok = true; if(tsLevel === 2 && v === item.py.toLowerCase()) ok = true; if(tsLevel === 3 && v === item.hz) ok = true; if(ok) { playSound('correct'); tsScore++; updateCoins(1); tsCurrentIdx++; document.getElementById('ts-score-display').innerText = tsScore; msgEl.innerText = ""; updateTsWord(); } else { playSound('wrong'); document.getElementById('ts-input').value = ""; msgEl.innerText = "SAI RỒI! THỬ LẠI!"; } }
+    function endSpeedTest() { clearInterval(tsTimer); document.getElementById('ts-play').classList.add('hidden'); document.getElementById('ts-play').classList.remove('flex'); document.getElementById('ts-result').classList.remove('hidden'); document.getElementById('ts-final-score').innerText = `${tsScore} / ${tsData.length}`; }
+
+    function renderGrammarList() { document.getElementById('grammar-list').innerHTML = grammarRules.map(r => `<div class="bg-white/5 p-6 border-l-2 border-indigo-500"> <h3 class="text-lg font-light text-white mb-2">${r.title}</h3> <code class="block bg-black/20 p-2 text-pink-300 mb-2 font-mono text-xs">${r.structure}</code> <p class="text-xs text-gray-400 italic">Ví dụ: ${r.ex}</p> </div>`).join(''); }
+    let rIdx = 0; function nextParagraph() { playSound('click'); rIdx = (rIdx+1)%readingData.length; document.getElementById('r-text').innerText = readingData[rIdx].zh; document.getElementById('r-input').value=""; document.getElementById('r-msg').innerText=""; }
+    function toggleReadingRef() { playSound('click'); const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
+    function checkReading() { if(document.getElementById('r-input').value.length > 5) { playSound('correct'); updateCoins(1); document.getElementById('r-msg').innerText = "OK (+1 Xu)"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-green-400"; } else { playSound('wrong'); document.getElementById('r-msg').innerText = "DỊCH QUÁ NGẮN!"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-red-400"; } }
+
+    const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"]; let workStep = 0; let currentWeek = 1; let scheduleData = []; let isDoubleShift = false; 
+    function changeWeek() { currentWeek = parseInt(document.getElementById('week-selector').value); document.getElementById('display-week-num').innerText = "TUẦN " + currentWeek; loadWorkSchedule(); }
+    function loadWorkSchedule() { const key = `skyWork_W${currentWeek}`; const saved = localStorage.getItem(key); document.getElementById('btn-cancel-edit').classList.add('hidden'); if (saved) { scheduleData = JSON.parse(saved); renderScheduleResult(); } else { resetWorkSchedule(); } }
+    function clearAllSchedules() { playSound('click'); if(confirm("Bạn có chắc chắn muốn xóa TOÀN BỘ lịch?")) { localStorage.removeItem('skyWork_W1'); localStorage.removeItem('skyWork_W2'); localStorage.removeItem('skyWork_W3'); localStorage.removeItem('skyWork_W4'); currentWeek = 1; document.getElementById('week-selector').value = 1; document.getElementById('display-week-num').innerText = "TUẦN 1"; resetWorkSchedule(); } }
+    function setVal(id, val) { document.getElementById(id).value = val; }
+    function toggleDoubleShift() { playSound('click'); isDoubleShift = !isDoubleShift; const section2 = document.getElementById('section-ca-2'); const btn = document.getElementById('btn-toggle-double'); if(isDoubleShift) { section2.classList.remove('hidden'); section2.classList.add('fade-in'); btn.classList.add('bg-indigo-500', 'text-white'); btn.innerText = "- Bỏ chế độ 2 Ca"; } else { section2.classList.add('hidden'); btn.classList.remove('bg-indigo-500', 'text-white'); btn.innerText = "+ Làm 2 Ca / Full"; setVal('w-pos-2', ''); setVal('w-time-2', ''); } }
+    function resetWorkSchedule(startDate = '') { workStep = 0; scheduleData = []; document.getElementById('work-wizard').classList.remove('hidden'); document.getElementById('work-result-container').classList.add('hidden'); setVal('w-date', startDate); setVal('w-pos',''); setVal('w-time',''); if(isDoubleShift) toggleDoubleShift(); updateWizardUI(); }
+    function editCurrentSchedule() { playSound('click'); let firstDate = ''; if(scheduleData.length > 0) firstDate = scheduleData[0].date; resetWorkSchedule(firstDate); document.getElementById('btn-cancel-edit').classList.remove('hidden'); }
+    function cancelEdit() { playSound('click'); loadWorkSchedule(); }
+    function createNextWeek() { playSound('click'); let lastDateOfWeek = ''; if(scheduleData.length > 0) { lastDateOfWeek = scheduleData[scheduleData.length - 1].date; } let nextStartDate = ''; if(lastDateOfWeek && lastDateOfWeek.includes('/')) { let [d, m] = lastDateOfWeek.split('/').map(Number); let dateObj = new Date(2026, m - 1, d); dateObj.setDate(dateObj.getDate() + 1); nextStartDate = `${dateObj.getDate()}/${dateObj.getMonth() + 1}`; } currentWeek++; const selector = document.getElementById('week-selector'); if(currentWeek > 4) currentWeek = 1; selector.value = currentWeek; document.getElementById('display-week-num').innerText = "TUẦN " + currentWeek; resetWorkSchedule(nextStartDate); }
+    function updateWizardUI() { document.getElementById('w-day-title').innerText = workDays[workStep]; document.getElementById('w-step-num').innerText = workStep + 1; if(workStep > 0 && scheduleData.length > 0) { const prevDate = scheduleData[workStep-1].date; const parts = prevDate.split('/'); if(parts.length === 2) { let d = parseInt(parts[0]); let m = parseInt(parts[1]); let dateObj = new Date(2026, m - 1, d); dateObj.setDate(dateObj.getDate() + 1); document.getElementById('w-date').value = `${dateObj.getDate()}/${dateObj.getMonth() + 1}`; } } }
+    function nextWorkStep() { playSound('click'); const date = document.getElementById('w-date').value || "N/A"; const pos = document.getElementById('w-pos').value || "N/A"; const time = document.getElementById('w-time').value || "N/A"; let pos2 = ""; let time2 = ""; if(isDoubleShift) { pos2 = document.getElementById('w-pos-2').value || ""; time2 = document.getElementById('w-time-2').value || ""; } scheduleData.push({ day: workDays[workStep], date, pos, time, pos2, time2, hasCa2: isDoubleShift }); workStep++; if(workStep >= 7) { localStorage.setItem(`skyWork_W${currentWeek}`, JSON.stringify(scheduleData)); renderScheduleResult(); } else { setVal('w-pos',''); setVal('w-time',''); if(isDoubleShift) toggleDoubleShift(); updateWizardUI(); } }
+    function calcHours(timeStr) { if(!timeStr || !timeStr.includes('-')) return 0; const cleanStr = timeStr.replace(/\s/g, ''); const t = cleanStr.replace(/h/g, '.').replace(/:/g, '.').split('-'); let duration = 0; if(t.length === 2) { const start = parseFloat(t[0]); const end = parseFloat(t[1]); duration = end - start; } const longShifts = ["07h00-15h30", "08h30-15h30", "15h30-22h30", "08h30-13h00", "17h00-22h30"]; for(let s of longShifts) { if(cleanStr.includes(s)) { duration -= 0.5; break; } } return duration > 0 ? duration : 0; }
+    function renderScheduleResult() { document.getElementById('work-wizard').classList.add('hidden'); document.getElementById('work-result-container').classList.remove('hidden'); const tbody = document.getElementById('work-tbody'); let totalH = 0; tbody.innerHTML = scheduleData.map(d => { let h1 = (d.pos !== 'OFF') ? calcHours(d.time) : 0; let h2 = (d.hasCa2 && d.pos2) ? calcHours(d.time2) : 0; let dayTotal = h1 + h2; totalH += dayTotal; let displayPos = `<span class="font-bold">${d.pos}</span>`; let displayTime = d.time; if(d.hasCa2 && d.pos2) { displayPos += `<br><span class="text-indigo-300 text-[10px]">+ ${d.pos2}</span>`; displayTime += `<br><span class="text-indigo-300 text-[10px]">${d.time2}</span>`; } return `<tr class="${d.pos === 'OFF' ? 'text-red-400' : ''}"> <td class="font-bold text-gray-400">${d.day}</td> <td>${d.date}</td> <td class="uppercase font-bold tracking-widest text-xs">${displayPos}</td> <td>${displayTime}</td> <td>${d.pos === 'OFF' ? '-' : (dayTotal > 0 ? dayTotal.toFixed(1) + 'h' : '?')}</td> </tr>`; }).join(''); document.getElementById('total-hours').innerText = totalH.toFixed(1) + "h"; document.getElementById('total-salary').innerText = (totalH * 25000).toLocaleString('vi-VN') + " VNĐ"; }
+    function downloadSchedule() { playSound('click'); html2canvas(document.getElementById('work-capture-area'), { backgroundColor: "#0f172a", scale: 2 }).then(canvas => { const link = document.createElement('a'); link.download = `LichLamViec_Tuan${currentWeek}.png`; link.href = canvas.toDataURL(); link.click(); }); }
+
+    let currentList = 'vpop'; let currentIndex = 0; let isHieuMode = false; let displayedVPop = [];
+    function renderMusicVPop() { displayedVPop = isHieuMode ? vPop.filter(s => s.isHieu) : vPop; const tpl = (s, idx) => { const safeName = s.name.replace(/'/g, "\\'"); return `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${safeName}', ${idx}, 'vpop', '${s.thumb}')"> <img src="${s.thumb}" class="flex-shrink-0"> <div class="flex-1 overflow-hidden"> <h4 class="text-[10px] font-bold uppercase text-white tracking-widest truncate" title="${s.name}">${s.name}</h4> <span class="text-[8px] text-gray-500">${s.type==='mp4'?'NO ADS':'YOUTUBE'}</span> </div> </div>`; }; document.getElementById('v-list').innerHTML = displayedVPop.map((s,i) => tpl(s, i)).join(''); }
+    function renderMusicCPop() { const tpl = (s, idx) => { const safeName = s.name.replace(/'/g, "\\'"); return `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${safeName}', ${idx}, 'cpop', '${s.thumb}')"> <img src="${s.thumb}" class="flex-shrink-0"> <div class="flex-1 overflow-hidden"> <h4 class="text-[10px] font-bold uppercase text-white tracking-widest truncate" title="${s.name}">${s.name}</h4> <span class="text-[8px] text-gray-500">${s.type==='mp4'?'NO ADS':'YOUTUBE'}</span> </div> </div>`; }; document.getElementById('c-list').innerHTML = cPop.map((s,i) => tpl(s, i)).join(''); }
+    function renderMusic() { renderMusicVPop(); renderMusicCPop(); }
+    function toggleHieuThuHai() { playSound('click'); isHieuMode = !isHieuMode; const btn = document.getElementById('hieu-btn'); const vListEl = document.getElementById('v-list'); if(isHieuMode) { btn.classList.add('scale-110', 'opacity-100', 'drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]'); btn.classList.remove('opacity-50'); } else { btn.classList.remove('scale-110', 'opacity-100', 'drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]'); btn.classList.add('opacity-50'); } vListEl.style.opacity = '0'; setTimeout(() => { renderMusicVPop(); vListEl.style.opacity = '1'; }, 300); }
+    var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    var player; function onYouTubeIframeAPIReady() { player = new YT.Player('player', { height: '100%', width: '100%', videoId: '', events: { 'onStateChange': onPlayerStateChange } }); }
+    function onPlayerStateChange(event) { if (event.data === YT.PlayerState.ENDED) checkAutoPlay(); }
+    document.getElementById('mp4-player').addEventListener('ended', checkAutoPlay);
+    function playMedia(src, type, name, idx, listType, thumb) { playSound('click'); currentList = listType; currentIndex = idx; document.getElementById('now-playing').innerText = name; const yt = document.getElementById('player'); const mp4 = document.getElementById('mp4-player'); if(player && player.stopVideo) player.stopVideo(); mp4.pause(); if(type === 'mp4') { yt.classList.add('hidden'); mp4.classList.remove('hidden'); mp4.src = src; mp4.play(); } else { mp4.classList.add('hidden'); yt.classList.remove('hidden'); player.loadVideoById(src); } }
+    function checkAutoPlay() { if(document.getElementById(`toggle-${currentList}`).checked) { const listData = currentList === 'vpop' ? displayedVPop : cPop; const nextIdx = (currentIndex + 1) % listData.length; const nextSong = listData[nextIdx]; playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb); } }
+
     const draggables = [
-        document.getElementById('drag-hoavien'),
-        document.getElementById('drag-nhanvat'),
-        document.getElementById('drag-tuido'),
-        document.getElementById('drag-cuahang'),
         document.getElementById('drag-suutam')
     ];
-    
     draggables.forEach(el => {
         if(!el) return; let isDragging = false; let offsetX = 0, offsetY = 0;
-        el.addEventListener('mousedown', (e) => { 
-            const rect = el.getBoundingClientRect(); 
-            const isResize = (e.clientX > rect.right - 15) && (e.clientY > rect.bottom - 15); 
-            if (isResize || e.button !== 0) return; 
-            isDragging = true; 
-            el.style.cursor = 'grabbing'; 
-            offsetX = e.clientX - rect.left; 
-            offsetY = e.clientY - rect.top; 
-        });
-        document.addEventListener('mousemove', (e) => { 
-            if (!isDragging) return; 
-            const containerRect = document.getElementById('hud-stats-container').getBoundingClientRect(); 
-            el.style.left = (e.clientX - containerRect.left - offsetX) + 'px'; 
-            el.style.top = (e.clientY - containerRect.top - offsetY) + 'px'; 
-        });
-        document.addEventListener('mouseup', () => { 
-            if(isDragging) { isDragging = false; el.style.cursor = 'grab'; } 
-        });
-        el.addEventListener('contextmenu', (e) => { 
-            e.preventDefault(); 
-            alert(`${el.id.replace('drag-','').toUpperCase()}:\nTOP: ${el.style.top || '0px'}\nLEFT: ${el.style.left || '0px'}\nWIDTH: ${el.offsetWidth + 'px'}\nHEIGHT: ${el.offsetHeight + 'px'}\n\n👉 Copy 4 dòng này đem qua đưa tui nhé!`); 
-        });
+        el.addEventListener('mousedown', (e) => { const rect = el.getBoundingClientRect(); const isResize = (e.clientX > rect.right - 15) && (e.clientY > rect.bottom - 15); if (isResize || e.button !== 0) return; isDragging = true; el.style.cursor = 'grabbing'; offsetX = e.clientX - rect.left; offsetY = e.clientY - rect.top; });
+        document.addEventListener('mousemove', (e) => { if (!isDragging) return; const containerRect = document.getElementById('hud-stats-container').getBoundingClientRect(); el.style.left = (e.clientX - containerRect.left - offsetX) + 'px'; el.style.top = (e.clientY - containerRect.top - offsetY) + 'px'; });
+        document.addEventListener('mouseup', () => { if(isDragging) { isDragging = false; el.style.cursor = 'grab'; } });
+        el.addEventListener('contextmenu', (e) => { e.preventDefault(); alert(`${el.id.replace('drag-','').toUpperCase()}:\nTOP: ${el.style.top || '0px'}\nLEFT: ${el.style.left || '0px'}\nWIDTH: ${el.offsetWidth + 'px'}\nHEIGHT: ${el.offsetHeight + 'px'}\n\n👉 Copy 4 dòng này đem qua đưa tui nhé!`); });
     });
+
 </script>
 </body>
 </html>
