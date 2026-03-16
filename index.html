@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.28 Clean Architecture</title>
+    <title>Skyreign Hub | V40.29 Final HUD Locked</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -72,18 +72,6 @@
         /* CSS NÚT GẠT */
         .switch-toggle input:checked + div { background-color: #4f46e5; }
         .switch-toggle input:checked + div > div { transform: translateX(100%); }
-
-        /* DRAG TOOL STYLES */
-        .drag-tool {
-            position: absolute;
-            resize: both;
-            overflow: hidden;
-            cursor: grab;
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px dashed rgba(104, 211, 145, 0.8);
-            z-index: 50;
-        }
-        .drag-tool:active { cursor: grabbing; border-color: #fff; }
     </style>
 </head>
 <body>
@@ -136,7 +124,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.28 CLEAN ARCHITECTURE</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.29 FINAL HUD LOCKED</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -244,7 +232,7 @@
             <img src="tuido.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Tui Do">
         </div>
 
-        <div id="drag-suutam" class="drag-tool pointer-events-auto" style="top: 800px; left: 500px; width: 150px; height: 150px; z-index: 50;">
+        <div id="fixed-suutam" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 856px; left: 1299px; width: 382px; height: 364px; z-index: 40;">
             <img src="suutam.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Suu Tam">
         </div>
 
@@ -331,7 +319,7 @@
                 <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Mode: Hán ➔ Việt</button>
                 <button onclick="toggleVocabRandom()" id="v-random-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Học: THỨ TỰ</button>
             </div>
-            <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">#1 / 237</p>
+            <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">#1 / 216</p>
             <div id="v-question" class="text-7xl font-light text-center mb-10 tracking-tighter">...</div>
             <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-2xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkVocab()">
             <div class="flex gap-2">
@@ -401,7 +389,7 @@
                             <span class="text-xs text-gray-400">đến</span>
                             <input type="number" id="ts-end" value="237" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
                         </div>
-                        <p class="text-[9px] text-gray-500 italic">(Tổng kho có <span id="ts-max-hint">237</span> từ)</p>
+                        <p class="text-[9px] text-gray-500 italic">(Tổng kho có <span id="ts-max-hint">0</span> từ)</p>
                     </div>
                     <div class="w-full text-center">
                         <p class="text-[10px] text-indigo-400 uppercase tracking-widest mb-2">Cấp Độ</p>
@@ -458,7 +446,10 @@
                 <div class="flex gap-2">
                     <button onclick="clearAllSchedules()" class="text-[10px] font-bold border border-red-500/50 text-red-400 hover:bg-red-900/20 px-4 py-2 rounded transition">Xóa Toàn Bộ Lịch</button>
                     <select id="week-selector" onchange="changeWeek()" class="bg-black text-xs uppercase p-2 border border-white/20 outline-none rounded">
-                        <option value="1">Tuần 1</option><option value="2">Tuần 2</option><option value="3">Tuần 3</option><option value="4">Tuần 4</option>
+                        <option value="1">Tuần 1</option>
+                        <option value="2">Tuần 2</option>
+                        <option value="3">Tuần 3</option>
+                        <option value="4">Tuần 4</option>
                     </select>
                 </div>
             </div>
@@ -609,7 +600,7 @@
 </div>
 
 <script>
-    // --- SCRIPTS LOGIC ---
+    // --- GLOBAL SYSTEMS ---
     function playSound(type) {
         let audio;
         if(type === 'click') audio = document.getElementById('sfx-click');
@@ -630,12 +621,17 @@
         const navBtn = document.getElementById('n-' + id);
         if(navBtn) navBtn.classList.add('active');
 
+        // Header ẩn hiện
         const mainHeader = document.getElementById('main-header');
         if(id === 'game') {
             mainHeader.style.opacity = '0';
-            if(localStorage.getItem('bgmOn') !== 'false') document.getElementById('bgm-game').play().catch(()=>{});
+            // Phát BGM
+            if(localStorage.getItem('bgmOn') !== 'false') {
+                document.getElementById('bgm-game').play().catch(()=>{});
+            }
         } else {
             mainHeader.style.opacity = '1';
+            // Tắt BGM
             document.getElementById('bgm-game').pause();
         }
         
@@ -649,53 +645,13 @@
         let currentIndex = 0;
         function loadNextVideo() {
             if (currentIndex >= mp4Songs.length) return;
-            fetch(mp4Songs[currentIndex], { mode: 'no-cors' }).then(() => { currentIndex++; loadNextVideo(); }).catch(() => { currentIndex++; loadNextVideo(); });
+            const url = mp4Songs[currentIndex];
+            fetch(url, { mode: 'no-cors' }).then(() => { currentIndex++; loadNextVideo(); }).catch(() => { currentIndex++; loadNextVideo(); });
         }
         loadNextVideo();
     }
 
-    // SETTINGS 
-    let selectedColorClass = localStorage.getItem('playerColor') || 'text-amber-100';
-    let savedName = localStorage.getItem('playerName') || 'NicksolEr';
-
-    function openSettings() {
-        playSound('click');
-        document.getElementById('settings-modal').classList.remove('hidden');
-        document.getElementById('setting-name-input').value = savedName;
-        document.getElementById('name-preview').innerText = savedName;
-        document.getElementById('name-preview').className = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass}`;
-        document.getElementById('bgm-toggle').checked = localStorage.getItem('bgmOn') !== 'false';
-    }
-    function closeSettings() { playSound('click'); document.getElementById('settings-modal').classList.add('hidden'); }
-    function toggleBGM() {
-        playSound('click');
-        const isOn = document.getElementById('bgm-toggle').checked;
-        localStorage.setItem('bgmOn', isOn);
-        if(isOn) document.getElementById('bgm-game').play().catch(()=>{}); else document.getElementById('bgm-game').pause();
-    }
-    function updateNamePreview() { document.getElementById('name-preview').innerText = document.getElementById('setting-name-input').value || 'NicksolEr'; }
-    function selectColor(colorClass, element) {
-        playSound('click'); selectedColorClass = colorClass;
-        document.getElementById('name-preview').className = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${colorClass}`;
-        const swatches = document.getElementById('color-picker').children;
-        for(let s of swatches) s.classList.replace('border-white', 'border-transparent');
-        element.classList.replace('border-transparent', 'border-white');
-    }
-    function saveSettings() {
-        playSound('correct');
-        savedName = document.getElementById('setting-name-input').value || 'NicksolEr';
-        localStorage.setItem('playerName', savedName);
-        localStorage.setItem('playerColor', selectedColorClass);
-        const hudClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass}`;
-        document.getElementById('player-name-hud').innerText = savedName;
-        document.getElementById('player-name-hud').className = hudClass + " pointer-events-none";
-        document.getElementById('val-bac').className = hudClass + " pointer-events-none";
-        document.getElementById('val-vang').className = hudClass + " pointer-events-none";
-        document.getElementById('val-nuoc-display').className = hudClass + " pointer-events-none";
-        closeSettings();
-    }
-
-    // THỂ LỰC (NƯỚC)
+    // --- LOGIC HỒI THỂ LỰC (NƯỚC) ---
     let stamina = parseInt(localStorage.getItem('skyStamina')) || 0;
     let lastUpdate = parseInt(localStorage.getItem('skyStaminaTime')) || Date.now();
 
@@ -719,19 +675,81 @@
         const valNuoc = document.getElementById('val-nuoc');
         if (valNuoc) valNuoc.innerText = stamina;
     }
+    
+    // --- LOGIC SETTINGS PANEL ---
+    let selectedColorClass = localStorage.getItem('playerColor') || 'text-amber-100';
+    let savedName = localStorage.getItem('playerName') || 'NicksolEr';
 
-    // KHỞI ĐỘNG
-    window.onload = () => { 
-        renderMusic(); renderLibrary(); renderGrammarList(); nextVocab(true); nextNames(true); nextParagraph(); loadWorkSchedule(); generateListenSentence();
+    function openSettings() {
+        playSound('click');
+        document.getElementById('settings-modal').classList.remove('hidden');
+        document.getElementById('setting-name-input').value = savedName;
+        document.getElementById('name-preview').innerText = savedName;
+        document.getElementById('name-preview').className = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass}`;
         
-        // Nạp Settings
+        // Update checkbox
+        const bgmOn = localStorage.getItem('bgmOn') !== 'false';
+        document.getElementById('bgm-toggle').checked = bgmOn;
+    }
+
+    function closeSettings() {
+        playSound('click');
+        document.getElementById('settings-modal').classList.add('hidden');
+    }
+
+    function toggleBGM() {
+        playSound('click');
+        const isOn = document.getElementById('bgm-toggle').checked;
+        localStorage.setItem('bgmOn', isOn);
+        const bgm = document.getElementById('bgm-game');
+        if(isOn) bgm.play().catch(()=>{}); else bgm.pause();
+    }
+
+    function updateNamePreview() {
+        const name = document.getElementById('setting-name-input').value || 'NicksolEr';
+        document.getElementById('name-preview').innerText = name;
+    }
+
+    function selectColor(colorClass, element) {
+        playSound('click');
+        selectedColorClass = colorClass;
+        document.getElementById('name-preview').className = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${colorClass}`;
+        
+        // Hiệu ứng chọn
+        const swatches = document.getElementById('color-picker').children;
+        for(let s of swatches) s.classList.replace('border-white', 'border-transparent');
+        element.classList.replace('border-transparent', 'border-white');
+    }
+
+    function saveSettings() {
+        playSound('correct');
+        savedName = document.getElementById('setting-name-input').value || 'NicksolEr';
+        localStorage.setItem('playerName', savedName);
+        localStorage.setItem('playerColor', selectedColorClass);
+        
+        // Update to HUD
         const hudClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none`;
         document.getElementById('player-name-hud').innerText = savedName;
         document.getElementById('player-name-hud').className = hudClass;
         document.getElementById('val-bac').className = hudClass;
         document.getElementById('val-vang').className = hudClass;
         document.getElementById('val-nuoc-display').className = hudClass;
+        closeSettings();
+    }
 
+    // BOOT
+    window.onload = () => { 
+        renderMusic(); renderLibrary(); renderGrammarList(); nextVocab(true); nextNames(true); nextParagraph(); loadWorkSchedule(); generateListenSentence();
+        
+        // Load Settings Data
+        const hudClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none`;
+        document.getElementById('player-name-hud').innerText = savedName;
+        document.getElementById('player-name-hud').className = hudClass;
+        document.getElementById('val-bac').className = hudClass;
+        document.getElementById('val-vang').className = hudClass;
+        document.getElementById('val-nuoc-display').className = hudClass;
+        
+        // Init Stamina
         setInterval(updateStamina, 1000);
         updateStamina();
         
@@ -739,7 +757,7 @@
         setTimeout(startSequentialPreload, 3000);
     };
 
-    // --- DICTIONARY ---
+    // --- VOCABULARY DICTIONARY (216 WORDS - MAPPED EXACTLY) ---
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" }, { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" }, { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" }, { hz: "先生", py: "xiānsheng", mn: "ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô" },
         { hz: "零", py: "líng", mn: "số 0" }, { hz: "一", py: "yī", mn: "số 1" }, { hz: "二", py: "èr", mn: "số 2" }, { hz: "三", py: "sān", mn: "số 3" }, { hz: "四", py: "sì", mn: "số 4" }, { hz: "五", py: "wǔ", mn: "số 5" }, { hz: "六", py: "liù", mn: "số 6" }, { hz: "七", py: "qī", mn: "số 7" }, { hz: "八", py: "bā", mn: "số 8" }, { hz: "九", py: "jiǔ", mn: "số 9" }, { hz: "十", py: "shí", mn: "số 10" }, { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" }, { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" }, { hz: "号", py: "hào", mn: "ngày" }, { hz: "星期", py: "xīngqī", mn: "tuần" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" }, { hz: "时候", py: "shíhou", mn: "khi lúc" },
@@ -796,7 +814,7 @@
         currentListenHz = sentence; currentListenVi = vi_sentence;
         document.getElementById('listen-input').value = ""; document.getElementById('listen-msg').innerHTML = "Đã tạo câu mới! Bấm nút 🎧 để nghe."; document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-indigo-300"; document.getElementById('listen-hint').classList.add('hidden');
     }
-    function playListenAudio() { if ('speechSynthesis' in window) { const utterance = new SpeechSynthesisUtterance(currentListenHz); utterance.lang = 'zh-CN'; utterance.rate = 1.3; window.speechSynthesis.speak(utterance); } else { alert("Trình duyệt không hỗ trợ phát âm thanh. Vui lòng dùng Chrome."); } }
+    function playListenAudio() { if ('speechSynthesis' in window) { const utterance = new SpeechSynthesisUtterance(currentListenHz); utterance.lang = 'zh-CN'; utterance.rate = 1.3; window.speechSynthesis.speak(utterance); } else { alert("Trình duyệt không hỗ trợ phát âm thanh."); } }
     function showListenHint() { playSound('click'); document.getElementById('listen-hint').innerHTML = `${currentListenHz}<br><span class="text-white text-xs font-normal opacity-80">${currentListenVi}</span>`; document.getElementById('listen-hint').classList.remove('hidden'); }
     function checkListen() {
         const val = document.getElementById('listen-input').value.trim(); const cleanVal = val.replace(/[.,?!。，？！]/g, ""); const cleanTarget = currentListenHz.replace(/[.,?!。，？！]/g, "");
@@ -883,9 +901,7 @@
     function playMedia(src, type, name, idx, listType, thumb) { playSound('click'); currentList = listType; currentIndex = idx; document.getElementById('now-playing').innerText = name; const yt = document.getElementById('player'); const mp4 = document.getElementById('mp4-player'); if(player && player.stopVideo) player.stopVideo(); mp4.pause(); if(type === 'mp4') { yt.classList.add('hidden'); mp4.classList.remove('hidden'); mp4.src = src; mp4.play(); } else { mp4.classList.add('hidden'); yt.classList.remove('hidden'); player.loadVideoById(src); } }
     function checkAutoPlay() { if(document.getElementById(`toggle-${currentList}`).checked) { const listData = currentList === 'vpop' ? displayedVPop : cPop; const nextIdx = (currentIndex + 1) % listData.length; const nextSong = listData[nextIdx]; playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb); } }
 
-    const draggables = [
-        document.getElementById('drag-suutam')
-    ];
+    const draggables = [];
     draggables.forEach(el => {
         if(!el) return; let isDragging = false; let offsetX = 0, offsetY = 0;
         el.addEventListener('mousedown', (e) => { const rect = el.getBoundingClientRect(); const isResize = (e.clientX > rect.right - 15) && (e.clientY > rect.bottom - 15); if (isResize || e.button !== 0) return; isDragging = true; el.style.cursor = 'grabbing'; offsetX = e.clientX - rect.left; offsetY = e.clientY - rect.top; });
