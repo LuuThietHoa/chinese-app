@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.24 Background Customizer</title>
+    <title>Skyreign Hub | V40.25 HUD Re-Alignment</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -80,10 +80,10 @@
             overflow: hidden;
             cursor: grab;
             background: rgba(255, 255, 255, 0.1);
-            border: 2px dashed rgba(104, 211, 145, 0.8);
+            border: 1px dashed rgba(255,255,255,0.5);
             z-index: 20;
         }
-        .drag-tool:active { cursor: grabbing; border-color: #fff; }
+        .drag-tool:active { cursor: grabbing; border-color: #68D391; }
     </style>
 </head>
 <body>
@@ -136,7 +136,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.24 BG UNLOCKED</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.25 HUD RE-ALIGNMENT</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -201,34 +201,42 @@
     
     <div id="hud-stats-container" class="fixed inset-0 pointer-events-none z-0">
         
-        <div id="drag-bg" class="drag-tool pointer-events-auto" style="top: 0px; left: 0px; width: 1926px; height: 996px; z-index: 1;">
-            <video src="bg.mp4" autoplay loop muted playsinline class="w-full h-full object-cover pointer-events-none select-none"></video>
+        <div id="fixed-bg" class="absolute pointer-events-none" style="top: 2px; left: 236px; width: 2154px; height: 1191px; z-index: 1;">
+            <video src="bg.mp4" autoplay loop muted playsinline class="w-full h-full object-cover"></video>
         </div>
 
-        <div id="fixed-uiG" class="absolute pointer-events-none" style="top: 24px; left: -58px; width: 466px; height: 230px; z-index: 10;">
-            <img src="uiG.png" class="w-full h-full object-contain" alt="UI G">
+        <div id="drag-uiG" class="drag-tool pointer-events-auto" style="top: 24px; left: -58px; width: 466px; height: 230px; z-index: 10;">
+            <img src="uiG.png" class="w-full h-full object-contain pointer-events-none select-none" alt="UI G">
         </div>
 
-        <div id="fixed-name" class="absolute flex items-center justify-center pointer-events-none" style="top: 182px; left: 73px; width: 198px; height: 77px; z-index: 20;">
-            <span id="player-name-hud" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100">NicksolEr</span>
+        <div id="drag-name" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 182px; left: 73px; width: 198px; height: 77px; z-index: 20;">
+            <span id="player-name-hud" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none">NicksolEr</span>
         </div>
         
-        <div id="fixed-bac" class="absolute flex items-center justify-center pointer-events-none" style="top: 15px; left: 1723px; width: 150px; height: 40px; z-index: 30;">
-            <span id="val-bac" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100">0</span>
+        <div id="drag-bac" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 15px; left: 1723px; width: 150px; height: 40px; z-index: 30;">
+            <span id="val-bac" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none">0</span>
         </div>
 
-        <div id="fixed-vang" class="absolute flex items-center justify-center pointer-events-none" style="top: 48px; left: 1650px; width: 321px; height: 176px; z-index: 30;">
-            <span id="val-vang" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100">0</span>
+        <div id="drag-vang" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 48px; left: 1650px; width: 321px; height: 176px; z-index: 30;">
+            <span id="val-vang" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none">0</span>
         </div>
 
-        <div id="fixed-nuoc" class="absolute flex items-center justify-center pointer-events-none" style="top: 200px; left: 1760px; width: 146px; height: 58px; z-index: 30;">
-            <span id="val-nuoc-display" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100"><span id="val-nuoc">0</span>/156</span>
+        <div id="drag-nuoc" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 200px; left: 1760px; width: 146px; height: 58px; z-index: 30;">
+            <span id="val-nuoc-display" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none"><span id="val-nuoc">0</span>/156</span>
         </div>
 
-        <div id="fixed-setting" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 765px; left: 1710px; width: 277px; height: 300px; z-index: 50;" onclick="openSettings()">
+        <div id="drag-setting" class="drag-tool pointer-events-auto" style="top: 765px; left: 1710px; width: 277px; height: 300px; z-index: 50;">
             <img src="setting.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Setting">
         </div>
 
+    </div>
+
+    <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50">
+        <div class="glass-card p-6 text-center border border-indigo-500/30 pointer-events-auto shadow-2xl">
+            <h2 class="text-xl font-bold tracking-[0.2em] uppercase text-white mb-2 drop-shadow-md">Chỉnh Sửa Tọa Độ</h2>
+            <p class="text-[10px] text-gray-300 mb-4">Kéo - thả các mục để định vị. Bấm chuột phải lấy tọa độ.</p>
+            <button onclick="openSettings()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px] px-6 py-2 rounded uppercase tracking-widest transition">⚙️ MỞ CÀI ĐẶT MÀU SẮC</button>
+        </div>
     </div>
 </div>
 
@@ -648,7 +656,7 @@
     function updateStamina() {
         const now = Date.now();
         const elapsedMs = now - lastUpdate;
-        const minutesPassed = Math.floor(elapsedMs / 900000); // 15 phút (15 * 60 * 1000 = 900000)
+        const minutesPassed = Math.floor(elapsedMs / 900000); // 15 phút
         
         if (minutesPassed > 0) {
             if (stamina < 156) {
@@ -676,10 +684,7 @@
         document.getElementById('setting-name-input').value = savedName;
         document.getElementById('name-preview').innerText = savedName;
         document.getElementById('name-preview').className = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass}`;
-        
-        // Update checkbox
-        const bgmOn = localStorage.getItem('bgmOn') !== 'false';
-        document.getElementById('bgm-toggle').checked = bgmOn;
+        document.getElementById('bgm-toggle').checked = localStorage.getItem('bgmOn') !== 'false';
     }
 
     function closeSettings() {
@@ -705,7 +710,6 @@
         selectedColorClass = colorClass;
         document.getElementById('name-preview').className = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${colorClass}`;
         
-        // Hiệu ứng chọn
         const swatches = document.getElementById('color-picker').children;
         for(let s of swatches) s.classList.replace('border-white', 'border-transparent');
         element.classList.replace('border-transparent', 'border-white');
@@ -720,10 +724,10 @@
         // Update to HUD
         const hudClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass}`;
         document.getElementById('player-name-hud').innerText = savedName;
-        document.getElementById('player-name-hud').className = hudClass;
-        document.getElementById('val-bac').className = hudClass;
-        document.getElementById('val-vang').className = hudClass;
-        document.getElementById('val-nuoc-display').className = hudClass;
+        document.getElementById('player-name-hud').className = hudClass + " pointer-events-none"; // Keep pointer-events-none for dragged elements
+        document.getElementById('val-bac').className = hudClass + " pointer-events-none";
+        document.getElementById('val-vang').className = hudClass + " pointer-events-none";
+        document.getElementById('val-nuoc-display').className = hudClass + " pointer-events-none";
         closeSettings();
     }
 
@@ -732,7 +736,7 @@
         renderMusic(); renderLibrary(); renderGrammarList(); nextVocab(true); nextNames(true); nextParagraph(); loadWorkSchedule(); generateListenSentence();
         
         // Load Settings Data
-        const hudClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass}`;
+        const hudClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none`;
         document.getElementById('player-name-hud').innerText = savedName;
         document.getElementById('player-name-hud').className = hudClass;
         document.getElementById('val-bac').className = hudClass;
@@ -774,14 +778,40 @@
         {name:"Mang Chủng",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"}, {name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"}, {name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"}, {name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"}
     ];
 
-    // DRAG LOGIC CHO BACKGROUND
-    const draggables = [document.getElementById('drag-bg')];
+    // CÁC DRAG TOOL HIỆN TẠI: uiG, Name, Bạc, Vàng, Nước, Setting
+    const draggables = [
+        document.getElementById('drag-uiG'),
+        document.getElementById('drag-name'),
+        document.getElementById('drag-bac'),
+        document.getElementById('drag-vang'),
+        document.getElementById('drag-nuoc'),
+        document.getElementById('drag-setting')
+    ];
+    
     draggables.forEach(el => {
         if(!el) return; let isDragging = false; let offsetX = 0, offsetY = 0;
-        el.addEventListener('mousedown', (e) => { const rect = el.getBoundingClientRect(); const isResize = (e.clientX > rect.right - 15) && (e.clientY > rect.bottom - 15); if (isResize || e.button !== 0) return; isDragging = true; el.style.cursor = 'grabbing'; offsetX = e.clientX - rect.left; offsetY = e.clientY - rect.top; });
-        document.addEventListener('mousemove', (e) => { if (!isDragging) return; const containerRect = document.getElementById('hud-stats-container').getBoundingClientRect(); el.style.left = (e.clientX - containerRect.left - offsetX) + 'px'; el.style.top = (e.clientY - containerRect.top - offsetY) + 'px'; });
-        document.addEventListener('mouseup', () => { if(isDragging) { isDragging = false; el.style.cursor = 'grab'; } });
-        el.addEventListener('contextmenu', (e) => { e.preventDefault(); alert(`BACKGROUND:\nTOP: ${el.style.top || '0px'}\nLEFT: ${el.style.left || '0px'}\nWIDTH: ${el.offsetWidth + 'px'}\nHEIGHT: ${el.offsetHeight + 'px'}\n\n👉 Copy 4 dòng này đem qua đưa tui nhé!`); });
+        el.addEventListener('mousedown', (e) => { 
+            const rect = el.getBoundingClientRect(); 
+            const isResize = (e.clientX > rect.right - 15) && (e.clientY > rect.bottom - 15); 
+            if (isResize || e.button !== 0) return; 
+            isDragging = true; 
+            el.style.cursor = 'grabbing'; 
+            offsetX = e.clientX - rect.left; 
+            offsetY = e.clientY - rect.top; 
+        });
+        document.addEventListener('mousemove', (e) => { 
+            if (!isDragging) return; 
+            const containerRect = document.getElementById('hud-stats-container').getBoundingClientRect(); 
+            el.style.left = (e.clientX - containerRect.left - offsetX) + 'px'; 
+            el.style.top = (e.clientY - containerRect.top - offsetY) + 'px'; 
+        });
+        document.addEventListener('mouseup', () => { 
+            if(isDragging) { isDragging = false; el.style.cursor = 'grab'; } 
+        });
+        el.addEventListener('contextmenu', (e) => { 
+            e.preventDefault(); 
+            alert(`${el.id.replace('drag-','').toUpperCase()}:\nTOP: ${el.style.top || '0px'}\nLEFT: ${el.style.left || '0px'}\nWIDTH: ${el.offsetWidth + 'px'}\nHEIGHT: ${el.offsetHeight + 'px'}\n\n👉 Copy 4 dòng này đem qua đưa tui nhé!`); 
+        });
     });
 </script>
 </body>
