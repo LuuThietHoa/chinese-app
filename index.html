@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.37 Flawless System</title>
+    <title>Skyreign Hub | V40.38 Ultimate Unlocked</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -56,6 +56,18 @@
         .font-tutien { font-family: 'Cinzel', serif; }
         .switch-toggle input:checked + div { background-color: #4f46e5; }
         .switch-toggle input:checked + div > div { transform: translateX(100%); }
+
+        /* MỞ KHÓA CSS CHO DRAG TOOLS */
+        .drag-tool {
+            position: absolute;
+            resize: both;
+            overflow: hidden;
+            cursor: grab;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px dashed rgba(104, 211, 145, 0.8);
+            z-index: 50;
+        }
+        .drag-tool:active { cursor: grabbing; border-color: #fff; }
     </style>
 </head>
 <body>
@@ -84,7 +96,7 @@
             <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Tên Nhân Vật</p>
             <input type="text" id="setting-name-input" class="w-full bg-black/30 border border-white/20 p-2 text-white outline-none rounded mb-4 focus:border-indigo-500 transition" oninput="updateNamePreview()">
             
-            <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Màu Chữ & Tài Nguyên (Khí Chất)</p>
+            <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Màu Chữ & Tài Nguyên</p>
             <div class="flex gap-3 mb-6 justify-center" id="color-picker">
                 <div class="w-6 h-6 rounded-full cursor-pointer bg-white border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-white', this)"></div>
                 <div class="w-6 h-6 rounded-full cursor-pointer bg-amber-100 border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-amber-100', this)"></div>
@@ -107,7 +119,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.37 FLAWLESS SYSTEM</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.38 ALL UNLOCKED & RESTORED</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -152,41 +164,61 @@
 
 <div id="game" class="tab-content relative w-full h-full min-h-screen bg-[#0a0a0a]">
     <div id="hud-stats-container" class="fixed inset-0 pointer-events-none z-0">
-        <div id="fixed-bg" class="absolute pointer-events-none" style="top: 2px; left: 236px; width: 2154px; height: 1191px; z-index: 1;">
-            <video src="bg.mp4" autoplay loop muted playsinline class="w-full h-full object-cover"></video>
+        
+        <div id="drag-bg" class="drag-tool pointer-events-auto" style="top: 2px; left: 236px; width: 2154px; height: 1191px; z-index: 1;">
+            <video src="bg.mp4" autoplay loop muted playsinline class="w-full h-full object-cover pointer-events-none select-none"></video>
         </div>
-        <div id="fixed-uiG" class="absolute pointer-events-none" style="top: 1px; left: 150px; width: 466px; height: 230px; z-index: 10;">
-            <img src="uiG.png" class="w-full h-full object-contain" alt="UI G">
+
+        <div id="drag-uiG" class="drag-tool pointer-events-auto" style="top: 1px; left: 150px; width: 466px; height: 230px; z-index: 10;">
+            <img src="uiG.png" class="w-full h-full object-contain pointer-events-none select-none" alt="UI G">
         </div>
-        <div id="fixed-name" class="absolute flex items-center justify-center pointer-events-none" style="top: 159px; left: 279px; width: 198px; height: 77px; z-index: 20;">
-            <span id="player-name-hud" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none">NicksolEr</span>
+
+        <div id="drag-name" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 159px; left: 279px; width: 198px; height: 77px; z-index: 20;">
+            <span id="player-name-hud" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none select-none">NicksolEr</span>
         </div>
-        <div id="fixed-bac" class="absolute flex items-center justify-center pointer-events-none" style="top: 63px; left: 2133px; width: 150px; height: 40px; z-index: 30;">
-            <span id="val-bac" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none">0</span>
+        
+        <div id="drag-bac" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 63px; left: 2133px; width: 150px; height: 40px; z-index: 30;">
+            <span id="val-bac" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none select-none">0</span>
         </div>
-        <div id="fixed-vang" class="absolute flex items-center justify-center pointer-events-none" style="top: 105px; left: 2069px; width: 321px; height: 176px; z-index: 30;">
-            <span id="val-vang" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none">0</span>
+
+        <div id="drag-vang" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 105px; left: 2069px; width: 321px; height: 176px; z-index: 30;">
+            <span id="val-vang" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none select-none">0</span>
         </div>
-        <div id="fixed-nuoc" class="absolute flex items-center justify-center pointer-events-none" style="top: 267px; left: 2189px; width: 146px; height: 58px; z-index: 30;">
-            <span id="val-nuoc-display" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none"><span id="val-nuoc">0</span>/156</span>
+
+        <div id="drag-nuoc" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 267px; left: 2189px; width: 146px; height: 58px; z-index: 30;">
+            <span id="val-nuoc-display" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none select-none"><span id="val-nuoc">0</span>/156</span>
         </div>
-        <div id="fixed-setting" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 942px; left: 2156px; width: 308px; height: 308px; z-index: 50;" onclick="openSettings()">
+
+        <div id="drag-setting" class="drag-tool pointer-events-auto" style="top: 942px; left: 2156px; width: 308px; height: 308px; z-index: 50;">
             <img src="setting.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Setting">
         </div>
-        <div id="fixed-nhanvat" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 809px; left: 1446px; width: 459px; height: 461px; z-index: 40;">
-            <img src="nhanvat.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Nhan Vat">
+
+        <div id="drag-nhanvat" class="drag-tool pointer-events-auto" style="top: 809px; left: 1446px; width: 459px; height: 461px; z-index: 40;">
+            <img src="nhanvat.png" class="w-full h-full object-contain pointer-events-none select-none hover:scale-105 hover:brightness-125 transition" alt="Nhan Vat">
         </div>
-        <div id="fixed-hoavien" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 864px; left: 1121px; width: 385px; height: 298px; z-index: 40;">
-            <img src="hoavien.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Hoa Vien">
+
+        <div id="drag-hoavien" class="drag-tool pointer-events-auto" style="top: 864px; left: 1121px; width: 385px; height: 298px; z-index: 40;">
+            <img src="hoavien.png" class="w-full h-full object-contain pointer-events-none select-none hover:scale-105 hover:brightness-125 transition" alt="Hoa Vien">
         </div>
-        <div id="fixed-cuahang" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 833px; left: 910px; width: 442px; height: 416px; z-index: 40;">
-            <img src="cuahang.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Cua Hang">
+
+        <div id="drag-cuahang" class="drag-tool pointer-events-auto" style="top: 833px; left: 910px; width: 442px; height: 416px; z-index: 40;">
+            <img src="cuahang.png" class="w-full h-full object-contain pointer-events-none select-none hover:scale-105 hover:brightness-125 transition" alt="Cua Hang">
         </div>
-        <div id="fixed-tuido" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 815px; left: 765px; width: 374px; height: 454px; z-index: 40;">
-            <img src="tuido.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Tui Do">
+
+        <div id="drag-tuido" class="drag-tool pointer-events-auto" style="top: 815px; left: 765px; width: 374px; height: 454px; z-index: 40;">
+            <img src="tuido.png" class="w-full h-full object-contain pointer-events-none select-none hover:scale-105 hover:brightness-125 transition" alt="Tui Do">
         </div>
-        <div id="fixed-suutam" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 856px; left: 1299px; width: 382px; height: 364px; z-index: 40;">
-            <img src="suutam.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Suu Tam">
+
+        <div id="drag-suutam" class="drag-tool pointer-events-auto" style="top: 856px; left: 1299px; width: 382px; height: 364px; z-index: 40;">
+            <img src="suutam.png" class="w-full h-full object-contain pointer-events-none select-none hover:scale-105 hover:brightness-125 transition" alt="Suu Tam">
+        </div>
+    </div>
+    
+    <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-50">
+        <div class="glass-card p-6 text-center border border-indigo-500/30 pointer-events-auto shadow-2xl">
+            <h2 class="text-xl font-bold tracking-[0.2em] uppercase text-white mb-2 drop-shadow-md">Chỉnh Sửa Tọa Độ</h2>
+            <p class="text-[10px] text-gray-300 mb-4">Kéo - thả các mục để định vị. Bấm chuột phải lấy tọa độ.</p>
+            <button onclick="openSettings()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px] px-6 py-2 rounded uppercase tracking-widest transition">⚙️ MỞ CÀI ĐẶT</button>
         </div>
     </div>
 </div>
@@ -564,7 +596,7 @@
 </div>
 
 <script>
-    // --- 1. DỮ LIỆU ĐƯỢC KHAI BÁO ĐẦU TIÊN ĐỂ KHÔNG BAO GIỜ BỊ LỖI UNDEFINED ---
+    // --- 1. KHAI BÁO DỮ LIỆU ĐỂ CHỐNG LỖI TẢI TRANG ---
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" }, { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" }, { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" }, { hz: "先生", py: "xiānsheng", mn: "ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô" },
         { hz: "零", py: "líng", mn: "số 0" }, { hz: "一", py: "yī", mn: "số 1" }, { hz: "二", py: "èr", mn: "số 2" }, { hz: "三", py: "sān", mn: "số 3" }, { hz: "四", py: "sì", mn: "số 4" }, { hz: "五", py: "wǔ", mn: "số 5" }, { hz: "六", py: "liù", mn: "số 6" }, { hz: "七", py: "qī", mn: "số 7" }, { hz: "八", py: "bā", mn: "số 8" }, { hz: "九", py: "jiǔ", mn: "số 9" }, { hz: "十", py: "shí", mn: "số 10" }, { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" }, { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" }, { hz: "号", py: "hào", mn: "ngày" }, { hz: "星期", py: "xīngqī", mn: "tuần" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" }, { hz: "时候", py: "shíhou", mn: "khi lúc" },
@@ -591,15 +623,12 @@
         { hz: "久", py: "jiǔ", mn: "lâu" }, { hz: "旧", py: "jiù", mn: "cũ" }, { hz: "就", py: "jiù", mn: "thì/liền" }, { hz: "觉得", py: "juéde", mn: "cảm thấy" }, { hz: "咖啡", py: "kāfēi", mn: "cà phê" }, 
         { hz: "开始", py: "kāishǐ", mn: "bắt đầu" }, { hz: "考试", py: "kǎoshì", mn: "thi cử" }
     ];
-
     const namesData = [ { vi: "Lưu Thiết Hoa", hz: "刘铁华", py: "Liú Tiěhuá" }, { vi: "Hà Mỹ Mỹ", hz: "何美美", py: "Hé Měiměi" }, { vi: "Bùi Lê Ngọc Linh", hz: "裴黎玉玲", py: "Péi Lí Yùlíng" }, { vi: "Lưu Thiết Vinh", hz: "刘铁荣", py: "Liú Tiěróng" }, { vi: "A Mỹ Linh", hz: "阿美玲", py: "Ā Měilíng" }, { vi: "Hà Gia Bảo", hz: "何家宝", py: "Hé Jiābǎo" }, { vi: "Diệp Thanh Thanh", hz: "叶青青", py: "Yè Qīngqīng" }, { vi: "Lê Bá Trần Hoàng", hz: "黎伯陈黄", py: "Lí Bó Chénhuáng" }, { vi: "Nguyễn Thị Phương Nguyên", hz: "阮氏芳原", py: "Ruǎn Shì Fāngyuán" } ];
     const grammarRules = [ { id: "g1", title: "S + 是 + N", structure: "S + 是 + N (Là)", ex: "我是学生", regex: /(.+)是(.+)/ }, { id: "g2", title: "S + 不 + 是 + N", structure: "S + 不 + 是 + N (Phủ định)", ex: "我不是老师", regex: /(.+)不是(.+)/ }, { id: "g3", title: "S + 是 + N + 吗?", structure: "S + 是 + N + 吗? (Nghi vấn)", ex: "你是中国人吗？", regex: /(.+)是(.+)吗[?？]?/ }, { id: "g4", title: "N + 们", structure: "N + 们 (Số nhiều)", ex: "我们", regex: /(.+)们/ } ];
     const readingData = [ { id: 1, zh: "你好！我叫刘铁花。我是学生。我家有五口人：爸爸、妈妈、哥哥、女儿和我。", key: "xin chào tôi tên lưu thiết hoa tôi là học sinh nhà tôi có năm người bố mẹ anh trai con gái và tôi", vi_display: "Xin chào! Tôi tên Lưu Thiết Hoa. Tôi là học sinh. Nhà tôi có 5 người: Bố, mẹ, anh trai, con gái và tôi." }, { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }, { id: 3, zh: "弟弟很喜欢吃包子。他每天早上都吃两个白包子。吃完包子，他去学校上课。", key: "em trai rất thích ăn bánh bao cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng ăn xong bánh bao cậu ấy đi trường học đi học", vi_display: "Em trai rất thích ăn bánh bao. Cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng. Ăn xong bánh bao, cậu ấy đi trường học." }, { id: 4, zh: "后天我们要去国外旅行。爸爸已经买好了机票。我们在机场等飞机。", key: "ngày hôm sau chúng tôi phải đi nước ngoài du lịch bố đã mua xong vé máy bay chúng tôi ở sân bay đợi máy bay", vi_display: "Ngày mốt chúng tôi sẽ đi du lịch nước ngoài. Bố đã mua xong vé máy bay. Chúng tôi đang đợi máy bay ở sân bay." } ];
     const vPop = [ {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false}, {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false}, {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false}, {name:"hieuthuhai - ngủ một mình ft. negav",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Không Thể Say l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true}, {name:"Exit Sign - HIEUTHUHAI ft. marzuz",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true}, {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true} ];
     const cPop = [ {name:"Mang Chủng",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"}, {name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"}, {name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"}, {name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"} ];
-</script>
 
-<script>
     // --- 2. HỆ THỐNG GIAO DIỆN & AUDIO CHUNG ---
     function playSound(type) {
         let audio;
@@ -646,7 +675,7 @@
         loadNextVideo();
     }
 
-    // --- 3. LOGIC HUD GAME (THỂ LỰC & CÀI ĐẶT MÀU) ---
+    // --- 3. CÀI ĐẶT GAME HUD (SETTINGS & STAMINA) ---
     let stamina = parseInt(localStorage.getItem('skyStamina')) || 0;
     let lastUpdate = parseInt(localStorage.getItem('skyStaminaTime')) || Date.now();
 
@@ -654,7 +683,6 @@
         const now = Date.now();
         const elapsedMs = now - lastUpdate;
         const minutesPassed = Math.floor(elapsedMs / 900000); 
-        
         if (minutesPassed > 0) {
             if (stamina < 156) {
                 stamina += minutesPassed;
@@ -723,13 +751,13 @@
         closeSettings();
     }
 
-    // --- 4. HỆ THỐNG TIẾN ĐỘ HỌC TẬP (CHECKLIST) ---
+    // --- 4. HỆ THỐNG TIẾN ĐỘ HỌC TẬP (CHECKLISTS) ---
     let listenProgress = 0; const listenMax = 50;
     let namesProgress = 0; const namesMax = 10;
     let voiceProgress = 0; const voiceMax = 20;
     let readingProgress = 0; const readingMax = 10;
 
-    // --- 5. LOGIC HỌC TỪ VỰNG CHỌN KHOẢNG TỪ ---
+    // --- 5. HỌC TỪ VỰNG CHỌN KHOẢNG TỪ ---
     let vIdx = -1; let vMode = 0; let isVocabRandom = false;
     let vStartBound = 1; let vEndBound = vocabData.length;
 
@@ -738,6 +766,7 @@
         let s = parseInt(document.getElementById('v-start-input').value) || 1;
         let e = parseInt(document.getElementById('v-end-input').value) || vocabData.length;
         if(s < 1) s = 1; if(e > vocabData.length) e = vocabData.length; if(s > e) s = e;
+        
         document.getElementById('v-start-input').value = s;
         document.getElementById('v-end-input').value = e;
         vStartBound = s; 
@@ -895,7 +924,7 @@
         } 
     }
 
-    // --- 10. THƯ VIỆN & NGỮ PHÁP (RENDER NGAY TỪ ĐẦU) ---
+    // --- 10. THƯ VIỆN & NGỮ PHÁP ---
     function renderLibrary() { document.getElementById('lib-count').innerText = vocabData.length; const html = vocabData.map((v, i) => `<div class="bg-white/5 p-3 rounded border border-white/10 flex flex-col justify-between hover:bg-white/10 transition"> <div class="flex justify-between items-center mb-1"> <span class="text-xs text-gray-500 font-mono">#${i+1}</span> <span class="text-lg font-bold text-white">${v.hz}</span> </div> <div class="text-xs text-indigo-300 font-mono">${v.py}</div> <div class="text-[10px] text-gray-400 uppercase mt-1 tracking-widest">${v.mn}</div> </div>`).join(''); document.getElementById('lib-list').innerHTML = html; }
     function renderGrammarList() { document.getElementById('grammar-list').innerHTML = grammarRules.map(r => `<div class="bg-white/5 p-6 border-l-2 border-indigo-500"> <h3 class="text-lg font-light text-white mb-2">${r.title}</h3> <code class="block bg-black/20 p-2 text-pink-300 mb-2 font-mono text-xs">${r.structure}</code> <p class="text-xs text-gray-400 italic">Ví dụ: ${r.ex}</p> </div>`).join(''); }
 
@@ -952,7 +981,6 @@
         renderLibrary(); 
         renderGrammarList(); 
         
-        // Load Settings Data
         const hudClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none`;
         document.getElementById('player-name-hud').innerText = savedName;
         document.getElementById('player-name-hud').className = hudClass;
@@ -960,14 +988,12 @@
         document.getElementById('val-vang').className = hudClass;
         document.getElementById('val-nuoc-display').className = hudClass;
 
-        // Khởi động các Module
         applyVocabRange();
         nextNames(true); 
         nextParagraph(); 
         loadWorkSchedule(); 
         generateListenSentence();
 
-        // Gắn checklist ban đầu
         document.getElementById('listen-progress').innerText = `Tiến độ: ${listenProgress}/${listenMax}`;
         document.getElementById('names-progress').innerText = `Tiến độ: ${namesProgress}/${namesMax}`;
         document.getElementById('voice-progress').innerText = `Tiến độ: ${voiceProgress}/${voiceMax}`;
