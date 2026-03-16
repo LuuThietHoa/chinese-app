@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.31 Ultimate Full Restored</title>
+    <title>Skyreign Hub | V40.32 Ultimate Fixed System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -105,6 +105,7 @@
                 <span id="name-preview" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100">NicksolEr</span>
             </div>
         </div>
+
         <button onclick="saveSettings()" class="w-full mt-6 py-4 bg-indigo-600 text-white font-bold text-xs uppercase tracking-widest hover:bg-indigo-500 rounded transition shadow-[0_0_15px_rgba(79,70,229,0.4)]">Lưu Cài Đặt</button>
     </div>
 </div>
@@ -112,7 +113,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.31 ULTIMATE FULL RESTORED</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.32 ULTIMATE FIXED SYSTEM</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -289,9 +290,9 @@
             
             <div class="flex justify-center items-center gap-2 mb-6">
                 <span class="text-[10px] text-gray-400 uppercase tracking-widest">Từ</span>
-                <input type="number" id="v-start-input" value="1" class="w-12 bg-transparent border-b border-white/20 text-center outline-none text-sm text-white">
+                <input type="number" id="v-start-input" value="1" class="w-12 bg-transparent border-b border-white/20 text-center outline-none text-sm text-white font-bold pb-1">
                 <span class="text-[10px] text-gray-400 uppercase tracking-widest">đến</span>
-                <input type="number" id="v-end-input" value="216" class="w-12 bg-transparent border-b border-white/20 text-center outline-none text-sm text-white">
+                <input type="number" id="v-end-input" value="237" class="w-12 bg-transparent border-b border-white/20 text-center outline-none text-sm text-white font-bold pb-1">
                 <button onclick="applyVocabRange()" class="text-[9px] border border-indigo-500 text-indigo-300 px-3 py-1 uppercase rounded hover:bg-indigo-500 hover:text-white transition">SET</button>
             </div>
             
@@ -299,7 +300,7 @@
                 <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Mode: Hán ➔ Việt</button>
                 <button onclick="toggleVocabRandom()" id="v-random-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Học: THỨ TỰ</button>
             </div>
-            <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">#1 / 216</p>
+            <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">Khoảng: 1-237 | Đang học: #1</p>
             <div id="v-question" class="text-7xl font-light text-center mb-10 tracking-tighter">...</div>
             
             <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-2xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkVocab()">
@@ -581,135 +582,7 @@
 </div>
 
 <script>
-    // --- GLOBAL SYSTEMS ---
-    function playSound(type) {
-        let audio;
-        if(type === 'click') audio = document.getElementById('sfx-click');
-        if(type === 'correct') audio = document.getElementById('sfx-correct');
-        if(type === 'wrong') audio = document.getElementById('sfx-wrong');
-        if(audio) { audio.currentTime = 0; audio.play().catch(() => {}); }
-    }
-
-    let userCoins = parseInt(localStorage.getItem('skyCoins')) || 0;
-    document.getElementById('coin-display').innerText = userCoins;
-    function updateCoins(amount) { userCoins += amount; localStorage.setItem('skyCoins', userCoins); document.getElementById('coin-display').innerText = userCoins; }
-
-    function switchTab(id) {
-        playSound('click');
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(id).classList.add('active');
-        const navBtn = document.getElementById('n-' + id);
-        if(navBtn) navBtn.classList.add('active');
-
-        // Header và BGM Game HUD ẩn hiện
-        const mainHeader = document.getElementById('main-header');
-        const bgmGame = document.getElementById('bgm-game');
-        if(id === 'game') {
-            mainHeader.style.opacity = '0';
-            if(localStorage.getItem('bgmOn') !== 'false' && bgmGame) bgmGame.play().catch(()=>{});
-        } else {
-            mainHeader.style.opacity = '1';
-            if(bgmGame) bgmGame.pause();
-        }
-        
-        // Lazy load
-        if (id === 'listen' && document.getElementById('listen-msg').innerText === "") generateListenSentence();
-        if (id === 'voice' && document.getElementById('voice-target').innerText === "...") nextVoiceWord();
-        if (id === 'test' && document.getElementById('test-grammar').classList.contains('hidden')) switchTestMode('grammar'); 
-    }
-
-    function startSequentialPreload() {
-        const mp4Songs = [...vPop, ...cPop].filter(s => s.type === 'mp4').map(s => s.id);
-        let currentIndex = 0;
-        function loadNextVideo() {
-            if (currentIndex >= mp4Songs.length) return;
-            const url = mp4Songs[currentIndex];
-            fetch(url, { mode: 'no-cors' }).then(() => { currentIndex++; loadNextVideo(); }).catch(() => { currentIndex++; loadNextVideo(); });
-        }
-        loadNextVideo();
-    }
-
-    // --- LOGIC HỒI THỂ LỰC (NƯỚC) ---
-    let stamina = parseInt(localStorage.getItem('skyStamina')) || 0;
-    let lastUpdate = parseInt(localStorage.getItem('skyStaminaTime')) || Date.now();
-
-    function updateStamina() {
-        const now = Date.now();
-        const elapsedMs = now - lastUpdate;
-        const minutesPassed = Math.floor(elapsedMs / 900000); // 15 phút 
-        
-        if (minutesPassed > 0) {
-            if (stamina < 156) {
-                stamina += minutesPassed;
-                if (stamina > 156) stamina = 156;
-                lastUpdate += minutesPassed * 900000;
-                localStorage.setItem('skyStamina', stamina);
-                localStorage.setItem('skyStaminaTime', lastUpdate);
-            } else {
-                lastUpdate = now;
-                localStorage.setItem('skyStaminaTime', lastUpdate);
-            }
-        }
-        const valNuoc = document.getElementById('val-nuoc');
-        if (valNuoc) valNuoc.innerText = stamina;
-    }
-    
-    // --- LOGIC SETTINGS PANEL ---
-    let selectedColorClass = localStorage.getItem('playerColor') || 'text-amber-100';
-    let savedName = localStorage.getItem('playerName') || 'NicksolEr';
-
-    function openSettings() {
-        playSound('click');
-        document.getElementById('settings-modal').classList.remove('hidden');
-        document.getElementById('setting-name-input').value = savedName;
-        document.getElementById('name-preview').innerText = savedName;
-        document.getElementById('name-preview').className = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass}`;
-        document.getElementById('bgm-toggle').checked = localStorage.getItem('bgmOn') !== 'false';
-    }
-
-    function closeSettings() {
-        playSound('click');
-        document.getElementById('settings-modal').classList.add('hidden');
-    }
-
-    function toggleBGM() {
-        playSound('click');
-        const isOn = document.getElementById('bgm-toggle').checked;
-        localStorage.setItem('bgmOn', isOn);
-        const bgm = document.getElementById('bgm-game');
-        if(isOn) bgm.play().catch(()=>{}); else bgm.pause();
-    }
-
-    function updateNamePreview() {
-        const name = document.getElementById('setting-name-input').value || 'NicksolEr';
-        document.getElementById('name-preview').innerText = name;
-    }
-
-    function selectColor(colorClass, element) {
-        playSound('click');
-        selectedColorClass = colorClass;
-        document.getElementById('name-preview').className = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${colorClass}`;
-        const swatches = document.getElementById('color-picker').children;
-        for(let s of swatches) s.classList.replace('border-white', 'border-transparent');
-        element.classList.replace('border-transparent', 'border-white');
-    }
-
-    function saveSettings() {
-        playSound('correct');
-        savedName = document.getElementById('setting-name-input').value || 'NicksolEr';
-        localStorage.setItem('playerName', savedName);
-        localStorage.setItem('playerColor', selectedColorClass);
-        const hudClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none`;
-        document.getElementById('player-name-hud').innerText = savedName;
-        document.getElementById('player-name-hud').className = hudClass;
-        document.getElementById('val-bac').className = hudClass;
-        document.getElementById('val-vang').className = hudClass;
-        document.getElementById('val-nuoc-display').className = hudClass;
-        closeSettings();
-    }
-
-    // --- DATA KHO TỪ VỰNG VÀ HỆ THỐNG CŨ ---
+    // --- 1. KHAI BÁO BIẾN DỮ LIỆU Ở TRÊN CÙNG ĐỂ CHỐNG LỖI ---
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" }, { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" }, { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" }, { hz: "先生", py: "xiānsheng", mn: "ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô" },
         { hz: "零", py: "líng", mn: "số 0" }, { hz: "一", py: "yī", mn: "số 1" }, { hz: "二", py: "èr", mn: "số 2" }, { hz: "三", py: "sān", mn: "số 3" }, { hz: "四", py: "sì", mn: "số 4" }, { hz: "五", py: "wǔ", mn: "số 5" }, { hz: "六", py: "liù", mn: "số 6" }, { hz: "七", py: "qī", mn: "số 7" }, { hz: "八", py: "bā", mn: "số 8" }, { hz: "九", py: "jiǔ", mn: "số 9" }, { hz: "十", py: "shí", mn: "số 10" }, { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" }, { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" }, { hz: "号", py: "hào", mn: "ngày" }, { hz: "星期", py: "xīngqī", mn: "tuần" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" }, { hz: "时候", py: "shíhou", mn: "khi lúc" },
@@ -743,20 +616,103 @@
     const vPop = [ {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false}, {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false}, {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false}, {name:"hieuthuhai - ngủ một mình ft. negav",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Không Thể Say l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true}, {name:"Exit Sign - HIEUTHUHAI ft. marzuz",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true}, {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true} ];
     const cPop = [ {name:"Mang Chủng",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"}, {name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"}, {name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"}, {name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"} ];
 
-    // --- TIẾN ĐỘ HỌC TẬP ---
+</script>
+
+<script>
+    // --- 1. TIẾN ĐỘ HỌC TẬP (CHECKLISTS) ---
     let listenProgress = 0; const listenMax = 50;
     let namesProgress = 0; const namesMax = 10;
     let voiceProgress = 0; const voiceMax = 20;
     let readingProgress = 0; const readingMax = 10;
 
-    // --- HỌC TÊN ---
+    // --- 2. HỌC TỪ VỰNG CHỌN KHOẢNG TỪ ---
+    let vIdx = -1; let vMode = 0; let isVocabRandom = false;
+    let vStartBound = 1; let vEndBound = vocabData.length;
+
+    function applyVocabRange() {
+        playSound('click');
+        let s = parseInt(document.getElementById('v-start-input').value) || 1;
+        let e = parseInt(document.getElementById('v-end-input').value) || vocabData.length;
+        if(s < 1) s = 1; if(e > vocabData.length) e = vocabData.length; if(s > e) s = e;
+        
+        document.getElementById('v-start-input').value = s;
+        document.getElementById('v-end-input').value = e;
+        vStartBound = s; 
+        vEndBound = e;
+        vIdx = vStartBound - 1; // Khởi tạo vị trí bằng số bắt đầu
+        renderVocabCard();
+    }
+
+    function changeVocabMode() { playSound('click'); vMode = (vMode+1)%3; document.getElementById('v-mode-btn').innerText = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"][vMode]; renderVocabCard(); }
+    function toggleVocabRandom() { playSound('click'); isVocabRandom = !isVocabRandom; document.getElementById('v-random-btn').innerText = isVocabRandom ? "Học: NGẪU NHIÊN" : "Học: THỨ TỰ"; document.getElementById('v-random-btn').className = isVocabRandom ? "text-[9px] border border-indigo-500 text-indigo-300 px-3 py-1 uppercase tracking-widest hover:bg-indigo-500 hover:text-white transition rounded" : "text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded"; }
+    
+    function nextVocab(moveNext = false) { 
+        if(moveNext) { 
+            if(isVocabRandom) {
+                vIdx = Math.floor(Math.random() * (vEndBound - vStartBound + 1)) + (vStartBound - 1);
+            } else { 
+                vIdx++;
+                if (vIdx > vEndBound - 1) vIdx = vStartBound - 1;
+            } 
+        } else {
+            if (vIdx < vStartBound - 1 || vIdx > vEndBound - 1) vIdx = vStartBound - 1;
+        }
+        renderVocabCard();
+    }
+
+    function renderVocabCard() {
+        const i = vocabData[vIdx]; 
+        const totalNumber = vEndBound - vStartBound + 1;
+        const currentNumber = vIdx - vStartBound + 2;
+        document.getElementById('v-progress').innerText = `Khoảng: ${vStartBound}-${vEndBound} | STT: ${currentNumber-1}/${totalNumber} (Từ gốc: #${vIdx+1})`; 
+        document.getElementById('v-question').innerText = vMode===0 ? i.hz : (vMode===1 ? i.mn.toUpperCase() : i.hz); 
+        document.getElementById('v-input').value = ""; 
+        document.getElementById('v-msg').innerText = ""; 
+        document.getElementById('v-hint').classList.add('hidden');
+    }
+    
+    function showVocabHint() { playSound('click'); const i = vocabData[vIdx]; let ans = vMode===0 ? i.mn : (vMode===1 ? i.hz : i.py); document.getElementById('v-hint').innerText = "Gợi ý: " + ans; document.getElementById('v-hint').classList.remove('hidden'); }
+    function checkVocab() { 
+        const i = vocabData[vIdx]; const v = document.getElementById('v-input').value.toLowerCase().trim(); let ok = (vMode===0 && v===i.mn.toLowerCase()) || (vMode===1 && v===i.hz) || (vMode===2 && v===i.py.toLowerCase()); 
+        if(ok) { 
+            playSound('correct'); updateCoins(1); 
+            document.getElementById('v-msg').innerText = "CHÍNH XÁC!"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400"; 
+            setTimeout(()=>nextVocab(true),1000); 
+        } else { playSound('wrong'); document.getElementById('v-msg').innerText = "SAI RỒI"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; } 
+    }
+
+    // --- 3. HỌC TÊN ---
     let nmIdx = 0; let nmMode = 0;
     function changeNamesMode() { playSound('click'); nmMode = (nmMode + 1) % 3; document.getElementById('nm-mode-btn').innerText = ["Việt ➔ Hán", "Hán ➔ Việt", "Việt ➔ Pinyin"][nmMode]; nextNames(true); }
-    function nextNames(rand) { if(rand) nmIdx = Math.floor(Math.random() * namesData.length); const n = namesData[nmIdx]; document.getElementById('nm-question').innerText = nmMode===0 ? n.vi : (nmMode===1 ? n.hz : n.vi); document.getElementById('nm-input').value = ""; document.getElementById('nm-msg').innerText = ""; document.getElementById('nm-hint').classList.add('hidden'); }
-    function showNamesHint() { playSound('click'); const n = namesData[nmIdx]; let ans = nmMode===0 ? n.hz : (nmMode===1 ? n.vi : n.py); document.getElementById('nm-hint').innerHTML = `Gợi ý: ${ans} <br><span class="text-[10px] text-gray-400 normal-case">(Pinyin: ${n.py})</span>`; document.getElementById('nm-hint').classList.remove('hidden'); }
-    function checkNames() { const n = namesData[nmIdx]; const v = document.getElementById('nm-input').value.toLowerCase().trim(); let ok = (nmMode===0 && v===n.hz) || (nmMode===1 && v===n.vi.toLowerCase()) || (nmMode===2 && v===n.py.toLowerCase()); if(ok) { playSound('correct'); updateCoins(1); if(namesProgress < namesMax) namesProgress++; document.getElementById('names-progress').innerText = `Tiến độ: ${namesProgress}/${namesMax}`; document.getElementById('nm-msg').innerText = "CHÍNH XÁC!"; document.getElementById('nm-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400"; setTimeout(()=>nextNames(true), 1000); } else { playSound('wrong'); document.getElementById('nm-msg').innerText = "SAI RỒI"; document.getElementById('nm-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; } }
+    function nextNames(rand) { 
+        if(rand) nmIdx = Math.floor(Math.random() * namesData.length); 
+        const n = namesData[nmIdx]; 
+        document.getElementById('nm-question').innerText = nmMode===0 ? n.vi : (nmMode===1 ? n.hz : n.vi); 
+        document.getElementById('nm-input').value = ""; 
+        document.getElementById('nm-msg').innerText = ""; 
+        document.getElementById('nm-hint').classList.add('hidden'); 
+    }
+    function showNamesHint() { 
+        playSound('click'); const n = namesData[nmIdx]; let ans = nmMode===0 ? n.hz : (nmMode===1 ? n.vi : n.py); 
+        // Hiển thị thêm Pinyin
+        document.getElementById('nm-hint').innerHTML = `Gợi ý: ${ans} <br><span class="text-[10px] text-gray-400 normal-case">(Pinyin: ${n.py})</span>`; 
+        document.getElementById('nm-hint').classList.remove('hidden'); 
+    }
+    function checkNames() { 
+        const n = namesData[nmIdx]; const v = document.getElementById('nm-input').value.toLowerCase().trim(); let ok = (nmMode===0 && v===n.hz) || (nmMode===1 && v===n.vi.toLowerCase()) || (nmMode===2 && v===n.py.toLowerCase()); 
+        if(ok) { 
+            playSound('correct'); updateCoins(1); 
+            if(namesProgress < namesMax) namesProgress++;
+            document.getElementById('names-progress').innerText = `Tiến độ: ${namesProgress}/${namesMax}`;
+            document.getElementById('nm-msg').innerText = "CHÍNH XÁC!"; 
+            document.getElementById('nm-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400"; 
+            setTimeout(()=>nextNames(true), 1000); 
+        } else { 
+            playSound('wrong'); document.getElementById('nm-msg').innerText = "SAI RỒI"; document.getElementById('nm-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; 
+        } 
+    }
 
-    // --- LUYỆN NÓI AI ---
+    // --- 4. LUYỆN NÓI AI ---
     let voiceIdx = 0; const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; let recognition;
     if (SpeechRecognition) {
         recognition = new SpeechRecognition(); recognition.lang = 'zh-CN'; recognition.interimResults = false;
@@ -764,62 +720,38 @@
         recognition.onend = function() { document.getElementById('voice-pulse').classList.add('opacity-0'); document.getElementById('voice-pulse').classList.remove('animate-ping'); };
         recognition.onresult = function(event) {
             const spoken = event.results[0][0].transcript.trim(); const target = vocabData[voiceIdx].hz; const cleanSpoken = spoken.replace(/[.,?!。，？！]/g, "");
-            if(cleanSpoken === target || cleanSpoken.includes(target) || target.includes(cleanSpoken)) { playSound('correct'); updateCoins(1); if(voiceProgress < voiceMax) voiceProgress++; document.getElementById('voice-progress').innerText = `Tiến độ: ${voiceProgress}/${voiceMax}`; document.getElementById('voice-feedback').innerHTML = `<span class='text-green-400 font-bold'>Giỏi quá! AI nghe được: "${cleanSpoken}"</span>`; setTimeout(() => nextVoiceWord(), 2000); } else { playSound('wrong'); document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Sai rồi. Bạn đọc là: "${cleanSpoken}"<br>Cần đọc là: "${target}"</span>`; }
+            if(cleanSpoken === target || cleanSpoken.includes(target) || target.includes(cleanSpoken)) { 
+                playSound('correct'); updateCoins(1); 
+                if(voiceProgress < voiceMax) voiceProgress++;
+                document.getElementById('voice-progress').innerText = `Tiến độ: ${voiceProgress}/${voiceMax}`;
+                document.getElementById('voice-feedback').innerHTML = `<span class='text-green-400 font-bold'>Giỏi quá! AI nghe được: "${cleanSpoken}"</span>`; 
+                setTimeout(() => nextVoiceWord(), 2000); 
+            } else { 
+                playSound('wrong'); document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Sai rồi. Bạn đọc là: "${cleanSpoken}"<br>Cần đọc là: "${target}"</span>`; 
+            }
         };
         recognition.onerror = function(event) { document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Lỗi mic: ${event.error}</span>`; document.getElementById('voice-pulse').classList.add('opacity-0'); document.getElementById('voice-pulse').classList.remove('animate-ping'); };
     }
     function nextVoiceWord() { playSound('click'); voiceIdx = Math.floor(Math.random() * vocabData.length); document.getElementById('voice-target').innerText = vocabData[voiceIdx].hz; document.getElementById('voice-py').innerText = vocabData[voiceIdx].py; document.getElementById('voice-mn').innerText = vocabData[voiceIdx].mn; document.getElementById('voice-feedback').innerHTML = ""; }
     function startListening() { if (!SpeechRecognition) { alert("Trình duyệt của bạn không hỗ trợ Nhận diện giọng nói. Hãy dùng Chrome!"); return; } playSound('click'); recognition.start(); }
 
-    // --- LUYỆN NGHE PHẢN XẠ NHANH ---
-    let currentListenHz = ""; let currentListenVi = "";
-    function generateListenSentence() {
-        playSound('click');
-        const subj_vi = {"我":"Tôi", "你":"Bạn", "他":"Anh ấy", "她":"Cô ấy", "我们":"Chúng tôi", "爸爸":"Bố", "妈妈":"Mẹ", "老师":"Giáo viên", "学生":"Học sinh", "哥哥":"Anh trai", "弟弟":"Em trai", "朋友":"Bạn bè", "先生":"Ông", "小姐":"Cô"}; const time_vi = {"现在":"Bây giờ", "今天":"Hôm nay", "明天":"Ngày mai", "昨天":"Hôm qua", "上午":"Buổi sáng", "中午":"Buổi trưa", "下午":"Buổi chiều", "白天":"Ban ngày"}; const vm_vi = {"去":"đi", "来":"đến", "回":"về", "出":"ra", "到":"đến"}; const va_vi = {"吃":"ăn", "喝":"uống", "买":"mua", "看":"xem", "做":"làm", "听":"nghe", "说":"nói", "读":"đọc", "写":"viết", "打":"đánh/gọi"}; const vf_vi = {"喜欢":"thích", "想":"muốn", "爱":"yêu", "觉得":"cảm thấy", "会":"biết", "能":"có thể"}; const pl_vi = {"学校":"trường học", "家":"nhà", "饭店":"nhà hàng", "商店":"cửa hàng", "北京":"Bắc Kinh", "中国":"Trung Quốc", "车站":"trạm xe", "机场":"sân bay", "国外":"nước ngoài", "大学":"đại học", "房间":"căn phòng", "教室":"lớp học"}; const nf_vi = {"水":"nước", "饭":"cơm", "菜":"đồ ăn", "茶":"trà", "苹果":"táo", "鸡蛋":"trứng gà", "包子":"bánh bao", "咖啡":"cà phê"}; const no_vi = {"书":"sách", "电脑":"máy tính", "电视":"tivi", "衣服":"quần áo", "钱":"tiền", "杯子":"cái cốc", "桌子":"cái bàn", "椅子":"cái ghế", "地图":"bản đồ", "车票":"vé xe"}; const adj_vi = {"好":"tốt/khỏe", "多":"nhiều", "少":"ít", "大":"to", "小":"nhỏ", "冷":"lạnh", "热":"nóng", "高兴":"vui vẻ", "漂亮":"xinh đẹp", "忙":"bận", "累":"mệt", "贵":"đắt", "旧":"cũ", "干净":"sạch sẽ"};
-        const subjects = Object.keys(subj_vi); const times = Object.keys(time_vi); const verbs_move = Object.keys(vm_vi); const verbs_action = Object.keys(va_vi); const verbs_feel = Object.keys(vf_vi); const places = Object.keys(pl_vi); const nouns_food = Object.keys(nf_vi); const nouns_obj = Object.keys(no_vi); const adjectives = Object.keys(adj_vi);
-        const S = subjects[Math.floor(Math.random() * subjects.length)]; const S2 = subjects[Math.floor(Math.random() * subjects.length)]; const T = times[Math.floor(Math.random() * times.length)]; const V_m = verbs_move[Math.floor(Math.random() * verbs_move.length)]; const V_a = verbs_action[Math.floor(Math.random() * verbs_action.length)]; const P = places[Math.floor(Math.random() * places.length)]; const N_f = nouns_food[Math.floor(Math.random() * nouns_food.length)]; const N_o = nouns_obj[Math.floor(Math.random() * nouns_obj.length)]; const Adj = adjectives[Math.floor(Math.random() * adjectives.length)];
-        let sentence = ""; let vi_sentence = ""; const type = Math.floor(Math.random() * 10); 
-        switch(type) {
-            case 0: sentence = `${S}${T}${V_m}${P}`; vi_sentence = `${subj_vi[S]} ${time_vi[T].toLowerCase()} ${vm_vi[V_m]} ${pl_vi[P]}.`; break; 
-            case 1: const V_a_1 = ["吃", "喝", "买"][Math.floor(Math.random() * 3)]; const V_f_1 = ["喜欢", "想"][Math.floor(Math.random() * 2)]; sentence = `${S}${V_f_1}${V_a_1}${N_f}`; vi_sentence = `${subj_vi[S]} ${vf_vi[V_f_1]} ${va_vi[V_a_1]} ${nf_vi[N_f]}.`; break; 
-            case 2: sentence = `${T}${S}很${Adj}`; vi_sentence = `${time_vi[T]} ${subj_vi[S].toLowerCase()} rất ${adj_vi[Adj].toLowerCase()}.`; break; 
-            case 3: sentence = `${S}和${S2}${V_m}${P}`; vi_sentence = `${subj_vi[S]} và ${subj_vi[S2].toLowerCase()} ${vm_vi[V_m]} ${pl_vi[P]}.`; break; 
-            case 4: sentence = `${S}在${P}${V_a}${N_o}`; vi_sentence = `${subj_vi[S]} ở ${pl_vi[P]} ${va_vi[V_a]} ${no_vi[N_o]}.`; break; 
-            case 5: sentence = `${S}${V_a}${N_o}吗？`; vi_sentence = `${subj_vi[S]} ${va_vi[V_a]} ${no_vi[N_o]} không?`; break; 
-            case 6: sentence = `${S}不${V_a}${N_f}`; vi_sentence = `${subj_vi[S]} không ${va_vi[V_a]} ${nf_vi[N_f]}.`; break; 
-            case 7: sentence = `${P}有${N_o}`; vi_sentence = `Ở ${pl_vi[P]} có ${no_vi[N_o]}.`; break; 
-            case 8: sentence = `${S}${T}要${V_a}${N_o}`; vi_sentence = `${time_vi[T]} ${subj_vi[S].toLowerCase()} muốn ${va_vi[V_a]} ${no_vi[N_o]}.`; break; 
-            case 9: sentence = `${S}觉得${N_f}很${Adj}`; vi_sentence = `${subj_vi[S]} cảm thấy ${nf_vi[N_f]} rất ${adj_vi[Adj].toLowerCase()}.`; break; 
-        }
-        currentListenHz = sentence; currentListenVi = vi_sentence;
-        document.getElementById('listen-input').value = ""; document.getElementById('listen-msg').innerHTML = "Đã tạo câu mới! Bấm nút 🎧 để nghe."; document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-indigo-300"; document.getElementById('listen-hint').classList.add('hidden');
-    }
-    function playListenAudio() { if ('speechSynthesis' in window) { const utterance = new SpeechSynthesisUtterance(currentListenHz); utterance.lang = 'zh-CN'; utterance.rate = 1.3; window.speechSynthesis.speak(utterance); } else { alert("Trình duyệt không hỗ trợ phát âm thanh."); } }
-    function showListenHint() { playSound('click'); document.getElementById('listen-hint').innerHTML = `${currentListenHz}<br><span class="text-white text-xs font-normal opacity-80">${currentListenVi}</span>`; document.getElementById('listen-hint').classList.remove('hidden'); }
-    function checkListen() {
-        const val = document.getElementById('listen-input').value.trim(); const cleanVal = val.replace(/[.,?!。，？！]/g, ""); const cleanTarget = currentListenHz.replace(/[.,?!。，？！]/g, "");
-        if(cleanVal === cleanTarget) { 
-            playSound('correct'); updateCoins(2); 
-            if(listenProgress < listenMax) listenProgress++; document.getElementById('listen-progress').innerText = `Tiến độ: ${listenProgress}/${listenMax}`;
-            document.getElementById('listen-msg').innerHTML = `QUÁ XUẤT SẮC! (+2 COIN)<br><span class="text-white font-normal text-xs normal-case mt-1 block opacity-80">Nghĩa là: ${currentListenVi}</span>`; document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400 leading-relaxed"; document.getElementById('listen-hint').innerHTML = `${currentListenHz}<br><span class="text-white text-xs font-normal opacity-80">${currentListenVi}</span>`; document.getElementById('listen-hint').classList.remove('hidden'); setTimeout(generateListenSentence, 3000); 
-        } else { playSound('wrong'); document.getElementById('listen-msg').innerText = "SAI RỒI! BẤM 🎧 NGHE LẠI HOẶC XEM GỢI Ý."; document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; }
+    // --- 5. ĐỌC HIỂU ---
+    let rIdx = 0; 
+    function nextParagraph() { playSound('click'); rIdx = (rIdx+1)%readingData.length; document.getElementById('r-text').innerText = readingData[rIdx].zh; document.getElementById('r-input').value=""; document.getElementById('r-msg').innerText=""; }
+    function toggleReadingRef() { playSound('click'); const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
+    function checkReading() { 
+        if(document.getElementById('r-input').value.trim().length > 5) { 
+            playSound('correct'); updateCoins(1); 
+            if(readingProgress < readingMax) readingProgress++;
+            document.getElementById('reading-progress').innerText = `Tiến độ: ${readingProgress}/${readingMax}`;
+            document.getElementById('r-msg').innerText = "OK (+1 Xu)"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-green-400"; 
+        } else { 
+            playSound('wrong'); document.getElementById('r-msg').innerText = "DỊCH QUÁ NGẮN!"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-red-400"; 
+        } 
     }
 
-    // --- HỌC TỪ VỰNG ---
-    let vIdx = -1; let vMode = 0; let isVocabRandom = false;
-    let vStartBound = 0; let vEndBound = vocabData.length - 1;
-    function applyVocabRange() { playSound('click'); let s = parseInt(document.getElementById('v-start-input').value) || 1; let e = parseInt(document.getElementById('v-end-input').value) || vocabData.length; if(s < 1) s = 1; if(e > vocabData.length) e = vocabData.length; if(s > e) s = e; vStartBound = s - 1; vEndBound = e - 1; vIdx = vStartBound - 1; nextVocab(true); }
-    function changeVocabMode() { playSound('click'); vMode = (vMode+1)%3; document.getElementById('v-mode-btn').innerText = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"][vMode]; nextVocab(false); }
-    function toggleVocabRandom() { playSound('click'); isVocabRandom = !isVocabRandom; document.getElementById('v-random-btn').innerText = isVocabRandom ? "Học: NGẪU NHIÊN" : "Học: THỨ TỰ"; document.getElementById('v-random-btn').className = isVocabRandom ? "text-[9px] border border-indigo-500 text-indigo-300 px-3 py-1 uppercase tracking-widest hover:bg-indigo-500 hover:text-white transition rounded" : "text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded"; }
-    function nextVocab(moveNext = false) { 
-        if(moveNext) { if(isVocabRandom) { vIdx = Math.floor(Math.random() * (vEndBound - vStartBound + 1)) + vStartBound; } else { vIdx++; if (vIdx > vEndBound || vIdx < vStartBound) vIdx = vStartBound; } } else if (vIdx === -1 || vIdx < vStartBound || vIdx > vEndBound) { vIdx = vStartBound; } 
-        const i = vocabData[vIdx]; const currentNumber = vIdx - vStartBound + 1; const totalNumber = vEndBound - vStartBound + 1;
-        document.getElementById('v-progress').innerText = `#${currentNumber} / ${totalNumber} (Kho: ${vIdx+1})`; document.getElementById('v-question').innerText = vMode===0?i.hz:(vMode===1?i.mn.toUpperCase():i.hz); document.getElementById('v-input').value = ""; document.getElementById('v-msg').innerText = ""; document.getElementById('v-hint').classList.add('hidden');
-    }
-    function showVocabHint() { playSound('click'); const i = vocabData[vIdx]; let ans = vMode===0 ? i.mn : (vMode===1 ? i.hz : i.py); document.getElementById('v-hint').innerText = "Gợi ý: " + ans; document.getElementById('v-hint').classList.remove('hidden'); }
-    function checkVocab() { const i = vocabData[vIdx]; const v = document.getElementById('v-input').value.toLowerCase().trim(); let ok = (vMode===0 && v===i.mn.toLowerCase()) || (vMode===1 && v===i.hz) || (vMode===2 && v===i.py.toLowerCase()); if(ok) { playSound('correct'); updateCoins(1); document.getElementById('v-msg').innerText = "CHÍNH XÁC!"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400"; setTimeout(()=>nextVocab(true),1000); } else { playSound('wrong'); document.getElementById('v-msg').innerText = "SAI RỒI"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; } }
-
-    // --- KIỂM TRA ---
+    // --- 6. CÁC MODULE CŨ CÒN LẠI ---
+    function renderLibrary() { document.getElementById('lib-count').innerText = vocabData.length; const html = vocabData.map((v, i) => `<div class="bg-white/5 p-3 rounded border border-white/10 flex flex-col justify-between hover:bg-white/10 transition"> <div class="flex justify-between items-center mb-1"> <span class="text-xs text-gray-500 font-mono">#${i+1}</span> <span class="text-lg font-bold text-white">${v.hz}</span> </div> <div class="text-xs text-indigo-300 font-mono">${v.py}</div> <div class="text-[10px] text-gray-400 uppercase mt-1 tracking-widest">${v.mn}</div> </div>`).join(''); document.getElementById('lib-list').innerHTML = html; }
     function switchTestMode(mode) { playSound('click'); document.getElementById('test-grammar').classList.add('hidden'); document.getElementById('test-fill').classList.add('hidden'); document.getElementById('test-speed').classList.add('hidden'); document.getElementById(`test-${mode}`).classList.remove('hidden'); if(mode === 'grammar') startGrammarTest(); if(mode === 'fill') generateFillTest(); if(mode === 'speed') resetSpeedTest(); }
     function startGrammarTest() { document.getElementById('tg-step1').classList.remove('hidden'); document.getElementById('tg-step2').classList.add('hidden'); document.getElementById('tg-step3').classList.add('hidden'); document.getElementById('tg-step4').classList.add('hidden'); document.getElementById('tg-sub-input').value = ""; document.getElementById('tg-noun-input').value = ""; document.getElementById('tg-make-sentence').value = ""; document.getElementById('tg-feedback').innerText = ""; currentTestRule = grammarRules[Math.floor(Math.random() * grammarRules.length)]; const subs = ["我","你","他","爸爸","妈妈"]; const nouns = ["学生","老师","医生","好人"]; const S = subs[Math.floor(Math.random() * subs.length)]; const N = nouns[Math.floor(Math.random() * nouns.length)]; if(currentTestRule.id === "g1") currentTestSentence = S + "是" + N; if(currentTestRule.id === "g2") currentTestSentence = S + "不是" + N; if(currentTestRule.id === "g3") currentTestSentence = S + "是" + N + "吗？"; if(currentTestRule.id === "g4") currentTestSentence = "我们"; document.getElementById('tg-question').innerText = currentTestSentence; let opts = [...grammarRules].sort(() => Math.random() - 0.5).slice(0, 3); if(!opts.includes(currentTestRule)) opts[0] = currentTestRule; opts = opts.sort(() => Math.random() - 0.5); document.getElementById('tg-options').innerHTML = opts.map(r => `<button onclick="checkStructure('${r.id}')" class="p-3 bg-white/5 border border-white/20 rounded text-xs hover:bg-white hover:text-black transition text-left">${r.structure}</button>`).join(''); }
     function checkStructure(id) { if(id === currentTestRule.id) { playSound('correct'); document.getElementById('tg-step1').classList.add('hidden'); document.getElementById('tg-step2').classList.remove('hidden'); document.getElementById('tg-feedback').innerText = "Đúng cấu trúc!"; } else { playSound('wrong'); alert("Sai rồi! Hãy nhìn kỹ câu hỏi."); } }
@@ -829,29 +761,14 @@
     function generateFillTest() { const subjects = ["我", "你", "他", "她", "老师", "学生", "同学", "朋友", "先生", "小姐", "爸爸", "妈妈", "哥哥", "弟弟", "工人"]; const verbs = ["喜欢", "想", "去", "吃", "喝", "看", "买", "做", "学", "打", "告诉", "教", "认识", "觉得", "记"]; const nouns = ["苹果", "茶", "水", "饭", "菜", "咖啡", "衣服", "书", "电脑", "电视", "包子", "鸡蛋", "钱", "汉语", "汉字"]; const places = ["学校", "家", "饭店", "商店", "北京", "中国", "车站", "机场", "国外", "大学", "房间", "教室"]; const adjectives = ["好", "多", "少", "大", "小", "冷", "热", "高兴", "漂亮", "忙", "累", "贵", "健康", "旧"]; const S = subjects[Math.floor(Math.random() * subjects.length)]; const type = Math.floor(Math.random() * 3); let dialogue = ""; let hideTarget = ""; let fakeOpts = []; if (type === 0) { const V = verbs[Math.floor(Math.random() * 5)]; const N = nouns[Math.floor(Math.random() * nouns.length)]; hideTarget = Math.random() > 0.5 ? V : N; dialogue = `A: ${S === '我' ? '你' : '我'}${V}什么？<br>B: ${S}${V === hideTarget ? '____' : V}${N === hideTarget ? '____' : N}。`; fakeOpts = ["什么", "吗", "不", "很", "太"]; } else if (type === 1) { const P = places[Math.floor(Math.random() * places.length)]; hideTarget = P; dialogue = `A: ${S === '我' ? '你' : '我'}去哪儿？<br>B: ${S}去____。`; fakeOpts = ["去", "来", "在", "哪儿", "怎么"]; } else { const N2 = nouns[Math.floor(Math.random() * nouns.length)]; const Adj = adjectives[Math.floor(Math.random() * adjectives.length)]; hideTarget = Math.random() > 0.5 ? N2 : Adj; dialogue = `A: ${N2 === hideTarget ? '____' : N2}怎么样？<br>B: ${N2 === hideTarget ? '____' : N2}很${Adj === hideTarget ? '____' : Adj}。`; fakeOpts = ["很", "太", "不", "多", "少"]; } document.getElementById('tf-dialogue').innerHTML = dialogue; let opts = fakeOpts.sort(() => Math.random() - 0.5).slice(0, 4); if(!opts.includes(hideTarget)) opts[0] = hideTarget; opts = opts.sort(() => Math.random() - 0.5); document.getElementById('tf-options').innerHTML = opts.map(o => `<button onclick="checkFill('${o}', '${hideTarget}')" class="px-4 py-2 border border-white/20 rounded hover:bg-white hover:text-black font-bold">${o}</button>`).join(''); document.getElementById('tf-msg').innerText = ""; }
     function checkFill(ans, correct) { if(ans === correct) { playSound('correct'); updateCoins(1); document.getElementById('tf-msg').innerText = "CHÍNH XÁC! (+1 COIN)"; document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-green-400"; setTimeout(generateFillTest, 1000); } else { playSound('wrong'); document.getElementById('tf-msg').innerText = "SAI RỒI!"; document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-red-400"; } }
 
-    // TỐC ĐỘ
     let tsTimer; let tsTimeLeft; let tsData = []; let tsCurrentIdx = 0; let tsScore = 0; let tsLevel = 1;
     function resetSpeedTest() { clearInterval(tsTimer); document.getElementById('ts-setup').classList.remove('hidden'); document.getElementById('ts-play').classList.add('hidden'); document.getElementById('ts-result').classList.add('hidden'); document.getElementById('ts-max-hint').innerText = vocabData.length; document.getElementById('ts-end').value = vocabData.length; }
     function startSpeedTest() { playSound('click'); const start = parseInt(document.getElementById('ts-start').value) || 1; const end = parseInt(document.getElementById('ts-end').value) || vocabData.length; tsTimeLeft = (parseInt(document.getElementById('ts-time').value) || 1) * 60; tsLevel = parseInt(document.getElementById('ts-level').value); if(start < 1 || end > vocabData.length || start > end) { alert(`Phạm vi từ không hợp lệ! Vui lòng nhập từ 1 đến ${vocabData.length}`); return; } tsData = vocabData.slice(start - 1, end).sort(() => Math.random() - 0.5); tsCurrentIdx = 0; tsScore = 0; document.getElementById('ts-setup').classList.add('hidden'); document.getElementById('ts-play').classList.remove('hidden'); document.getElementById('ts-play').classList.add('flex'); document.getElementById('ts-total-display').innerText = tsData.length; document.getElementById('ts-score-display').innerText = 0; document.getElementById('ts-play-msg').innerText = ""; updateTsWord(); tsTimer = setInterval(() => { tsTimeLeft--; let m = Math.floor(tsTimeLeft / 60).toString().padStart(2, '0'); let s = (tsTimeLeft % 60).toString().padStart(2, '0'); document.getElementById('ts-timer-display').innerText = `${m}:${s}`; if(tsTimeLeft <= 0) endSpeedTest(); }, 1000); }
     function updateTsWord() { if(tsCurrentIdx >= tsData.length) { endSpeedTest(); return; } let item = tsData[tsCurrentIdx]; let q = ""; if(tsLevel === 1) q = item.hz; if(tsLevel === 2) q = item.mn.toUpperCase(); if(tsLevel === 3) q = item.mn.toUpperCase(); document.getElementById('ts-current-word').innerText = q; document.getElementById('ts-input').value = ""; document.getElementById('ts-input').focus(); }
     function checkSpeedVocab() { let item = tsData[tsCurrentIdx]; let v = document.getElementById('ts-input').value.toLowerCase().trim(); let msgEl = document.getElementById('ts-play-msg'); let ok = false; if(tsLevel === 1 && v === item.mn.toLowerCase()) ok = true; if(tsLevel === 2 && v === item.py.toLowerCase()) ok = true; if(tsLevel === 3 && v === item.hz) ok = true; if(ok) { playSound('correct'); tsScore++; updateCoins(1); tsCurrentIdx++; document.getElementById('ts-score-display').innerText = tsScore; msgEl.innerText = ""; updateTsWord(); } else { playSound('wrong'); document.getElementById('ts-input').value = ""; msgEl.innerText = "SAI RỒI! THỬ LẠI!"; } }
     function endSpeedTest() { clearInterval(tsTimer); document.getElementById('ts-play').classList.add('hidden'); document.getElementById('ts-play').classList.remove('flex'); document.getElementById('ts-result').classList.remove('hidden'); document.getElementById('ts-final-score').innerText = `${tsScore} / ${tsData.length}`; }
-
-    // --- ĐỌC HIỂU ---
     function renderGrammarList() { document.getElementById('grammar-list').innerHTML = grammarRules.map(r => `<div class="bg-white/5 p-6 border-l-2 border-indigo-500"> <h3 class="text-lg font-light text-white mb-2">${r.title}</h3> <code class="block bg-black/20 p-2 text-pink-300 mb-2 font-mono text-xs">${r.structure}</code> <p class="text-xs text-gray-400 italic">Ví dụ: ${r.ex}</p> </div>`).join(''); }
-    let rIdx = 0; function nextParagraph() { playSound('click'); rIdx = (rIdx+1)%readingData.length; document.getElementById('r-text').innerText = readingData[rIdx].zh; document.getElementById('r-input').value=""; document.getElementById('r-msg').innerText=""; }
-    function toggleReadingRef() { playSound('click'); const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
-    function checkReading() { 
-        if(document.getElementById('r-input').value.trim().length > 5) { 
-            playSound('correct'); updateCoins(1); 
-            if(readingProgress < readingMax) readingProgress++; document.getElementById('reading-progress').innerText = `Tiến độ: ${readingProgress}/${readingMax}`;
-            document.getElementById('r-msg').innerText = "OK (+1 Xu)"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-green-400"; 
-        } else { 
-            playSound('wrong'); document.getElementById('r-msg').innerText = "DỊCH QUÁ NGẮN!"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-red-400"; 
-        } 
-    }
 
-    // LỊCH LÀM VIỆC
     const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"]; let workStep = 0; let currentWeek = 1; let scheduleData = []; let isDoubleShift = false; 
     function changeWeek() { currentWeek = parseInt(document.getElementById('week-selector').value); document.getElementById('display-week-num').innerText = "TUẦN " + currentWeek; loadWorkSchedule(); }
     function loadWorkSchedule() { const key = `skyWork_W${currentWeek}`; const saved = localStorage.getItem(key); document.getElementById('btn-cancel-edit').classList.add('hidden'); if (saved) { scheduleData = JSON.parse(saved); renderScheduleResult(); } else { resetWorkSchedule(); } }
@@ -868,7 +785,6 @@
     function renderScheduleResult() { document.getElementById('work-wizard').classList.add('hidden'); document.getElementById('work-result-container').classList.remove('hidden'); const tbody = document.getElementById('work-tbody'); let totalH = 0; tbody.innerHTML = scheduleData.map(d => { let h1 = (d.pos !== 'OFF') ? calcHours(d.time) : 0; let h2 = (d.hasCa2 && d.pos2) ? calcHours(d.time2) : 0; let dayTotal = h1 + h2; totalH += dayTotal; let displayPos = `<span class="font-bold">${d.pos}</span>`; let displayTime = d.time; if(d.hasCa2 && d.pos2) { displayPos += `<br><span class="text-indigo-300 text-[10px]">+ ${d.pos2}</span>`; displayTime += `<br><span class="text-indigo-300 text-[10px]">${d.time2}</span>`; } return `<tr class="${d.pos === 'OFF' ? 'text-red-400' : ''}"> <td class="font-bold text-gray-400">${d.day}</td> <td>${d.date}</td> <td class="uppercase font-bold tracking-widest text-xs">${displayPos}</td> <td>${displayTime}</td> <td>${d.pos === 'OFF' ? '-' : (dayTotal > 0 ? dayTotal.toFixed(1) + 'h' : '?')}</td> </tr>`; }).join(''); document.getElementById('total-hours').innerText = totalH.toFixed(1) + "h"; document.getElementById('total-salary').innerText = (totalH * 25000).toLocaleString('vi-VN') + " VNĐ"; }
     function downloadSchedule() { playSound('click'); html2canvas(document.getElementById('work-capture-area'), { backgroundColor: "#0f172a", scale: 2 }).then(canvas => { const link = document.createElement('a'); link.download = `LichLamViec_Tuan${currentWeek}.png`; link.href = canvas.toDataURL(); link.click(); }); }
 
-    // MUSIC
     let currentList = 'vpop'; let currentIndex = 0; let isHieuMode = false; let displayedVPop = [];
     function renderMusicVPop() { displayedVPop = isHieuMode ? vPop.filter(s => s.isHieu) : vPop; const tpl = (s, idx) => { const safeName = s.name.replace(/'/g, "\\'"); return `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${safeName}', ${idx}, 'vpop', '${s.thumb}')"> <img src="${s.thumb}" class="flex-shrink-0"> <div class="flex-1 overflow-hidden"> <h4 class="text-[10px] font-bold uppercase text-white tracking-widest truncate" title="${s.name}">${s.name}</h4> <span class="text-[8px] text-gray-500">${s.type==='mp4'?'NO ADS':'YOUTUBE'}</span> </div> </div>`; }; document.getElementById('v-list').innerHTML = displayedVPop.map((s,i) => tpl(s, i)).join(''); }
     function renderMusicCPop() { const tpl = (s, idx) => { const safeName = s.name.replace(/'/g, "\\'"); return `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${safeName}', ${idx}, 'cpop', '${s.thumb}')"> <img src="${s.thumb}" class="flex-shrink-0"> <div class="flex-1 overflow-hidden"> <h4 class="text-[10px] font-bold uppercase text-white tracking-widest truncate" title="${s.name}">${s.name}</h4> <span class="text-[8px] text-gray-500">${s.type==='mp4'?'NO ADS':'YOUTUBE'}</span> </div> </div>`; }; document.getElementById('c-list').innerHTML = cPop.map((s,i) => tpl(s, i)).join(''); }
@@ -880,17 +796,6 @@
     document.getElementById('mp4-player').addEventListener('ended', checkAutoPlay);
     function playMedia(src, type, name, idx, listType, thumb) { playSound('click'); currentList = listType; currentIndex = idx; document.getElementById('now-playing').innerText = name; const yt = document.getElementById('player'); const mp4 = document.getElementById('mp4-player'); if(player && player.stopVideo) player.stopVideo(); mp4.pause(); if(type === 'mp4') { yt.classList.add('hidden'); mp4.classList.remove('hidden'); mp4.src = src; mp4.play(); } else { mp4.classList.add('hidden'); yt.classList.remove('hidden'); player.loadVideoById(src); } }
     function checkAutoPlay() { if(document.getElementById(`toggle-${currentList}`).checked) { const listData = currentList === 'vpop' ? displayedVPop : cPop; const nextIdx = (currentIndex + 1) % listData.length; const nextSong = listData[nextIdx]; playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb); } }
-
-    // DRAG TOOL CHO SUUTAM
-    const draggables = [document.getElementById('drag-suutam')];
-    draggables.forEach(el => {
-        if(!el) return; let isDragging = false; let offsetX = 0, offsetY = 0;
-        el.addEventListener('mousedown', (e) => { const rect = el.getBoundingClientRect(); const isResize = (e.clientX > rect.right - 15) && (e.clientY > rect.bottom - 15); if (isResize || e.button !== 0) return; isDragging = true; el.style.cursor = 'grabbing'; offsetX = e.clientX - rect.left; offsetY = e.clientY - rect.top; });
-        document.addEventListener('mousemove', (e) => { if (!isDragging) return; const containerRect = document.getElementById('hud-stats-container').getBoundingClientRect(); el.style.left = (e.clientX - containerRect.left - offsetX) + 'px'; el.style.top = (e.clientY - containerRect.top - offsetY) + 'px'; });
-        document.addEventListener('mouseup', () => { if(isDragging) { isDragging = false; el.style.cursor = 'grab'; } });
-        el.addEventListener('contextmenu', (e) => { e.preventDefault(); alert(`${el.id.replace('drag-','').toUpperCase()}:\nTOP: ${el.style.top || '0px'}\nLEFT: ${el.style.left || '0px'}\nWIDTH: ${el.offsetWidth + 'px'}\nHEIGHT: ${el.offsetHeight + 'px'}\n\n👉 Copy 4 dòng này đem qua đưa tui nhé!`); });
-    });
-
 </script>
 </body>
 </html>
