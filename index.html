@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.43 Final Coords Fixed</title>
+    <title>Skyreign Hub | V40.44 Final Clean HUD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -58,7 +58,6 @@
         .switch-toggle input:checked + div { background-color: #4f46e5; }
         .switch-toggle input:checked + div > div { transform: translateX(100%); }
 
-        /* CÔNG CỤ KÉO THẢ */
         .drag-tool {
             position: absolute;
             resize: both;
@@ -120,7 +119,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.43 FINAL HUD FIXED</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.44 CLEAN HUD FIXED</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -166,7 +165,7 @@
 <div id="game" class="tab-content relative w-full h-full min-h-screen bg-[#0a0a0a]">
     <div id="hud-stats-container" class="fixed inset-0 pointer-events-none z-0">
         
-        <div id="drag-bg" class="drag-tool pointer-events-auto" style="top: 2px; left: 236px; width: 2154px; height: 1191px; z-index: 1;">
+        <div id="fixed-bg" class="absolute pointer-events-none" style="top: 35px; left: 213px; width: 1124px; height: 628px; z-index: 1;">
             <video src="bg.mp4" autoplay loop muted playsinline class="w-full h-full object-cover pointer-events-none select-none" draggable="false"></video>
         </div>
 
@@ -218,14 +217,6 @@
             <img src="VIP.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="VIP">
         </div>
 
-    </div>
-    
-    <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[100]">
-        <div class="glass-card p-6 text-center border border-indigo-500/30 pointer-events-auto shadow-2xl">
-            <h2 class="text-xl font-bold tracking-[0.2em] uppercase text-white mb-2 drop-shadow-md">Tọa độ UI đã khóa</h2>
-            <p class="text-[10px] text-gray-300 mb-4">Kéo thả mục Background nếu cần. Chuột phải lấy tọa độ.</p>
-            <button onclick="openSettings()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px] px-6 py-2 rounded uppercase tracking-widest transition">⚙️ MỞ CÀI ĐẶT</button>
-        </div>
     </div>
 </div>
 
@@ -307,7 +298,6 @@
 <div id="vocab" class="tab-content">
     <div class="min-h-screen flex flex-col items-center pt-32 px-4">
         <div class="glass-card p-10 w-full max-w-lg relative text-center">
-            
             <div class="flex justify-center items-center gap-2 mb-6">
                 <span class="text-[10px] text-gray-400 uppercase tracking-widest">Từ</span>
                 <input type="number" id="v-start-input" value="1" class="w-12 bg-transparent border-b border-white/20 text-center outline-none text-sm text-white font-bold pb-1">
@@ -315,21 +305,17 @@
                 <input type="number" id="v-end-input" value="237" class="w-12 bg-transparent border-b border-white/20 text-center outline-none text-sm text-white font-bold pb-1">
                 <button onclick="applyVocabRange()" class="text-[9px] border border-indigo-500 text-indigo-300 px-3 py-1 uppercase rounded hover:bg-indigo-500 hover:text-white transition">SET</button>
             </div>
-            
             <div class="flex justify-between w-full mb-4">
                 <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Mode: Hán ➔ Việt</button>
                 <button onclick="toggleVocabRandom()" id="v-random-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Học: THỨ TỰ</button>
             </div>
             <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">Khoảng: 1-237 | Đang học: #1</p>
             <div id="v-question" class="text-7xl font-light text-center mb-10 tracking-tighter">...</div>
-            
             <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-2xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkVocab()">
-            
             <div class="flex gap-2">
                 <button onclick="checkVocab()" class="w-full py-4 bg-white text-black font-bold text-xs uppercase tracking-[0.2em] rounded-sm">Kiểm Tra</button>
                 <button onclick="showVocabHint()" class="w-16 py-4 bg-white/10 hover:bg-white/30 text-white font-bold text-xs transition rounded-sm" title="Gợi ý">💡</button>
             </div>
-            
             <div id="v-feedback" class="text-center h-12 mt-4">
                 <p id="v-msg" class="text-[10px] font-bold uppercase tracking-widest"></p>
                 <p id="v-hint" class="text-[12px] text-yellow-400 mt-1 uppercase hidden"></p>
@@ -602,7 +588,7 @@
 </div>
 
 <script>
-    // --- 1. KHAI BÁO DỮ LIỆU ĐỂ CHỐNG LỖI TẢI TRANG ---
+    // --- 1. KHAI BÁO DỮ LIỆU ---
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" }, { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" }, { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" }, { hz: "先生", py: "xiānsheng", mn: "ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô" },
         { hz: "零", py: "líng", mn: "số 0" }, { hz: "一", py: "yī", mn: "số 1" }, { hz: "二", py: "èr", mn: "số 2" }, { hz: "三", py: "sān", mn: "số 3" }, { hz: "四", py: "sì", mn: "số 4" }, { hz: "五", py: "wǔ", mn: "số 5" }, { hz: "六", py: "liù", mn: "số 6" }, { hz: "七", py: "qī", mn: "số 7" }, { hz: "八", py: "bā", mn: "số 8" }, { hz: "九", py: "jiǔ", mn: "số 9" }, { hz: "十", py: "shí", mn: "số 10" }, { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" }, { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" }, { hz: "号", py: "hào", mn: "ngày" }, { hz: "星期", py: "xīngqī", mn: "tuần" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" }, { hz: "时候", py: "shíhou", mn: "khi lúc" },
@@ -636,7 +622,7 @@
     const vPop = [ {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false}, {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false}, {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false}, {name:"hieuthuhai - ngủ một mình ft. negav",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Không Thể Say l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true}, {name:"Exit Sign - HIEUTHUHAI ft. marzuz",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true}, {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true} ];
     const cPop = [ {name:"Mang Chủng",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"}, {name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"}, {name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"}, {name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"} ];
 
-    // --- 2. HỆ THỐNG GIAO DIỆN & AUDIO CHUNG ---
+    // --- 2. HỆ THỐNG GIAO DIỆN & AUDIO ---
     function playSound(type) {
         let audio;
         if(type === 'click') audio = document.getElementById('sfx-click');
@@ -682,7 +668,7 @@
         loadNextVideo();
     }
 
-    // --- 3. CÀI ĐẶT GAME HUD (SETTINGS & STAMINA) ---
+    // --- 3. CÀI ĐẶT GAME HUD ---
     let stamina = parseInt(localStorage.getItem('skyStamina')) || 0;
     let lastUpdate = parseInt(localStorage.getItem('skyStaminaTime')) || Date.now();
 
@@ -751,7 +737,7 @@
         localStorage.setItem('playerColor', selectedColorClass);
         
         const nameClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
-        const resClass = `font-tutien text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
+        const resClass = `font-tutien text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
         
         document.getElementById('player-name-hud').innerText = savedName;
         document.getElementById('player-name-hud').className = nameClass;
@@ -761,7 +747,7 @@
         closeSettings();
     }
 
-    // --- 4. HỆ THỐNG TIẾN ĐỘ HỌC TẬP (CHECKLISTS) ---
+    // --- 4. HỆ THỐNG TIẾN ĐỘ ---
     let listenProgress = 0; const listenMax = 50;
     let namesProgress = 0; const namesMax = 10;
     let voiceProgress = 0; const voiceMax = 20;
@@ -776,7 +762,6 @@
         let s = parseInt(document.getElementById('v-start-input').value) || 1;
         let e = parseInt(document.getElementById('v-end-input').value) || vocabData.length;
         if(s < 1) s = 1; if(e > vocabData.length) e = vocabData.length; if(s > e) s = e;
-        
         document.getElementById('v-start-input').value = s;
         document.getElementById('v-end-input').value = e;
         vStartBound = s; 
@@ -996,7 +981,7 @@
             const isResize = (e.clientX > rect.right - 20) && (e.clientY > rect.bottom - 20);
             if (isResize || e.button !== 0) return; 
             
-            e.preventDefault(); // Chống bôi đen, chống kéo ảnh mặc định của trình duyệt
+            e.preventDefault(); 
             
             currentDragElement = el;
             el.style.cursor = 'grabbing';
@@ -1027,7 +1012,7 @@
         if (currentDragElement) {
             currentDragElement.style.cursor = 'grab';
             if (currentDragElement.id === 'drag-bg') currentDragElement.style.zIndex = 1;
-            else currentDragElement.style.zIndex = 50; // drag-vip
+            else currentDragElement.style.zIndex = 50; 
             
             currentDragElement = null;
         }
@@ -1041,13 +1026,14 @@
         
         // Khôi phục Setting Text Size & Color
         const nameClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
-        const resClass = `font-tutien text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
+        const resClass = `font-tutien text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
+        const nuocClass = `font-tutien text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
         
         document.getElementById('player-name-hud').innerText = savedName;
         document.getElementById('player-name-hud').className = nameClass;
         document.getElementById('val-bac').className = resClass;
         document.getElementById('val-vang').className = resClass;
-        document.getElementById('val-nuoc-display').className = resClass;
+        document.getElementById('val-nuoc-display').className = nuocClass;
 
         // Khởi động các Module
         applyVocabRange();
