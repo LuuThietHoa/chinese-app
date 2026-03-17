@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.41 Final Coords & VIP</title>
+    <title>Skyreign Hub | V40.42 Full Unlock HUD</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -58,7 +58,7 @@
         .switch-toggle input:checked + div { background-color: #4f46e5; }
         .switch-toggle input:checked + div > div { transform: translateX(100%); }
 
-        /* CÔNG CỤ KÉO THẢ */
+        /* CÔNG CỤ KÉO THẢ (ĐÃ MỞ KHÓA CHO GAME HUD) */
         .drag-tool {
             position: absolute;
             resize: both;
@@ -97,7 +97,7 @@
             <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Tên Nhân Vật</p>
             <input type="text" id="setting-name-input" class="w-full bg-black/30 border border-white/20 p-2 text-white outline-none rounded mb-4 focus:border-indigo-500 transition" oninput="updateNamePreview()">
             
-            <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Màu Chữ & Tài Nguyên</p>
+            <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Màu Chữ & Tài Nguyên (Khí Chất)</p>
             <div class="flex gap-3 mb-6 justify-center" id="color-picker">
                 <div class="w-6 h-6 rounded-full cursor-pointer bg-white border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-white', this)"></div>
                 <div class="w-6 h-6 rounded-full cursor-pointer bg-amber-100 border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-amber-100', this)"></div>
@@ -120,7 +120,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.41 HUD FIXED & VIP ADDED</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.42 ALL HUD UNLOCKED</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -170,48 +170,48 @@
             <video src="bg.mp4" autoplay loop muted playsinline class="w-full h-full object-cover pointer-events-none select-none" draggable="false"></video>
         </div>
 
-        <div id="fixed-uiG" class="absolute pointer-events-none" style="top: 8px; left: 93px; width: 372px; height: 188px; z-index: 10;">
-            <img src="uiG.png" class="w-full h-full object-contain" alt="UI G">
+        <div id="drag-uiG" class="drag-tool pointer-events-auto" style="top: 8px; left: 93px; width: 372px; height: 188px; z-index: 10;">
+            <img src="uiG.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="UI G">
         </div>
 
-        <div id="fixed-name" class="absolute flex items-center justify-center pointer-events-none" style="top: 132px; left: 174px; width: 198px; height: 77px; z-index: 20;">
-            <span id="player-name-hud" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none select-none">NicksolEr</span>
+        <div id="drag-name" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 132px; left: 174px; width: 198px; height: 77px; z-index: 20;">
+            <span id="player-name-hud" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none select-none" draggable="false">NicksolEr</span>
         </div>
         
-        <div id="fixed-bac" class="absolute flex items-center justify-center pointer-events-none" style="top: 23px; left: 1222px; width: 118px; height: 30px; z-index: 30;">
-            <span id="val-bac" class="font-tutien text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none select-none">0</span>
+        <div id="drag-bac" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 23px; left: 1222px; width: 118px; height: 30px; z-index: 30;">
+            <span id="val-bac" class="font-tutien text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none select-none" draggable="false">0</span>
         </div>
 
-        <div id="fixed-vang" class="absolute flex items-center justify-center pointer-events-none" style="top: 73px; left: 1233px; width: 104px; height: 56px; z-index: 30;">
-            <span id="val-vang" class="font-tutien text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none select-none">0</span>
+        <div id="drag-vang" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 73px; left: 1233px; width: 104px; height: 56px; z-index: 30;">
+            <span id="val-vang" class="font-tutien text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none select-none" draggable="false">0</span>
         </div>
 
-        <div id="fixed-nuoc" class="absolute flex items-center justify-center pointer-events-none" style="top: 141px; left: 1264px; width: 140px; height: 35px; z-index: 30;">
-            <span id="val-nuoc-display" class="font-tutien text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none select-none"><span id="val-nuoc">0</span>/156</span>
+        <div id="drag-nuoc" class="drag-tool pointer-events-auto flex items-center justify-center" style="top: 141px; left: 1264px; width: 140px; height: 35px; z-index: 30;">
+            <span id="val-nuoc-display" class="font-tutien text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100 pointer-events-none select-none" draggable="false"><span id="val-nuoc">0</span>/156</span>
         </div>
 
-        <div id="fixed-setting" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 460px; left: 1194px; width: 230px; height: 246px; z-index: 50;" onclick="openSettings()">
-            <img src="setting.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Setting">
+        <div id="drag-setting" class="drag-tool pointer-events-auto" style="top: 460px; left: 1194px; width: 230px; height: 246px; z-index: 50;">
+            <img src="setting.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Setting">
         </div>
 
-        <div id="fixed-nhanvat" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 441px; left: 845px; width: 240px; height: 268px; z-index: 40;">
-            <img src="nhanvat.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Nhan Vat">
+        <div id="drag-nhanvat" class="drag-tool pointer-events-auto" style="top: 441px; left: 845px; width: 240px; height: 268px; z-index: 40;">
+            <img src="nhanvat.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Nhan Vat">
         </div>
 
-        <div id="fixed-hoavien" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 482px; left: 673px; width: 184px; height: 160px; z-index: 40;">
-            <img src="hoavien.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Hoa Vien">
+        <div id="drag-hoavien" class="drag-tool pointer-events-auto" style="top: 482px; left: 673px; width: 184px; height: 160px; z-index: 40;">
+            <img src="hoavien.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Hoa Vien">
         </div>
 
-        <div id="fixed-cuahang" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 469px; left: 563px; width: 203px; height: 222px; z-index: 40;">
-            <img src="cuahang.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Cua Hang">
+        <div id="drag-cuahang" class="drag-tool pointer-events-auto" style="top: 469px; left: 563px; width: 203px; height: 222px; z-index: 40;">
+            <img src="cuahang.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Cua Hang">
         </div>
 
-        <div id="fixed-tuido" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 525px; left: 489px; width: 145px; height: 110px; z-index: 40;">
-            <img src="tuido.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Tui Do">
+        <div id="drag-tuido" class="drag-tool pointer-events-auto" style="top: 525px; left: 489px; width: 145px; height: 110px; z-index: 40;">
+            <img src="tuido.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Tui Do">
         </div>
 
-        <div id="fixed-suutam" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 486px; left: 779px; width: 176px; height: 182px; z-index: 40;">
-            <img src="suutam.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Suu Tam">
+        <div id="drag-suutam" class="drag-tool pointer-events-auto" style="top: 486px; left: 779px; width: 176px; height: 182px; z-index: 40;">
+            <img src="suutam.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Suu Tam">
         </div>
 
         <div id="drag-vip" class="drag-tool pointer-events-auto" style="top: 300px; left: 500px; width: 100px; height: 100px; z-index: 50;">
@@ -219,12 +219,12 @@
         </div>
 
     </div>
-
+    
     <div class="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 pointer-events-none z-[100]">
         <div class="glass-card p-6 text-center border border-indigo-500/30 pointer-events-auto shadow-2xl">
-            <h2 class="text-xl font-bold tracking-[0.2em] uppercase text-white mb-2 drop-shadow-md">Tùy Chỉnh Nền & VIP</h2>
-            <p class="text-[10px] text-gray-300 mb-4">Kéo thả mục Background, VIP. Chuột phải lấy tọa độ.</p>
-            <button onclick="openSettings()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px] px-6 py-2 rounded uppercase tracking-widest transition">⚙️ MỞ CÀI ĐẶT</button>
+            <h2 class="text-xl font-bold tracking-[0.2em] uppercase text-white mb-2 drop-shadow-md">Chỉnh Sửa Tọa Độ</h2>
+            <p class="text-[10px] text-gray-300 mb-4">Kéo thả toàn bộ UI. Chuột phải lấy tọa độ.</p>
+            <button onclick="openSettings()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-[10px] px-6 py-2 rounded uppercase tracking-widest transition">⚙️ MỞ BẢNG CÀI ĐẶT</button>
         </div>
     </div>
 </div>
@@ -307,7 +307,6 @@
 <div id="vocab" class="tab-content">
     <div class="min-h-screen flex flex-col items-center pt-32 px-4">
         <div class="glass-card p-10 w-full max-w-lg relative text-center">
-            
             <div class="flex justify-center items-center gap-2 mb-6">
                 <span class="text-[10px] text-gray-400 uppercase tracking-widest">Từ</span>
                 <input type="number" id="v-start-input" value="1" class="w-12 bg-transparent border-b border-white/20 text-center outline-none text-sm text-white font-bold pb-1">
@@ -322,14 +321,11 @@
             </div>
             <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">Khoảng: 1-237 | Đang học: #1</p>
             <div id="v-question" class="text-7xl font-light text-center mb-10 tracking-tighter">...</div>
-            
             <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-2xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkVocab()">
-            
             <div class="flex gap-2">
                 <button onclick="checkVocab()" class="w-full py-4 bg-white text-black font-bold text-xs uppercase tracking-[0.2em] rounded-sm">Kiểm Tra</button>
                 <button onclick="showVocabHint()" class="w-16 py-4 bg-white/10 hover:bg-white/30 text-white font-bold text-xs transition rounded-sm" title="Gợi ý">💡</button>
             </div>
-            
             <div id="v-feedback" class="text-center h-12 mt-4">
                 <p id="v-msg" class="text-[10px] font-bold uppercase tracking-widest"></p>
                 <p id="v-hint" class="text-[12px] text-yellow-400 mt-1 uppercase hidden"></p>
@@ -752,12 +748,13 @@
         
         const nameClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
         const resClass = `font-tutien text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
+        const nuocClass = `font-tutien text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
         
         document.getElementById('player-name-hud').innerText = savedName;
         document.getElementById('player-name-hud').className = nameClass;
         document.getElementById('val-bac').className = resClass;
         document.getElementById('val-vang').className = resClass;
-        document.getElementById('val-nuoc-display').className = resClass;
+        document.getElementById('val-nuoc-display').className = nuocClass;
         closeSettings();
     }
 
@@ -985,7 +982,7 @@
     function playMedia(src, type, name, idx, listType, thumb) { playSound('click'); currentList = listType; currentIndex = idx; document.getElementById('now-playing').innerText = name; const yt = document.getElementById('player'); const mp4 = document.getElementById('mp4-player'); if(player && player.stopVideo) player.stopVideo(); mp4.pause(); if(type === 'mp4') { yt.classList.add('hidden'); mp4.classList.remove('hidden'); mp4.src = src; mp4.play(); } else { mp4.classList.add('hidden'); yt.classList.remove('hidden'); player.loadVideoById(src); } }
     function checkAutoPlay() { if(document.getElementById(`toggle-${currentList}`).checked) { const listData = currentList === 'vpop' ? displayedVPop : cPop; const nextIdx = (currentIndex + 1) % listData.length; const nextSong = listData[nextIdx]; playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb); } }
 
-    // --- 14. DRAG LOGIC CHO BACKGROUND VÀ VIP ---
+    // --- 14. DRAG LOGIC CHO TẤT CẢ GAME HUD ---
     let currentDragElement = null;
     let offsetX = 0, offsetY = 0;
 
@@ -996,7 +993,7 @@
             const isResize = (e.clientX > rect.right - 20) && (e.clientY > rect.bottom - 20);
             if (isResize || e.button !== 0) return; 
             
-            e.preventDefault(); // Chống bôi đen, chống kéo ảnh mặc định của trình duyệt
+            e.preventDefault(); // Chống bôi đen, chống kéo ảnh mặc định
             
             currentDragElement = el;
             el.style.cursor = 'grabbing';
@@ -1027,7 +1024,11 @@
         if (currentDragElement) {
             currentDragElement.style.cursor = 'grab';
             if (currentDragElement.id === 'drag-bg') currentDragElement.style.zIndex = 1;
-            else currentDragElement.style.zIndex = 50; // drag-vip
+            else if (currentDragElement.id === 'drag-uiG') currentDragElement.style.zIndex = 10;
+            else if (currentDragElement.id === 'drag-name') currentDragElement.style.zIndex = 20;
+            else if (currentDragElement.id === 'drag-bac' || currentDragElement.id === 'drag-vang' || currentDragElement.id === 'drag-nuoc') currentDragElement.style.zIndex = 30;
+            else if (currentDragElement.id === 'drag-setting' || currentDragElement.id === 'drag-vip') currentDragElement.style.zIndex = 50;
+            else currentDragElement.style.zIndex = 40; // Các icon còn lại
             
             currentDragElement = null;
         }
@@ -1041,7 +1042,7 @@
         
         // Khôi phục Setting Text Size & Color
         const nameClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
-        const resClass = `font-tutien text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
+        const resClass = `font-tutien text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`; // Bạc, Vàng, Nước đã giảm size text-lg
         
         document.getElementById('player-name-hud').innerText = savedName;
         document.getElementById('player-name-hud').className = nameClass;
