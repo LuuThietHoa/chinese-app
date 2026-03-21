@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.45 Inventory Opened</title>
+    <title>Skyreign Hub | V40.46 Logic & UI Perfection</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -58,6 +58,7 @@
         .switch-toggle input:checked + div { background-color: #4f46e5; }
         .switch-toggle input:checked + div > div { transform: translateX(100%); }
 
+        /* KÉO THẢ DÀNH CHO BACKGROUND & VIP */
         .drag-tool {
             position: absolute;
             resize: both;
@@ -126,7 +127,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.45 INVENTORY OPENED</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.46 PERFECT LOGIC</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -223,7 +224,6 @@
         <div id="drag-vip" class="drag-tool pointer-events-auto" style="top: 262px; left: 184px; width: 138px; height: 125px; z-index: 50;">
             <img src="VIP.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="VIP">
         </div>
-
     </div>
 </div>
 
@@ -305,7 +305,6 @@
 <div id="vocab" class="tab-content">
     <div class="min-h-screen flex flex-col items-center pt-32 px-4">
         <div class="glass-card p-10 w-full max-w-lg relative text-center">
-            
             <div class="flex justify-center items-center gap-2 mb-6">
                 <span class="text-[10px] text-gray-400 uppercase tracking-widest">Từ</span>
                 <input type="number" id="v-start-input" value="1" class="w-12 bg-transparent border-b border-white/20 text-center outline-none text-sm text-white font-bold pb-1">
@@ -320,14 +319,12 @@
             </div>
             <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">Khoảng: 1-237 | Đang học: #1</p>
             <div id="v-question" class="text-7xl font-light text-center mb-10 tracking-tighter">...</div>
-            
             <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-2xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkVocab()">
             
             <div class="flex gap-2">
                 <button onclick="checkVocab()" class="w-full py-4 bg-white text-black font-bold text-xs uppercase tracking-[0.2em] rounded-sm">Kiểm Tra</button>
                 <button onclick="showVocabHint()" class="w-16 py-4 bg-white/10 hover:bg-white/30 text-white font-bold text-xs transition rounded-sm" title="Gợi ý">💡</button>
             </div>
-            
             <div id="v-feedback" class="text-center h-12 mt-4">
                 <p id="v-msg" class="text-[10px] font-bold uppercase tracking-widest"></p>
                 <p id="v-hint" class="text-[12px] text-yellow-400 mt-1 uppercase hidden"></p>
@@ -600,7 +597,7 @@
 </div>
 
 <script>
-    // --- 1. KHAI BÁO DỮ LIỆU ĐỂ CHỐNG LỖI TẢI TRANG ---
+    // --- 1. KHAI BÁO DỮ LIỆU ---
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" }, { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" }, { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" }, { hz: "先生", py: "xiānsheng", mn: "ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô" },
         { hz: "零", py: "líng", mn: "số 0" }, { hz: "一", py: "yī", mn: "số 1" }, { hz: "二", py: "èr", mn: "số 2" }, { hz: "三", py: "sān", mn: "số 3" }, { hz: "四", py: "sì", mn: "số 4" }, { hz: "五", py: "wǔ", mn: "số 5" }, { hz: "六", py: "liù", mn: "số 6" }, { hz: "七", py: "qī", mn: "số 7" }, { hz: "八", py: "bā", mn: "số 8" }, { hz: "九", py: "jiǔ", mn: "số 9" }, { hz: "十", py: "shí", mn: "số 10" }, { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" }, { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" }, { hz: "号", py: "hào", mn: "ngày" }, { hz: "星期", py: "xīngqī", mn: "tuần" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" }, { hz: "时候", py: "shíhou", mn: "khi lúc" },
@@ -634,7 +631,7 @@
     const vPop = [ {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false}, {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false}, {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false}, {name:"hieuthuhai - ngủ một mình ft. negav",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Không Thể Say l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true}, {name:"Exit Sign - HIEUTHUHAI ft. marzuz",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true}, {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true} ];
     const cPop = [ {name:"Mang Chủng",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"}, {name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"}, {name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"}, {name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"} ];
 
-    // --- 2. HỆ THỐNG GIAO DIỆN & AUDIO CHUNG ---
+    // --- 2. HỆ THỐNG GIAO DIỆN & AUDIO ---
     function playSound(type) {
         let audio;
         if(type === 'click') audio = document.getElementById('sfx-click');
@@ -770,13 +767,13 @@
         document.getElementById('tuido-modal').classList.add('hidden');
     }
 
-    // --- 5. HỆ THỐNG TIẾN ĐỘ HỌC TẬP (CHECKLISTS) ---
+    // --- 5. HỆ THỐNG TIẾN ĐỘ ---
     let listenProgress = 0; const listenMax = 50;
     let namesProgress = 0; const namesMax = 10;
     let voiceProgress = 0; const voiceMax = 20;
     let readingProgress = 0; const readingMax = 10;
 
-    // --- 6. HỌC TỪ VỰNG CHỌN KHOẢNG TỪ ---
+    // --- 6. HỌC TỪ VỰNG ---
     let vIdx = -1; let vMode = 0; let isVocabRandom = false;
     let vStartBound = 1; let vEndBound = vocabData.length;
 
@@ -832,7 +829,7 @@
         } else { playSound('wrong'); document.getElementById('v-msg').innerText = "SAI RỒI"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; } 
     }
 
-    // --- 7. HỌC TÊN THÔNG MINH ---
+    // --- 7. HỌC TÊN ---
     let nmIdx = 0; let nmMode = 0;
     function changeNamesMode() { playSound('click'); nmMode = (nmMode + 1) % 2; document.getElementById('nm-mode-btn').innerText = ["Việt ➔ Hán", "Hán ➔ Việt"][nmMode]; nextNames(true); }
     function nextNames(rand) { 
@@ -897,21 +894,95 @@
     let currentListenHz = ""; let currentListenVi = "";
     function generateListenSentence() {
         playSound('click');
-        const subj_vi = {"我":"Tôi", "你":"Bạn", "他":"Anh ấy", "她":"Cô ấy", "我们":"Chúng tôi", "爸爸":"Bố", "妈妈":"Mẹ", "老师":"Giáo viên", "学生":"Học sinh", "哥哥":"Anh trai", "弟弟":"Em trai", "朋友":"Bạn bè", "先生":"Ông", "小姐":"Cô"}; const time_vi = {"现在":"Bây giờ", "今天":"Hôm nay", "明天":"Ngày mai", "昨天":"Hôm qua", "上午":"Buổi sáng", "中午":"Buổi trưa", "下午":"Buổi chiều", "白天":"Ban ngày"}; const vm_vi = {"去":"đi", "来":"đến", "回":"về", "出":"ra", "到":"đến"}; const va_vi = {"吃":"ăn", "喝":"uống", "买":"mua", "看":"xem", "做":"làm", "听":"nghe", "说":"nói", "读":"đọc", "写":"viết", "打":"đánh/gọi"}; const vf_vi = {"喜欢":"thích", "想":"muốn", "爱":"yêu", "觉得":"cảm thấy", "会":"biết", "能":"có thể"}; const pl_vi = {"学校":"trường học", "家":"nhà", "饭店":"nhà hàng", "商店":"cửa hàng", "北京":"Bắc Kinh", "中国":"Trung Quốc", "车站":"trạm xe", "机场":"sân bay", "国外":"nước ngoài", "大学":"đại học", "房间":"căn phòng", "教室":"lớp học"}; const nf_vi = {"水":"nước", "饭":"cơm", "菜":"đồ ăn", "茶":"trà", "苹果":"táo", "鸡蛋":"trứng gà", "包子":"bánh bao", "咖啡":"cà phê"}; const no_vi = {"书":"sách", "电脑":"máy tính", "电视":"tivi", "衣服":"quần áo", "钱":"tiền", "杯子":"cái cốc", "桌子":"cái bàn", "椅子":"cái ghế", "地图":"bản đồ", "车票":"vé xe"}; const adj_vi = {"好":"tốt/khỏe", "多":"nhiều", "少":"ít", "大":"to", "小":"nhỏ", "冷":"lạnh", "热":"nóng", "高兴":"vui vẻ", "漂亮":"xinh đẹp", "忙":"bận", "累":"mệt", "贵":"đắt", "旧":"cũ", "干净":"sạch sẽ"};
-        const subjects = Object.keys(subj_vi); const times = Object.keys(time_vi); const verbs_move = Object.keys(vm_vi); const verbs_action = Object.keys(va_vi); const verbs_feel = Object.keys(vf_vi); const places = Object.keys(pl_vi); const nouns_food = Object.keys(nf_vi); const nouns_obj = Object.keys(no_vi); const adjectives = Object.keys(adj_vi);
-        const S = subjects[Math.floor(Math.random() * subjects.length)]; const S2 = subjects[Math.floor(Math.random() * subjects.length)]; const T = times[Math.floor(Math.random() * times.length)]; const V_m = verbs_move[Math.floor(Math.random() * verbs_move.length)]; const V_a = verbs_action[Math.floor(Math.random() * verbs_action.length)]; const P = places[Math.floor(Math.random() * places.length)]; const N_f = nouns_food[Math.floor(Math.random() * nouns_food.length)]; const N_o = nouns_obj[Math.floor(Math.random() * nouns_obj.length)]; const Adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+        const subj_vi = {"我":"Tôi", "你":"Bạn", "他":"Anh ấy", "她":"Cô ấy", "我们":"Chúng tôi", "爸爸":"Bố", "妈妈":"Mẹ", "老师":"Giáo viên", "学生":"Học sinh", "哥哥":"Anh trai", "弟弟":"Em trai", "朋友":"Bạn bè", "先生":"Ông", "小姐":"Cô"}; 
+        const time_vi = {"现在":"Bây giờ", "今天":"Hôm nay", "明天":"Ngày mai", "昨天":"Hôm qua", "上午":"Buổi sáng", "中午":"Buổi trưa", "下午":"Buổi chiều", "白天":"Ban ngày"}; 
+        const vm_vi = {"去":"đi", "来":"đến", "回":"về", "出":"ra", "到":"đến"}; 
+        const vf_vi = {"喜欢":"thích", "想":"muốn", "爱":"yêu", "觉得":"cảm thấy", "会":"biết", "能":"có thể"}; 
+        const pl_vi = {"学校":"trường học", "家":"nhà", "饭店":"nhà hàng", "商店":"cửa hàng", "北京":"Bắc Kinh", "中国":"Trung Quốc", "车站":"trạm xe", "机场":"sân bay", "国外":"nước ngoài", "大学":"đại học", "房间":"căn phòng", "教室":"lớp học"}; 
+        const adj_vi = {"好":"tốt/khỏe", "多":"nhiều", "少":"ít", "大":"to", "小":"nhỏ", "冷":"lạnh", "热":"nóng", "高兴":"vui vẻ", "漂亮":"xinh đẹp", "忙":"bận", "累":"mệt", "贵":"đắt", "旧":"cũ", "干净":"sạch sẽ"};
+        
+        // Dictionary phân nhóm Logic để tránh sinh câu vô lý
+        const eat_dict = {"吃":"ăn", "买":"mua", "做":"làm"};
+        const food_dict = {"饭":"cơm", "菜":"món ăn", "苹果":"táo", "鸡蛋":"trứng gà", "包子":"bánh bao"};
+        const drink_dict = {"喝":"uống", "买":"mua"};
+        const water_dict = {"水":"nước", "茶":"trà", "咖啡":"cà phê"};
+        const see_dict = {"看":"xem", "买":"mua"};
+        const obj_dict = {"书":"sách", "电脑":"máy tính", "电视":"tivi", "衣服":"quần áo"};
+        const possess_dict = {"书":"sách", "电脑":"máy tính", "电视":"tivi", "衣服":"quần áo", "杯子":"cái cốc", "桌子":"cái bàn", "椅子":"cái ghế", "地图":"bản đồ", "车票":"vé xe"};
+
+        function getVN() {
+            let r = Math.random();
+            if(r < 0.33) {
+                let v = Object.keys(eat_dict)[Math.floor(Math.random()*3)];
+                let n = Object.keys(food_dict)[Math.floor(Math.random()*5)];
+                return {v:v, n:n, vi_v:eat_dict[v], vi_n:food_dict[n]};
+            } else if(r < 0.66) {
+                let v = Object.keys(drink_dict)[Math.floor(Math.random()*2)];
+                let n = Object.keys(water_dict)[Math.floor(Math.random()*3)];
+                return {v:v, n:n, vi_v:drink_dict[v], vi_n:water_dict[n]};
+            } else {
+                let v = Object.keys(see_dict)[Math.floor(Math.random()*2)];
+                let n = Object.keys(obj_dict)[Math.floor(Math.random()*4)];
+                return {v:v, n:n, vi_v:see_dict[v], vi_n:obj_dict[n]};
+            }
+        }
+
+        const subjects = Object.keys(subj_vi); 
+        const times = Object.keys(time_vi); 
+        const verbs_move = Object.keys(vm_vi); 
+        const places = Object.keys(pl_vi); 
+        const adjectives = Object.keys(adj_vi);
+
+        const S = subjects[Math.floor(Math.random() * subjects.length)]; 
+        const S2 = subjects[Math.floor(Math.random() * subjects.length)]; 
+        const T = times[Math.floor(Math.random() * times.length)]; 
+        const V_m = verbs_move[Math.floor(Math.random() * verbs_move.length)]; 
+        const P = places[Math.floor(Math.random() * places.length)]; 
+        const Adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+        
         let sentence = ""; let vi_sentence = ""; const type = Math.floor(Math.random() * 10); 
+        
         switch(type) {
             case 0: sentence = `${S}${T}${V_m}${P}`; vi_sentence = `${subj_vi[S]} ${time_vi[T].toLowerCase()} ${vm_vi[V_m]} ${pl_vi[P]}.`; break; 
-            case 1: const V_a_1 = ["吃", "喝", "买"][Math.floor(Math.random() * 3)]; const V_f_1 = ["喜欢", "想"][Math.floor(Math.random() * 2)]; sentence = `${S}${V_f_1}${V_a_1}${N_f}`; vi_sentence = `${subj_vi[S]} ${vf_vi[V_f_1]} ${va_vi[V_a_1]} ${nf_vi[N_f]}.`; break; 
+            case 1: 
+                let vn1 = getVN();
+                let vf1 = ["喜欢", "想"][Math.floor(Math.random() * 2)]; 
+                sentence = `${S}${vf1}${vn1.v}${vn1.n}`; 
+                vi_sentence = `${subj_vi[S]} ${vf_vi[vf1]} ${vn1.vi_v} ${vn1.vi_n}.`; 
+                break; 
             case 2: sentence = `${T}${S}很${Adj}`; vi_sentence = `${time_vi[T]} ${subj_vi[S].toLowerCase()} rất ${adj_vi[Adj].toLowerCase()}.`; break; 
             case 3: sentence = `${S}和${S2}${V_m}${P}`; vi_sentence = `${subj_vi[S]} và ${subj_vi[S2].toLowerCase()} ${vm_vi[V_m]} ${pl_vi[P]}.`; break; 
-            case 4: sentence = `${S}在${P}${V_a}${N_o}`; vi_sentence = `${subj_vi[S]} ở ${pl_vi[P]} ${va_vi[V_a]} ${no_vi[N_o]}.`; break; 
-            case 5: sentence = `${S}${V_a}${N_o}吗？`; vi_sentence = `${subj_vi[S]} ${va_vi[V_a]} ${no_vi[N_o]} không?`; break; 
-            case 6: sentence = `${S}不${V_a}${N_f}`; vi_sentence = `${subj_vi[S]} không ${va_vi[V_a]} ${nf_vi[N_f]}.`; break; 
-            case 7: sentence = `${P}有${N_o}`; vi_sentence = `Ở ${pl_vi[P]} có ${no_vi[N_o]}.`; break; 
-            case 8: sentence = `${S}${T}要${V_a}${N_o}`; vi_sentence = `${time_vi[T]} ${subj_vi[S].toLowerCase()} muốn ${va_vi[V_a]} ${no_vi[N_o]}.`; break; 
-            case 9: sentence = `${S}觉得${N_f}很${Adj}`; vi_sentence = `${subj_vi[S]} cảm thấy ${nf_vi[N_f]} rất ${adj_vi[Adj].toLowerCase()}.`; break; 
+            case 4: 
+                let vn4 = getVN();
+                sentence = `${S}在${P}${vn4.v}${vn4.n}`; 
+                vi_sentence = `${subj_vi[S]} ở ${pl_vi[P]} ${vn4.vi_v} ${vn4.vi_n}.`; 
+                break; 
+            case 5: 
+                let vn5 = getVN();
+                sentence = `${S}${vn5.v}${vn5.n}吗？`; 
+                vi_sentence = `${subj_vi[S]} ${vn5.vi_v} ${vn5.vi_n} không?`; 
+                break; 
+            case 6: 
+                let vn6 = getVN();
+                sentence = `${S}不${vn6.v}${vn6.n}`; 
+                vi_sentence = `${subj_vi[S]} không ${vn6.vi_v} ${vn6.vi_n}.`; 
+                break; 
+            case 7: 
+                let no7 = Object.keys(possess_dict)[Math.floor(Math.random()*9)];
+                sentence = `${P}有${no7}`; 
+                vi_sentence = `Ở ${pl_vi[P]} có ${possess_dict[no7]}.`; 
+                break; 
+            case 8: 
+                let vn8 = getVN();
+                sentence = `${S}${T}要${vn8.v}${vn8.n}`; 
+                vi_sentence = `${time_vi[T]} ${subj_vi[S].toLowerCase()} muốn ${vn8.vi_v} ${vn8.vi_n}.`; 
+                break; 
+            case 9: 
+                let nf9 = ["饭","菜","苹果","鸡蛋","包子","水","茶","咖啡"][Math.floor(Math.random() * 8)];
+                let nf9_vi = {"饭":"cơm","菜":"đồ ăn","苹果":"táo","鸡蛋":"trứng gà","包子":"bánh bao","水":"nước","茶":"trà","咖啡":"cà phê"}[nf9];
+                sentence = `${S}觉得${nf9}很${Adj}`; 
+                vi_sentence = `${subj_vi[S]} cảm thấy ${nf9_vi} rất ${adj_vi[Adj].toLowerCase()}.`; 
+                break; 
         }
         currentListenHz = sentence; currentListenVi = vi_sentence;
         document.getElementById('listen-input').value = ""; document.getElementById('listen-msg').innerHTML = "Đã tạo câu mới! Bấm nút 🎧 để nghe."; document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-indigo-300"; document.getElementById('listen-hint').classList.add('hidden');
@@ -994,12 +1065,61 @@
     function playMedia(src, type, name, idx, listType, thumb) { playSound('click'); currentList = listType; currentIndex = idx; document.getElementById('now-playing').innerText = name; const yt = document.getElementById('player'); const mp4 = document.getElementById('mp4-player'); if(player && player.stopVideo) player.stopVideo(); mp4.pause(); if(type === 'mp4') { yt.classList.add('hidden'); mp4.classList.remove('hidden'); mp4.src = src; mp4.play(); } else { mp4.classList.add('hidden'); yt.classList.remove('hidden'); player.loadVideoById(src); } }
     function checkAutoPlay() { if(document.getElementById(`toggle-${currentList}`).checked) { const listData = currentList === 'vpop' ? displayedVPop : cPop; const nextIdx = (currentIndex + 1) % listData.length; const nextSong = listData[nextIdx]; playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb); } }
 
-    // --- INIT APP ---
+    // --- 15. KÉO THẢ BACKGROUND VÀ VIP ---
+    let currentDragElement = null;
+    let offsetX = 0, offsetY = 0;
+
+    const draggables = document.querySelectorAll('.drag-tool');
+    draggables.forEach(el => {
+        el.addEventListener('mousedown', (e) => {
+            const rect = el.getBoundingClientRect();
+            const isResize = (e.clientX > rect.right - 20) && (e.clientY > rect.bottom - 20);
+            if (isResize || e.button !== 0) return; 
+            
+            e.preventDefault(); 
+            
+            currentDragElement = el;
+            el.style.cursor = 'grabbing';
+            el.style.zIndex = 100; 
+            
+            offsetX = e.clientX - rect.left;
+            offsetY = e.clientY - rect.top;
+        });
+
+        el.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            alert(`${el.id.replace('drag-','').toUpperCase()}:\nTOP: ${el.style.top || '0px'}\nLEFT: ${el.style.left || '0px'}\nWIDTH: ${el.offsetWidth}px\nHEIGHT: ${el.offsetHeight}px\n\n👉 Copy 4 dòng này đem qua đưa tui nhé!`);
+        });
+    });
+
+    document.addEventListener('mousemove', (e) => {
+        if (!currentDragElement) return;
+        e.preventDefault(); 
+        const containerRect = document.getElementById('hud-stats-container').getBoundingClientRect();
+        let newX = e.clientX - containerRect.left - offsetX;
+        let newY = e.clientY - containerRect.top - offsetY;
+        
+        currentDragElement.style.left = newX + 'px';
+        currentDragElement.style.top = newY + 'px';
+    });
+
+    document.addEventListener('mouseup', () => {
+        if (currentDragElement) {
+            currentDragElement.style.cursor = 'grab';
+            if (currentDragElement.id === 'drag-bg') currentDragElement.style.zIndex = 1;
+            else currentDragElement.style.zIndex = 50; 
+            
+            currentDragElement = null;
+        }
+    });
+
+    // --- INIT APP KHI TẤT CẢ HÀM ĐÃ ĐƯỢC TẠO ---
     window.onload = () => { 
         renderMusic(); 
         renderLibrary(); 
         renderGrammarList(); 
         
+        // Khôi phục Setting Text Size & Color
         const nameClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
         const resClass = `font-tutien text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
         const nuocClass = `font-tutien text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
@@ -1010,12 +1130,14 @@
         document.getElementById('val-vang').className = resClass;
         document.getElementById('val-nuoc-display').className = nuocClass;
 
+        // Khởi động các Module
         applyVocabRange();
         nextNames(true); 
         nextParagraph(); 
         loadWorkSchedule(); 
         generateListenSentence();
 
+        // Gắn checklist ban đầu
         document.getElementById('listen-progress').innerText = `Tiến độ: ${listenProgress}/${listenMax}`;
         document.getElementById('names-progress').innerText = `Tiến độ: ${namesProgress}/${namesMax}`;
         document.getElementById('voice-progress').innerText = `Tiến độ: ${voiceProgress}/${voiceMax}`;
