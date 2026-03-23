@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.49 Ultimate Layout</title>
+    <title>Skyreign Hub | V40.50 Auto-Copy Coordinates</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -58,12 +58,21 @@
         .switch-toggle input:checked + div { background-color: #4f46e5; }
         .switch-toggle input:checked + div > div { transform: translateX(100%); }
 
-        /* CÔNG CỤ KÉO THẢ DÀNH CHO ICON THƯ VIỆN */
+        /* CÔNG CỤ KÉO THẢ */
         .drag-tool {
             position: absolute; resize: both; overflow: hidden; cursor: grab;
             background: rgba(255, 255, 255, 0.05); border: 2px dashed rgba(104, 211, 145, 0.8); z-index: 50;
         }
         .drag-tool:active { cursor: grabbing; border-color: #fff; background: rgba(255, 255, 255, 0.1); }
+        
+        /* CÔNG CỤ KÉO THẢ 25 SLOTS */
+        .slot-tool {
+            position: absolute; resize: both; overflow: hidden; cursor: grab;
+            background: rgba(239, 68, 68, 0.3); border: 2px dashed rgba(239, 68, 68, 0.8); z-index: 50;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: bold; font-size: 16px; text-shadow: 1px 1px 2px black; pointer-events: auto;
+        }
+        .slot-tool:active { cursor: grabbing; border-color: #fff; background: rgba(239, 68, 68, 0.6); }
     </style>
 </head>
 <body>
@@ -92,7 +101,7 @@
             <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Tên Nhân Vật</p>
             <input type="text" id="setting-name-input" class="w-full bg-black/30 border border-white/20 p-2 text-white outline-none rounded mb-4 focus:border-indigo-500 transition" oninput="updateNamePreview()">
             
-            <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Màu Chữ & Tài Nguyên (Khí Chất)</p>
+            <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Màu Chữ & Tài Nguyên</p>
             <div class="flex gap-3 mb-6 justify-center" id="color-picker">
                 <div class="w-6 h-6 rounded-full cursor-pointer bg-white border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-white', this)"></div>
                 <div class="w-6 h-6 rounded-full cursor-pointer bg-amber-100 border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-amber-100', this)"></div>
@@ -112,41 +121,43 @@
     </div>
 </div>
 
-<div id="tuido-modal" class="fixed inset-0 z-[2000] hidden flex items-center justify-center bg-black/80 backdrop-blur-sm transition-opacity duration-300">
-    <div class="relative w-full max-w-4xl max-h-[90vh] flex items-center justify-center p-4">
-        <button onclick="closeTuido()" class="absolute top-4 right-4 md:right-10 text-white/50 hover:text-red-500 text-6xl drop-shadow-md z-50 transition transform hover:scale-110">&times;</button>
-        <img src="open1.png" class="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] fade-in" alt="Túi Đồ Open">
+<div id="tuido-modal" class="fixed inset-0 z-[2000] hidden bg-black/80 backdrop-blur-sm transition-opacity duration-300">
+    <button onclick="downloadSlotsConfig()" class="absolute top-4 left-4 bg-green-500 hover:bg-green-400 text-white font-bold py-3 px-6 rounded z-[2001] transition shadow-[0_0_15px_rgba(74,222,128,0.5)]">📥 TẢI THÔNG SỐ 25 Ô</button>
+    <button onclick="closeTuido()" class="absolute top-4 right-4 md:right-10 text-white/50 hover:text-red-500 text-6xl drop-shadow-md z-[2001] transition transform hover:scale-110">&times;</button>
+    
+    <div id="inventory-container" class="absolute inset-0 w-full h-full pointer-events-none flex items-center justify-center p-4">
+        <img src="open1.png" class="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] fade-in pointer-events-none select-none" alt="Túi Đồ Open">
         
         <div id="inventory-slots-area" class="fixed inset-0 pointer-events-none">
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 176px; left: 331px; width: 50px; height: 50px;">1</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 173px; left: 424px; width: 50px; height: 50px;">2</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 175px; left: 522px; width: 50px; height: 50px;">3</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 175px; left: 619px; width: 50px; height: 50px;">4</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 175px; left: 715px; width: 50px; height: 50px;">5</div>
+            <div id="slot-1" class="slot-tool" style="top: 176px; left: 331px; width: 50px; height: 50px;">1</div>
+            <div id="slot-2" class="slot-tool" style="top: 173px; left: 424px; width: 50px; height: 50px;">2</div>
+            <div id="slot-3" class="slot-tool" style="top: 175px; left: 522px; width: 50px; height: 50px;">3</div>
+            <div id="slot-4" class="slot-tool" style="top: 175px; left: 619px; width: 50px; height: 50px;">4</div>
+            <div id="slot-5" class="slot-tool" style="top: 175px; left: 715px; width: 50px; height: 50px;">5</div>
             
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 276px; left: 331px; width: 50px; height: 50px;">6</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 277px; left: 427px; width: 50px; height: 50px;">7</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 274px; left: 524px; width: 50px; height: 50px;">8</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 274px; left: 621px; width: 50px; height: 50px;">9</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 272px; left: 716px; width: 50px; height: 50px;">10</div>
+            <div id="slot-6" class="slot-tool" style="top: 276px; left: 331px; width: 50px; height: 50px;">6</div>
+            <div id="slot-7" class="slot-tool" style="top: 277px; left: 427px; width: 50px; height: 50px;">7</div>
+            <div id="slot-8" class="slot-tool" style="top: 274px; left: 524px; width: 50px; height: 50px;">8</div>
+            <div id="slot-9" class="slot-tool" style="top: 274px; left: 621px; width: 50px; height: 50px;">9</div>
+            <div id="slot-10" class="slot-tool" style="top: 272px; left: 716px; width: 50px; height: 50px;">10</div>
             
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 374px; left: 331px; width: 50px; height: 50px;">11</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 373px; left: 425px; width: 50px; height: 50px;">12</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 373px; left: 522px; width: 50px; height: 50px;">13</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 372px; left: 619px; width: 50px; height: 50px;">14</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 374px; left: 717px; width: 50px; height: 50px;">15</div>
+            <div id="slot-11" class="slot-tool" style="top: 374px; left: 331px; width: 50px; height: 50px;">11</div>
+            <div id="slot-12" class="slot-tool" style="top: 373px; left: 425px; width: 50px; height: 50px;">12</div>
+            <div id="slot-13" class="slot-tool" style="top: 373px; left: 522px; width: 50px; height: 50px;">13</div>
+            <div id="slot-14" class="slot-tool" style="top: 372px; left: 619px; width: 50px; height: 50px;">14</div>
+            <div id="slot-15" class="slot-tool" style="top: 374px; left: 717px; width: 50px; height: 50px;">15</div>
             
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 474px; left: 332px; width: 50px; height: 50px;">16</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 475px; left: 429px; width: 50px; height: 50px;">17</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 475px; left: 525px; width: 50px; height: 50px;">18</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 475px; left: 621px; width: 50px; height: 50px;">19</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 474px; left: 714px; width: 50px; height: 50px;">20</div>
+            <div id="slot-16" class="slot-tool" style="top: 474px; left: 332px; width: 50px; height: 50px;">16</div>
+            <div id="slot-17" class="slot-tool" style="top: 475px; left: 429px; width: 50px; height: 50px;">17</div>
+            <div id="slot-18" class="slot-tool" style="top: 475px; left: 525px; width: 50px; height: 50px;">18</div>
+            <div id="slot-19" class="slot-tool" style="top: 475px; left: 621px; width: 50px; height: 50px;">19</div>
+            <div id="slot-20" class="slot-tool" style="top: 474px; left: 714px; width: 50px; height: 50px;">20</div>
             
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 572px; left: 332px; width: 50px; height: 50px;">21</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 570px; left: 428px; width: 50px; height: 50px;">22</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 572px; left: 522px; width: 50px; height: 50px;">23</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 571px; left: 622px; width: 50px; height: 50px;">24</div>
-            <div class="absolute border border-white/30 flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 572px; left: 716px; width: 50px; height: 50px;">25</div>
+            <div id="slot-21" class="slot-tool" style="top: 572px; left: 332px; width: 50px; height: 50px;">21</div>
+            <div id="slot-22" class="slot-tool" style="top: 570px; left: 428px; width: 50px; height: 50px;">22</div>
+            <div id="slot-23" class="slot-tool" style="top: 572px; left: 522px; width: 50px; height: 50px;">23</div>
+            <div id="slot-24" class="slot-tool" style="top: 571px; left: 622px; width: 50px; height: 50px;">24</div>
+            <div id="slot-25" class="slot-tool" style="top: 572px; left: 716px; width: 50px; height: 50px;">25</div>
         </div>
     </div>
 </div>
@@ -161,7 +172,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.49 CLEAN ENGINE</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.50 AUTO-COPY ENGINE</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -207,7 +218,7 @@
 <div id="game" class="tab-content relative w-full h-full min-h-screen bg-[#0a0a0a]">
     <div id="hud-stats-container" class="fixed inset-0 pointer-events-none z-0">
         
-        <div id="fixed-bg" class="absolute pointer-events-none" style="top: 36px; left: 213px; width: 1124px; height: 628px; z-index: 1;">
+        <div id="drag-bg" class="drag-tool pointer-events-auto" style="top: 36px; left: 213px; width: 1124px; height: 628px; z-index: 1;">
             <video src="bg.mp4" autoplay loop muted playsinline class="w-full h-full object-cover pointer-events-none select-none" draggable="false"></video>
         </div>
 
@@ -259,8 +270,12 @@
             <img src="VIP.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="VIP">
         </div>
 
-        <div id="drag-thuvien" class="drag-tool pointer-events-auto" style="top: 30px; left: 1014px; width: 100px; height: 100px; z-index: 50;">
+        <div id="fixed-thuvien" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 30px; left: 1014px; width: 100px; height: 100px; z-index: 40;" onclick="openThuvienHoa()">
             <img src="icon_thuvien.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Thư Viện">
+        </div>
+
+        <div id="drag-ruong" class="drag-tool pointer-events-auto" style="top: 300px; left: 500px; width: 100px; height: 100px; z-index: 50;">
+            <img src="ruongkhoidau.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Ruong Khởi Đầu">
         </div>
     </div>
 </div>
@@ -343,7 +358,6 @@
 <div id="vocab" class="tab-content">
     <div class="min-h-screen flex flex-col items-center pt-32 px-4">
         <div class="glass-card p-10 w-full max-w-lg relative text-center">
-            
             <div class="flex justify-center items-center gap-2 mb-6">
                 <span class="text-[10px] text-gray-400 uppercase tracking-widest">Từ</span>
                 <input type="number" id="v-start-input" value="1" class="w-12 bg-transparent border-b border-white/20 text-center outline-none text-sm text-white font-bold pb-1">
@@ -351,21 +365,17 @@
                 <input type="number" id="v-end-input" value="237" class="w-12 bg-transparent border-b border-white/20 text-center outline-none text-sm text-white font-bold pb-1">
                 <button onclick="applyVocabRange()" class="text-[9px] border border-indigo-500 text-indigo-300 px-3 py-1 uppercase rounded hover:bg-indigo-500 hover:text-white transition">SET</button>
             </div>
-            
             <div class="flex justify-between w-full mb-4">
                 <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Mode: Hán ➔ Việt</button>
                 <button onclick="toggleVocabRandom()" id="v-random-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Học: THỨ TỰ</button>
             </div>
             <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">Khoảng: 1-237 | Đang học: #1</p>
             <div id="v-question" class="text-7xl font-light text-center mb-10 tracking-tighter">...</div>
-            
             <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-2xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkVocab()">
-            
             <div class="flex gap-2">
                 <button onclick="checkVocab()" class="w-full py-4 bg-white text-black font-bold text-xs uppercase tracking-[0.2em] rounded-sm">Kiểm Tra</button>
                 <button onclick="showVocabHint()" class="w-16 py-4 bg-white/10 hover:bg-white/30 text-white font-bold text-xs transition rounded-sm" title="Gợi ý">💡</button>
             </div>
-            
             <div id="v-feedback" class="text-center h-12 mt-4">
                 <p id="v-msg" class="text-[10px] font-bold uppercase tracking-widest"></p>
                 <p id="v-hint" class="text-[12px] text-yellow-400 mt-1 uppercase hidden"></p>
@@ -638,7 +648,7 @@
 </div>
 
 <script>
-    // --- 1. DATA KHAI BÁO 1 LẦN DUY NHẤT ĐỂ CHỐNG LỖI ---
+    // --- 1. KHAI BÁO DỮ LIỆU ĐỂ CHỐNG LỖI TẢI TRANG ---
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" }, { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" }, { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" }, { hz: "先生", py: "xiānsheng", mn: "ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô" },
         { hz: "零", py: "líng", mn: "số 0" }, { hz: "一", py: "yī", mn: "số 1" }, { hz: "二", py: "èr", mn: "số 2" }, { hz: "三", py: "sān", mn: "số 3" }, { hz: "四", py: "sì", mn: "số 4" }, { hz: "五", py: "wǔ", mn: "số 5" }, { hz: "六", py: "liù", mn: "số 6" }, { hz: "七", py: "qī", mn: "số 7" }, { hz: "八", py: "bā", mn: "số 8" }, { hz: "九", py: "jiǔ", mn: "số 9" }, { hz: "十", py: "shí", mn: "số 10" }, { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" }, { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" }, { hz: "号", py: "hào", mn: "ngày" }, { hz: "星期", py: "xīngqī", mn: "tuần" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" }, { hz: "时候", py: "shíhou", mn: "khi lúc" },
@@ -672,7 +682,7 @@
     const vPop = [ {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false}, {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false}, {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false}, {name:"hieuthuhai - ngủ một mình ft. negav",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Không Thể Say l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true}, {name:"Exit Sign - HIEUTHUHAI ft. marzuz",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true}, {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true} ];
     const cPop = [ {name:"Mang Chủng",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"}, {name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"}, {name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"}, {name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"} ];
 
-    // --- 2. HỆ THỐNG GIAO DIỆN & AUDIO ---
+    // --- 2. GIAO DIỆN & AUDIO ---
     function playSound(type) {
         let audio;
         if(type === 'click') audio = document.getElementById('sfx-click');
@@ -798,140 +808,51 @@
         closeSettings();
     }
 
-    // --- 4. HỆ THỐNG MODAL (TÚI ĐỒ VÀ THƯ VIỆN HOA) ---
-    function openTuido() {
-        playSound('click');
-        document.getElementById('tuido-modal').classList.remove('hidden');
-    }
-    function closeTuido() {
-        playSound('click');
-        document.getElementById('tuido-modal').classList.add('hidden');
-    }
+    // --- 4. TÚI ĐỒ VÀ THƯ VIỆN MODAL ---
+    function openTuido() { playSound('click'); document.getElementById('tuido-modal').classList.remove('hidden'); }
+    function closeTuido() { playSound('click'); document.getElementById('tuido-modal').classList.add('hidden'); }
 
-    function openThuvienHoa() {
-        playSound('click');
-        document.getElementById('thuvien-modal').classList.remove('hidden');
-    }
-    function closeThuvienHoa() {
-        playSound('click');
-        document.getElementById('thuvien-modal').classList.add('hidden');
-    }
+    function openThuvienHoa() { playSound('click'); document.getElementById('thuvien-modal').classList.remove('hidden'); }
+    function closeThuvienHoa() { playSound('click'); document.getElementById('thuvien-modal').classList.add('hidden'); }
 
     function downloadSlotsConfig() {
         playSound('click');
         let data = "=== TỌA ĐỘ 25 Ô TRONG TÚI ĐỒ ===\n\n";
         for(let i=1; i<=25; i++) {
             let el = document.getElementById('slot-'+i);
-            if(el) {
-                data += `SLOT ${i}:\nTOP: ${el.style.top || '0px'}\nLEFT: ${el.style.left || '0px'}\nWIDTH: ${el.offsetWidth}px\nHEIGHT: ${el.offsetHeight}px\n\n`;
-            }
+            if(el) { data += `SLOT ${i}:\nTOP: ${el.style.top || '0px'}\nLEFT: ${el.style.left || '0px'}\nWIDTH: ${el.offsetWidth}px\nHEIGHT: ${el.offsetHeight}px\n\n`; }
         }
         const blob = new Blob([data], {type: "text/plain;charset=utf-8"});
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = "ToaDo_25_Slots.txt";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        const a = document.createElement('a'); a.href = url; a.download = "ToaDo_25_Slots.txt";
+        document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
         alert("Đã tải xong file ToaDo_25_Slots.txt! Mở ra copy thông số gửi lại tui nhé!");
     }
 
-    // --- 5. HỆ THỐNG TIẾN ĐỘ ---
-    let listenProgress = 0; const listenMax = 50;
-    let namesProgress = 0; const namesMax = 10;
-    let voiceProgress = 0; const voiceMax = 20;
-    let readingProgress = 0; const readingMax = 10;
+    // --- 5. TIẾN ĐỘ ---
+    let listenProgress = 0; const listenMax = 50; let namesProgress = 0; const namesMax = 10;
+    let voiceProgress = 0; const voiceMax = 20; let readingProgress = 0; const readingMax = 10;
 
     // --- 6. HỌC TỪ VỰNG ---
-    let vIdx = -1; let vMode = 0; let isVocabRandom = false;
-    let vStartBound = 1; let vEndBound = vocabData.length;
-
-    function applyVocabRange() {
-        playSound('click');
-        let s = parseInt(document.getElementById('v-start-input').value) || 1;
-        let e = parseInt(document.getElementById('v-end-input').value) || vocabData.length;
-        if(s < 1) s = 1; if(e > vocabData.length) e = vocabData.length; if(s > e) s = e;
-        document.getElementById('v-start-input').value = s;
-        document.getElementById('v-end-input').value = e;
-        vStartBound = s; vEndBound = e; vIdx = vStartBound - 1; 
-        renderVocabCard();
-    }
-
+    let vIdx = -1; let vMode = 0; let isVocabRandom = false; let vStartBound = 1; let vEndBound = vocabData.length;
+    function applyVocabRange() { playSound('click'); let s = parseInt(document.getElementById('v-start-input').value) || 1; let e = parseInt(document.getElementById('v-end-input').value) || vocabData.length; if(s < 1) s = 1; if(e > vocabData.length) e = vocabData.length; if(s > e) s = e; document.getElementById('v-start-input').value = s; document.getElementById('v-end-input').value = e; vStartBound = s; vEndBound = e; vIdx = vStartBound - 1; renderVocabCard(); }
     function changeVocabMode() { playSound('click'); vMode = (vMode+1)%3; document.getElementById('v-mode-btn').innerText = ["Hán ➔ Việt", "Việt ➔ Hán", "Hán ➔ Pinyin"][vMode]; renderVocabCard(); }
     function toggleVocabRandom() { playSound('click'); isVocabRandom = !isVocabRandom; document.getElementById('v-random-btn').innerText = isVocabRandom ? "Học: NGẪU NHIÊN" : "Học: THỨ TỰ"; document.getElementById('v-random-btn').className = isVocabRandom ? "text-[9px] border border-indigo-500 text-indigo-300 px-3 py-1 uppercase tracking-widest hover:bg-indigo-500 hover:text-white transition rounded" : "text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded"; }
-    
-    function nextVocab(moveNext = false) { 
-        if(moveNext) { 
-            if(isVocabRandom) { vIdx = Math.floor(Math.random() * (vEndBound - vStartBound + 1)) + (vStartBound - 1); } 
-            else { vIdx++; if (vIdx > vEndBound - 1) vIdx = vStartBound - 1; } 
-        } else {
-            if (vIdx < vStartBound - 1 || vIdx > vEndBound - 1) vIdx = vStartBound - 1;
-        }
-        renderVocabCard();
-    }
-
-    function renderVocabCard() {
-        const i = vocabData[vIdx]; 
-        const totalNumber = vEndBound - vStartBound + 1;
-        const currentNumber = vIdx - vStartBound + 2;
-        document.getElementById('v-progress').innerText = `Khoảng: ${vStartBound}-${vEndBound} | STT: ${currentNumber-1}/${totalNumber} (Từ gốc: #${vIdx+1})`; 
-        document.getElementById('v-question').innerText = vMode===0 ? i.hz : (vMode===1 ? i.mn.toUpperCase() : i.hz); 
-        document.getElementById('v-input').value = ""; document.getElementById('v-msg').innerText = ""; document.getElementById('v-hint').classList.add('hidden');
-    }
-    
+    function nextVocab(moveNext = false) { if(moveNext) { if(isVocabRandom) { vIdx = Math.floor(Math.random() * (vEndBound - vStartBound + 1)) + (vStartBound - 1); } else { vIdx++; if (vIdx > vEndBound - 1) vIdx = vStartBound - 1; } } else { if (vIdx < vStartBound - 1 || vIdx > vEndBound - 1) vIdx = vStartBound - 1; } renderVocabCard(); }
+    function renderVocabCard() { const i = vocabData[vIdx]; const totalNumber = vEndBound - vStartBound + 1; const currentNumber = vIdx - vStartBound + 2; document.getElementById('v-progress').innerText = `Khoảng: ${vStartBound}-${vEndBound} | STT: ${currentNumber-1}/${totalNumber} (Từ gốc: #${vIdx+1})`; document.getElementById('v-question').innerText = vMode===0 ? i.hz : (vMode===1 ? i.mn.toUpperCase() : i.hz); document.getElementById('v-input').value = ""; document.getElementById('v-msg').innerText = ""; document.getElementById('v-hint').classList.add('hidden'); }
     function showVocabHint() { playSound('click'); const i = vocabData[vIdx]; let ans = vMode===0 ? i.mn : (vMode===1 ? i.hz : i.py); document.getElementById('v-hint').innerText = "Gợi ý: " + ans; document.getElementById('v-hint').classList.remove('hidden'); }
-    function checkVocab() { 
-        const i = vocabData[vIdx]; const v = document.getElementById('v-input').value.toLowerCase().trim(); let ok = (vMode===0 && v===i.mn.toLowerCase()) || (vMode===1 && v===i.hz) || (vMode===2 && v===i.py.toLowerCase()); 
-        if(ok) { playSound('correct'); updateCoins(1); document.getElementById('v-msg').innerText = "CHÍNH XÁC!"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400"; setTimeout(()=>nextVocab(true),1000); } 
-        else { playSound('wrong'); document.getElementById('v-msg').innerText = "SAI RỒI"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; } 
-    }
+    function checkVocab() { const i = vocabData[vIdx]; const v = document.getElementById('v-input').value.toLowerCase().trim(); let ok = (vMode===0 && v===i.mn.toLowerCase()) || (vMode===1 && v===i.hz) || (vMode===2 && v===i.py.toLowerCase()); if(ok) { playSound('correct'); updateCoins(1); document.getElementById('v-msg').innerText = "CHÍNH XÁC!"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400"; setTimeout(()=>nextVocab(true),1000); } else { playSound('wrong'); document.getElementById('v-msg').innerText = "SAI RỒI"; document.getElementById('v-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; } }
 
     // --- 7. HỌC TÊN ---
     let nmIdx = 0; let nmMode = 0;
     function changeNamesMode() { playSound('click'); nmMode = (nmMode + 1) % 2; document.getElementById('nm-mode-btn').innerText = ["Việt ➔ Hán", "Hán ➔ Việt"][nmMode]; nextNames(true); }
-    function nextNames(rand) { 
-        if(rand) nmIdx = Math.floor(Math.random() * namesData.length); const n = namesData[nmIdx]; 
-        document.getElementById('nm-question').innerText = nmMode===0 ? n.vi : n.hz; 
-        document.getElementById('nm-input').value = ""; document.getElementById('nm-msg').innerHTML = ""; document.getElementById('nm-hint').classList.add('hidden'); 
-    }
-    function showNamesHint() { 
-        playSound('click'); const n = namesData[nmIdx]; let ans = nmMode===0 ? n.hz : n.vi; 
-        document.getElementById('nm-hint').innerHTML = `Gợi ý: ${ans} <br><span class="text-[10px] text-gray-400 normal-case font-mono">(Pinyin: ${n.py})</span>`; 
-        document.getElementById('nm-hint').classList.remove('hidden'); 
-    }
-    function checkNames() { 
-        const n = namesData[nmIdx]; const v = document.getElementById('nm-input').value.toLowerCase().trim(); 
-        let ok = false; if(nmMode === 0 && v === n.hz) ok = true; if(nmMode === 1 && v === n.vi.toLowerCase()) ok = true;
-        let pinyinInfo = `<br><span class="text-gray-400 font-mono text-[10px] normal-case">Pinyin: ${n.py}</span>`;
-        if(ok) { 
-            playSound('correct'); updateCoins(1); 
-            if(namesProgress < namesMax) namesProgress++; document.getElementById('names-progress').innerText = `Tiến độ: ${namesProgress}/${namesMax}`;
-            document.getElementById('nm-msg').innerHTML = "CHÍNH XÁC!" + pinyinInfo; document.getElementById('nm-msg').className = "text-xs font-bold uppercase tracking-widest text-green-400 mt-2 block"; 
-            setTimeout(()=>nextNames(true), 2000); 
-        } else { 
-            playSound('wrong'); 
-            document.getElementById('nm-msg').innerHTML = "SAI RỒI!" + pinyinInfo; document.getElementById('nm-msg').className = "text-xs font-bold uppercase tracking-widest text-red-400 mt-2 block"; 
-        } 
-    }
+    function nextNames(rand) { if(rand) nmIdx = Math.floor(Math.random() * namesData.length); const n = namesData[nmIdx]; document.getElementById('nm-question').innerText = nmMode===0 ? n.vi : n.hz; document.getElementById('nm-input').value = ""; document.getElementById('nm-msg').innerHTML = ""; document.getElementById('nm-hint').classList.add('hidden'); }
+    function showNamesHint() { playSound('click'); const n = namesData[nmIdx]; let ans = nmMode===0 ? n.hz : n.vi; document.getElementById('nm-hint').innerHTML = `Gợi ý: ${ans} <br><span class="text-[10px] text-gray-400 normal-case font-mono">(Pinyin: ${n.py})</span>`; document.getElementById('nm-hint').classList.remove('hidden'); }
+    function checkNames() { const n = namesData[nmIdx]; const v = document.getElementById('nm-input').value.toLowerCase().trim(); let ok = false; if(nmMode === 0 && v === n.hz) ok = true; if(nmMode === 1 && v === n.vi.toLowerCase()) ok = true; let pinyinInfo = `<br><span class="text-gray-400 font-mono text-[10px] normal-case">Pinyin: ${n.py}</span>`; if(ok) { playSound('correct'); updateCoins(1); if(namesProgress < namesMax) namesProgress++; document.getElementById('names-progress').innerText = `Tiến độ: ${namesProgress}/${namesMax}`; document.getElementById('nm-msg').innerHTML = "CHÍNH XÁC!" + pinyinInfo; document.getElementById('nm-msg').className = "text-xs font-bold uppercase tracking-widest text-green-400 mt-2 block"; setTimeout(()=>nextNames(true), 2000); } else { playSound('wrong'); document.getElementById('nm-msg').innerHTML = "SAI RỒI!" + pinyinInfo; document.getElementById('nm-msg').className = "text-xs font-bold uppercase tracking-widest text-red-400 mt-2 block"; } }
 
-    // --- 8. LUYỆN NÓI AI ---
+    // --- 8. LUYỆN NÓI ---
     let voiceIdx = 0; const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; let recognition;
-    if (SpeechRecognition) {
-        recognition = new SpeechRecognition(); recognition.lang = 'zh-CN'; recognition.interimResults = false;
-        recognition.onstart = function() { document.getElementById('voice-pulse').classList.remove('opacity-0'); document.getElementById('voice-pulse').classList.add('animate-ping'); document.getElementById('voice-feedback').innerHTML = "<span class='text-gray-400'>Đang lắng nghe... (Hãy nói đi)</span>"; };
-        recognition.onend = function() { document.getElementById('voice-pulse').classList.add('opacity-0'); document.getElementById('voice-pulse').classList.remove('animate-ping'); };
-        recognition.onresult = function(event) {
-            const spoken = event.results[0][0].transcript.trim(); const target = vocabData[voiceIdx].hz; const cleanSpoken = spoken.replace(/[.,?!。，？！]/g, "");
-            if(cleanSpoken === target || cleanSpoken.includes(target) || target.includes(cleanSpoken)) { 
-                playSound('correct'); updateCoins(1); 
-                if(voiceProgress < voiceMax) voiceProgress++; document.getElementById('voice-progress').innerText = `Tiến độ: ${voiceProgress}/${voiceMax}`;
-                document.getElementById('voice-feedback').innerHTML = `<span class='text-green-400 font-bold'>Giỏi quá! AI nghe được: "${cleanSpoken}"</span>`; setTimeout(() => nextVoiceWord(), 2000); 
-            } else { playSound('wrong'); document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Sai rồi. Bạn đọc là: "${cleanSpoken}"<br>Cần đọc là: "${target}"</span>`; }
-        };
-        recognition.onerror = function(event) { document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Lỗi mic: ${event.error}</span>`; document.getElementById('voice-pulse').classList.add('opacity-0'); document.getElementById('voice-pulse').classList.remove('animate-ping'); };
-    }
+    if (SpeechRecognition) { recognition = new SpeechRecognition(); recognition.lang = 'zh-CN'; recognition.interimResults = false; recognition.onstart = function() { document.getElementById('voice-pulse').classList.remove('opacity-0'); document.getElementById('voice-pulse').classList.add('animate-ping'); document.getElementById('voice-feedback').innerHTML = "<span class='text-gray-400'>Đang lắng nghe... (Hãy nói đi)</span>"; }; recognition.onend = function() { document.getElementById('voice-pulse').classList.add('opacity-0'); document.getElementById('voice-pulse').classList.remove('animate-ping'); }; recognition.onresult = function(event) { const spoken = event.results[0][0].transcript.trim(); const target = vocabData[voiceIdx].hz; const cleanSpoken = spoken.replace(/[.,?!。，？！]/g, ""); if(cleanSpoken === target || cleanSpoken.includes(target) || target.includes(cleanSpoken)) { playSound('correct'); updateCoins(1); if(voiceProgress < voiceMax) voiceProgress++; document.getElementById('voice-progress').innerText = `Tiến độ: ${voiceProgress}/${voiceMax}`; document.getElementById('voice-feedback').innerHTML = `<span class='text-green-400 font-bold'>Giỏi quá! AI nghe được: "${cleanSpoken}"</span>`; setTimeout(() => nextVoiceWord(), 2000); } else { playSound('wrong'); document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Sai rồi. Bạn đọc là: "${cleanSpoken}"<br>Cần đọc là: "${target}"</span>`; } }; recognition.onerror = function(event) { document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Lỗi mic: ${event.error}</span>`; document.getElementById('voice-pulse').classList.add('opacity-0'); document.getElementById('voice-pulse').classList.remove('animate-ping'); }; }
     function nextVoiceWord() { playSound('click'); voiceIdx = Math.floor(Math.random() * vocabData.length); document.getElementById('voice-target').innerText = vocabData[voiceIdx].hz; document.getElementById('voice-py').innerText = vocabData[voiceIdx].py; document.getElementById('voice-mn').innerText = vocabData[voiceIdx].mn; document.getElementById('voice-feedback').innerHTML = ""; }
     function startListening() { if (!SpeechRecognition) { alert("Trình duyệt của bạn không hỗ trợ Nhận diện giọng nói. Hãy dùng Chrome!"); return; } playSound('click'); recognition.start(); }
 
@@ -945,117 +866,46 @@
         const vf_vi = {"喜欢":"thích", "想":"muốn", "爱":"yêu", "觉得":"cảm thấy", "会":"biết", "能":"có thể"}; 
         const pl_vi = {"学校":"trường học", "家":"nhà", "饭店":"nhà hàng", "商店":"cửa hàng", "北京":"Bắc Kinh", "中国":"Trung Quốc", "车站":"trạm xe", "机场":"sân bay", "国外":"nước ngoài", "大学":"đại học", "房间":"căn phòng", "教室":"lớp học"}; 
         const adj_vi = {"好":"tốt/khỏe", "多":"nhiều", "少":"ít", "大":"to", "小":"nhỏ", "冷":"lạnh", "热":"nóng", "高兴":"vui vẻ", "漂亮":"xinh đẹp", "忙":"bận", "累":"mệt", "贵":"đắt", "旧":"cũ", "干净":"sạch sẽ"};
-        
-        // Dictionary phân nhóm Logic để tránh sinh câu vô lý
-        const eat_dict = {"吃":"ăn", "买":"mua", "做":"làm"};
-        const food_dict = {"饭":"cơm", "菜":"món ăn", "苹果":"táo", "鸡蛋":"trứng gà", "包子":"bánh bao"};
-        const drink_dict = {"喝":"uống", "买":"mua"};
-        const water_dict = {"水":"nước", "茶":"trà", "咖啡":"cà phê"};
-        const see_dict = {"看":"xem", "买":"mua"};
-        const obj_dict = {"书":"sách", "电脑":"máy tính", "电视":"tivi", "衣服":"quần áo"};
+        const eat_dict = {"吃":"ăn", "买":"mua", "做":"làm"}; const food_dict = {"饭":"cơm", "菜":"món ăn", "苹果":"táo", "鸡蛋":"trứng gà", "包子":"bánh bao"};
+        const drink_dict = {"喝":"uống", "买":"mua"}; const water_dict = {"水":"nước", "茶":"trà", "咖啡":"cà phê"};
+        const see_dict = {"看":"xem", "买":"mua"}; const obj_dict = {"书":"sách", "电脑":"máy tính", "电视":"tivi", "衣服":"quần áo"};
         const possess_dict = {"书":"sách", "电脑":"máy tính", "电视":"tivi", "衣服":"quần áo", "杯子":"cái cốc", "桌子":"cái bàn", "椅子":"cái ghế", "地图":"bản đồ", "车票":"vé xe"};
 
         function getVN() {
             let r = Math.random();
-            if(r < 0.33) {
-                let v = Object.keys(eat_dict)[Math.floor(Math.random()*3)];
-                let n = Object.keys(food_dict)[Math.floor(Math.random()*5)];
-                return {v:v, n:n, vi_v:eat_dict[v], vi_n:food_dict[n]};
-            } else if(r < 0.66) {
-                let v = Object.keys(drink_dict)[Math.floor(Math.random()*2)];
-                let n = Object.keys(water_dict)[Math.floor(Math.random()*3)];
-                return {v:v, n:n, vi_v:drink_dict[v], vi_n:water_dict[n]};
-            } else {
-                let v = Object.keys(see_dict)[Math.floor(Math.random()*2)];
-                let n = Object.keys(obj_dict)[Math.floor(Math.random()*4)];
-                return {v:v, n:n, vi_v:see_dict[v], vi_n:obj_dict[n]};
-            }
+            if(r < 0.33) { let v = Object.keys(eat_dict)[Math.floor(Math.random()*3)]; let n = Object.keys(food_dict)[Math.floor(Math.random()*5)]; return {v:v, n:n, vi_v:eat_dict[v], vi_n:food_dict[n]}; } 
+            else if(r < 0.66) { let v = Object.keys(drink_dict)[Math.floor(Math.random()*2)]; let n = Object.keys(water_dict)[Math.floor(Math.random()*3)]; return {v:v, n:n, vi_v:drink_dict[v], vi_n:water_dict[n]}; } 
+            else { let v = Object.keys(see_dict)[Math.floor(Math.random()*2)]; let n = Object.keys(obj_dict)[Math.floor(Math.random()*4)]; return {v:v, n:n, vi_v:see_dict[v], vi_n:obj_dict[n]}; }
         }
 
-        const subjects = Object.keys(subj_vi); 
-        const times = Object.keys(time_vi); 
-        const verbs_move = Object.keys(vm_vi); 
-        const places = Object.keys(pl_vi); 
-        const adjectives = Object.keys(adj_vi);
-
-        const S = subjects[Math.floor(Math.random() * subjects.length)]; 
-        const S2 = subjects[Math.floor(Math.random() * subjects.length)]; 
-        const T = times[Math.floor(Math.random() * times.length)]; 
-        const V_m = verbs_move[Math.floor(Math.random() * verbs_move.length)]; 
-        const P = places[Math.floor(Math.random() * places.length)]; 
-        const Adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+        const subjects = Object.keys(subj_vi); const times = Object.keys(time_vi); const verbs_move = Object.keys(vm_vi); const places = Object.keys(pl_vi); const adjectives = Object.keys(adj_vi);
+        const S = subjects[Math.floor(Math.random() * subjects.length)]; const S2 = subjects[Math.floor(Math.random() * subjects.length)]; const T = times[Math.floor(Math.random() * times.length)]; const V_m = verbs_move[Math.floor(Math.random() * verbs_move.length)]; const P = places[Math.floor(Math.random() * places.length)]; const Adj = adjectives[Math.floor(Math.random() * adjectives.length)];
         
         let sentence = ""; let vi_sentence = ""; const type = Math.floor(Math.random() * 10); 
         
         switch(type) {
             case 0: sentence = `${S}${T}${V_m}${P}`; vi_sentence = `${subj_vi[S]} ${time_vi[T].toLowerCase()} ${vm_vi[V_m]} ${pl_vi[P]}.`; break; 
-            case 1: 
-                let vn1 = getVN();
-                let vf1 = ["喜欢", "想"][Math.floor(Math.random() * 2)]; 
-                sentence = `${S}${vf1}${vn1.v}${vn1.n}`; 
-                vi_sentence = `${subj_vi[S]} ${vf_vi[vf1]} ${vn1.vi_v} ${vn1.vi_n}.`; 
-                break; 
+            case 1: let vn1 = getVN(); let vf1 = ["喜欢", "想"][Math.floor(Math.random() * 2)]; sentence = `${S}${vf1}${vn1.v}${vn1.n}`; vi_sentence = `${subj_vi[S]} ${vf_vi[vf1]} ${vn1.vi_v} ${vn1.vi_n}.`; break; 
             case 2: sentence = `${T}${S}很${Adj}`; vi_sentence = `${time_vi[T]} ${subj_vi[S].toLowerCase()} rất ${adj_vi[Adj].toLowerCase()}.`; break; 
             case 3: sentence = `${S}和${S2}${V_m}${P}`; vi_sentence = `${subj_vi[S]} và ${subj_vi[S2].toLowerCase()} ${vm_vi[V_m]} ${pl_vi[P]}.`; break; 
-            case 4: 
-                let vn4 = getVN();
-                sentence = `${S}在${P}${vn4.v}${vn4.n}`; 
-                vi_sentence = `${subj_vi[S]} ở ${pl_vi[P]} ${vn4.vi_v} ${vn4.vi_n}.`; 
-                break; 
-            case 5: 
-                let vn5 = getVN();
-                sentence = `${S}${vn5.v}${vn5.n}吗？`; 
-                vi_sentence = `${subj_vi[S]} ${vn5.vi_v} ${vn5.vi_n} không?`; 
-                break; 
-            case 6: 
-                let vn6 = getVN();
-                sentence = `${S}不${vn6.v}${vn6.n}`; 
-                vi_sentence = `${subj_vi[S]} không ${vn6.vi_v} ${vn6.vi_n}.`; 
-                break; 
-            case 7: 
-                let no7 = Object.keys(possess_dict)[Math.floor(Math.random()*9)];
-                sentence = `${P}有${no7}`; 
-                vi_sentence = `Ở ${pl_vi[P]} có ${possess_dict[no7]}.`; 
-                break; 
-            case 8: 
-                let vn8 = getVN();
-                sentence = `${S}${T}要${vn8.v}${vn8.n}`; 
-                vi_sentence = `${time_vi[T]} ${subj_vi[S].toLowerCase()} muốn ${vn8.vi_v} ${vn8.vi_n}.`; 
-                break; 
-            case 9: 
-                let nf9 = ["饭","菜","苹果","鸡蛋","包子","水","茶","咖啡"][Math.floor(Math.random() * 8)];
-                let nf9_vi = {"饭":"cơm","菜":"đồ ăn","苹果":"táo","鸡蛋":"trứng gà","包子":"bánh bao","水":"nước","茶":"trà","咖啡":"cà phê"}[nf9];
-                sentence = `${S}觉得${nf9}很${Adj}`; 
-                vi_sentence = `${subj_vi[S]} cảm thấy ${nf9_vi} rất ${adj_vi[Adj].toLowerCase()}.`; 
-                break; 
+            case 4: let vn4 = getVN(); sentence = `${S}在${P}${vn4.v}${vn4.n}`; vi_sentence = `${subj_vi[S]} ở ${pl_vi[P]} ${vn4.vi_v} ${vn4.vi_n}.`; break; 
+            case 5: let vn5 = getVN(); sentence = `${S}${vn5.v}${vn5.n}吗？`; vi_sentence = `${subj_vi[S]} ${vn5.vi_v} ${vn5.vi_n} không?`; break; 
+            case 6: let vn6 = getVN(); sentence = `${S}不${vn6.v}${vn6.n}`; vi_sentence = `${subj_vi[S]} không ${vn6.vi_v} ${vn6.vi_n}.`; break; 
+            case 7: let no7 = Object.keys(possess_dict)[Math.floor(Math.random()*9)]; sentence = `${P}有${no7}`; vi_sentence = `Ở ${pl_vi[P]} có ${possess_dict[no7]}.`; break; 
+            case 8: let vn8 = getVN(); sentence = `${S}${T}要${vn8.v}${vn8.n}`; vi_sentence = `${time_vi[T]} ${subj_vi[S].toLowerCase()} muốn ${vn8.vi_v} ${vn8.vi_n}.`; break; 
+            case 9: let nf9 = ["饭","菜","苹果","鸡蛋","包子","水","茶","咖啡"][Math.floor(Math.random() * 8)]; let nf9_vi = {"饭":"cơm","菜":"đồ ăn","苹果":"táo","鸡蛋":"trứng gà","包子":"bánh bao","水":"nước","茶":"trà","咖啡":"cà phê"}[nf9]; sentence = `${S}觉得${nf9}很${Adj}`; vi_sentence = `${subj_vi[S]} cảm thấy ${nf9_vi} rất ${adj_vi[Adj].toLowerCase()}.`; break; 
         }
         currentListenHz = sentence; currentListenVi = vi_sentence;
         document.getElementById('listen-input').value = ""; document.getElementById('listen-msg').innerHTML = "Đã tạo câu mới! Bấm nút 🎧 để nghe."; document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-indigo-300"; document.getElementById('listen-hint').classList.add('hidden');
     }
     function playListenAudio() { if ('speechSynthesis' in window) { const utterance = new SpeechSynthesisUtterance(currentListenHz); utterance.lang = 'zh-CN'; utterance.rate = 1.3; window.speechSynthesis.speak(utterance); } else { alert("Trình duyệt không hỗ trợ phát âm thanh."); } }
     function showListenHint() { playSound('click'); document.getElementById('listen-hint').innerHTML = `${currentListenHz}<br><span class="text-white text-xs font-normal opacity-80">${currentListenVi}</span>`; document.getElementById('listen-hint').classList.remove('hidden'); }
-    function checkListen() {
-        const val = document.getElementById('listen-input').value.trim(); const cleanVal = val.replace(/[.,?!。，？！]/g, ""); const cleanTarget = currentListenHz.replace(/[.,?!。，？！]/g, "");
-        if(cleanVal === cleanTarget) { 
-            playSound('correct'); updateCoins(2); 
-            if(listenProgress < listenMax) listenProgress++; document.getElementById('listen-progress').innerText = `Tiến độ: ${listenProgress}/${listenMax}`;
-            document.getElementById('listen-msg').innerHTML = `QUÁ XUẤT SẮC! (+2 COIN)<br><span class="text-white font-normal text-xs normal-case mt-1 block opacity-80">Nghĩa là: ${currentListenVi}</span>`; document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400 leading-relaxed"; document.getElementById('listen-hint').innerHTML = `${currentListenHz}<br><span class="text-white text-xs font-normal opacity-80">${currentListenVi}</span>`; document.getElementById('listen-hint').classList.remove('hidden'); setTimeout(generateListenSentence, 3000); 
-        } else { playSound('wrong'); document.getElementById('listen-msg').innerText = "SAI RỒI! BẤM 🎧 NGHE LẠI HOẶC XEM GỢI Ý."; document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; }
-    }
+    function checkListen() { const val = document.getElementById('listen-input').value.trim(); const cleanVal = val.replace(/[.,?!。，？！]/g, ""); const cleanTarget = currentListenHz.replace(/[.,?!。，？！]/g, ""); if(cleanVal === cleanTarget) { playSound('correct'); updateCoins(2); if(listenProgress < listenMax) listenProgress++; document.getElementById('listen-progress').innerText = `Tiến độ: ${listenProgress}/${listenMax}`; document.getElementById('listen-msg').innerHTML = `QUÁ XUẤT SẮC! (+2 COIN)<br><span class="text-white font-normal text-xs normal-case mt-1 block opacity-80">Nghĩa là: ${currentListenVi}</span>`; document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-green-400 leading-relaxed"; document.getElementById('listen-hint').innerHTML = `${currentListenHz}<br><span class="text-white text-xs font-normal opacity-80">${currentListenVi}</span>`; document.getElementById('listen-hint').classList.remove('hidden'); setTimeout(generateListenSentence, 3000); } else { playSound('wrong'); document.getElementById('listen-msg').innerText = "SAI RỒI! BẤM 🎧 NGHE LẠI HOẶC XEM GỢI Ý."; document.getElementById('listen-msg').className = "text-[10px] font-bold uppercase tracking-widest text-red-400"; } }
 
     // --- 10. ĐỌC HIỂU ---
-    let rIdx = 0; 
-    function nextParagraph() { playSound('click'); rIdx = (rIdx+1)%readingData.length; document.getElementById('r-text').innerText = readingData[rIdx].zh; document.getElementById('r-input').value=""; document.getElementById('r-msg').innerText=""; }
+    let rIdx = 0; function nextParagraph() { playSound('click'); rIdx = (rIdx+1)%readingData.length; document.getElementById('r-text').innerText = readingData[rIdx].zh; document.getElementById('r-input').value=""; document.getElementById('r-msg').innerText=""; }
     function toggleReadingRef() { playSound('click'); const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
-    function checkReading() { 
-        if(document.getElementById('r-input').value.trim().length > 5) { 
-            playSound('correct'); updateCoins(1); 
-            if(readingProgress < readingMax) readingProgress++; document.getElementById('reading-progress').innerText = `Tiến độ: ${readingProgress}/${readingMax}`;
-            document.getElementById('r-msg').innerText = "OK (+1 Xu)"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-green-400"; 
-        } else { 
-            playSound('wrong'); document.getElementById('r-msg').innerText = "DỊCH QUÁ NGẮN!"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-red-400"; 
-        } 
-    }
+    function checkReading() { if(document.getElementById('r-input').value.trim().length > 5) { playSound('correct'); updateCoins(1); if(readingProgress < readingMax) readingProgress++; document.getElementById('reading-progress').innerText = `Tiến độ: ${readingProgress}/${readingMax}`; document.getElementById('r-msg').innerText = "OK (+1 Xu)"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-green-400"; } else { playSound('wrong'); document.getElementById('r-msg').innerText = "DỊCH QUÁ NGẮN!"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-red-400"; } }
 
     // --- 11. THƯ VIỆN & NGỮ PHÁP ---
     function renderLibrary() { document.getElementById('lib-count').innerText = vocabData.length; const html = vocabData.map((v, i) => `<div class="bg-white/5 p-3 rounded border border-white/10 flex flex-col justify-between hover:bg-white/10 transition"> <div class="flex justify-between items-center mb-1"> <span class="text-xs text-gray-500 font-mono">#${i+1}</span> <span class="text-lg font-bold text-white">${v.hz}</span> </div> <div class="text-xs text-indigo-300 font-mono">${v.py}</div> <div class="text-[10px] text-gray-400 uppercase mt-1 tracking-widest">${v.mn}</div> </div>`).join(''); document.getElementById('lib-list').innerHTML = html; }
@@ -1108,10 +958,10 @@
     function playMedia(src, type, name, idx, listType, thumb) { playSound('click'); currentList = listType; currentIndex = idx; document.getElementById('now-playing').innerText = name; const yt = document.getElementById('player'); const mp4 = document.getElementById('mp4-player'); if(player && player.stopVideo) player.stopVideo(); mp4.pause(); if(type === 'mp4') { yt.classList.add('hidden'); mp4.classList.remove('hidden'); mp4.src = src; mp4.play(); } else { mp4.classList.add('hidden'); yt.classList.remove('hidden'); player.loadVideoById(src); } }
     function checkAutoPlay() { if(document.getElementById(`toggle-${currentList}`).checked) { const listData = currentList === 'vpop' ? displayedVPop : cPop; const nextIdx = (currentIndex + 1) % listData.length; const nextSong = listData[nextIdx]; playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb); } }
 
-    // --- 15. HỆ THỐNG KÉO THẢ TỌA ĐỘ BẬC CAO ---
+    // --- 15. HỆ THỐNG KÉO THẢ TỌA ĐỘ VÀ AUTO-COPY ---
     let currentDragElement = null;
     let offsetX = 0, offsetY = 0;
-    let hasMoved = false; // Phân biệt kéo thả và click
+    let hasMoved = false; // Phân biệt kéo thả và click để mở modal thư viện
 
     const draggables = document.querySelectorAll('.drag-tool, .slot-tool');
     draggables.forEach(el => {
@@ -1123,7 +973,7 @@
             e.preventDefault(); 
             
             currentDragElement = el;
-            hasMoved = false; // Reset trạng thái di chuyển
+            hasMoved = false; 
             el.style.cursor = 'grabbing';
             el.style.zIndex = 2000; 
             
@@ -1131,18 +981,23 @@
             offsetY = e.clientY - rect.top;
         });
 
-        if(el.classList.contains('drag-tool')) {
-            el.addEventListener('contextmenu', (e) => {
-                e.preventDefault();
-                alert(`${el.id.replace('drag-','').toUpperCase()}:\nTOP: ${el.style.top || '0px'}\nLEFT: ${el.style.left || '0px'}\nWIDTH: ${el.offsetWidth}px\nHEIGHT: ${el.offsetHeight}px\n\n👉 Copy 4 dòng này đem qua đưa tui nhé!`);
+        // Click chuột phải TỰ ĐỘNG COPY VÀO CLIPBOARD
+        el.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+            const info = `${el.id.replace('drag-','').toUpperCase()}:\nTOP: ${el.style.top || '0px'}\nLEFT: ${el.style.left || '0px'}\nWIDTH: ${el.offsetWidth}px\nHEIGHT: ${el.offsetHeight}px`;
+            
+            navigator.clipboard.writeText(info).then(() => {
+                alert(`ĐÃ TỰ SAO CHÉP VÀO MÁY BẠN:\n\n${info}`);
+            }).catch(err => {
+                alert(`Copy tự động thất bại, vui lòng copy tay:\n\n${info}`);
             });
-        }
+        });
     });
 
     document.addEventListener('mousemove', (e) => {
         if (!currentDragElement) return;
         e.preventDefault(); 
-        hasMoved = true; // Đánh dấu là đang kéo đi
+        hasMoved = true; 
         
         let containerId = currentDragElement.classList.contains('slot-tool') ? 'inventory-container' : 'hud-stats-container';
         const containerElement = document.getElementById(containerId);
@@ -1166,13 +1021,11 @@
         }
     });
 
-    // Bắt sự kiện Click thông minh cho icon Thư Viện
+    // Mở modal Thư viện Hoa nếu chỉ click mà không kéo
     const thuvienIcon = document.getElementById('drag-thuvien');
     if(thuvienIcon) {
         thuvienIcon.addEventListener('click', () => {
-            if(!hasMoved) { // Chỉ mở nếu không kéo đi
-                openThuvienHoa();
-            }
+            if(!hasMoved) { openThuvienHoa(); }
         });
     }
 
@@ -1182,7 +1035,6 @@
         renderLibrary(); 
         renderGrammarList(); 
         
-        // Khôi phục Setting Text Size & Color
         const nameClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
         const resClass = `font-tutien text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
         const nuocClass = `font-tutien text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
@@ -1193,14 +1045,12 @@
         document.getElementById('val-vang').className = resClass;
         document.getElementById('val-nuoc-display').className = nuocClass;
 
-        // Khởi động các Module
         applyVocabRange();
         nextNames(true); 
         nextParagraph(); 
         loadWorkSchedule(); 
         generateListenSentence();
 
-        // Gắn checklist ban đầu
         document.getElementById('listen-progress').innerText = `Tiến độ: ${listenProgress}/${listenMax}`;
         document.getElementById('names-progress').innerText = `Tiến độ: ${namesProgress}/${namesMax}`;
         document.getElementById('voice-progress').innerText = `Tiến độ: ${voiceProgress}/${voiceMax}`;
