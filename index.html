@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.52 Final Auto-Copy Slots</title>
+    <title>Skyreign Hub | V40.53 Absolute Final</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -57,22 +57,6 @@
         .font-tutien { font-family: 'Cinzel', serif; }
         .switch-toggle input:checked + div { background-color: #4f46e5; }
         .switch-toggle input:checked + div > div { transform: translateX(100%); }
-
-        /* CÔNG CỤ KÉO THẢ CHUNG (Rương sẽ dùng cái này) */
-        .drag-tool {
-            position: absolute; resize: both; overflow: hidden; cursor: grab;
-            background: rgba(255, 255, 255, 0.05); border: 2px dashed rgba(104, 211, 145, 0.8); z-index: 50;
-        }
-        .drag-tool:active { cursor: grabbing; border-color: #fff; background: rgba(255, 255, 255, 0.1); }
-        
-        /* CÔNG CỤ KÉO THẢ TÚI ĐỒ (25 Ô) */
-        .slot-tool {
-            position: absolute; resize: both; overflow: hidden; cursor: grab;
-            background: rgba(239, 68, 68, 0.3); border: 2px dashed rgba(239, 68, 68, 0.8); z-index: 50;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-weight: bold; font-size: 16px; text-shadow: 1px 1px 2px black; pointer-events: auto;
-        }
-        .slot-tool:active { cursor: grabbing; border-color: #fff; background: rgba(239, 68, 68, 0.6); }
     </style>
 </head>
 <body>
@@ -82,106 +66,108 @@
 <audio id="sfx-wrong" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3" preload="auto"></audio>
 <audio id="bgm-game" src="pp.mp4" loop preload="auto"></audio>
 
-<div id="settings-modal" class="fixed inset-0 z-[1001] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm">
-    <div class="glass-card p-8 w-full max-w-md border border-white/20 relative shadow-[0_0_50px_rgba(0,0,0,0.8)]">
-        <button onclick="closeSettings()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">✖</button>
-        <h2 class="text-2xl font-bold uppercase tracking-widest text-center mb-6 text-indigo-300 drop-shadow-md">Cài Đặt Game</h2>
-        
-        <div class="flex justify-between items-center mb-6 bg-white/5 p-4 rounded border border-white/10">
-            <span class="text-xs font-bold uppercase tracking-widest text-gray-200">Nhạc Nền (pp.mp4)</span>
-            <label class="switch-toggle relative inline-block w-12 h-6 cursor-pointer">
-                <input type="checkbox" id="bgm-toggle" class="opacity-0 w-0 h-0" onchange="toggleBGM()">
-                <div class="absolute inset-0 bg-gray-600 rounded-full transition-colors duration-300">
-                    <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300"></div>
+<div id="settings-modal" class="fixed inset-0 z-[1001] hidden bg-black/60 backdrop-blur-sm">
+    <div class="flex items-center justify-center w-full h-full p-4 relative">
+        <div class="glass-card p-8 w-full max-w-md border border-white/20 relative shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+            <button onclick="closeSettings()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">✖</button>
+            <h2 class="text-2xl font-bold uppercase tracking-widest text-center mb-6 text-indigo-300 drop-shadow-md">Cài Đặt Game</h2>
+            
+            <div class="flex justify-between items-center mb-6 bg-white/5 p-4 rounded border border-white/10">
+                <span class="text-xs font-bold uppercase tracking-widest text-gray-200">Nhạc Nền (pp.mp4)</span>
+                <label class="switch-toggle relative inline-block w-12 h-6 cursor-pointer">
+                    <input type="checkbox" id="bgm-toggle" class="opacity-0 w-0 h-0" onchange="toggleBGM()">
+                    <div class="absolute inset-0 bg-gray-600 rounded-full transition-colors duration-300">
+                        <div class="absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300"></div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="bg-white/5 p-4 rounded border border-white/10">
+                <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Tên Nhân Vật</p>
+                <input type="text" id="setting-name-input" class="w-full bg-black/30 border border-white/20 p-2 text-white outline-none rounded mb-4 focus:border-indigo-500 transition" oninput="updateNamePreview()">
+                
+                <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Màu Chữ & Khí Chất</p>
+                <div class="flex gap-3 mb-6 justify-center" id="color-picker">
+                    <div class="w-6 h-6 rounded-full cursor-pointer bg-white border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-white', this)"></div>
+                    <div class="w-6 h-6 rounded-full cursor-pointer bg-amber-100 border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-amber-100', this)"></div>
+                    <div class="w-6 h-6 rounded-full cursor-pointer bg-red-400 border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-red-400', this)"></div>
+                    <div class="w-6 h-6 rounded-full cursor-pointer bg-green-400 border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-green-400', this)"></div>
+                    <div class="w-6 h-6 rounded-full cursor-pointer bg-blue-400 border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-blue-400', this)"></div>
+                    <div class="w-6 h-6 rounded-full cursor-pointer bg-fuchsia-400 border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-fuchsia-400', this)"></div>
                 </div>
-            </label>
-        </div>
-
-        <div class="bg-white/5 p-4 rounded border border-white/10">
-            <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Tên Nhân Vật</p>
-            <input type="text" id="setting-name-input" class="w-full bg-black/30 border border-white/20 p-2 text-white outline-none rounded mb-4 focus:border-indigo-500 transition" oninput="updateNamePreview()">
-            
-            <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Màu Chữ & Tài Nguyên</p>
-            <div class="flex gap-3 mb-6 justify-center" id="color-picker">
-                <div class="w-6 h-6 rounded-full cursor-pointer bg-white border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-white', this)"></div>
-                <div class="w-6 h-6 rounded-full cursor-pointer bg-amber-100 border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-amber-100', this)"></div>
-                <div class="w-6 h-6 rounded-full cursor-pointer bg-red-400 border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-red-400', this)"></div>
-                <div class="w-6 h-6 rounded-full cursor-pointer bg-green-400 border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-green-400', this)"></div>
-                <div class="w-6 h-6 rounded-full cursor-pointer bg-blue-400 border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-blue-400', this)"></div>
-                <div class="w-6 h-6 rounded-full cursor-pointer bg-fuchsia-400 border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-fuchsia-400', this)"></div>
+                
+                <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest text-center">Bản Xem Trước</p>
+                <div class="text-center py-4 bg-black/50 border border-dashed border-white/20 rounded h-20 flex items-center justify-center">
+                    <span id="name-preview" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100">NicksolEr</span>
+                </div>
             </div>
-            
-            <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest text-center">Bản Xem Trước</p>
-            <div class="text-center py-4 bg-black/50 border border-dashed border-white/20 rounded h-20 flex items-center justify-center">
-                <span id="name-preview" class="font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] text-amber-100">NicksolEr</span>
-            </div>
-        </div>
 
-        <button onclick="saveSettings()" class="w-full mt-6 py-4 bg-indigo-600 text-white font-bold text-xs uppercase tracking-widest hover:bg-indigo-500 rounded transition shadow-[0_0_15px_rgba(79,70,229,0.4)]">Lưu Cài Đặt</button>
+            <button onclick="saveSettings()" class="w-full mt-6 py-4 bg-indigo-600 text-white font-bold text-xs uppercase tracking-widest hover:bg-indigo-500 rounded transition shadow-[0_0_15px_rgba(79,70,229,0.4)]">Lưu Cài Đặt</button>
+        </div>
     </div>
 </div>
 
 <div id="tuido-modal" class="fixed inset-0 z-[2000] hidden bg-black/80 backdrop-blur-sm transition-opacity duration-300 overflow-auto">
-    <button onclick="downloadSlotsConfig()" class="fixed top-6 left-10 bg-green-500 hover:bg-green-400 text-white font-bold py-3 px-6 rounded z-[2001] transition shadow-[0_0_15px_rgba(74,222,128,0.5)]">📥 TẢI THÔNG SỐ 25 Ô</button>
     <button onclick="closeTuido()" class="fixed top-6 right-10 text-white/50 hover:text-red-500 text-6xl drop-shadow-md z-[2001] transition transform hover:scale-110">&times;</button>
-    
     <div class="w-full min-h-full flex items-center justify-center p-10 relative">
         <div id="inventory-container" class="relative flex-shrink-0" style="width: 1124px; height: 628px;">
-            <img src="open1.png" class="absolute inset-0 w-full h-full object-fill drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] pointer-events-none select-none" draggable="false" alt="Túi Đồ Open">
+            <img src="open1.png" class="absolute inset-0 w-full h-full object-fill drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] fade-in pointer-events-none select-none" draggable="false" alt="Túi Đồ Open">
             
             <div id="inventory-slots-area" class="absolute inset-0 pointer-events-none">
-                <div id="slot-1" class="slot-tool" style="top: 176px; left: 331px; width: 50px; height: 50px;"></div>
-                <div id="slot-2" class="slot-tool" style="top: 173px; left: 424px; width: 50px; height: 50px;"></div>
-                <div id="slot-3" class="slot-tool" style="top: 175px; left: 522px; width: 50px; height: 50px;"></div>
-                <div id="slot-4" class="slot-tool" style="top: 175px; left: 619px; width: 50px; height: 50px;"></div>
-                <div id="slot-5" class="slot-tool" style="top: 175px; left: 715px; width: 50px; height: 50px;"></div>
+                <div id="slot-1" class="absolute flex items-center justify-center" style="top: 141px; left: 167px; width: 50px; height: 50px;"></div>
+                <div id="slot-2" class="absolute flex items-center justify-center" style="top: 141px; left: 255px; width: 50px; height: 50px;"></div>
+                <div id="slot-3" class="absolute flex items-center justify-center" style="top: 141px; left: 341px; width: 50px; height: 50px;"></div>
+                <div id="slot-4" class="absolute flex items-center justify-center" style="top: 143px; left: 427px; width: 50px; height: 50px;"></div>
+                <div id="slot-5" class="absolute flex items-center justify-center" style="top: 143px; left: 512px; width: 50px; height: 50px;"></div>
                 
-                <div id="slot-6" class="slot-tool" style="top: 276px; left: 331px; width: 50px; height: 50px;"></div>
-                <div id="slot-7" class="slot-tool" style="top: 277px; left: 427px; width: 50px; height: 50px;"></div>
-                <div id="slot-8" class="slot-tool" style="top: 274px; left: 524px; width: 50px; height: 50px;"></div>
-                <div id="slot-9" class="slot-tool" style="top: 274px; left: 621px; width: 50px; height: 50px;"></div>
-                <div id="slot-10" class="slot-tool" style="top: 272px; left: 716px; width: 50px; height: 50px;"></div>
+                <div id="slot-6" class="absolute flex items-center justify-center" style="top: 231px; left: 167px; width: 50px; height: 50px;"></div>
+                <div id="slot-7" class="absolute flex items-center justify-center" style="top: 230px; left: 255px; width: 50px; height: 50px;"></div>
+                <div id="slot-8" class="absolute flex items-center justify-center" style="top: 229px; left: 341px; width: 51px; height: 52px;"></div>
+                <div id="slot-9" class="absolute flex items-center justify-center" style="top: 231px; left: 427px; width: 50px; height: 50px;"></div>
+                <div id="slot-10" class="absolute flex items-center justify-center" style="top: 232px; left: 513px; width: 50px; height: 50px;"></div>
                 
-                <div id="slot-11" class="slot-tool" style="top: 374px; left: 331px; width: 50px; height: 50px;"></div>
-                <div id="slot-12" class="slot-tool" style="top: 373px; left: 425px; width: 50px; height: 50px;"></div>
-                <div id="slot-13" class="slot-tool" style="top: 373px; left: 522px; width: 50px; height: 50px;"></div>
-                <div id="slot-14" class="slot-tool" style="top: 372px; left: 619px; width: 50px; height: 50px;"></div>
-                <div id="slot-15" class="slot-tool" style="top: 374px; left: 717px; width: 50px; height: 50px;"></div>
+                <div id="slot-11" class="absolute flex items-center justify-center" style="top: 318px; left: 168px; width: 50px; height: 50px;"></div>
+                <div id="slot-12" class="absolute flex items-center justify-center" style="top: 318px; left: 256px; width: 50px; height: 50px;"></div>
+                <div id="slot-13" class="absolute flex items-center justify-center" style="top: 318px; left: 339px; width: 50px; height: 50px;"></div>
+                <div id="slot-14" class="absolute flex items-center justify-center" style="top: 320px; left: 426px; width: 50px; height: 50px;"></div>
+                <div id="slot-15" class="absolute flex items-center justify-center" style="top: 319px; left: 513px; width: 50px; height: 50px;"></div>
                 
-                <div id="slot-16" class="slot-tool" style="top: 474px; left: 332px; width: 50px; height: 50px;"></div>
-                <div id="slot-17" class="slot-tool" style="top: 475px; left: 429px; width: 50px; height: 50px;"></div>
-                <div id="slot-18" class="slot-tool" style="top: 475px; left: 525px; width: 50px; height: 50px;"></div>
-                <div id="slot-19" class="slot-tool" style="top: 475px; left: 621px; width: 50px; height: 50px;"></div>
-                <div id="slot-20" class="slot-tool" style="top: 474px; left: 714px; width: 50px; height: 50px;"></div>
+                <div id="slot-16" class="absolute flex items-center justify-center" style="top: 411px; left: 167px; width: 50px; height: 50px;"></div>
+                <div id="slot-17" class="absolute flex items-center justify-center" style="top: 409px; left: 254px; width: 50px; height: 50px;"></div>
+                <div id="slot-18" class="absolute flex items-center justify-center" style="top: 410px; left: 340px; width: 50px; height: 50px;"></div>
+                <div id="slot-19" class="absolute flex items-center justify-center" style="top: 411px; left: 427px; width: 50px; height: 50px;"></div>
+                <div id="slot-20" class="absolute flex items-center justify-center" style="top: 410px; left: 513px; width: 50px; height: 50px;"></div>
                 
-                <div id="slot-21" class="slot-tool" style="top: 572px; left: 332px; width: 50px; height: 50px;"></div>
-                <div id="slot-22" class="slot-tool" style="top: 570px; left: 428px; width: 50px; height: 50px;"></div>
-                <div id="slot-23" class="slot-tool" style="top: 572px; left: 522px; width: 50px; height: 50px;"></div>
-                <div id="slot-24" class="slot-tool" style="top: 571px; left: 622px; width: 50px; height: 50px;"></div>
-                <div id="slot-25" class="slot-tool" style="top: 572px; left: 716px; width: 50px; height: 50px;"></div>
+                <div id="slot-21" class="absolute flex items-center justify-center" style="top: 497px; left: 167px; width: 50px; height: 50px;"></div>
+                <div id="slot-22" class="absolute flex items-center justify-center" style="top: 497px; left: 255px; width: 50px; height: 50px;"></div>
+                <div id="slot-23" class="absolute flex items-center justify-center" style="top: 498px; left: 341px; width: 50px; height: 50px;"></div>
+                <div id="slot-24" class="absolute flex items-center justify-center" style="top: 500px; left: 426px; width: 50px; height: 50px;"></div>
+                <div id="slot-25" class="absolute flex items-center justify-center" style="top: 496px; left: 512px; width: 50px; height: 50px;"></div>
             </div>
         </div>
     </div>
 </div>
 
-<div id="thuvien-modal" class="fixed inset-0 z-[2000] hidden bg-black/80 backdrop-blur-sm transition-opacity duration-300 flex items-center justify-center">
-    <div class="relative w-full max-w-4xl h-[90vh] p-4">
+<div id="thuvien-modal" class="fixed inset-0 z-[2000] hidden bg-black/80 backdrop-blur-sm transition-opacity duration-300">
+    <div class="flex items-center justify-center w-full h-full p-4 relative">
         <button onclick="closeThuvienHoa()" class="absolute top-4 right-4 md:right-10 text-white/50 hover:text-red-500 text-6xl drop-shadow-md z-[2001] transition transform hover:scale-110">&times;</button>
         <img src="thuvienhoa.png" class="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] fade-in pointer-events-auto" alt="Thư Viện Hoa">
     </div>
 </div>
 
-<div id="ruong-modal" class="fixed inset-0 z-[2000] hidden bg-black/80 backdrop-blur-sm transition-opacity duration-300 flex items-center justify-center">
-    <div class="relative w-[500px] h-[400px] flex items-center justify-center p-4">
-        <button onclick="closeRuong()" class="absolute top-2 right-2 text-white/50 hover:text-red-500 text-5xl drop-shadow-md z-[2001] transition transform hover:scale-110">&times;</button>
-        <img src="thongbao.png" class="absolute inset-0 w-full h-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] fade-in pointer-events-none select-none" alt="Thông báo">
-        
-        <div class="relative z-10 flex flex-col items-center mt-10 fade-in">
-            <img id="ruong-item-img" src="" class="w-32 h-32 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] animate-bounce" alt="Item">
+<div id="ruong-modal" class="fixed inset-0 z-[2000] hidden bg-black/80 backdrop-blur-sm transition-opacity duration-300">
+    <div class="flex items-center justify-center w-full h-full p-4 relative">
+        <div class="relative w-[500px] h-[400px] flex items-center justify-center">
+            <button onclick="closeRuong()" class="absolute top-2 right-2 text-white/50 hover:text-red-500 text-5xl drop-shadow-md z-[2001] transition transform hover:scale-110">&times;</button>
+            <img src="thongbao.png" class="absolute inset-0 w-full h-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] fade-in pointer-events-none select-none" alt="Thông báo">
             
-            <div class="flex gap-4 mt-8">
-                <button onclick="viewNextChestItem()" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded uppercase tracking-widest transition border border-gray-400 shadow-[0_0_10px_rgba(255,255,255,0.2)]">Xem Tiếp</button>
-                <button onclick="claimChestItems()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 px-8 rounded uppercase tracking-widest transition shadow-[0_0_15px_rgba(217,119,6,0.5)] border border-amber-300">Nhận</button>
+            <div class="relative z-10 flex flex-col items-center mt-10 fade-in">
+                <img id="ruong-item-img" src="" class="w-32 h-32 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] animate-bounce" alt="Item">
+                
+                <div class="flex gap-4 mt-8">
+                    <button onclick="viewNextChestItem()" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded uppercase tracking-widest transition border border-gray-400 shadow-[0_0_10px_rgba(255,255,255,0.2)]">Xem Tiếp</button>
+                    <button onclick="claimChestItems()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 px-8 rounded uppercase tracking-widest transition shadow-[0_0_15px_rgba(217,119,6,0.5)] border border-amber-300">Nhận</button>
+                </div>
             </div>
         </div>
     </div>
@@ -190,7 +176,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.52 GACHA & AUTO-COPY ENGINE</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.53 FINAL GACHA & SLOTS</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -292,7 +278,7 @@
             <img src="icon_thuvien.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Thư Viện">
         </div>
 
-        <div id="drag-ruong" class="drag-tool pointer-events-auto flex items-center justify-center cursor-pointer hover:scale-105 transition" style="top: 114px; left: 1017px; width: 100px; height: 100px; z-index: 60;">
+        <div id="fixed-ruong" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 114px; left: 1017px; width: 100px; height: 100px; z-index: 60;" onclick="openRuong()">
             <img src="ruongkhoidau.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Ruong Khởi Đầu">
         </div>
     </div>
@@ -837,32 +823,10 @@
     // --- 4. TÚI ĐỒ VÀ THƯ VIỆN MODAL ---
     function openTuido() { playSound('click'); document.getElementById('tuido-modal').classList.remove('hidden'); renderInventory(); }
     function closeTuido() { playSound('click'); document.getElementById('tuido-modal').classList.add('hidden'); }
-
     function openThuvienHoa() { playSound('click'); document.getElementById('thuvien-modal').classList.remove('hidden'); }
     function closeThuvienHoa() { playSound('click'); document.getElementById('thuvien-modal').classList.add('hidden'); }
 
-    function downloadSlotsConfig() {
-        playSound('click');
-        let data = "=== TỌA ĐỘ 25 Ô TRONG TÚI ĐỒ ===\n\n";
-        for(let i=1; i<=25; i++) {
-            let el = document.getElementById('slot-'+i);
-            if(el) {
-                data += `SLOT ${i}:\nTOP: ${el.style.top || '0px'}\nLEFT: ${el.style.left || '0px'}\nWIDTH: ${el.offsetWidth}px\nHEIGHT: ${el.offsetHeight}px\n\n`;
-            }
-        }
-        const blob = new Blob([data], {type: "text/plain;charset=utf-8"});
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = "ToaDo_25_Slots.txt";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-        alert("Đã tải xong file ToaDo_25_Slots.txt! Mở ra copy thông số gửi lại tui nhé!");
-    }
-
-    // --- LOGIC MỞ RƯƠNG (GACHA TÂN THỦ) ---
+    // --- LOGIC MỞ RƯƠNG (GACHA TÂN THỦ LẦN 1) ---
     const chestItems = [
         { id: 'hoacuchoami.png', name: 'Hoa Cúc Họa Mi' },
         { id: 'hoaduacan.png', name: 'Hoa Dừa Cạn' },
@@ -872,10 +836,10 @@
     ];
     let currentChestIdx = 0;
     
-    // AN TOÀN TRÁNH JS CRASH DO DỮ LIỆU CŨ LỖI
+    // AN TOÀN TRÁNH JS CRASH DO DỮ LIỆU CŨ LỖI, SỬA KEY ĐỂ RESET STATE
     let inventory = [];
     try {
-        let savedInv = localStorage.getItem('skyInventory');
+        let savedInv = localStorage.getItem('skyInventory_v2');
         if(savedInv) inventory = JSON.parse(savedInv);
     } catch(e) {
         inventory = [];
@@ -883,16 +847,14 @@
     if(!Array.isArray(inventory)) inventory = [];
 
     function openRuong() {
-        if (!hasMoved) { 
-            playSound('click');
-            if (localStorage.getItem('skyNewbieGift') === 'true') {
-                alert("Xin lỗi, bạn đã nhận hoa tân thủ rồi!");
-                return;
-            }
-            currentChestIdx = 0;
-            document.getElementById('ruong-modal').classList.remove('hidden');
-            showChestItem();
+        playSound('click');
+        if (localStorage.getItem('skyNewbieGift_v2') === 'true') {
+            alert("Xin lỗi, bạn đã nhận hoa tân thủ rồi!");
+            return;
         }
+        currentChestIdx = 0;
+        document.getElementById('ruong-modal').classList.remove('hidden');
+        showChestItem();
     }
 
     function showChestItem() {
@@ -912,7 +874,7 @@
     }
 
     function claimChestItems() {
-        if (localStorage.getItem('skyNewbieGift') === 'true') {
+        if (localStorage.getItem('skyNewbieGift_v2') === 'true') {
             playSound('wrong');
             alert("Xin lỗi, bạn đã nhận hoa tân thủ rồi!");
         } else {
@@ -923,8 +885,9 @@
                     inventory.push(item.id);
                 }
             });
-            localStorage.setItem('skyNewbieGift', 'true');
-            localStorage.setItem('skyInventory', JSON.stringify(inventory)); 
+            localStorage.setItem('skyNewbieGift_v2', 'true');
+            localStorage.setItem('skyInventory_v2', JSON.stringify(inventory)); 
+            renderInventory(); 
             alert("Bạn đã nhận thành công 5 đóa hoa tân thủ vào túi đồ!");
             closeRuong();
         }
@@ -933,14 +896,14 @@
     function closeRuong() {
         playSound('click');
         // Nếu chưa bấm nhận mà tắt ngang thì ép nhận luôn cho chắc ăn
-        if (localStorage.getItem('skyNewbieGift') !== 'true') {
+        if (localStorage.getItem('skyNewbieGift_v2') !== 'true') {
              chestItems.forEach(item => {
                 if (inventory.length < 25) {
                     inventory.push(item.id);
                 }
             });
-            localStorage.setItem('skyNewbieGift', 'true');
-            localStorage.setItem('skyInventory', JSON.stringify(inventory)); 
+            localStorage.setItem('skyNewbieGift_v2', 'true');
+            localStorage.setItem('skyInventory_v2', JSON.stringify(inventory)); 
         }
         document.getElementById('ruong-modal').classList.add('hidden');
     }
@@ -996,13 +959,9 @@
         const pl_vi = {"学校":"trường học", "家":"nhà", "饭店":"nhà hàng", "商店":"cửa hàng", "北京":"Bắc Kinh", "中国":"Trung Quốc", "车站":"trạm xe", "机场":"sân bay", "国外":"nước ngoài", "大学":"đại học", "房间":"căn phòng", "教室":"lớp học"}; 
         const adj_vi = {"好":"tốt/khỏe", "多":"nhiều", "少":"ít", "大":"to", "小":"nhỏ", "冷":"lạnh", "热":"nóng", "高兴":"vui vẻ", "漂亮":"xinh đẹp", "忙":"bận", "累":"mệt", "贵":"đắt", "旧":"cũ", "干净":"sạch sẽ"};
         
-        // Dictionary phân nhóm Logic để tránh sinh câu vô lý
-        const eat_dict = {"吃":"ăn", "买":"mua", "做":"làm"};
-        const food_dict = {"饭":"cơm", "菜":"món ăn", "苹果":"táo", "鸡蛋":"trứng gà", "包子":"bánh bao"};
-        const drink_dict = {"喝":"uống", "买":"mua"};
-        const water_dict = {"水":"nước", "茶":"trà", "咖啡":"cà phê"};
-        const see_dict = {"看":"xem", "买":"mua"};
-        const obj_dict = {"书":"sách", "电脑":"máy tính", "电视":"tivi", "衣服":"quần áo"};
+        const eat_dict = {"吃":"ăn", "买":"mua", "做":"làm"}; const food_dict = {"饭":"cơm", "菜":"món ăn", "苹果":"táo", "鸡蛋":"trứng gà", "包子":"bánh bao"};
+        const drink_dict = {"喝":"uống", "买":"mua"}; const water_dict = {"水":"nước", "茶":"trà", "咖啡":"cà phê"};
+        const see_dict = {"看":"xem", "买":"mua"}; const obj_dict = {"书":"sách", "电脑":"máy tính", "电视":"tivi", "衣服":"quần áo"};
         const possess_dict = {"书":"sách", "电脑":"máy tính", "电视":"tivi", "衣服":"quần áo", "杯子":"cái cốc", "桌子":"cái bàn", "椅子":"cái ghế", "地图":"bản đồ", "车票":"vé xe"};
 
         function getVN() {
@@ -1092,77 +1051,6 @@
     function playMedia(src, type, name, idx, listType, thumb) { playSound('click'); currentList = listType; currentIndex = idx; document.getElementById('now-playing').innerText = name; const yt = document.getElementById('player'); const mp4 = document.getElementById('mp4-player'); if(player && player.stopVideo) player.stopVideo(); mp4.pause(); if(type === 'mp4') { yt.classList.add('hidden'); mp4.classList.remove('hidden'); mp4.src = src; mp4.play(); } else { mp4.classList.add('hidden'); yt.classList.remove('hidden'); player.loadVideoById(src); } }
     function checkAutoPlay() { if(document.getElementById(`toggle-${currentList}`).checked) { const listData = currentList === 'vpop' ? displayedVPop : cPop; const nextIdx = (currentIndex + 1) % listData.length; const nextSong = listData[nextIdx]; playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb); } }
 
-    // --- 15. HỆ THỐNG KÉO THẢ TỌA ĐỘ VÀ AUTO-COPY ---
-    let currentDragElement = null;
-    let offsetX = 0, offsetY = 0;
-    let hasMoved = false; 
-
-    const draggables = document.querySelectorAll('.drag-tool, .slot-tool');
-    draggables.forEach(el => {
-        el.addEventListener('mousedown', (e) => {
-            const rect = el.getBoundingClientRect();
-            const isResize = (e.clientX > rect.right - 20) && (e.clientY > rect.bottom - 20);
-            if (isResize || e.button !== 0) return; 
-            
-            e.preventDefault(); 
-            
-            currentDragElement = el;
-            hasMoved = false; 
-            el.style.cursor = 'grabbing';
-            el.style.zIndex = 2000; 
-            
-            offsetX = e.clientX - rect.left;
-            offsetY = e.clientY - rect.top;
-        });
-
-        // CHUỘT PHẢI TỰ ĐỘNG COPY VÀO BỘ NHỚ MÁY TÍNH
-        el.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            const info = `${el.id.replace('drag-','').toUpperCase()}:\nTOP: ${el.style.top || '0px'}\nLEFT: ${el.style.left || '0px'}\nWIDTH: ${el.offsetWidth}px\nHEIGHT: ${el.offsetHeight}px`;
-            
-            navigator.clipboard.writeText(info).then(() => {
-                alert(`🔥 ĐÃ TỰ SAO CHÉP VÀO MÁY BẠN:\n\n${info}\n\n👉 Bạn chỉ cần ấn Ctrl + V để dán cho tui nha!`);
-            }).catch(err => {
-                alert(`Copy tự động thất bại, vui lòng copy tay:\n\n${info}`);
-            });
-        });
-    });
-
-    document.addEventListener('mousemove', (e) => {
-        if (!currentDragElement) return;
-        e.preventDefault(); 
-        hasMoved = true; 
-        
-        let containerId = currentDragElement.classList.contains('slot-tool') ? 'inventory-container' : 'hud-stats-container';
-        const containerElement = document.getElementById(containerId);
-        if (!containerElement) return;
-        const containerRect = containerElement.getBoundingClientRect();
-        
-        let newX = e.clientX - containerRect.left - offsetX;
-        let newY = e.clientY - containerRect.top - offsetY;
-        
-        currentDragElement.style.left = newX + 'px';
-        currentDragElement.style.top = newY + 'px';
-    });
-
-    document.addEventListener('mouseup', () => {
-        if (currentDragElement) {
-            currentDragElement.style.cursor = 'grab';
-            if (currentDragElement.id === 'drag-bg') currentDragElement.style.zIndex = 1;
-            else currentDragElement.style.zIndex = 50; 
-            
-            currentDragElement = null;
-        }
-    });
-
-    // MỞ RƯƠNG NẾU CLICK
-    const ruongIcon = document.getElementById('drag-ruong');
-    if(ruongIcon) {
-        ruongIcon.addEventListener('click', () => {
-            if(!hasMoved) { openRuong(); }
-        });
-    }
-
     // --- INIT APP ---
     window.onload = () => { 
         renderMusic(); 
@@ -1170,7 +1058,6 @@
         renderGrammarList(); 
         renderInventory(); 
         
-        // Khôi phục Setting Text Color
         const nameClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
         const resClass = `font-tutien text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
         const nuocClass = `font-tutien text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
@@ -1181,14 +1068,12 @@
         document.getElementById('val-vang').className = resClass;
         document.getElementById('val-nuoc-display').className = nuocClass;
 
-        // Khởi động các Module
         applyVocabRange();
         nextNames(true); 
         nextParagraph(); 
         loadWorkSchedule(); 
         generateListenSentence();
 
-        // Gắn checklist ban đầu
         document.getElementById('listen-progress').innerText = `Tiến độ: ${listenProgress}/${listenMax}`;
         document.getElementById('names-progress').innerText = `Tiến độ: ${namesProgress}/${namesMax}`;
         document.getElementById('voice-progress').innerText = `Tiến độ: ${voiceProgress}/${voiceMax}`;
