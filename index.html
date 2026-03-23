@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.50 Gacha Inventory System</title>
+    <title>Skyreign Hub | V40.50 Gacha Newbie Chest</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -58,7 +58,7 @@
         .switch-toggle input:checked + div { background-color: #4f46e5; }
         .switch-toggle input:checked + div > div { transform: translateX(100%); }
 
-        /* CÔNG CỤ KÉO THẢ CHỈ CHO RƯƠNG KHỞI ĐẦU */
+        /* Kéo thả Tool (Hiện không dùng trên UI Game nữa, dành cho tool ẩn) */
         .drag-tool {
             position: absolute; resize: both; overflow: hidden; cursor: grab;
             background: rgba(255, 255, 255, 0.05); border: 2px dashed rgba(104, 211, 145, 0.8); z-index: 50;
@@ -92,7 +92,7 @@
             <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Tên Nhân Vật</p>
             <input type="text" id="setting-name-input" class="w-full bg-black/30 border border-white/20 p-2 text-white outline-none rounded mb-4 focus:border-indigo-500 transition" oninput="updateNamePreview()">
             
-            <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Màu Chữ & Tài Nguyên</p>
+            <p class="text-[10px] uppercase font-bold text-gray-400 mb-2 tracking-widest">Màu Chữ & Tài Nguyên (Khí Chất)</p>
             <div class="flex gap-3 mb-6 justify-center" id="color-picker">
                 <div class="w-6 h-6 rounded-full cursor-pointer bg-white border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-white', this)"></div>
                 <div class="w-6 h-6 rounded-full cursor-pointer bg-amber-100 border-2 border-transparent hover:scale-110 transition" onclick="selectColor('text-amber-100', this)"></div>
@@ -112,42 +112,44 @@
     </div>
 </div>
 
-<div id="tuido-modal" class="fixed inset-0 z-[2000] hidden bg-black/80 backdrop-blur-sm transition-opacity duration-300">
-    <button onclick="closeTuido()" class="absolute top-4 right-4 md:right-10 text-white/50 hover:text-red-500 text-6xl drop-shadow-md z-[2001] transition transform hover:scale-110">&times;</button>
-    
-    <div id="inventory-container" class="absolute inset-0 w-full h-full pointer-events-none flex items-center justify-center p-4">
-        <img src="open1.png" class="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] fade-in pointer-events-none select-none" alt="Túi Đồ Open">
+<div id="tuido-modal" class="fixed inset-0 z-[2000] hidden bg-black/80 backdrop-blur-sm transition-opacity duration-300 flex items-center justify-center">
+    <div class="relative w-full max-w-4xl h-[90vh] p-4 flex justify-center items-center">
+        <button onclick="closeTuido()" class="absolute top-4 right-4 md:right-10 text-white/50 hover:text-red-500 text-6xl drop-shadow-md z-[2001] transition transform hover:scale-110">&times;</button>
         
-        <div id="inventory-slots-area" class="fixed inset-0 pointer-events-none">
-            <div id="slot-1" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 176px; left: 331px; width: 50px; height: 50px;">1</div>
-            <div id="slot-2" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 173px; left: 424px; width: 50px; height: 50px;">2</div>
-            <div id="slot-3" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 175px; left: 522px; width: 50px; height: 50px;">3</div>
-            <div id="slot-4" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 175px; left: 619px; width: 50px; height: 50px;">4</div>
-            <div id="slot-5" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 175px; left: 715px; width: 50px; height: 50px;">5</div>
+        <div id="inventory-container" class="relative w-[1124px] h-[628px] flex items-center justify-center">
+            <img src="open1.png" class="absolute inset-0 w-full h-full object-contain drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] fade-in pointer-events-none select-none" draggable="false" alt="Túi Đồ Open">
             
-            <div id="slot-6" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 276px; left: 331px; width: 50px; height: 50px;">6</div>
-            <div id="slot-7" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 277px; left: 427px; width: 50px; height: 50px;">7</div>
-            <div id="slot-8" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 274px; left: 524px; width: 50px; height: 50px;">8</div>
-            <div id="slot-9" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 274px; left: 621px; width: 50px; height: 50px;">9</div>
-            <div id="slot-10" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 272px; left: 716px; width: 50px; height: 50px;">10</div>
-            
-            <div id="slot-11" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 374px; left: 331px; width: 50px; height: 50px;">11</div>
-            <div id="slot-12" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 373px; left: 425px; width: 50px; height: 50px;">12</div>
-            <div id="slot-13" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 373px; left: 522px; width: 50px; height: 50px;">13</div>
-            <div id="slot-14" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 372px; left: 619px; width: 50px; height: 50px;">14</div>
-            <div id="slot-15" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 374px; left: 717px; width: 50px; height: 50px;">15</div>
-            
-            <div id="slot-16" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 474px; left: 332px; width: 50px; height: 50px;">16</div>
-            <div id="slot-17" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 475px; left: 429px; width: 50px; height: 50px;">17</div>
-            <div id="slot-18" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 475px; left: 525px; width: 50px; height: 50px;">18</div>
-            <div id="slot-19" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 475px; left: 621px; width: 50px; height: 50px;">19</div>
-            <div id="slot-20" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 474px; left: 714px; width: 50px; height: 50px;">20</div>
-            
-            <div id="slot-21" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 572px; left: 332px; width: 50px; height: 50px;">21</div>
-            <div id="slot-22" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 570px; left: 428px; width: 50px; height: 50px;">22</div>
-            <div id="slot-23" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 572px; left: 522px; width: 50px; height: 50px;">23</div>
-            <div id="slot-24" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 571px; left: 622px; width: 50px; height: 50px;">24</div>
-            <div id="slot-25" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 572px; left: 716px; width: 50px; height: 50px;">25</div>
+            <div id="inventory-slots-area" class="absolute inset-0 pointer-events-none">
+                <div id="slot-1" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 176px; left: 331px; width: 50px; height: 50px;">1</div>
+                <div id="slot-2" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 173px; left: 424px; width: 50px; height: 50px;">2</div>
+                <div id="slot-3" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 175px; left: 522px; width: 50px; height: 50px;">3</div>
+                <div id="slot-4" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 175px; left: 619px; width: 50px; height: 50px;">4</div>
+                <div id="slot-5" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 175px; left: 715px; width: 50px; height: 50px;">5</div>
+                
+                <div id="slot-6" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 276px; left: 331px; width: 50px; height: 50px;">6</div>
+                <div id="slot-7" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 277px; left: 427px; width: 50px; height: 50px;">7</div>
+                <div id="slot-8" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 274px; left: 524px; width: 50px; height: 50px;">8</div>
+                <div id="slot-9" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 274px; left: 621px; width: 50px; height: 50px;">9</div>
+                <div id="slot-10" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 272px; left: 716px; width: 50px; height: 50px;">10</div>
+                
+                <div id="slot-11" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 374px; left: 331px; width: 50px; height: 50px;">11</div>
+                <div id="slot-12" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 373px; left: 425px; width: 50px; height: 50px;">12</div>
+                <div id="slot-13" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 373px; left: 522px; width: 50px; height: 50px;">13</div>
+                <div id="slot-14" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 372px; left: 619px; width: 50px; height: 50px;">14</div>
+                <div id="slot-15" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 374px; left: 717px; width: 50px; height: 50px;">15</div>
+                
+                <div id="slot-16" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 474px; left: 332px; width: 50px; height: 50px;">16</div>
+                <div id="slot-17" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 475px; left: 429px; width: 50px; height: 50px;">17</div>
+                <div id="slot-18" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 475px; left: 525px; width: 50px; height: 50px;">18</div>
+                <div id="slot-19" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 475px; left: 621px; width: 50px; height: 50px;">19</div>
+                <div id="slot-20" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 474px; left: 714px; width: 50px; height: 50px;">20</div>
+                
+                <div id="slot-21" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 572px; left: 332px; width: 50px; height: 50px;">21</div>
+                <div id="slot-22" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 570px; left: 428px; width: 50px; height: 50px;">22</div>
+                <div id="slot-23" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 572px; left: 522px; width: 50px; height: 50px;">23</div>
+                <div id="slot-24" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 571px; left: 622px; width: 50px; height: 50px;">24</div>
+                <div id="slot-25" class="absolute flex items-center justify-center text-white/50 text-xl font-bold bg-black/20" style="top: 572px; left: 716px; width: 50px; height: 50px;">25</div>
+            </div>
         </div>
     </div>
 </div>
@@ -166,7 +168,11 @@
         
         <div class="relative z-10 flex flex-col items-center mt-10 fade-in">
             <img id="ruong-item-img" src="" class="w-32 h-32 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.5)] animate-bounce" alt="Item">
-            <button onclick="nextChestItem()" class="mt-8 bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 px-8 rounded uppercase tracking-widest transition shadow-[0_0_15px_rgba(217,119,6,0.5)] border border-amber-300">Nhận & Xem Tiếp</button>
+            
+            <div class="flex gap-4 mt-8">
+                <button onclick="viewNextChestItem()" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded uppercase tracking-widest transition border border-gray-400 shadow-[0_0_10px_rgba(255,255,255,0.2)]">Xem Tiếp</button>
+                <button onclick="claimChestItems()" class="bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 px-8 rounded uppercase tracking-widest transition shadow-[0_0_15px_rgba(217,119,6,0.5)] border border-amber-300">Nhận</button>
+            </div>
         </div>
     </div>
 </div>
@@ -174,7 +180,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.50 GACHA INVENTORY SYSTEM</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.50 GACHA CHEST SYSTEM</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -245,41 +251,40 @@
         </div>
 
         <div id="fixed-setting" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 465px; left: 1156px; width: 230px; height: 246px; z-index: 50;" onclick="openSettings()">
-            <img src="setting.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Setting">
+            <img src="setting.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Setting">
         </div>
 
         <div id="fixed-nhanvat" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 508px; left: 871px; width: 181px; height: 136px; z-index: 40;">
-            <img src="nhanvat.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Nhan Vat">
+            <img src="nhanvat.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Nhan Vat">
         </div>
 
         <div id="fixed-hoavien" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 516px; left: 716px; width: 121px; height: 108px; z-index: 40;">
-            <img src="hoavien.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Hoa Vien">
+            <img src="hoavien.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Hoa Vien">
         </div>
 
         <div id="fixed-cuahang" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 506px; left: 618px; width: 128px; height: 142px; z-index: 40;">
-            <img src="cuahang.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Cua Hang">
+            <img src="cuahang.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Cua Hang">
         </div>
 
         <div id="fixed-tuido" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 516px; left: 508px; width: 159px; height: 123px; z-index: 40;" onclick="openTuido()">
-            <img src="tuido.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Tui Do">
+            <img src="tuido.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Tui Do">
         </div>
 
         <div id="fixed-suutam" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 485px; left: 780px; width: 176px; height: 182px; z-index: 40;">
-            <img src="suutam.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Suu Tam">
+            <img src="suutam.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Suu Tam">
         </div>
 
         <div id="fixed-vip" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 262px; left: 184px; width: 138px; height: 125px; z-index: 50;">
-            <img src="VIP.png" class="w-full h-full object-contain pointer-events-none select-none" alt="VIP">
+            <img src="VIP.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="VIP">
         </div>
 
         <div id="fixed-thuvien" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 30px; left: 1014px; width: 100px; height: 100px; z-index: 40;" onclick="openThuvienHoa()">
-            <img src="icon_thuvien.png" class="w-full h-full object-contain pointer-events-none select-none" alt="Thư Viện">
+            <img src="icon_thuvien.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Thư Viện">
         </div>
 
-        <div id="drag-ruong" class="drag-tool pointer-events-auto flex items-center justify-center cursor-pointer hover:scale-105 transition" style="top: 114px; left: 1017px; width: 100px; height: 100px; z-index: 60;">
+        <div id="fixed-ruong" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 114px; left: 1017px; width: 100px; height: 100px; z-index: 60;" onclick="openRuong()">
             <img src="ruongkhoidau.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Ruong Khởi Đầu">
         </div>
-
     </div>
 </div>
 
@@ -814,10 +819,11 @@
     // --- 4. TÚI ĐỒ VÀ THƯ VIỆN MODAL ---
     function openTuido() { playSound('click'); document.getElementById('tuido-modal').classList.remove('hidden'); }
     function closeTuido() { playSound('click'); document.getElementById('tuido-modal').classList.add('hidden'); }
+
     function openThuvienHoa() { playSound('click'); document.getElementById('thuvien-modal').classList.remove('hidden'); }
     function closeThuvienHoa() { playSound('click'); document.getElementById('thuvien-modal').classList.add('hidden'); }
 
-    // --- LOGIC MỞ RƯƠNG (GACHA) ---
+    // --- LOGIC MỞ RƯƠNG (GACHA TÂN THỦ) ---
     const chestItems = [
         { id: 'hoacuchoami.png', name: 'Hoa Cúc Họa Mi' },
         { id: 'hoaduacan.png', name: 'Hoa Dừa Cạn' },
@@ -826,12 +832,15 @@
         { id: 'hoavantho.png', name: 'Hoa Vạn Thọ' }
     ];
     let currentChestIdx = 0;
-    let inventory = [];
+    let inventory = JSON.parse(localStorage.getItem('skyInventory')) || [];
 
     function openRuong() {
-        if (!hasMoved) { // Chỉ mở khi click, không phải lúc đang kéo thả
+        if (!hasMoved) { // Click bthg, ko phải đang kéo thả
             playSound('click');
-            if (inventory.length >= 25 || chestItems.length === 0) return; // Full túi
+            if (localStorage.getItem('skyNewbieGift') === 'true') {
+                alert("Xin lỗi, bạn đã nhận hoa tân thủ rồi!");
+                return;
+            }
             currentChestIdx = 0;
             document.getElementById('ruong-modal').classList.remove('hidden');
             showChestItem();
@@ -842,44 +851,51 @@
         if (currentChestIdx < chestItems.length) {
             const item = chestItems[currentChestIdx];
             document.getElementById('ruong-item-img').src = item.id;
-        } else {
-            closeRuong();
         }
     }
 
-    function nextChestItem() {
-        playSound('correct');
-        if (currentChestIdx < chestItems.length) {
-            inventory.push(chestItems[currentChestIdx].id); // Tống vào túi đồ
-            currentChestIdx++;
-            showChestItem();
-            renderInventory(); // Cập nhật hình ảnh túi đồ liền tay
+    function viewNextChestItem() {
+        playSound('click');
+        currentChestIdx++;
+        if (currentChestIdx >= chestItems.length) currentChestIdx = 0; 
+        showChestItem();
+    }
+
+    function claimChestItems() {
+        if (localStorage.getItem('skyNewbieGift') === 'true') {
+            playSound('wrong');
+            alert("Xin lỗi, bạn đã nhận hoa tân thủ rồi!");
+        } else {
+            playSound('correct');
+            // Gom 5 hoa vào mảng túi đồ
+            chestItems.forEach(item => {
+                if (inventory.length < 25) {
+                    inventory.push(item.id);
+                }
+            });
+            localStorage.setItem('skyNewbieGift', 'true');
+            localStorage.setItem('skyInventory', JSON.stringify(inventory)); 
+            renderInventory(); // Nạp vào các ô slots
+            alert("Bạn đã nhận thành công 5 đóa hoa tân thủ vào túi đồ!");
+            closeRuong();
         }
     }
 
     function closeRuong() {
         playSound('click');
-        // Nhận nốt phần quà còn lại nếu tắt ngang
-        while (currentChestIdx < chestItems.length) {
-            if (inventory.length < 25) {
-                inventory.push(chestItems[currentChestIdx].id);
-            }
-            currentChestIdx++;
-        }
         document.getElementById('ruong-modal').classList.add('hidden');
-        renderInventory();
     }
 
     function renderInventory() {
         for (let i = 1; i <= 25; i++) {
             let slot = document.getElementById('slot-' + i);
             if (slot) {
-                if (inventory[i-1]) { // Nếu có item ở vị trí này
+                if (inventory[i-1]) { 
                     slot.innerHTML = `<img src="${inventory[i-1]}" class="w-full h-full object-contain p-1 z-10 pointer-events-none">`;
-                    slot.classList.remove('text-white/50', 'text-xl', 'bg-black/20');
-                } else { // Trống
-                    slot.innerHTML = i;
-                    slot.classList.add('text-white/50', 'text-xl', 'bg-black/20');
+                    slot.classList.remove('bg-black/20');
+                } else { 
+                    slot.innerHTML = '';
+                    slot.classList.add('bg-black/20');
                 }
             }
         }
@@ -906,7 +922,7 @@
     function showNamesHint() { playSound('click'); const n = namesData[nmIdx]; let ans = nmMode===0 ? n.hz : n.vi; document.getElementById('nm-hint').innerHTML = `Gợi ý: ${ans} <br><span class="text-[10px] text-gray-400 normal-case font-mono">(Pinyin: ${n.py})</span>`; document.getElementById('nm-hint').classList.remove('hidden'); }
     function checkNames() { const n = namesData[nmIdx]; const v = document.getElementById('nm-input').value.toLowerCase().trim(); let ok = false; if(nmMode === 0 && v === n.hz) ok = true; if(nmMode === 1 && v === n.vi.toLowerCase()) ok = true; let pinyinInfo = `<br><span class="text-gray-400 font-mono text-[10px] normal-case">Pinyin: ${n.py}</span>`; if(ok) { playSound('correct'); updateCoins(1); if(namesProgress < namesMax) namesProgress++; document.getElementById('names-progress').innerText = `Tiến độ: ${namesProgress}/${namesMax}`; document.getElementById('nm-msg').innerHTML = "CHÍNH XÁC!" + pinyinInfo; document.getElementById('nm-msg').className = "text-xs font-bold uppercase tracking-widest text-green-400 mt-2 block"; setTimeout(()=>nextNames(true), 2000); } else { playSound('wrong'); document.getElementById('nm-msg').innerHTML = "SAI RỒI!" + pinyinInfo; document.getElementById('nm-msg').className = "text-xs font-bold uppercase tracking-widest text-red-400 mt-2 block"; } }
 
-    // --- 8. LUYỆN NÓI ---
+    // --- 8. LUYỆN NÓI AI ---
     let voiceIdx = 0; const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; let recognition;
     if (SpeechRecognition) { recognition = new SpeechRecognition(); recognition.lang = 'zh-CN'; recognition.interimResults = false; recognition.onstart = function() { document.getElementById('voice-pulse').classList.remove('opacity-0'); document.getElementById('voice-pulse').classList.add('animate-ping'); document.getElementById('voice-feedback').innerHTML = "<span class='text-gray-400'>Đang lắng nghe... (Hãy nói đi)</span>"; }; recognition.onend = function() { document.getElementById('voice-pulse').classList.add('opacity-0'); document.getElementById('voice-pulse').classList.remove('animate-ping'); }; recognition.onresult = function(event) { const spoken = event.results[0][0].transcript.trim(); const target = vocabData[voiceIdx].hz; const cleanSpoken = spoken.replace(/[.,?!。，？！]/g, ""); if(cleanSpoken === target || cleanSpoken.includes(target) || target.includes(cleanSpoken)) { playSound('correct'); updateCoins(1); if(voiceProgress < voiceMax) voiceProgress++; document.getElementById('voice-progress').innerText = `Tiến độ: ${voiceProgress}/${voiceMax}`; document.getElementById('voice-feedback').innerHTML = `<span class='text-green-400 font-bold'>Giỏi quá! AI nghe được: "${cleanSpoken}"</span>`; setTimeout(() => nextVoiceWord(), 2000); } else { playSound('wrong'); document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Sai rồi. Bạn đọc là: "${cleanSpoken}"<br>Cần đọc là: "${target}"</span>`; } }; recognition.onerror = function(event) { document.getElementById('voice-feedback').innerHTML = `<span class='text-red-400'>Lỗi mic: ${event.error}</span>`; document.getElementById('voice-pulse').classList.add('opacity-0'); document.getElementById('voice-pulse').classList.remove('animate-ping'); }; }
     function nextVoiceWord() { playSound('click'); voiceIdx = Math.floor(Math.random() * vocabData.length); document.getElementById('voice-target').innerText = vocabData[voiceIdx].hz; document.getElementById('voice-py').innerText = vocabData[voiceIdx].py; document.getElementById('voice-mn').innerText = vocabData[voiceIdx].mn; document.getElementById('voice-feedback').innerHTML = ""; }
@@ -922,31 +938,16 @@
         const vf_vi = {"喜欢":"thích", "想":"muốn", "爱":"yêu", "觉得":"cảm thấy", "会":"biết", "能":"có thể"}; 
         const pl_vi = {"学校":"trường học", "家":"nhà", "饭店":"nhà hàng", "商店":"cửa hàng", "北京":"Bắc Kinh", "中国":"Trung Quốc", "车站":"trạm xe", "机场":"sân bay", "国外":"nước ngoài", "大学":"đại học", "房间":"căn phòng", "教室":"lớp học"}; 
         const adj_vi = {"好":"tốt/khỏe", "多":"nhiều", "少":"ít", "大":"to", "小":"nhỏ", "冷":"lạnh", "热":"nóng", "高兴":"vui vẻ", "漂亮":"xinh đẹp", "忙":"bận", "累":"mệt", "贵":"đắt", "旧":"cũ", "干净":"sạch sẽ"};
-        
-        // Dictionary phân nhóm Logic để tránh sinh câu vô lý
-        const eat_dict = {"吃":"ăn", "买":"mua", "做":"làm"};
-        const food_dict = {"饭":"cơm", "菜":"món ăn", "苹果":"táo", "鸡蛋":"trứng gà", "包子":"bánh bao"};
-        const drink_dict = {"喝":"uống", "买":"mua"};
-        const water_dict = {"水":"nước", "茶":"trà", "咖啡":"cà phê"};
-        const see_dict = {"看":"xem", "买":"mua"};
-        const obj_dict = {"书":"sách", "电脑":"máy tính", "电视":"tivi", "衣服":"quần áo"};
+        const eat_dict = {"吃":"ăn", "买":"mua", "做":"làm"}; const food_dict = {"饭":"cơm", "菜":"món ăn", "苹果":"táo", "鸡蛋":"trứng gà", "包子":"bánh bao"};
+        const drink_dict = {"喝":"uống", "买":"mua"}; const water_dict = {"水":"nước", "茶":"trà", "咖啡":"cà phê"};
+        const see_dict = {"看":"xem", "买":"mua"}; const obj_dict = {"书":"sách", "电脑":"máy tính", "电视":"tivi", "衣服":"quần áo"};
         const possess_dict = {"书":"sách", "电脑":"máy tính", "电视":"tivi", "衣服":"quần áo", "杯子":"cái cốc", "桌子":"cái bàn", "椅子":"cái ghế", "地图":"bản đồ", "车票":"vé xe"};
 
         function getVN() {
             let r = Math.random();
-            if(r < 0.33) {
-                let v = Object.keys(eat_dict)[Math.floor(Math.random()*3)];
-                let n = Object.keys(food_dict)[Math.floor(Math.random()*5)];
-                return {v:v, n:n, vi_v:eat_dict[v], vi_n:food_dict[n]};
-            } else if(r < 0.66) {
-                let v = Object.keys(drink_dict)[Math.floor(Math.random()*2)];
-                let n = Object.keys(water_dict)[Math.floor(Math.random()*3)];
-                return {v:v, n:n, vi_v:drink_dict[v], vi_n:water_dict[n]};
-            } else {
-                let v = Object.keys(see_dict)[Math.floor(Math.random()*2)];
-                let n = Object.keys(obj_dict)[Math.floor(Math.random()*4)];
-                return {v:v, n:n, vi_v:see_dict[v], vi_n:obj_dict[n]};
-            }
+            if(r < 0.33) { let v = Object.keys(eat_dict)[Math.floor(Math.random()*3)]; let n = Object.keys(food_dict)[Math.floor(Math.random()*5)]; return {v:v, n:n, vi_v:eat_dict[v], vi_n:food_dict[n]}; } 
+            else if(r < 0.66) { let v = Object.keys(drink_dict)[Math.floor(Math.random()*2)]; let n = Object.keys(water_dict)[Math.floor(Math.random()*3)]; return {v:v, n:n, vi_v:drink_dict[v], vi_n:water_dict[n]}; } 
+            else { let v = Object.keys(see_dict)[Math.floor(Math.random()*2)]; let n = Object.keys(obj_dict)[Math.floor(Math.random()*4)]; return {v:v, n:n, vi_v:see_dict[v], vi_n:obj_dict[n]}; }
         }
 
         const subjects = Object.keys(subj_vi); const times = Object.keys(time_vi); const verbs_move = Object.keys(vm_vi); const places = Object.keys(pl_vi); const adjectives = Object.keys(adj_vi);
@@ -982,7 +983,7 @@
     function renderLibrary() { document.getElementById('lib-count').innerText = vocabData.length; const html = vocabData.map((v, i) => `<div class="bg-white/5 p-3 rounded border border-white/10 flex flex-col justify-between hover:bg-white/10 transition"> <div class="flex justify-between items-center mb-1"> <span class="text-xs text-gray-500 font-mono">#${i+1}</span> <span class="text-lg font-bold text-white">${v.hz}</span> </div> <div class="text-xs text-indigo-300 font-mono">${v.py}</div> <div class="text-[10px] text-gray-400 uppercase mt-1 tracking-widest">${v.mn}</div> </div>`).join(''); document.getElementById('lib-list').innerHTML = html; }
     function renderGrammarList() { document.getElementById('grammar-list').innerHTML = grammarRules.map(r => `<div class="bg-white/5 p-6 border-l-2 border-indigo-500"> <h3 class="text-lg font-light text-white mb-2">${r.title}</h3> <code class="block bg-black/20 p-2 text-pink-300 mb-2 font-mono text-xs">${r.structure}</code> <p class="text-xs text-gray-400 italic">Ví dụ: ${r.ex}</p> </div>`).join(''); }
 
-    // --- 12. BÀI KIỂM TRA ---
+    // --- 12. BÀI KIỂM TRA TỔNG HỢP ---
     function switchTestMode(mode) { playSound('click'); document.getElementById('test-grammar').classList.add('hidden'); document.getElementById('test-fill').classList.add('hidden'); document.getElementById('test-speed').classList.add('hidden'); document.getElementById(`test-${mode}`).classList.remove('hidden'); if(mode === 'grammar') startGrammarTest(); if(mode === 'fill') generateFillTest(); if(mode === 'speed') resetSpeedTest(); }
     function startGrammarTest() { document.getElementById('tg-step1').classList.remove('hidden'); document.getElementById('tg-step2').classList.add('hidden'); document.getElementById('tg-step3').classList.add('hidden'); document.getElementById('tg-step4').classList.add('hidden'); document.getElementById('tg-sub-input').value = ""; document.getElementById('tg-noun-input').value = ""; document.getElementById('tg-make-sentence').value = ""; document.getElementById('tg-feedback').innerText = ""; currentTestRule = grammarRules[Math.floor(Math.random() * grammarRules.length)]; const subs = ["我","你","他","爸爸","妈妈"]; const nouns = ["学生","老师","医生","好人"]; const S = subs[Math.floor(Math.random() * subs.length)]; const N = nouns[Math.floor(Math.random() * nouns.length)]; if(currentTestRule.id === "g1") currentTestSentence = S + "是" + N; if(currentTestRule.id === "g2") currentTestSentence = S + "不是" + N; if(currentTestRule.id === "g3") currentTestSentence = S + "是" + N + "吗？"; if(currentTestRule.id === "g4") currentTestSentence = "我们"; document.getElementById('tg-question').innerText = currentTestSentence; let opts = [...grammarRules].sort(() => Math.random() - 0.5).slice(0, 3); if(!opts.includes(currentTestRule)) opts[0] = currentTestRule; opts = opts.sort(() => Math.random() - 0.5); document.getElementById('tg-options').innerHTML = opts.map(r => `<button onclick="checkStructure('${r.id}')" class="p-3 bg-white/5 border border-white/20 rounded text-xs hover:bg-white hover:text-black transition text-left">${r.structure}</button>`).join(''); }
     function checkStructure(id) { if(id === currentTestRule.id) { playSound('correct'); document.getElementById('tg-step1').classList.add('hidden'); document.getElementById('tg-step2').classList.remove('hidden'); document.getElementById('tg-feedback').innerText = "Đúng cấu trúc!"; } else { playSound('wrong'); alert("Sai rồi! Hãy nhìn kỹ câu hỏi."); } }
@@ -1070,10 +1071,7 @@
         e.preventDefault(); 
         hasMoved = true; 
         
-        let containerId = currentDragElement.classList.contains('slot-tool') ? 'inventory-container' : 'hud-stats-container';
-        const containerElement = document.getElementById(containerId);
-        if (!containerElement) return;
-        const containerRect = containerElement.getBoundingClientRect();
+        const containerRect = document.getElementById('hud-stats-container').getBoundingClientRect();
         
         let newX = e.clientX - containerRect.left - offsetX;
         let newY = e.clientY - containerRect.top - offsetY;
@@ -1085,19 +1083,12 @@
     document.addEventListener('mouseup', () => {
         if (currentDragElement) {
             currentDragElement.style.cursor = 'grab';
-            currentDragElement.style.zIndex = 50; 
+            currentDragElement.style.zIndex = 60; 
             currentDragElement = null;
         }
     });
 
-    // CLICK ĐỂ MỞ TÍNH NĂNG
-    const thuvienIcon = document.getElementById('drag-thuvien');
-    if(thuvienIcon) {
-        thuvienIcon.addEventListener('click', () => {
-            if(!hasMoved) { openThuvienHoa(); }
-        });
-    }
-
+    // --- CLICK EVENTS ---
     const ruongIcon = document.getElementById('drag-ruong');
     if(ruongIcon) {
         ruongIcon.addEventListener('click', () => {
@@ -1105,14 +1096,14 @@
         });
     }
 
-    // --- INIT APP ---
+    // --- INIT APP KHI TẤT CẢ HÀM ĐÃ ĐƯỢC TẠO ---
     window.onload = () => { 
         renderMusic(); 
         renderLibrary(); 
         renderGrammarList(); 
-        renderInventory(); // Load túi đồ lúc khởi động
+        renderInventory(); 
         
-        // Khôi phục Setting Text
+        // Khôi phục Setting Text Color
         const nameClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
         const resClass = `font-tutien text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
         const nuocClass = `font-tutien text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
