@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.53 Absolute Final</title>
+    <title>Skyreign Hub | V40.54 Sentence Practice Master</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -119,25 +119,21 @@
                 <div id="slot-3" class="absolute flex items-center justify-center" style="top: 141px; left: 341px; width: 50px; height: 50px;"></div>
                 <div id="slot-4" class="absolute flex items-center justify-center" style="top: 143px; left: 427px; width: 50px; height: 50px;"></div>
                 <div id="slot-5" class="absolute flex items-center justify-center" style="top: 143px; left: 512px; width: 50px; height: 50px;"></div>
-                
                 <div id="slot-6" class="absolute flex items-center justify-center" style="top: 231px; left: 167px; width: 50px; height: 50px;"></div>
                 <div id="slot-7" class="absolute flex items-center justify-center" style="top: 230px; left: 255px; width: 50px; height: 50px;"></div>
                 <div id="slot-8" class="absolute flex items-center justify-center" style="top: 229px; left: 341px; width: 51px; height: 52px;"></div>
                 <div id="slot-9" class="absolute flex items-center justify-center" style="top: 231px; left: 427px; width: 50px; height: 50px;"></div>
                 <div id="slot-10" class="absolute flex items-center justify-center" style="top: 232px; left: 513px; width: 50px; height: 50px;"></div>
-                
                 <div id="slot-11" class="absolute flex items-center justify-center" style="top: 318px; left: 168px; width: 50px; height: 50px;"></div>
                 <div id="slot-12" class="absolute flex items-center justify-center" style="top: 318px; left: 256px; width: 50px; height: 50px;"></div>
                 <div id="slot-13" class="absolute flex items-center justify-center" style="top: 318px; left: 339px; width: 50px; height: 50px;"></div>
                 <div id="slot-14" class="absolute flex items-center justify-center" style="top: 320px; left: 426px; width: 50px; height: 50px;"></div>
                 <div id="slot-15" class="absolute flex items-center justify-center" style="top: 319px; left: 513px; width: 50px; height: 50px;"></div>
-                
                 <div id="slot-16" class="absolute flex items-center justify-center" style="top: 411px; left: 167px; width: 50px; height: 50px;"></div>
                 <div id="slot-17" class="absolute flex items-center justify-center" style="top: 409px; left: 254px; width: 50px; height: 50px;"></div>
                 <div id="slot-18" class="absolute flex items-center justify-center" style="top: 410px; left: 340px; width: 50px; height: 50px;"></div>
                 <div id="slot-19" class="absolute flex items-center justify-center" style="top: 411px; left: 427px; width: 50px; height: 50px;"></div>
                 <div id="slot-20" class="absolute flex items-center justify-center" style="top: 410px; left: 513px; width: 50px; height: 50px;"></div>
-                
                 <div id="slot-21" class="absolute flex items-center justify-center" style="top: 497px; left: 167px; width: 50px; height: 50px;"></div>
                 <div id="slot-22" class="absolute flex items-center justify-center" style="top: 497px; left: 255px; width: 50px; height: 50px;"></div>
                 <div id="slot-23" class="absolute flex items-center justify-center" style="top: 498px; left: 341px; width: 50px; height: 50px;"></div>
@@ -173,10 +169,34 @@
     </div>
 </div>
 
+<div id="sentence-modal" class="fixed inset-0 z-[3000] hidden bg-black/90 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="glass-card w-full max-w-2xl p-10 relative flex flex-col items-center">
+        <button onclick="closeSentencePractice()" class="absolute top-4 right-4 text-white/50 hover:text-red-500 text-3xl transition">&times;</button>
+        <h3 id="sp-title" class="text-2xl text-amber-300 font-bold mb-2 uppercase tracking-widest">Luyện Câu</h3>
+        <div id="sp-progress" class="text-xs text-gray-400 mb-8 font-mono bg-white/10 px-3 py-1 rounded">Câu 1/12</div>
+        
+        <div id="sp-vi" class="text-3xl font-light text-white mb-4 text-center leading-relaxed">Tôi là học sinh.</div>
+        
+        <div id="sp-hint-area" class="flex flex-col items-center justify-center mb-8 h-16 transition-all duration-300 opacity-0">
+            <div id="sp-py" class="text-sm text-indigo-300 font-mono mb-1 tracking-widest">Wǒ shì xuésheng.</div>
+            <div id="sp-zh-hint" class="text-2xl text-yellow-400 font-bold">我是学生。</div>
+        </div>
+        
+        <input type="text" id="sp-input" class="w-full max-w-lg bg-transparent border-b-2 border-indigo-500 py-3 text-center text-4xl outline-none mb-8 text-white transition focus:border-amber-300" placeholder="Gõ chữ Hán..." onkeypress="if(event.key==='Enter') checkSentence()">
+        
+        <div class="flex gap-4 w-full max-w-lg">
+            <button onclick="checkSentence()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded uppercase tracking-widest transition shadow-[0_0_15px_rgba(79,70,229,0.4)]">Kiểm Tra</button>
+            <button onclick="showSentenceHint()" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-4 px-8 rounded uppercase tracking-widest transition border border-gray-400">Gợi Ý</button>
+        </div>
+        
+        <div id="sp-feedback" class="mt-6 text-xs font-bold uppercase tracking-[0.2em] h-6 text-center"></div>
+    </div>
+</div>
+
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.53 FINAL GACHA & SLOTS</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.54 SENTENCE PRACTICE MASTER</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -270,7 +290,7 @@
             <img src="suutam.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="Suu Tam">
         </div>
 
-        <div id="fixed-vip" class="absolute pointer-events-none" style="top: 262px; left: 184px; width: 138px; height: 125px; z-index: 50;">
+        <div id="fixed-vip" class="absolute pointer-events-auto cursor-pointer hover:scale-105 hover:brightness-125 transition" style="top: 262px; left: 184px; width: 138px; height: 125px; z-index: 50;">
             <img src="VIP.png" class="w-full h-full object-contain pointer-events-none select-none" draggable="false" alt="VIP">
         </div>
 
@@ -288,10 +308,10 @@
     <div class="min-h-screen flex flex-col items-center pt-32 px-4 pb-24">
         <div class="glass-card p-8 w-full max-w-5xl">
             <div class="flex justify-between items-end mb-6 border-b border-white/10 pb-4">
-                <h2 class="text-2xl font-light uppercase tracking-widest text-white">Thư Viện Từ Vựng</h2>
+                <h2 class="text-2xl font-light uppercase tracking-widest text-white">Thư Viện Từ Vựng & Đặt Câu</h2>
                 <div class="text-[10px] bg-indigo-900 text-indigo-300 px-3 py-1 uppercase tracking-widest rounded">Tổng: <span id="lib-count" class="font-bold text-white">0</span> Từ</div>
             </div>
-            <div id="lib-list" class="lib-grid max-h-[60vh] overflow-y-auto pr-2 no-scrollbar"></div>
+            <div id="lib-list" class="lib-grid max-h-[70vh] overflow-y-auto pr-2 no-scrollbar"></div>
         </div>
     </div>
 </div>
@@ -652,33 +672,725 @@
 </div>
 
 <script>
-    // --- 1. DATA TỪ VỰNG NGỮ PHÁP ---
-    const vocabData = [
-        { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" }, { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" }, { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" }, { hz: "先生", py: "xiānsheng", mn: "ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô" },
-        { hz: "零", py: "líng", mn: "số 0" }, { hz: "一", py: "yī", mn: "số 1" }, { hz: "二", py: "èr", mn: "số 2" }, { hz: "三", py: "sān", mn: "số 3" }, { hz: "四", py: "sì", mn: "số 4" }, { hz: "五", py: "wǔ", mn: "số 5" }, { hz: "六", py: "liù", mn: "số 6" }, { hz: "七", py: "qī", mn: "số 7" }, { hz: "八", py: "bā", mn: "số 8" }, { hz: "九", py: "jiǔ", mn: "số 9" }, { hz: "十", py: "shí", mn: "số 10" }, { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" }, { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" }, { hz: "号", py: "hào", mn: "ngày" }, { hz: "星期", py: "xīngqī", mn: "tuần" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" }, { hz: "时候", py: "shíhou", mn: "khi lúc" },
-        { hz: "是", py: "shì", mn: "là" }, { hz: "有", py: "yǒu", mn: "có" }, { hz: "在", py: "zài", mn: "ở" }, { hz: "要", py: "yào", mn: "muốn/cần" }, { hz: "喜欢", py: "xǐhuan", mn: "thích" }, { hz: "爱", py: "ài", mn: "yêu" }, { hz: "吃", py: "chī", mn: "ăn" }, { hz: "喝", py: "hē", mn: "uống" }, { hz: "去", py: "qù", mn: "đi" }, { hz: "来", py: "lái", mn: "đến" }, { hz: "想", py: "xiǎng", mn: "muốn/nghĩ" }, { hz: "看", py: "kàn", mn: "nhìn/xem" }, { hz: "听", py: "tīng", mn: "nghe" }, { hz: "说", py: "shuō", mn: "nói" }, { hz: "读", py: "dú", mn: "đọc" }, { hz: "写", py: "xiě", mn: "viết" }, { hz: "做", py: "zuò", mn: "làm" }, { hz: "买", py: "mǎi", mn: "mua" }, { hz: "给", py: "gěi", mn: "cho/đưa" }, { hz: "回", py: "huí", mn: "về" }, { hz: "住", py: "zhù", mn: "sống" }, { hz: "认识", py: "rènshi", mn: "quen biết" }, { hz: "会", py: "huì", mn: "biết" }, { hz: "能", py: "néng", mn: "có thể" },
-        { hz: "好", py: "hǎo", mn: "tốt/khỏe" }, { hz: "多", py: "duō", mn: "nhiều" }, { hz: "少", py: "shǎo", mn: "ít" }, { hz: "大", py: "dà", mn: "to/lớn" }, { hz: "小", py: "xiǎo", mn: "nhỏ" }, { hz: "冷", py: "lěng", mn: "lạnh" }, { hz: "热", py: "rè", mn: "nóng" }, { hz: "高兴", py: "gāoxìng", mn: "vui vẻ" }, { hz: "漂亮", py: "piàoliang", mn: "xinh đẹp" }, { hz: "对", py: "duì", mn: "đúng" }, { hz: "错", py: "cuò", mn: "sai" }, { hz: "忙", py: "máng", mn: "bận" }, { hz: "累", py: "lèi", mn: "mệt" },
-        { hz: "水", py: "shuǐ", mn: "nước" }, { hz: "饭", py: "fàn", mn: "cơm" }, { hz: "菜", py: "cài", mn: "món ăn" }, { hz: "茶", py: "chá", mn: "trà" }, { hz: "苹果", py: "píngguǒ", mn: "táo" }, { hz: "钱", py: "qián", mn: "tiền" }, { hz: "东西", py: "dōngxi", mn: "đồ đạc" }, { hz: "杯子", py: "bēizi", mn: "cái cốc" }, { hz: "衣服", py: "yīfu", mn: "quần áo" }, { hz: "书", py: "shū", mn: "sách" }, { hz: "桌子", py: "zhuōzi", mn: "cái bàn" }, { hz: "椅子", py: "yǐzi", mn: "cái ghế" }, { hz: "电脑", py: "diànnǎo", mn: "máy tính" }, { hz: "电视", py: "diànshì", mn: "tivi" }, { hz: "家", py: "jiā", mn: "nhà" }, { hz: "学校", py: "xuéxiào", mn: "trường học" }, { hz: "饭店", py: "fàndiàn", mn: "nhà hàng" }, { hz: "商店", py: "shāngdiàn", mn: "cửa hàng" }, { hz: "北京", py: "běijīng", mn: "Bắc Kinh" }, { hz: "中国", py: "zhōngguó", mn: "Trung Quốc" },
-        { hz: "不", py: "bù", mn: "không" }, { hz: "没", py: "méi", mn: "chưa/không" }, { hz: "很", py: "hěn", mn: "rất" }, { hz: "太", py: "tài", mn: "quá/lắm" }, { hz: "都", py: "dōu", mn: "đều" }, { hz: "和", py: "hé", mn: "và" }, { hz: "的", py: "de", mn: "của (trợ từ)" }, { hz: "地", py: "de", mn: "một cách" }, { hz: "吗", py: "ma", mn: "không?" }, { hz: "呢", py: "ne", mn: "thì sao" }, { hz: "了", py: "le", mn: "rồi" }, { hz: "什么", py: "shénme", mn: "cái gì" }, { hz: "哪儿", py: "nǎr", mn: "ở đâu" }, { hz: "怎么", py: "zěnme", mn: "làm sao" }, { hz: "多少", py: "duōshao", mn: "bao nhiêu" }, { hz: "几", py: "jǐ", mn: "mấy" },
-        { hz: "爱好", py: "àihào", mn: "yêu thích" }, { hz: "吧", py: "ba", mn: "nhé" }, { hz: "白", py: "bái", mn: "màu trắng" }, { hz: "白天", py: "báitiān", mn: "ban ngày" }, { hz: "百", py: "bǎi", mn: "một trăm" }, { hz: "班", py: "bān", mn: "lớp học" }, { hz: "半", py: "bàn", mn: "một nửa" }, { hz: "帮", py: "bāng", mn: "giúp đỡ" }, { hz: "包", py: "bāo", mn: "bao" }, { hz: "包子", py: "bāozǐ", mn: "bánh bao" }, { hz: "北边", py: "běibian", mn: "phía bắc" }, { hz: "本", py: "běn", mn: "cuốn/vở" }, { hz: "比", py: "bǐ", mn: "hơn/so với" }, { hz: "别", py: "bié", mn: "đừng" }, { hz: "别的", py: "bié de", mn: "cái khác" }, { hz: "病", py: "bìng", mn: "bệnh/ốm" }, { hz: "不客气", py: "búkèqi", mn: "không có gì" }, { hz: "不用", py: "búyòng", mn: "không cần" }, { hz: "差", py: "chà", mn: "kém/tệ" }, { hz: "常", py: "cháng", mn: "thường xuyên" }, { hz: "尝尝", py: "cháng cháng", mn: "nếm thử" }, { hz: "唱", py: "chàng", mn: "hát" }, { hz: "车", py: "chē", mn: "xe" }, { hz: "车票", py: "chēpiào", mn: "vé xe" }, { hz: "车上", py: "chē shàng", mn: "trên xe" }, { hz: "车站", py: "chēzhàn", mn: "trạm xe" }, { hz: "出", py: "chū", mn: "ra/đi" }, { hz: "出来", py: "chūlái", mn: "ra đây" }, { hz: "床", py: "chuáng", mn: "giường" }, { hz: "次", py: "cì", mn: "lần/lượt" }, { hz: "从", py: "cóng", mn: "từ" }, { hz: "打", py: "dǎ", mn: "打车", py: "dǎchē", mn: "bắt xe" }, { hz: "打电话", py: "dǎ diànhuà", mn: "gọi điện thoại" }, { hz: "打开", py: "dǎkāi", mn: "mở ra" }, { hz: "打球", py: "dǎqiú", mn: "chơi bóng" }, { hz: "大学", py: "dàxué", mn: "đại học" }, { hz: "到", py: "dào", mn: "đến" }, { hz: "得到", py: "dédào", mn: "đạt được" }, { hz: "等", py: "děng", mn: "đợi/chờ" }, 
-        { hz: "地", py: "dì", mn: "đất" }, { hz: "地点", py: "dìdiǎn", mn: "địa điểm" }, { hz: "地方", py: "dìfāng", mn: "nơi chốn" }, { hz: "地上", py: "dìshàng", mn: "mặt đất" }, { hz: "地图", py: "dìtú", mn: "bản đồ" }, 
-        { hz: "弟弟", py: "dìdi", mn: "em trai" }, { hz: "第", py: "dì", mn: "thứ tự" }, { hz: "电", py: "diàn", mn: "điện" }, { hz: "电话", py: "diànhuà", mn: "điện thoại" }, { hz: "电影", py: "diànyǐng", mn: "phim ảnh" }, 
-        { hz: "电影院", py: "diànyǐngyuàn", mn: "rạp chiếu phim" }, { hz: "东", py: "dōng", mn: "hướng đông" }, { hz: "动", py: "dòng", mn: "cử động" }, { hz: "动作", py: "dòngzuò", mn: "động tác" }, { hz: "读书", py: "dúshū", mn: "học bài" }, 
-        { hz: "饿", py: "è", mn: "đói" }, { hz: "房间", py: "fángjiān", mn: "căn phòng" }, { hz: "房子", py: "fángzi", mn: "căn nhà" }, { hz: "放", py: "fàng", mn: "đặt/để" }, { hz: "放假", py: "fàngjià", mn: "nghỉ lễ" }, 
-        { hz: "放学", py: "fàngxué", mn: "tan học" }, { hz: "飞", py: "fēi", mn: "bay" }, { hz: "飞机", py: "fēijī", mn: "máy bay" }, { hz: "风", py: "fēng", mn: "gió" }, { hz: "干", py: "gān", mn: "khô/cạn" }, 
-        { hz: "干净", py: "gānjìng", mn: "sạch sẽ" }, { hz: "干", py: "gàn", mn: "làm" }, { hz: "干什么", py: "gàn shénme", mn: "làm gì thế" }, { hz: "高", py: "gāo", mn: "cao" }, { hz: "告诉", py: "gàosu", mn: "nói/bày tỏ" }, 
-        { hz: "哥哥", py: "gēge", mn: "anh trai" }, { hz: "歌", py: "gē", mn: "bài hát" }, { hz: "跟", py: "gēn", mn: "cùng/với" }, { hz: "工人", py: "gōngrén", mn: "công nhân" }, { hz: "工作", py: "gōngzuò", mn: "công việc" }, 
-        { hz: "关", py: "guān", mn: "đóng/tắt" }, { hz: "关上", py: "guān shàng", mn: "đóng lại" }, { hz: "贵", py: "guì", mn: "đắt/mắc" }, { hz: "国", py: "guó", mn: "nước/quốc gia" }, { hz: "国外", py: "guó wài", mn: "nước ngoài" }, 
-        { hz: "过", py: "guò", mn: "đi qua" }, { hz: "孩子", py: "hái zi", mn: "trẻ em" }, { hz: "汉语", py: "Hàn yǔ", mn: "tiếng Hán" }, { hz: "汉字", py: "Hàn zì", mn: "chữ Hán" }, { hz: "好玩儿", py: "hǎowánr", mn: "thú vị" }, 
-        { hz: "后", py: "hòu", mn: "đằng sau" }, { hz: "后天", py: "hòutiān", mn: "ngày hôm sau" }, { hz: "花", py: "huā", mn: "hoa" }, { hz: "话", py: "huà", mn: "lời nói" }, { hz: "坏", py: "huài", mn: "hư hỏng" }, 
-        { hz: "还", py: "huán", mn: "trả lại" }, { hz: "回答", py: "huídá", mn: "trả lời" }, { hz: "回到", py: "huídào", mn: "trở về" }, { hz: "火车", py: "huǒchē", mn: "tàu hỏa" }, { hz: "机场", py: "jīchǎng", mn: "sân bay" }, 
-        { hz: "机票", py: "jīpiào", mn: "vé máy bay" }, { hz: "鸡蛋", py: "jīdàn", mn: "trứng gà" }, { hz: "记", py: "jì", mn: "nhớ" }, { hz: "记得", py: "jìde", mn: "ghi nhớ" }, { hz: "记住", py: "jìzhù", mn: "nhớ kĩ" },
-        { hz: "加", py: "jiā", mn: "cộng/thêm" }, { hz: "件", py: "jiàn", mn: "chiếc/cái" }, { hz: "健康", py: "jiànkāng", mn: "khỏe mạnh" }, { hz: "见面", py: "jiànmiàn", mn: "gặp mặt" }, { hz: "讲", py: "jiǎng", mn: "giảng/kể" }, 
-        { hz: "教", py: "jiāo", mn: "dạy" }, { hz: "脚", py: "jiǎo", mn: "chân" }, { hz: "叫", py: "jiào", mn: "gọi tên" }, { hz: "教室", py: "jiàoshì", mn: "lớp học" }, { hz: "接待", py: "jiēdài", mn: "tiếp đón" }, 
-        { hz: "接", py: "jiē", mn: "đón/nhận" }, { hz: "近", py: "jìn", mn: "gần" }, { hz: "进", py: "jìn", mn: "vào" }, { hz: "进来", py: "jìnlái", mn: "vào đây" }, { hz: "进去", py: "jìnqù", mn: "vào đó" }, 
-        { hz: "久", py: "jiǔ", mn: "lâu" }, { hz: "旧", py: "jiù", mn: "cũ" }, { hz: "就", py: "jiù", mn: "thì/liền" }, { hz: "觉得", py: "juéde", mn: "cảm thấy" }, { hz: "咖啡", py: "kāfēi", mn: "cà phê" }, 
-        { hz: "开始", py: "kāishǐ", mn: "bắt đầu" }, { hz: "考试", py: "kǎoshì", mn: "thi cử" }
-    ];
+    // --- 1. DATA TỪ VỰNG VÀ CÁC CÂU LUYỆN TẬP ---
+    const rawVocabText = `
+#1 我 (wǒ) – tôi
+我是学生。 (Wǒ shì xuésheng.) – Tôi là học sinh.
+我喜欢吃米饭。 (Wǒ xǐhuan chī mǐfàn.) – Tôi thích ăn cơm.
+我现在很忙。 (Wǒ xiànzài hěn máng.) – Bây giờ tôi rất bận.
+我明天要去上班。 (Wǒ míngtiān yào qù shàngbān.) – Ngày mai tôi phải đi làm.
+我有一个女儿。 (Wǒ yǒu yí gè nǚ'ér.) – Tôi có một con gái.
+我爸爸是老师。 (Wǒ bàba shì lǎoshī.) – Bố tôi là giáo viên.
+我爱我的妈妈。 (Wǒ ài wǒ de māma.) – Tôi yêu mẹ tôi.
+我昨天吃了面条。 (Wǒ zuótiān chī le miàntiáo.) – Hôm qua tôi ăn mì.
+我上午九点上课。 (Wǒ shàngwǔ jiǔ diǎn shàngkè.) – Buổi sáng tôi học lúc chín giờ.
+我和朋友一起吃饭。 (Wǒ hé péngyou yìqǐ chīfàn.) – Tôi ăn cùng bạn bè.
+我是越南人。 (Wǒ shì Yuènán rén.) – Tôi là người Việt Nam.
+我要喝水。 (Wǒ yào hē shuǐ.) – Tôi muốn uống nước.
+
+#2 你 (nǐ) – bạn (ngôi thứ hai)
+你好！ (Nǐ hǎo!) – Chào bạn!
+你是老师吗？ (Nǐ shì lǎoshī ma?) – Bạn có phải là giáo viên không?
+你喜欢吃什么？ (Nǐ xǐhuan chī shénme?) – Bạn thích ăn gì?
+你现在几点下班？ (Nǐ xiànzài jǐ diǎn xiàbān?) – Bây giờ bạn tan làm mấy giờ?
+你明天有空吗？ (Nǐ míngtiān yǒu kòng ma?) – Ngày mai bạn rảnh không?
+你有儿子吗？ (Nǐ yǒu érzi ma?) – Bạn có con trai không?
+你爸爸做什么工作？ (Nǐ bàba zuò shénme gōngzuò?) – Bố bạn làm nghề gì?
+你爱喝茶吗？ (Nǐ ài hē chá ma?) – Bạn có thích uống trà không?
+你昨天去哪儿了？ (Nǐ zuótiān qù nǎr le?) – Hôm qua bạn đi đâu?
+你上午做什么？ (Nǐ shàngwǔ zuò shénme?) – Buổi sáng bạn làm gì?
+你是我的好朋友。 (Nǐ shì wǒ de hǎo péngyou.) – Bạn là bạn tốt của tôi.
+你要不要一起吃午饭？ (Nǐ yào bu yào yìqǐ chī wǔfàn?) – Bạn có muốn ăn trưa cùng không?
+
+#3 他 (tā) – anh ấy / cậu ấy
+他是我的同学。 (Tā shì wǒ de tóngxué.) – Anh ấy là bạn cùng lớp của tôi.
+他喜欢喝咖啡。 (Tā xǐhuan hē kāfēi.) – Anh ấy thích uống cà phê.
+他现在在公司。 (Tā xiànzài zài gōngsī.) – Bây giờ anh ấy đang ở công ty.
+他明天要开会。 (Tā míngtiān yào kāihuì.) – Ngày mai anh ấy phải họp.
+他有一个儿子。 (Tā yǒu yí gè érzi.) – Anh ấy có một con trai.
+他爸爸是医生。 (Tā bàba shì yīshēng.) – Bố anh ấy là bác sĩ.
+他爱踢足球。 (Tā ài tī zúqiú.) – Anh ấy yêu đá bóng.
+他昨天加班了。 (Tā zuótiān jiābān le.) – Hôm qua anh ấy làm thêm giờ.
+他上午十点上班。 (Tā shàngwǔ shí diǎn shàngbān.) – Anh ấy đi làm lúc mười giờ sáng.
+他和朋友去吃饭。 (Tā hé péngyou qù chīfàn.) – Anh ấy đi ăn cùng bạn.
+他是好人。 (Tā shì hǎo rén.) – Anh ấy là người tốt.
+他要买新手机。 (Tā yào mǎi xīn shǒujī.) – Anh ấy muốn mua điện thoại mới.
+
+#4 她 (tā) – cô ấy
+她是我的姐姐。 (Tā shì wǒ de jiějie.) – Cô ấy là chị gái tôi.
+她喜欢吃水果。 (Tā xǐhuan chī shuǐguǒ.) – Cô ấy thích ăn trái cây.
+她现在在学校。 (Tā xiànzài zài xuéxiào.) – Bây giờ cô ấy đang ở trường.
+她明天要去超市。 (Tā míngtiān yào qù chāoshì.) – Ngày mai cô ấy phải đi siêu thị.
+她有一个女儿。 (Tā yǒu yí gè nǚ'ér.) – Cô ấy có một con gái.
+她妈妈很漂亮。 (Tā māma hěn piàoliang.) – Mẹ cô ấy rất xinh.
+她爱看书。 (Tā ài kàn shū.) – Cô ấy yêu đọc sách.
+她昨天买了衣服。 (Tā zuótiān mǎi le yīfu.) – Hôm qua cô ấy mua quần áo.
+她下午三点下课。 (Tā xiàwǔ sān diǎn xiàkè.) – Cô ấy tan học lúc ba giờ chiều.
+她和朋友一起学习。 (Tā hé péngyou yìqǐ xuéxí.) – Cô ấy học cùng bạn.
+她是好学生。 (Tā shì hǎo xuésheng.) – Cô ấy là học sinh giỏi.
+她要喝牛奶。 (Tā yào hē niúnǎi.) – Cô ấy muốn uống sữa.
+
+#5 我们 (wǒmen) – chúng tôi / chúng ta
+我们是同学。 (Wǒmen shì tóngxué.) – Chúng tôi là bạn cùng lớp.
+我们喜欢吃中国菜。 (Wǒmen xǐhuan chī Zhōngguó cài.) – Chúng tôi thích ăn món Trung.
+我们现在去吃饭吧。 (Wǒmen xiànzài qù chīfàn ba.) – Bây giờ chúng ta đi ăn nhé.
+我们明天一起去公园。 (Wǒmen míngtiān yìqǐ qù gōngyuán.) – Ngày mai chúng ta cùng đi công viên.
+我们有三个老师。 (Wǒmen yǒu sān gè lǎoshī.) – Chúng tôi có ba giáo viên.
+我们爱我们的爸爸妈妈。 (Wǒmen ài wǒmen de bàba māma.) – Chúng tôi yêu bố mẹ chúng tôi.
+我们昨天看电影了。 (Wǒmen zuótiān kàn diànyǐng le.) – Hôm qua chúng tôi xem phim.
+我们上午有中文课。 (Wǒmen shàngwǔ yǒu Zhōngwén kè.) – Buổi sáng chúng tôi có giờ tiếng Trung.
+我们中午吃米饭。 (Wǒmen zhōngwǔ chī mǐfàn.) – Chúng tôi ăn cơm trưa.
+我们都是好朋友。 (Wǒmen dōu shì hǎo péngyou.) – Chúng tôi đều là bạn tốt.
+我们要去上班。 (Wǒmen yào qù shàngbān.) – Chúng tôi phải đi làm.
+我们是越南人。 (Wǒmen shì Yuènán rén.) – Chúng tôi là người Việt Nam.
+
+#6 谁 (shéi) – ai
+谁是你的老师？ (Shéi shì nǐ de lǎoshī?) – Ai là giáo viên của bạn?
+谁想吃苹果？ (Shéi xiǎng chī píngguǒ?) – Ai muốn ăn táo?
+那是谁？ (Nà shì shéi?) – Đó là ai?
+谁明天来我家？ (Shéi míngtiān lái wǒ jiā?) – Ai ngày mai đến nhà tôi?
+谁有儿子？ (Shéi yǒu érzi?) – Ai có con trai?
+谁是王先生？ (Shéi shì Wáng xiānsheng?) – Ai là ông Vương?
+谁喜欢喝茶？ (Shéi xǐhuan hē chá?) – Ai thích uống trà?
+昨天谁来了？ (Zuótiān shéi lái le?) – Hôm qua ai đến?
+上午谁上课？ (Shàngwǔ shéi shàngkè?) – Buổi sáng ai học?
+谁是你的朋友？ (Shéi shì nǐ de péngyou?) – Ai là bạn của bạn?
+谁要喝水？ (Shéi yào hē shuǐ?) – Ai muốn uống nước?
+谁爱看电影？ (Shéi ài kàn diànyǐng?) – Ai thích xem phim?
+
+#7 爸爸 (bàba) – bố
+我爸爸是老师。 (Wǒ bàba shì lǎoshī.) – Bố tôi là giáo viên.
+爸爸喜欢喝咖啡。 (Bàba xǐhuan hē kāfēi.) – Bố thích uống cà phê.
+爸爸现在在上班。 (Bàba xiànzài zài shàngbān.) – Bố bây giờ đang đi làm.
+爸爸明天休息。 (Bàba míngtiān xiūxi.) – Bố ngày mai nghỉ.
+爸爸爱我们。 (Bàba ài wǒmen.) – Bố yêu chúng tôi.
+昨天爸爸买了水果。 (Zuótiān bàba mǎi le shuǐguǒ.) – Hôm qua bố mua trái cây.
+爸爸上午去公司。 (Bàba shàngwǔ qù gōngsī.) – Bố buổi sáng đi công ty.
+爸爸中午回家吃饭。 (Bàba zhōngwǔ huí jiā chīfàn.) – Bố trưa về nhà ăn cơm.
+爸爸是好人。 (Bàba shì hǎo rén.) – Bố là người tốt.
+爸爸要买新车。 (Bàba yào mǎi xīn chē.) – Bố muốn mua xe mới.
+这是我爸爸。 (Zhè shì wǒ bàba.) – Đây là bố tôi.
+爸爸和妈妈一起去公园。 (Bàba hé māma yìqǐ qù gōngyuán.) – Bố và mẹ cùng đi công viên.
+
+#8 妈妈 (māma) – mẹ
+我妈妈很漂亮。 (Wǒ māma hěn piàoliang.) – Mẹ tôi rất xinh.
+妈妈喜欢做饭。 (Māma xǐhuan zuòfàn.) – Mẹ thích nấu ăn.
+妈妈现在在厨房。 (Māma xiànzài zài chúfáng.) – Bây giờ mẹ đang ở bếp.
+妈妈明天去买菜。 (Māma míngtiān qù mǎi cài.) – Mẹ ngày mai đi mua rau.
+妈妈爱她的女儿。 (Māma ài tā de nǚ'ér.) – Mẹ yêu con gái của mẹ.
+昨天妈妈做了很多菜。 (Zuótiān māma zuò le hěn duō cài.) – Hôm qua mẹ nấu nhiều món.
+妈妈上午打扫房间。 (Māma shàngwǔ dǎsǎo fángjiān.) – Mẹ buổi sáng dọn phòng.
+妈妈中午做午饭。 (Māma zhōngwǔ zuò wǔfàn.) – Mẹ trưa nấu cơm trưa.
+妈妈是好妈妈。 (Māma shì hǎo māma.) – Mẹ là mẹ tốt.
+妈妈要喝茶。 (Māma yào hē chá.) – Mẹ muốn uống trà.
+这是我妈妈。 (Zhè shì wǒ māma.) – Đây là mẹ tôi.
+妈妈和爸爸一起看电视。 (Māma hé bàba yìqǐ kàn diànshì.) – Mẹ và bố cùng xem ti vi.
+
+#9 儿子 (érzi) – con trai
+我有一个儿子。 (Wǒ yǒu yí gè érzi.) – Tôi có một con trai.
+他的儿子五岁。 (Tā de érzi wǔ suì.) – Con trai anh ấy năm tuổi.
+儿子喜欢踢球。 (Érzi xǐhuan tī qiú.) – Con trai thích đá bóng.
+儿子明天上学。 (Érzi míngtiān shàngxué.) – Con trai ngày mai đi học.
+儿子爱吃糖。 (Érzi ài chī táng.) – Con trai thích ăn kẹo.
+昨天儿子很高兴。 (Zuótiān érzi hěn gāoxìng.) – Hôm qua con trai rất vui.
+儿子上午去学校。 (Érzi shàngwǔ qù xuéxiào.) – Con trai buổi sáng đi trường.
+儿子是好学生。 (Érzi shì hǎo xuésheng.) – Con trai là học sinh giỏi.
+这是我的儿子。 (Zhè shì wǒ de érzi.) – Đây là con trai tôi.
+儿子要喝牛奶。 (Érzi yào hē niúnǎi.) – Con trai muốn uống sữa.
+儿子和朋友玩。 (Érzi hé péngyou wán.) – Con trai chơi với bạn.
+爸爸的儿子很聪明。 (Bàba de érzi hěn cōngmíng.) – Con trai của bố rất thông minh.
+
+#10 女儿 (nǚ'ér) – con gái
+她有一个女儿。 (Tā yǒu yí gè nǚ'ér.) – Cô ấy có một con gái.
+我的女儿很可爱。 (Wǒ de nǚ'ér hěn kě'ài.) – Con gái tôi rất dễ thương.
+女儿喜欢画画。 (Nǚ'ér xǐhuan huà huà.) – Con gái thích vẽ.
+女儿明天考试。 (Nǚ'ér míngtiān kǎoshì.) – Con gái ngày mai thi.
+女儿爱妈妈。 (Nǚ'ér ài māma.) – Con gái yêu mẹ.
+昨天女儿买了新衣服。 (Zuótiān nǚ'ér mǎi le xīn yīfu.) – Hôm qua con gái mua quần áo mới.
+女儿下午学钢琴。 (Nǚ'ér xiàwǔ xué gāngqín.) – Con gái chiều học đàn piano.
+女儿是好孩子。 (Nǚ'ér shì hǎo háizi.) – Con gái là đứa trẻ ngoan.
+这是我的女儿。 (Zhè shì wǒ de nǚ'ér.) – Đây là con gái tôi.
+女儿要吃冰激凌。 (Nǚ'ér yào chī bīngjīlíng.) – Con gái muốn ăn kem.
+女儿和同学一起学习。 (Nǚ'ér hé tóngxué yìqǐ xuéxí.) – Con gái học cùng bạn cùng lớp.
+妈妈的女儿很漂亮。 (Māma de nǚ'ér hěn piàoliang.) – Con gái của mẹ rất xinh.
+
+#11 老师 (lǎoshī) – giáo viên
+他是中文老师。 (Tā shì Zhōngwén lǎoshī.) – Anh ấy là giáo viên tiếng Trung.
+老师喜欢学生。 (Lǎoshī xǐhuan xuésheng.) – Giáo viên thích học sinh.
+老师现在在上课。 (Lǎoshī xiànzài zài shàngkè.) – Bây giờ thầy đang dạy.
+老师明天有会议。 (Lǎoshī míngtiān yǒu huìyì.) – Thầy ngày mai có họp.
+我的老师很nice。 (Wǒ de lǎoshī hěn hǎo.) – Giáo viên của tôi rất tốt.
+昨天老师布置作业。 (Zuótiān lǎoshī bùzhì zuòyè.) – Hôm qua thầy giao bài tập.
+老师上午教我们。 (Lǎoshī shàngwǔ jiāo wǒmen.) – Thầy buổi sáng dạy chúng tôi.
+老师是好老师。 (Lǎoshī shì hǎo lǎoshī.) – Thầy là giáo viên tốt.
+这是我们的老师。 (Zhè shì wǒmen de lǎoshī.) – Đây là giáo viên của chúng tôi.
+老师要喝水。 (Lǎoshī yào hē shuǐ.) – Thầy muốn uống nước.
+学生喜欢老师。 (Xuésheng xǐhuan lǎoshī.) – Học sinh thích thầy cô.
+老师和学生一起活动。 (Lǎoshī hé xuésheng yìqǐ huódòng.) – Thầy cô và học sinh cùng hoạt động.
+
+#12 学生 (xuésheng) – học sinh
+我是学生。 (Wǒ shì xuésheng.) – Tôi là học sinh.
+学生喜欢放假。 (Xuésheng xǐhuan fàngjià.) – Học sinh thích nghỉ hè.
+学生现在在教室。 (Xuésheng xiànzài zài jiàoshì.) – Học sinh bây giờ đang ở lớp.
+学生明天考试。 (Xuésheng míngtiān kǎoshì.) – Học sinh ngày mai thi.
+学生爱学习。 (Xuésheng ài xuéxí.) – Học sinh yêu học.
+昨天学生很多。 (Zuótiān xuésheng hěn duō.) – Hôm qua có nhiều học sinh.
+学生上午有课。 (Xuésheng shàngwǔ yǒu kè.) – Học sinh buổi sáng có tiết.
+学生中午吃饭。 (Xuésheng zhōngwǔ chīfàn.) – Học sinh trưa ăn cơm.
+学生是好学生。 (Xuésheng shì hǎo xuésheng.) – Đây là học sinh giỏi.
+学生要写作业。 (Xuésheng yào xiě zuòyè.) – Học sinh phải làm bài tập.
+老师教学生。 (Lǎoshī jiāo xuésheng.) – Thầy dạy học sinh.
+学生和同学一起玩。 (Xuésheng hé tóngxué yìqǐ wán.) – Học sinh chơi cùng bạn cùng lớp.
+
+#13 同学 (tóngxué) – bạn cùng lớp
+他是我的同学。 (Tā shì wǒ de tóngxué.) – Anh ấy là bạn cùng lớp tôi.
+同学喜欢一起学习。 (Tóngxué xǐhuan yìqǐ xuéxí.) – Bạn cùng lớp thích học chung.
+同学现在在图书馆。 (Tóngxué xiànzài zài túshūguǎn.) – Bạn cùng lớp bây giờ ở thư viện.
+同学明天去公园。 (Tóngxué míngtiān qù gōngyuán.) – Bạn cùng lớp ngày mai đi công viên.
+同学爱打篮球。 (Tóngxué ài dǎ lánqiú.) – Bạn cùng lớp thích chơi bóng rổ.
+昨天同学来我家。 (Zuótiān tóngxué lái wǒ jiā.) – Hôm qua bạn cùng lớp đến nhà tôi.
+同学上午一起上课。 (Tóngxué shàngwǔ yìqǐ shàngkè.) – Bạn cùng lớp buổi sáng học chung.
+同学中午一起吃饭。 (Tóngxué zhōngwǔ yìqǐ chīfàn.) – Bạn cùng lớp trưa ăn cùng.
+同学是好朋友。 (Tóngxué shì hǎo péngyou.) – Bạn cùng lớp là bạn tốt.
+同学要借书。 (Tóngxué yào jiè shū.) – Bạn cùng lớp muốn mượn sách.
+我有很多同学。 (Wǒ yǒu hěn duō tóngxué.) – Tôi có nhiều bạn cùng lớp.
+老师和同学都很忙。 (Lǎoshī hé tóngxué dōu hěn máng.) – Thầy và bạn cùng lớp đều bận.
+
+#14 朋友 (péngyou) – bạn bè
+他是我的朋友。 (Tā shì wǒ de péngyou.) – Anh ấy là bạn của tôi.
+朋友喜欢一起吃饭。 (Péngyou xǐhuan yìqǐ chīfàn.) – Bạn bè thích ăn cùng.
+朋友现在来我家。 (Péngyou xiànzài lái wǒ jiā.) – Bạn bây giờ đến nhà tôi.
+朋友明天去旅行。 (Péngyou míngtiān qù lǚxíng.) – Bạn ngày mai đi du lịch.
+朋友爱唱歌。 (Péngyou ài chànggē.) – Bạn thích hát.
+昨天朋友送礼物。 (Zuótiān péngyou sòng lǐwù.) – Hôm qua bạn tặng quà.
+朋友上午打电话。 (Péngyou shàngwǔ dǎ diànhuà.) – Bạn buổi sáng gọi điện.
+朋友中午一起喝咖啡。 (Péngyou zhōngwǔ yìqǐ hē kāfēi.) – Bạn trưa uống cà phê cùng.
+朋友是好人。 (Péngyou shì hǎo rén.) – Bạn là người tốt.
+朋友要来玩。 (Péngyou yào lái wán.) – Bạn muốn đến chơi.
+我有很多朋友。 (Wǒ yǒu hěn duō péngyou.) – Tôi có nhiều bạn.
+朋友和同学都是好人。 (Péngyou hé tóngxué dōu shì hǎo rén.) – Bạn bè và bạn cùng lớp đều tốt.
+
+#15 人 (rén) – người
+他是好人。 (Tā shì hǎo rén.) – Anh ấy là người tốt.
+这里有很多人。 (Zhèlǐ yǒu hěn duō rén.) – Ở đây có nhiều người.
+那个人是谁？ (Nà gè rén shì shéi?) – Người kia là ai?
+中国人喜欢喝茶。 (Zhōngguó rén xǐhuan hē chá.) – Người Trung Quốc thích uống trà.
+越南人很友好。 (Yuènán rén hěn yǒuhǎo.) – Người Việt Nam rất thân thiện.
+昨天很多人来。 (Zuótiān hěn duō rén lái.) – Hôm qua nhiều người đến.
+上午很多人上班。 (Shàngwǔ hěn duō rén shàngbān.) – Buổi sáng nhiều người đi làm.
+中午很多人吃饭。 (Zhōngwǔ hěn duō rén chīfàn.) – Trưa nhiều người ăn cơm.
+这个人是老师。 (Zhège rén shì lǎoshī.) – Người này là giáo viên.
+人要努力学习。 (Rén yào nǔlì xuéxí.) – Con người phải cố gắng học.
+很多人喜欢吃米饭。 (Hěn duō rén xǐhuan chī mǐfàn.) – Nhiều người thích ăn cơm.
+她是一个很nice的人。 (Tā shì yí gè hěn hǎo de rén.) – Cô ấy là một người rất tốt.
+
+#16 先生 (xiānsheng) – ông, ngài, chồng
+王先生，您好！ (Wáng xiānsheng, nín hǎo!) – Ông Vương, chào ngài!
+这位先生是老师。 (Zhè wèi xiānsheng shì lǎoshī.) – Ông này là giáo viên.
+先生现在在开会。 (Xiānsheng xiànzài zài kāihuì.) – Ông bây giờ đang họp.
+先生明天出差。 (Xiānsheng míngtiān chūchāi.) – Ông ngày mai đi công tác.
+这是我先生。 (Zhè shì wǒ xiānsheng.) – Đây là chồng tôi.
+昨天先生加班。 (Zuótiān xiānsheng jiābān.) – Hôm qua chồng tôi làm thêm.
+先生上午很忙。 (Xiānsheng shàngwǔ hěn máng.) – Ông buổi sáng rất bận.
+先生要喝茶。 (Xiānsheng yào hē chá.) – Ông muốn uống trà.
+李先生是好人。 (Lǐ xiānsheng shì hǎo rén.) – Ông Lý là người tốt.
+先生喜欢看书。 (Xiānsheng xǐhuan kàn shū.) – Ông thích đọc sách.
+先生和太太一起吃饭。 (Xiānsheng hé tàitai yìqǐ chīfàn.) – Ông và bà cùng ăn.
+那位先生是谁？ (Nà wèi xiānsheng shì shéi?) – Ông kia là ai?
+
+#17 小姐 (xiǎojiě) – cô (xưng hô lịch sự với phụ nữ trẻ)
+小姐，您好！ (Xiǎojiě, nín hǎo!) – Cô, chào cô!
+那位小姐是学生。 (Nà wèi xiǎojiě shì xuésheng.) – Cô kia là học sinh.
+小姐现在在工作。 (Xiǎojiě xiànzài zài gōngzuò.) – Cô bây giờ đang làm việc.
+小姐明天来上课。 (Xiǎojiě míngtiān lái shàngkè.) – Cô ngày mai đến học.
+这位小姐很漂亮。 (Zhè wèi xiǎojiě hěn piàoliang.) – Cô này rất xinh.
+昨天小姐买了衣服。 (Zuótiān xiǎojiě mǎi le yīfu.) – Hôm qua cô mua quần áo.
+小姐上午喝咖啡。 (Xiǎojiě shàngwǔ hē kāfēi.) – Cô buổi sáng uống cà phê.
+小姐要吃水果。 (Xiǎojiě yào chī shuǐguǒ.) – Cô muốn ăn trái cây.
+张小姐是我的朋友。 (Zhāng xiǎojiě shì wǒ de péngyou.) – Cô Trương là bạn tôi.
+小姐喜欢音乐。 (Xiǎojiě xǐhuan yīnyuè.) – Cô thích âm nhạc.
+小姐和朋友一起去。 (Xiǎojiě hé péngyou yìqǐ qù.) – Cô đi cùng bạn.
+那位小姐是谁？ (Nà wèi xiǎojiě shì shéi?) – Cô kia là ai?
+
+#18 零 (líng) – số 0
+现在是十点零五分。 (Xiànzài shì shí diǎn líng wǔ fēn.) – Bây giờ là mười giờ lẻ năm phút.
+我的电话号码有零。 (Wǒ de diànhuà hàomǎ yǒu líng.) – Số điện thoại của tôi có số 0.
+今天是二零二六年。 (Jīntiān shì èr líng èr liù nián.) – Hôm nay là năm 2026.
+零加一是一。 (Líng jiā yī shì yī.) – Không cộng một là một.
+温度是零下五度。 (Wēndù shì líng xià wǔ dù.) – Nhiệt độ là âm năm độ.
+他家住零号楼。 (Tā jiā zhù líng hào lóu.) – Nhà anh ấy ở tòa số 0.
+考试得了零分。 (Kǎoshì dé le líng fēn.) – Thi được 0 điểm.
+现在零点。 (Xiànzài líng diǎn.) – Bây giờ là mười hai giờ khuya.
+我的生日是十月零五号。 (Wǒ de shēngrì shì shí yuè líng wǔ hào.) – Sinh nhật tôi là ngày mùng 5 tháng 10.
+零是数字。 (Líng shì shùzì.) – Không là một con số.
+房间号码是零一二。 (Fángjiān hàomǎ shì líng yī èr.) – Số phòng là 012.
+今天零下，很冷。 (Jīntiān líng xià, hěn lěng.) – Hôm nay âm độ, rất lạnh.
+
+#19 一 (yī) – số 1
+我有一个儿子。 (Wǒ yǒu yí gè érzi.) – Tôi có một con trai.
+现在一点。 (Xiànzài yī diǎn.) – Bây giờ một giờ.
+今天是一月一日。 (Jīntiān shì yī yuè yī rì.) – Hôm nay là ngày 1 tháng 1.
+一加一是二。 (Yī jiā yī shì èr.) – Một cộng một là hai.
+我要一杯水。 (Wǒ yào yì bēi shuǐ.) – Tôi muốn một ly nước.
+她有一个女儿。 (Tā yǒu yí gè nǚ'ér.) – Cô ấy có một con gái.
+星期一我上班。 (Xīngqī yī wǒ shàngbān.) – Thứ Hai tôi đi làm.
+一本书。 (Yì běn shū.) – Một cuốn sách.
+我爱你一次。 (Wǒ ài nǐ yí cì.) – Tôi yêu bạn một lần.
+一个人。 (Yí gè rén.) – Một người.
+明天一点见面。 (Míngtiān yī diǎn jiànmiàn.) – Ngày mai gặp lúc một giờ.
+一月很冷。 (Yī yuè hěn lěng.) – Tháng Một rất lạnh.
+
+#20 二 (èr) – số 2
+我有两个朋友。 (Wǒ yǒu liǎng gè péngyou.) – Tôi có hai người bạn.
+现在两点。 (Xiànzài liǎng diǎn.) – Bây giờ hai giờ.
+二加二是四。 (Èr jiā èr shì sì.) – Hai cộng hai là bốn.
+今天是二月二号。 (Jīntiān shì èr yuè èr hào.) – Hôm nay là ngày 2 tháng 2.
+他有两个儿子。 (Tā yǒu liǎng gè érzi.) – Anh ấy có hai con trai.
+星期二我休息。 (Xīngqī èr wǒ xiūxi.) – Thứ Ba tôi nghỉ.
+两本书。 (Liǎng běn shū.) – Hai cuốn sách.
+我要两个苹果。 (Wǒ yào liǎng gè píngguǒ.) – Tôi muốn hai quả táo.
+二月有二十八天。 (Èr yuè yǒu èr shí bā tiān.) – Tháng Hai có 28 ngày.
+两个人。 (Liǎng gè rén.) – Hai người.
+明天两点开会。 (Míngtiān liǎng diǎn kāihuì.) – Ngày mai họp lúc hai giờ.
+二加一是三。 (Èr jiā yī shì sān.) – Hai cộng một là ba.
+
+#21 三 (sān) – số 3
+我有三个同学。 (Wǒ yǒu sān gè tóngxué.) – Tôi có ba bạn cùng lớp.
+现在三点。 (Xiànzài sān diǎn.) – Bây giờ ba giờ.
+三加二是五。 (Sān jiā èr shì wǔ.) – Ba cộng hai là năm.
+今天是三月三号。 (Jīntiān shì sān yuè sān hào.) – Hôm nay ngày 3 tháng 3.
+她有三个女儿。 (Tā yǒu sān gè nǚ'ér.) – Cô ấy có ba con gái.
+星期三我学习。 (Xīngqī sān wǒ xuéxí.) – Thứ Tư tôi học.
+我要三个。 (Wǒ yào sān gè.) – Tôi muốn ba cái.
+三个人一起吃饭。 (Sān gè rén yìqǐ chīfàn.) – Ba người ăn cùng.
+三月是春天。 (Sān yuè shì chūntiān.) – Tháng Ba là mùa xuân.
+明天三点见面。 (Míngtiān sān diǎn jiànmiàn.) – Ngày mai gặp lúc ba giờ.
+三本书。 (Sān běn shū.) – Ba cuốn sách.
+我喜欢三这个数字。 (Wǒ xǐhuan sān zhège shùzì.) – Tôi thích số ba.
+
+#22 四 (sì) – số 4
+现在四点。 (Xiànzài sì diǎn.) – Bây giờ bốn giờ.
+四加一是五。 (Sì jiā yī shì wǔ.) – Bốn cộng một là năm.
+今天是四月四号。 (Jīntiān shì sì yuè sì hào.) – Hôm nay ngày 4 tháng 4.
+我有四个朋友。 (Wǒ yǒu sì gè péngyou.) – Tôi có bốn người bạn.
+星期四我去超市。 (Xīngqī sì wǒ qù chāoshì.) – Thứ Năm tôi đi siêu thị.
+四个人。 (Sì gè rén.) – Bốn người.
+四月是春天。 (Sì yuè shì chūntiān.) – Tháng Tư là mùa xuân.
+我要四个苹果。 (Wǒ yào sì gè píngguǒ.) – Tôi muốn bốn quả táo.
+明天四点下班。 (Míngtiān sì diǎn xiàbān.) – Ngày mai tan làm lúc bốn giờ.
+四本书。 (Sì běn shū.) – Bốn cuốn sách.
+他家有四口人。 (Tā jiā yǒu sì kǒu rén.) – Nhà anh ấy có bốn người.
+四加四是八。 (Sì jiā sì shì bā.) – Bốn cộng bốn là tám.
+
+#23 五 (wǔ) – số 5
+现在五点。 (Xiànzài wǔ diǎn.) – Bây giờ năm giờ.
+五加五是十。 (Wǔ jiā wǔ shì shí.) – Năm cộng năm là mười.
+今天是五月五号。 (Jīntiān shì wǔ yuè wǔ hào.) – Hôm nay ngày 5 tháng 5.
+我五岁的时候... (Wǒ wǔ suì de shíhou...) – Khi tôi năm tuổi...
+星期五我休息。 (Xīngqī wǔ wǒ xiūxi.) – Thứ Sáu tôi nghỉ.
+五个人一起玩。 (Wǔ gè rén yìqǐ wán.) – Năm người chơi cùng.
+我要五分钟。 (Wǒ yào wǔ fēnzhōng.) – Tôi cần năm phút.
+五月有三十一天。 (Wǔ yuè yǒu sān shí yī tiān.) – Tháng Năm có 31 ngày.
+明天五点见面。 (Míngtiān wǔ diǎn jiànmiàn.) – Ngày mai gặp lúc năm giờ.
+五本书。 (Wǔ běn shū.) – Năm cuốn sách.
+他有五个同学。 (Tā yǒu wǔ gè tóngxué.) – Anh ấy có năm bạn cùng lớp.
+五加三是八。 (Wǔ jiā sān shì bā.) – Năm cộng ba là tám.
+
+#24 六 (liù) – số 6
+现在六点。 (Xiànzài liù diǎn.) – Bây giờ sáu giờ.
+六加四是十。 (Liù jiā sì shì shí.) – Sáu cộng bốn là mười.
+今天是六月六号。 (Jīntiān shì liù yuè liù hào.) – Hôm nay ngày 6 tháng 6.
+我六点起床。 (Wǒ liù diǎn qǐchuáng.) – Tôi dậy lúc sáu giờ.
+星期六我休息。 (Xīngqī liù wǒ xiūxi.) – Thứ Bảy tôi nghỉ.
+六个人吃饭。 (Liù gè rén chīfàn.) – Sáu người ăn cơm.
+六月是夏天。 (Liù yuè shì xiàtiān.) – Tháng Sáu là mùa hè.
+我要六个。 (Wǒ yào liù gè.) – Tôi muốn sáu cái.
+明天六点上班。 (Míngtiān liù diǎn shàngbān.) – Ngày mai đi làm lúc sáu giờ.
+六本书。 (Liù běn shū.) – Sáu cuốn sách.
+他六岁。 (Tā liù suì.) – Anh ấy sáu tuổi.
+六加二是八。 (Liù jiā èr shì bā.) – Sáu cộng hai là tám.
+
+#25 七 (qī) – số 7
+现在七点。 (Xiànzài qī diǎn.) – Bây giờ bảy giờ.
+七加三是十。 (Qī jiā sān shì shí.) – Bảy cộng ba là mười.
+今天是七月七号。 (Jīntiān shì qī yuè qī hào.) – Hôm nay ngày 7 tháng 7.
+我七点吃早饭。 (Wǒ qī diǎn chī zǎofàn.) – Tôi ăn sáng lúc bảy giờ.
+七个人。 (Qī gè rén.) – Bảy người.
+七月很热。 (Qī yuè hěn rè.) – Tháng Bảy rất nóng.
+明天七点见面。 (Míngtiān qī diǎn jiànmiàn.) – Ngày mai gặp lúc bảy giờ.
+七本书。 (Qī běn shū.) – Bảy cuốn sách.
+他七岁上学。 (Tā qī suì shàngxué.) – Anh ấy bảy tuổi đi học.
+七加七是十四。 (Qī jiā qī shì shí sì.) – Bảy cộng bảy là mười bốn.
+我有七个朋友。 (Wǒ yǒu qī gè péngyou.) – Tôi có bảy người bạn.
+
+#26 八 (bā) – số 8
+现在八点。 (Xiànzài bā diǎn.) – Bây giờ tám giờ.
+八加二是十。 (Bā jiā èr shì shí.) – Tám cộng hai là mười.
+今天是八月八号。 (Jīntiān shì bā yuè bā hào.) – Hôm nay ngày 8 tháng 8.
+我八点上班。 (Wǒ bā diǎn shàngbān.) – Tôi đi làm lúc tám giờ.
+八个人一起。 (Bā gè rén yìqǐ.) – Tám người cùng.
+八月是夏天。 (Bā yuè shì xiàtiān.) – Tháng Tám là mùa hè.
+明天八点开会。 (Míngtiān bā diǎn kāihuì.) – Ngày mai họp lúc tám giờ.
+八本书。 (Bā běn shū.) – Tám cuốn sách.
+八加八是十六。 (Bā jiā bā shì shí liù.) – Tám cộng tám là mười sáu.
+他八岁。 (Tā bā suì.) – Anh ấy tám tuổi.
+我要八个苹果。 (Wǒ yào bā gè píngguǒ.) – Tôi muốn tám quả táo.
+八点半。 (Bā diǎn bàn.) – Tám giờ rưỡi.
+
+#27 九 (jiǔ) – số 9
+现在九点。 (Xiànzài jiǔ diǎn.) – Bây giờ chín giờ.
+九加一是十。 (Jiǔ jiā yī shì shí.) – Chín cộng một là mười.
+今天是九月九号。 (Jīntiān shì jiǔ yuè jiǔ hào.) – Hôm nay ngày 9 tháng 9.
+我九点睡觉。 (Wǒ jiǔ diǎn shuìjiào.) – Tôi ngủ lúc chín giờ.
+九个人。 (Jiǔ gè rén.) – Chín người.
+九月是秋天。 (Jiǔ yuè shì qiūtiān.) – Tháng Chín là mùa thu.
+明天九点上课。 (Míngtiān jiǔ diǎn shàngkè.) – Ngày mai học lúc chín giờ.
+九本书。 (Jiǔ běn shū.) – Chín cuốn sách.
+九加九是十八。 (Jiǔ jiā jiǔ shì shí bā.) – Chín cộng chín là mười tám.
+她九岁。 (Tā jiǔ suì.) – Cô ấy chín tuổi.
+我有九个同学。 (Wǒ yǒu jiǔ gè tóngxué.) – Tôi có chín bạn cùng lớp.
+九点一刻。 (Jiǔ diǎn yí kè.) – Chín giờ mười lăm.
+
+#28 十 (shí) – số 10
+现在十点。 (Xiànzài shí diǎn.) – Bây giờ mười giờ.
+十加零是十。 (Shí jiā líng shì shí.) – Mười cộng không là mười.
+今天是十月十号。 (Jīntiān shì shí yuè shí hào.) – Hôm nay ngày 10 tháng 10.
+我十点吃午饭。 (Wǒ shí diǎn chī wǔfàn.) – Tôi ăn trưa lúc mười giờ (hoặc mười giờ sáng).
+十个人。 (Shí gè rén.) – Mười người.
+十月是秋天。 (Shí yuè shì qiūtiān.) – Tháng Mười là mùa thu.
+明天十点见面。 (Míngtiān shí diǎn jiànmiàn.) – Ngày mai gặp lúc mười giờ.
+十本书。 (Shí běn shū.) – Mười cuốn sách.
+十加十是二十。 (Shí jiā shí shì èr shí.) – Mười cộng mười là hai mươi.
+他十岁。 (Tā shí suì.) – Anh ấy mười tuổi.
+我有十个朋友。 (Wǒ yǒu shí gè péngyou.) – Tôi có mười người bạn.
+十点半。 (Shí diǎn bàn.) – Mười giờ rưỡi.
+
+#29 现在 (xiànzài) – bây giờ
+现在几点？ (Xiànzài jǐ diǎn?) – Bây giờ mấy giờ?
+现在我很忙。 (Xiànzài wǒ hěn máng.) – Bây giờ tôi rất bận.
+现在我要吃饭。 (Xiànzài wǒ yào chīfàn.) – Bây giờ tôi muốn ăn.
+现在他在学校。 (Xiànzài tā zài xuéxiào.) – Bây giờ anh ấy ở trường.
+现在几号？ (Xiànzài jǐ hào?) – Bây giờ ngày mấy?
+现在是上午。 (Xiànzài shì shàngwǔ.) – Bây giờ là buổi sáng.
+现在我们学习。 (Xiànzài wǒmen xuéxí.) – Bây giờ chúng ta học.
+现在你做什么？ (Xiànzài nǐ zuò shénme?) – Bây giờ bạn làm gì?
+现在十点二十分。 (Xiànzài shí diǎn èr shí fēn.) – Bây giờ mười giờ hai mươi.
+现在我要去上班。 (Xiànzài wǒ yào qù shàngbān.) – Bây giờ tôi phải đi làm.
+现在很热。 (Xiànzài hěn rè.) – Bây giờ rất nóng.
+现在她喜欢喝茶。 (Xiànzài tā xǐhuan hē chá.) – Bây giờ cô ấy thích uống trà.
+
+#30 点 (diǎn) – giờ (dùng với số)
+现在几点？ (Xiànzài jǐ diǎn?) – Bây giờ mấy giờ?
+我八点起床。 (Wǒ bā diǎn qǐchuáng.) – Tôi tám giờ dậy.
+会议九点开始。 (Huìyì jiǔ diǎn kāishǐ.) – Họp chín giờ bắt đầu.
+下午三点我有课。 (Xiàwǔ sān diǎn wǒ yǒu kè.) – Chiều ba giờ tôi có tiết.
+明天十点见面。 (Míngtiān shí diǎn jiànmiàn.) – Ngày mai mười giờ gặp.
+现在一点半。 (Xiànzài yī diǎn bàn.) – Bây giờ một giờ rưỡi.
+他六点吃饭。 (Tā liù diǎn chīfàn.) – Anh ấy sáu giờ ăn.
+七点上课。 (Qī diǎn shàngkè.) – Bảy giờ học.
+五点下班。 (Wǔ diǎn xiàbān.) – Năm giờ tan làm.
+两点喝咖啡。 (Liǎng diǎn hē kāfēi.) – Hai giờ uống cà phê.
+十一点睡觉。 (Shí yī diǎn shuìjiào.) – Mười một giờ ngủ.
+四点去超市。 (Sì diǎn qù chāoshì.) – Bốn giờ đi siêu thị.
+
+#31 分 (fēn) – phút
+现在十点二十分。 (Xiànzài shí diǎn èr shí fēn.) – Bây giờ mười giờ hai mươi phút.
+火车七点十五分到。 (Huǒchē qī diǎn shí wǔ fēn dào.) – Tàu đến lúc bảy giờ mười lăm.
+等我五分钟。 (Děng wǒ wǔ fēnzhōng.) – Đợi tôi năm phút.
+会议九点三十分开始。 (Huìyì jiǔ diǎn sān shí fēn kāishǐ.) – Họp chín giờ rưỡi bắt đầu.
+现在差五分八点。 (Xiànzài chà wǔ fēn bā diǎn.) – Bây giờ kém năm phút tám giờ.
+我要十分钟。 (Wǒ yào shí fēnzhōng.) – Tôi cần mười phút.
+飞机下午两点四十五分起飞。 (Fēijī xiàwǔ liǎng diǎn sì shí wǔ fēn qǐfēi.) – Máy bay hai giờ bốn mươi lăm chiều cất cánh.
+三点五分。 (Sān diǎn wǔ fēn.) – Ba giờ năm phút.
+请等一下，一分钟。 (Qǐng děng yíxià, yī fēnzhōng.) – Xin đợi một chút, một phút.
+六点二十五分。 (Liù diǎn èr shí wǔ fēn.) – Sáu giờ hai mươi lăm.
+现在是零分。 (Xiànzài shì líng fēn.) – Bây giờ là tròn giờ.
+我迟到两分钟。 (Wǒ chídào liǎng fēnzhōng.) – Tôi trễ hai phút.
+
+#32 今天 (jīntiān) – hôm nay
+今天几号？ (Jīntiān jǐ hào?) – Hôm nay ngày mấy?
+今天我很高兴。 (Jīntiān wǒ hěn gāoxìng.) – Hôm nay tôi rất vui.
+今天星期几？ (Jīntiān xīngqī jǐ?) – Hôm nay thứ mấy?
+今天我要学习。 (Jīntiān wǒ yào xuéxí.) – Hôm nay tôi phải học.
+今天吃什么？ (Jīntiān chī shénme?) – Hôm nay ăn gì?
+今天上午有课。 (Jīntiān shàngwǔ yǒu kè.) – Hôm nay buổi sáng có tiết.
+今天中午热。 (Jīntiān zhōngwǔ rè.) – Hôm nay trưa nóng.
+今天我去上班。 (Jīntiān wǒ qù shàngbān.) – Hôm nay tôi đi làm.
+今天是我的生日。 (Jīntiān shì wǒ de shēngrì.) – Hôm nay là sinh nhật tôi.
+今天你忙吗？ (Jīntiān nǐ máng ma?) – Hôm nay bạn bận không?
+今天下雨。 (Jīntiān xiàyǔ.) – Hôm nay mưa.
+今天我们一起吃饭。 (Jīntiān wǒmen yìqǐ chīfàn.) – Hôm nay chúng ta ăn cùng.
+
+#33 明天 (míngtiān) – ngày mai
+明天见！ (Míngtiān jiàn!) – Hẹn gặp ngày mai!
+明天你做什么？ (Míngtiān nǐ zuò shénme?) – Ngày mai bạn làm gì?
+明天我要早起。 (Míngtiān wǒ yào zǎo qǐ.) – Ngày mai tôi phải dậy sớm.
+明天上午有会议。 (Míngtiān shàngwǔ yǒu huìyì.) – Ngày mai buổi sáng có họp.
+明天我们去公园。 (Míngtiān wǒmen qù gōngyuán.) – Ngày mai chúng ta đi công viên.
+明天几号？ (Míngtiān jǐ hào?) – Ngày mai ngày mấy?
+明天星期几？ (Míngtiān xīngqī jǐ?) – Ngày mai thứ mấy?
+明天我要吃面条。 (Míngtiān wǒ yào chī miàntiáo.) – Ngày mai tôi muốn ăn mì.
+明天他来我家。 (Míngtiān tā lái wǒ jiā.) – Ngày mai anh ấy đến nhà tôi.
+明天不冷。 (Míngtiān bù lěng.) – Ngày mai không lạnh.
+明天你有空吗？ (Míngtiān nǐ yǒu kòng ma?) – Ngày mai bạn rảnh không?
+明天一起吃饭吧。 (Míngtiān yìqǐ chīfàn ba.) – Ngày mai ăn cùng nhé.
+
+#34 昨天 (zuótiān) – hôm qua
+昨天我很累。 (Zuótiān wǒ hěn lèi.) – Hôm qua tôi rất mệt.
+昨天你去哪儿了？ (Zuótiān nǐ qù nǎr le?) – Hôm qua bạn đi đâu?
+昨天我加班了。 (Zuótiān wǒ jiābān le.) – Hôm qua tôi làm thêm giờ.
+昨天天气很好。 (Zuótiān tiānqì hěn hǎo.) – Hôm qua thời tiết rất tốt.
+昨天我们吃火锅。 (Zuótiān wǒmen chī huǒguō.) – Hôm qua chúng tôi ăn lẩu.
+昨天是星期几？ (Zuótiān shì xīngqī jǐ?) – Hôm qua là thứ mấy?
+昨天上午我学习。 (Zuótiān shàngwǔ wǒ xuéxí.) – Hôm qua buổi sáng tôi học.
+昨天她很高兴。 (Zuótiān tā hěn gāoxìng.) – Hôm qua cô ấy rất vui.
+昨天我买了书。 (Zuótiān wǒ mǎi le shū.) – Hôm qua tôi mua sách.
+昨天几号？ (Zuótiān jǐ hào?) – Hôm qua ngày mấy?
+昨天朋友来玩。 (Zuótiān péngyou lái wán.) – Hôm qua bạn đến chơi.
+昨天我爱吃那个菜。 (Zuótiān wǒ ài chī nàge cài.) – Hôm qua tôi thích ăn món đó.
+
+#35 年 (nián) – năm
+今年是2026年。 (Jīnnián shì èr líng èr liù nián.) – Năm nay là năm 2026.
+我二十岁。 (Wǒ èr shí suì) – Tôi hai mươi tuổi.
+明年我去中国。 (Míngnián wǒ qù Zhōngguó.) – Năm sau tôi đi Trung Quốc.
+去年我学中文。 (Qùnián wǒ xué Zhōngwén.) – Năm ngoái tôi học tiếng Trung.
+一九九零年出生。 (Yī jiǔ jiǔ líng nián chūshēng.) – Sinh năm 1990.
+一年有十二个月。 (Yì nián yǒu shí èr gè yuè.) – Một năm có mười hai tháng.
+他今年三十岁。 (Tā jīnnián sān shí suì) – Anh ấy năm nay ba mươi tuổi.
+新年快乐！ (Xīnnián kuàilè!) – Chúc mừng năm mới!
+明年是2027年。 (Míngnián shì èr líng èr qī nián.) – Năm sau là 2027.
+我喜欢这个年。 (Wǒ xǐhuan zhège nián.) – Tôi thích năm này.
+一年有三百六十五天。 (Yì nián yǒu sān bǎi liù shí wǔ tiān.) – Một năm có 365 ngày.
+她出生在2000年。 (Tā chūshēng zài èr líng líng líng nián.) – Cô ấy sinh năm 2000.
+
+#36 月 (yuè) – tháng
+今天是三月。 (Jīntiān shì sān yuè.) – Hôm nay là tháng Ba.
+一月很冷。 (Yī yuè hěn lěng.) – Tháng Một rất lạnh.
+十二月是冬天。 (Shí èr yuè shì dōngtiān.) – Tháng Mười Hai là mùa đông.
+我喜欢六月。 (Wǒ xǐhuan liù yuè.) – Tôi thích tháng Sáu.
+下个月我生日。 (Xià gè yuè wǒ shēngrì.) – Tháng sau là sinh nhật tôi.
+上个月我去旅行。 (Shàng gè yuè wǒ qù lǚxíng.) – Tháng trước tôi đi du lịch.
+一个月有三十天。 (Yí gè yuè yǒu sān shí tiān.) – Một tháng có ba mươi ngày.
+五月是春天。 (Wǔ yuè shì chūntiān.) – Tháng Năm là mùa xuân.
+七月很热。 (Qī yuè hěn rè.) – Tháng Bảy rất nóng.
+现在是十月。 (Xiànzài shì shí yuè.) – Bây giờ là tháng Mười.
+八月我放假。 (Bā yuè wǒ fàngjià.) – Tháng Tám tôi nghỉ.
+九月上学。 (Jiǔ yuè shàngxué.) – Tháng Chín đi học.
+
+#37 日 (rì) – ngày (chính thức)
+今天是五月一日。 (Jīntiān shì wǔ yuè yī rì.) – Hôm nay là ngày 1 tháng 5.
+我的生日是十月一日。 (Wǒ de shēngrì shì shí yuè yī rì.) – Sinh nhật tôi là ngày 1 tháng 10.
+国庆日是十月一日。 (Guóqìng rì shì shí yuè yī rì.) – Ngày Quốc khánh là 1/10.
+每日学习中文。 (Měi rì xuéxí Zhōngwén.) – Mỗi ngày học tiếng Trung.
+今日是好日子。 (Jīnrì shì hǎo rìzi.) – Hôm nay là ngày tốt.
+生日快乐，日日开心！ (Shēngrì kuàilè, rìrì kāixīn!) – Chúc mừng sinh nhật, ngày nào cũng vui!
+一日到三十一日。 (Yī rì dào sān shí yī rì.) – Từ ngày 1 đến ngày 31.
+他出生在五月五日。 (Tā chūshēng zài wǔ yuè wǔ rì.) – Anh ấy sinh ngày 5 tháng 5.
+明日见。 (Míngrì jiàn.) – Ngày mai gặp.
+昨日很忙。 (Zuórì hěn máng.) – Hôm qua rất bận.
+每日八点上班。 (Měi rì bā diǎn shàngbān.) – Mỗi ngày tám giờ đi làm.
+今天是重要的一日。 (Jīntiān shì zhòngyào de yī rì.) – Hôm nay là một ngày quan trọng.
+
+#38 号 (hào) – ngày (thường dùng trong nói)
+今天几号？ (Jīntiān jǐ hào?) – Hôm nay ngày mấy?
+我的生日是三月十五号。 (Wǒ de shēngrì shì sān yuè shí wǔ hào.) – Sinh nhật tôi là ngày 15 tháng 3.
+明天二十号。 (Míngtiān èr shí hào.) – Ngày mai là ngày 20.
+五号我休息。 (Wǔ hào wǒ xiūxi.) – Ngày mùng 5 tôi nghỉ.
+今天是十号。 (Jīntiān shì shí hào.) – Hôm nay là ngày 10.
+一号到三十一号。 (Yī hào dào sān shí yī hào.) – Từ ngày 1 đến ngày 31.
+昨天是九号。 (Zuótiān shì jiǔ hào.) – Hôm qua là ngày 9.
+下个月一号见面。 (Xià gè yuè yī hào jiànmiàn.) – Tháng sau ngày 1 gặp.
+号很大。 (Hào hěn dà.) – Số ngày to.
+二十五号是我的生日。 (Èr shí wǔ hào shì wǒ de shēngrì.) – Ngày 25 là sinh nhật tôi.
+今天三十一号。 (Jīntiān sān shí yī hào.) – Hôm nay ngày 31.
+八号我去中国。 (Bā hào wǒ qù Zhōngguó.) – Ngày mùng 8 tôi đi Trung Quốc.
+
+#39 星期 (xīngqī) – tuần / thứ
+今天星期几？ (Jīntiān xīngqī jǐ?) – Hôm nay thứ mấy?
+星期一我上班。 (Xīngqī yī wǒ shàngbān.) – Thứ Hai tôi đi làm.
+星期六我休息。 (Xīngqī liù wǒ xiūxi.) – Thứ Bảy tôi nghỉ.
+一个星期有七天。 (Yí gè xīngqī yǒu qī tiān.) – Một tuần có bảy ngày.
+下星期我们考试。 (Xià xīngqī wǒmen kǎoshì.) – Tuần sau chúng ta thi.
+上星期我很忙。 (Shàng xīngqī wǒ hěn máng.) – Tuần trước tôi rất bận.
+星期日是休息日。 (Xīngqī rì shì xiūxi rì.) – Chủ Nhật là ngày nghỉ.
+星期三下午有课。 (Xīngqī sān xiàwǔ yǒu kè.) – Thứ Tư chiều có tiết.
+我喜欢星期五。 (Wǒ xǐhuan xīngqī wǔ.) – Tôi thích thứ Sáu.
+星期二吃火锅。 (Xīngqī èr chī huǒguō.) – Thứ Ba ăn lẩu.
+这个星期很开心。 (Zhège xīngqī hěn kāixīn.) – Tuần này rất vui.
+星期四我见朋友。 (Xīngqī sì wǒ jiàn péngyou.) – Thứ Năm tôi gặp bạn.
+
+#40 上午 (shàngwǔ) – buổi sáng
+上午我学习。 (Shàngwǔ wǒ xuéxí.) – Buổi sáng tôi học.
+明天上午九点开会。 (Míngtiān shàngwǔ jiǔ diǎn kāihuì.) – Sáng mai chín giờ họp.
+上午很凉快。 (Shàngwǔ hěn liángkuài.) – Buổi sáng mát mẻ.
+我上午八点起床。 (Wǒ shàngwǔ bā diǎn qǐchuáng.) – Tôi sáng tám giờ dậy.
+上午吃早饭。 (Shàngwǔ chī zǎofàn.) – Buổi sáng ăn sáng.
+她上午去学校。 (Tā shàngwǔ qù xuéxiào.) – Cô ấy sáng đi trường.
+上午我喝咖啡。 (Shàngwǔ wǒ hē kāfēi.) – Buổi sáng tôi uống cà phê.
+明天上午你有空吗？ (Míngtiān shàngwǔ nǐ yǒu kòng ma?) – Sáng mai bạn rảnh không?
+上午工作。 (Shàngwǔ gōngzuò.) – Buổi sáng làm việc.
+上午十点。 (Shàngwǔ shí diǎn.) – Mười giờ sáng.
+我们上午见面。 (Wǒmen shàngwǔ jiànmiàn.) – Chúng ta gặp buổi sáng.
+上午天气好。 (Shàngwǔ tiānqì hǎo.) – Buổi sáng thời tiết tốt.
+
+#41 中午 (zhōngwǔ) – buổi trưa
+中午我吃饭。 (Zhōngwǔ wǒ chīfàn.) – Buổi trưa tôi ăn cơm.
+中午十二点。 (Zhōngwǔ shí èr diǎn.) – Mười hai giờ trưa.
+明天中午一起吃吧。 (Míngtiān zhōngwǔ yìqǐ chī ba.) – Trưa mai ăn cùng nhé.
+中午很热。 (Zhōngwǔ hěn rè.) – Trưa rất nóng.
+我中午休息。 (Wǒ zhōngwǔ xiūxi.) – Tôi trưa nghỉ.
+中午吃米饭。 (Zhōngwǔ chī mǐfàn.) – Trưa ăn cơm.
+她中午回家。 (Tā zhōngwǔ huí jiā.) – Cô ấy trưa về nhà.
+中午我们喝汤。 (Zhōngwǔ wǒmen hē tāng.) – Trưa chúng ta uống canh.
+中午十二点半。 (Zhōngwǔ shí èr diǎn bàn.) – Mười hai giờ rưỡi trưa.
+昨天中午我很忙。 (Zuótiān zhōngwǔ wǒ hěn máng.) – Trưa hôm qua tôi bận.
+中午要睡觉吗？ (Zhōngwǔ yào shuìjiào ma?) – Trưa có muốn ngủ không?
+中午见朋友。 (Zhōngwǔ jiàn péngyou.) – Trưa gặp bạn.
+
+#42 下午 (xiàwǔ) – buổi chiều
+下午我有课。 (Xiàwǔ wǒ yǒu kè.) – Buổi chiều tôi có tiết.
+明天下午三点见面。 (Míngtiān xiàwǔ sān diǎn jiànmiàn.) – Chiều mai ba giờ gặp.
+下午我去超市。 (Xiàwǔ wǒ qù chāoshì.) – Chiều tôi đi siêu thị.
+下午很暖和。 (Xiàwǔ hěn nuǎnhuo.) – Chiều ấm áp.
+我下午四点下班。 (Wǒ xiàwǔ sì diǎn xiàbān.) – Tôi chiều bốn giờ tan làm.
+下午喝茶。 (Xiàwǔ hē chá.) – Chiều uống trà.
+她下午学习。 (Tā xiàwǔ xuéxí.) – Cô ấy chiều học.
+下午我们玩。 (Xiàwǔ wǒmen wán.) – Chiều chúng ta chơi.
+下午五点。 (Xiàwǔ wǔ diǎn.) – Năm giờ chiều.
+昨天下午下雨。 (Zuótiān xiàwǔ xiàyǔ.) – Chiều hôm qua mưa.
+下午要工作。 (Xiàwǔ yào gōngzuò.) – Chiều phải làm việc.
+下午见！ (Xiàwǔ jiàn!) – Hẹn chiều gặp!
+
+#43 时候 (shíhou) – lúc, khi, thời gian
+你什么时候来？ (Nǐ shénme shíhou lái?) – Bạn lúc nào đến?
+小时候我喜欢吃糖。 (Xiǎo shíhou wǒ xǐhuan chī táng.) – Khi nhỏ tôi thích ăn kẹo.
+下班的时候给我打电话。 (Xiàbān de shíhou gěi wǒ dǎ diànhuà.) – Lúc tan làm gọi cho tôi.
+吃饭的时候不要说话。 (Chīfàn de shíhou bù yào shuōhuà.) – Lúc ăn đừng nói chuyện.
+那个时候我很小。 (Nàge shíhou wǒ hěn xiǎo.) – Lúc đó tôi còn nhỏ.
+上学的时候我很开心。 (Shàngxué de shíhou wǒ hěn kāixīn.) – Khi đi học tôi rất vui.
+现在是什么时候？ (Xiànzài shì shénme shíhou?) – Bây giờ là lúc nào?
+明天这个时候我不在。 (Míngtiān zhège shíhou wǒ bù zài.) – Ngày mai lúc này tôi không có nhà.
+朋友来的时候我很高兴。 (Péngyou lái de shíhou wǒ hěn gāoxìng.) – Lúc bạn đến tôi rất vui.
+工作的时候要认真。 (Gōngzuò de shíhou yào rènzhēn.) – Lúc làm việc phải nghiêm túc.
+她小时候很可爱。 (Tā xiǎo shíhou hěn kě'ài.) – Khi cô ấy nhỏ rất dễ thương.
+什么时候吃饭？ (Shénme shíhou chīfàn?) – Lúc nào ăn cơm?
+
+#44 是 (shì) – là (động từ “to be”)
+我是学生。 (Wǒ shì xuésheng.) – Tôi là học sinh.
+他是老师。 (Tā shì lǎoshī.) – Anh ấy là giáo viên.
+今天是星期一。 (Jīntiān shì xīngqī yī.) – Hôm nay là thứ Hai.
+这是我的朋友。 (Zhè shì wǒ de péngyou.) – Đây là bạn tôi.
+她是好人。 (Tā shì hǎo rén.) – Cô ấy là người tốt.
+现在是十点。 (Xiànzài shì shí diǎn.) – Bây giờ là mười giờ.
+我爸爸是医生。 (Wǒ bàba shì yīshēng.) – Bố tôi là bác sĩ.
+我们是同学。 (Wǒmen shì tóngxué.) – Chúng tôi là bạn cùng lớp.
+明天是我的生日。 (Míngtiān shì wǒ de shēngrì.) – Ngày mai là sinh nhật tôi.
+那个人是谁？ (Nà gè rén shì shéi?) – Người kia là ai?
+这里是学校。 (Zhèlǐ shì xuéxiào.) – Đây là trường học.
+我是中国人吗？不是，我是越南人。 (Wǒ shì Zhōngguó rén ma? Bù shì, wǒ shì Yuènán rén.) – Tôi là người Trung Quốc à? Không, tôi là người Việt Nam.
+
+#45 有 (yǒu) – có
+我有一个儿子。 (Wǒ yǒu yí gè érzi.) – Tôi có một con trai.
+这里有很多人。 (Zhèlǐ yǒu hěn duō rén.) – Ở đây có nhiều người.
+你有朋友吗？ (Nǐ yǒu péngyou ma?) – Bạn có bạn bè không?
+明天我有会议。 (Míngtiān wǒ yǒu huìyì.) – Ngày mai tôi có họp.
+他有两个女儿。 (Tā yǒu liǎng gè nǚ'ér.) – Anh ấy có hai con gái.
+学校有很多学生。 (Xuéxiào yǒu hěn duō xuésheng.) – Trường có nhiều học sinh.
+我有时间。 (Wǒ yǒu shíjiān.) – Tôi có thời gian.
+现在有课吗？ (Xiànzài yǒu kè ma?) – Bây giờ có tiết không?
+昨天我有作业。 (Zuótiān wǒ yǒu zuòyè.) – Hôm qua tôi có bài tập.
+她有漂亮的衣服。 (Tā yǒu piàoliang de yīfu.) – Cô ấy có quần áo đẹp.
+我们有好老师。 (Wǒmen yǒu hǎo lǎoshī.) – Chúng tôi có thầy cô tốt.
+你有没有水？ (Nǐ yǒu méi yǒu shuǐ?) – Bạn có nước không?
+
+#46 在 (zài) – ở (vị trí) / đang (tiếp diễn)
+我在学校。 (Wǒ zài xuéxiào.) – Tôi ở trường.
+他在公司上班。 (Tā zài gōngsī shàngbān.) – Anh ấy đang làm việc ở công ty.
+现在我在家。 (Xiànzài wǒ zài jiā.) – Bây giờ tôi ở nhà.
+书在桌子上。 (Shū zài zhuōzi shàng.) – Sách ở trên bàn.
+明天我在北京。 (Míngtiān wǒ zài Běijīng.) – Ngày mai tôi ở Bắc Kinh.
+她在吃饭。 (Tā zài chīfàn.) – Cô ấy đang ăn.
+我们在学习中文。 (Wǒmen zài xuéxí Zhōngwén.) – Chúng tôi đang học tiếng Trung.
+朋友在哪儿？ (Péngyou zài nǎr?) – Bạn ở đâu?
+昨天我在公园。 (Zuótiān wǒ zài gōngyuán.) – Hôm qua tôi ở công viên.
+老师在教室。 (Lǎoshī zài jiàoshì.) – Thầy ở trong lớp.
+我在喝水。 (Wǒ zài hē shuǐ.) – Tôi đang uống nước.
+儿子在玩。 (Érzi zài wán.) – Con trai đang chơi.
+
+#47 要 (yào) – muốn / cần / sẽ (tương lai gần)
+我要吃饭。 (Wǒ yào chīfàn.) – Tôi muốn ăn cơm.
+你要喝什么？ (Nǐ yào hē shénme?) – Bạn muốn uống gì?
+明天我要早起。 (Míngtiān wǒ yào zǎo qǐ.) – Ngày mai tôi phải dậy sớm.
+他要买书。 (Tā yào mǎi shū.) – Anh ấy muốn mua sách.
+我们要去上班。 (Wǒmen yào qù shàngbān.) – Chúng tôi phải đi làm.
+你要不要一起去？ (Nǐ yào bu yào yìqǐ qù?) – Bạn có muốn đi cùng không?
+现在我要学习。 (Xiànzài wǒ yào xuéxí.) – Bây giờ tôi phải học.
+女儿要吃冰激凌。 (Nǚ'ér yào chī bīngjīlíng.) – Con gái muốn ăn kem.
+朋友要来我家。 (Péngyou yào lái wǒ jiā.) – Bạn muốn đến nhà tôi.
+我要一杯水。 (Wǒ yào yì bēi shuǐ.) – Tôi muốn một ly nước.
+明天你要做什么？ (Míngtiān nǐ yào zuò shénme?) – Ngày mai bạn sẽ làm gì?
+我要睡觉了。 (Wǒ yào shuìjiào le.) – Tôi muốn ngủ rồi.
+
+#48 喜欢 (xǐhuan) – thích
+我喜欢吃米饭。 (Wǒ xǐhuan chī mǐfàn.) – Tôi thích ăn cơm.
+你喜欢什么颜色？ (Nǐ xǐhuan shénme yánsè?) – Bạn thích màu gì?
+他喜欢踢足球。 (Tā xǐhuan tī zúqiú.) – Anh ấy thích đá bóng.
+她喜欢看书。 (Tā xǐhuan kàn shū.) – Cô ấy thích đọc sách.
+我们喜欢中国菜。 (Wǒmen xǐhuan Zhōngguó cài.) – Chúng tôi thích món Trung Quốc.
+爸爸喜欢喝茶。 (Bàba xǐhuan hē chá.) – Bố thích uống trà.
+儿子喜欢玩游戏。 (Érzi xǐhuan wán yóuxì.) – Con trai thích chơi game.
+老师喜欢学生。 (Lǎoshī xǐhuan xuésheng.) – Thầy thích học sinh.
+我喜欢早上喝咖啡。 (Wǒ xǐhuan zǎoshang hē kāfēi.) – Tôi thích sáng uống cà phê.
+朋友喜欢唱歌。 (Péngyou xǐhuan chànggē.) – Bạn thích hát.
+你喜欢这个吗？ (Nǐ xǐhuan zhège ma?) – Bạn có thích cái này không?
+我不喜欢冷天。 (Wǒ bù xǐhuan lěng tiān.) – Tôi không thích trời lạnh.
+
+#49 爱 (ài) – yêu
+我爱我的妈妈。 (Wǒ ài wǒ de māma.) – Tôi yêu mẹ tôi.
+爸爸爱儿子。 (Bàba ài érzi.) – Bố yêu con trai.
+她爱看电影。 (Tā ài kàn diànyǐng.) – Cô ấy yêu xem phim.
+我们爱中国文化。 (Wǒmen ài Zhōngguó wénhuà.) – Chúng tôi yêu văn hóa Trung Quốc.
+老师爱学生。 (Lǎoshī ài xuésheng.) – Thầy yêu học sinh.
+我爱吃辣的。 (Wǒ ài chī là de.) – Tôi yêu ăn cay.
+女儿爱爸爸妈妈。 (Nǚ'ér ài bàba māma.) – Con gái yêu bố mẹ.
+他爱踢球。 (Tā ài tī qiú.) – Anh ấy yêu đá bóng.
+我爱这个城市。 (Wǒ ài zhège chéngshì.) – Tôi yêu thành phố này.
+朋友爱帮助别人。 (Péngyou ài bāngzhù biérén.) – Bạn yêu giúp đỡ người khác.
+你爱我吗？ (Nǐ ài wǒ ma?) – Bạn có yêu tôi không?
+妈妈爱做饭。 (Māma ài zuòfàn.) – Mẹ yêu nấu ăn.
+
+#50 吃 (chī) – ăn
+你吃饭了吗？ (Nǐ chīfàn le ma?) – Bạn ăn cơm chưa?
+我喜欢吃米饭。 (Wǒ xǐhuan chī mǐfàn.) – Tôi thích ăn cơm.
+中午我们一起吃吧。 (Zhōngwǔ wǒmen yìqǐ chī ba.) – Trưa chúng ta ăn cùng nhé.
+她吃苹果。 (Tā chī píngguǒ.) – Cô ấy ăn táo.
+昨天我吃了面条。 (Zuótiān wǒ chī le miàntiáo.) – Hôm qua tôi ăn mì.
+儿子爱吃糖。 (Érzi ài chī táng.) – Con trai thích ăn kẹo.
+现在我要吃早饭。 (Xiànzài wǒ yào chī zǎofàn.) – Bây giờ tôi muốn ăn sáng.
+你吃什么？ (Nǐ chī shénme?) – Bạn ăn gì?
+我们吃中国菜。 (Wǒmen chī Zhōngguó cài.) – Chúng tôi ăn món Trung.
+下午吃水果。 (Xiàwǔ chī shuǐguǒ.) – Chiều ăn trái cây.
+老师不吃辣。 (Lǎoshī bù chī là.) – Thầy không ăn cay.
+吃饱了吗？ (Chī bǎo le ma?) – Ăn no chưa?
+`;
+
+    // TRÌNH PHÂN TÍCH DATA SIÊU VIỆT
+    const vocabData = [];
+    let curWord = null;
+    rawVocabText.trim().split('\n').forEach(line => {
+        line = line.trim();
+        if(!line) return;
+        let mWord = line.match(/#\d+\s+([^\s]+)\s+\(([^)]+)\)\s+[–-]\s+(.+)/);
+        if(mWord) {
+            curWord = { hz: mWord[1], py: mWord[2], mn: mWord[3], sentences: [] };
+            vocabData.push(curWord);
+        } else if(curWord) {
+            let mSent = line.match(/(.+?)\s+\((.+?)\)\s+[–-]\s+(.+)/);
+            if(mSent) {
+                curWord.sentences.push({ zh: mSent[1].trim(), py: mSent[2].trim(), vi: mSent[3].trim() });
+            }
+        }
+    });
 
     const namesData = [ { vi: "Lưu Thiết Hoa", hz: "刘铁华", py: "Liú Tiěhuá" }, { vi: "Hà Mỹ Mỹ", hz: "何美美", py: "Hé Měiměi" }, { vi: "Bùi Lê Ngọc Linh", hz: "裴黎玉玲", py: "Péi Lí Yùlíng" }, { vi: "Lưu Thiết Vinh", hz: "刘铁荣", py: "Liú Tiěróng" }, { vi: "A Mỹ Linh", hz: "阿美玲", py: "Ā Měilíng" }, { vi: "Hà Gia Bảo", hz: "何家宝", py: "Hé Jiābǎo" }, { vi: "Diệp Thanh Thanh", hz: "叶青青", py: "Yè Qīngqīng" }, { vi: "Lê Bá Trần Hoàng", hz: "黎伯陈黄", py: "Lí Bó Chénhuáng" }, { vi: "Nguyễn Thị Phương Nguyên", hz: "阮氏芳原", py: "Ruǎn Shì Fāngyuán" } ];
     const grammarRules = [ { id: "g1", title: "S + 是 + N", structure: "S + 是 + N (Là)", ex: "我是学生", regex: /(.+)是(.+)/ }, { id: "g2", title: "S + 不 + 是 + N", structure: "S + 不 + 是 + N (Phủ định)", ex: "我不是老师", regex: /(.+)不是(.+)/ }, { id: "g3", title: "S + 是 + N + 吗?", structure: "S + 是 + N + 吗? (Nghi vấn)", ex: "你是中国人吗？", regex: /(.+)是(.+)吗[?？]?/ }, { id: "g4", title: "N + 们", structure: "N + 们 (Số nhiều)", ex: "我们", regex: /(.+)们/ } ];
@@ -686,7 +1398,7 @@
     const vPop = [ {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false}, {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false}, {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false}, {name:"hieuthuhai - ngủ một mình ft. negav",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Không Thể Say l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true}, {name:"Exit Sign - HIEUTHUHAI ft. marzuz",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true}, {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true} ];
     const cPop = [ {name:"Mang Chủng",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"}, {name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"}, {name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"}, {name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"} ];
 
-    // --- BẮT LỖI JS CHUNG (CHỐNG KẸT TAB) ---
+    // --- BẮT LỖI JS CHUNG ---
     window.onerror = function(msg, url, line) { console.error("Lỗi JS: " + msg + " ở dòng " + line); };
 
     // --- 2. GIAO DIỆN & AUDIO ---
@@ -836,25 +1548,24 @@
     ];
     let currentChestIdx = 0;
     
-    // AN TOÀN TRÁNH JS CRASH DO DỮ LIỆU CŨ LỖI, SỬA KEY ĐỂ RESET STATE
     let inventory = [];
     try {
         let savedInv = localStorage.getItem('skyInventory_v2');
         if(savedInv) inventory = JSON.parse(savedInv);
-    } catch(e) {
-        inventory = [];
-    }
+    } catch(e) { inventory = []; }
     if(!Array.isArray(inventory)) inventory = [];
 
     function openRuong() {
-        playSound('click');
-        if (localStorage.getItem('skyNewbieGift_v2') === 'true') {
-            alert("Xin lỗi, bạn đã nhận hoa tân thủ rồi!");
-            return;
+        if (!hasMoved) { 
+            playSound('click');
+            if (localStorage.getItem('skyNewbieGift_v2') === 'true') {
+                alert("Xin lỗi, bạn đã nhận hoa tân thủ rồi!");
+                return;
+            }
+            currentChestIdx = 0;
+            document.getElementById('ruong-modal').classList.remove('hidden');
+            showChestItem();
         }
-        currentChestIdx = 0;
-        document.getElementById('ruong-modal').classList.remove('hidden');
-        showChestItem();
     }
 
     function showChestItem() {
@@ -868,7 +1579,7 @@
         playSound('click');
         currentChestIdx++;
         if (currentChestIdx >= chestItems.length) {
-            currentChestIdx = 0; // Lặp lại nếu xem hết
+            currentChestIdx = 0; 
         }
         showChestItem();
     }
@@ -879,7 +1590,6 @@
             alert("Xin lỗi, bạn đã nhận hoa tân thủ rồi!");
         } else {
             playSound('correct');
-            // Cất cả 5 bông hoa vào túi
             chestItems.forEach(item => {
                 if (inventory.length < 25) {
                     inventory.push(item.id);
@@ -895,7 +1605,6 @@
 
     function closeRuong() {
         playSound('click');
-        // Nếu chưa bấm nhận mà tắt ngang thì ép nhận luôn cho chắc ăn
         if (localStorage.getItem('skyNewbieGift_v2') !== 'true') {
              chestItems.forEach(item => {
                 if (inventory.length < 25) {
@@ -948,7 +1657,7 @@
     function nextVoiceWord() { playSound('click'); voiceIdx = Math.floor(Math.random() * vocabData.length); document.getElementById('voice-target').innerText = vocabData[voiceIdx].hz; document.getElementById('voice-py').innerText = vocabData[voiceIdx].py; document.getElementById('voice-mn').innerText = vocabData[voiceIdx].mn; document.getElementById('voice-feedback').innerHTML = ""; }
     function startListening() { if (!SpeechRecognition) { alert("Trình duyệt của bạn không hỗ trợ Nhận diện giọng nói. Hãy dùng Chrome!"); return; } playSound('click'); recognition.start(); }
 
-    // --- 9. NGHE HIỂU (CHỐNG CÂU VÔ LÝ) ---
+    // --- 9. NGHE HIỂU ---
     let currentListenHz = ""; let currentListenVi = "";
     function generateListenSentence() {
         playSound('click');
@@ -1000,8 +1709,105 @@
     function toggleReadingRef() { playSound('click'); const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
     function checkReading() { if(document.getElementById('r-input').value.trim().length > 5) { playSound('correct'); updateCoins(1); if(readingProgress < readingMax) readingProgress++; document.getElementById('reading-progress').innerText = `Tiến độ: ${readingProgress}/${readingMax}`; document.getElementById('r-msg').innerText = "OK (+1 Xu)"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-green-400"; } else { playSound('wrong'); document.getElementById('r-msg').innerText = "DỊCH QUÁ NGẮN!"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-red-400"; } }
 
-    // --- 11. THƯ VIỆN & NGỮ PHÁP ---
-    function renderLibrary() { document.getElementById('lib-count').innerText = vocabData.length; const html = vocabData.map((v, i) => `<div class="bg-white/5 p-3 rounded border border-white/10 flex flex-col justify-between hover:bg-white/10 transition"> <div class="flex justify-between items-center mb-1"> <span class="text-xs text-gray-500 font-mono">#${i+1}</span> <span class="text-lg font-bold text-white">${v.hz}</span> </div> <div class="text-xs text-indigo-300 font-mono">${v.py}</div> <div class="text-[10px] text-gray-400 uppercase mt-1 tracking-widest">${v.mn}</div> </div>`).join(''); document.getElementById('lib-list').innerHTML = html; }
+    // --- 11. THƯ VIỆN & LUYỆN ĐẶT CÂU (TÍNH NĂNG MỚI) ---
+    function renderLibrary() { 
+        document.getElementById('lib-count').innerText = vocabData.length; 
+        const html = vocabData.map((v, i) => `
+        <div class="bg-white/5 p-4 rounded border border-white/10 flex flex-col justify-between hover:bg-white/10 transition"> 
+            <div class="flex justify-between items-center mb-1"> 
+                <span class="text-xs text-gray-500 font-mono">#${i+1}</span> 
+                <span class="text-2xl font-bold text-white">${v.hz}</span> 
+            </div> 
+            <div class="text-sm text-indigo-300 font-mono">${v.py}</div> 
+            <div class="text-xs text-gray-400 uppercase mt-1 tracking-widest">${v.mn}</div> 
+            
+            ${v.sentences && v.sentences.length > 0 ? `
+            <div class="flex gap-2 mt-4 pt-4 border-t border-white/10">
+                <button onclick="openSentencePractice(${i}, 'order')" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white text-[9px] py-2 rounded uppercase font-bold tracking-wider transition">Học Đặt Câu</button>
+                <button onclick="openSentencePractice(${i}, 'random')" class="flex-1 bg-green-600 hover:bg-green-500 text-white text-[9px] py-2 rounded uppercase font-bold tracking-wider transition">Đoán Chữ</button>
+            </div>
+            ` : ''}
+        </div>`).join(''); 
+        document.getElementById('lib-list').innerHTML = html; 
+    }
+
+    let spWordIdx = 0;
+    let spMode = 'order'; 
+    let spSentences = [];
+    let spCurrentIdx = 0;
+
+    function openSentencePractice(wordIdx, mode) {
+        playSound('click');
+        spWordIdx = wordIdx;
+        spMode = mode;
+        const wordObj = vocabData[wordIdx];
+        if(!wordObj.sentences || wordObj.sentences.length === 0) {
+            alert("Từ này chưa có dữ liệu câu luyện tập!");
+            return;
+        }
+        
+        spSentences = [...wordObj.sentences];
+        if (mode === 'random') {
+            spSentences = spSentences.sort(() => Math.random() - 0.5);
+        }
+        
+        spCurrentIdx = 0;
+        document.getElementById('sp-title').innerText = `Luyện Tập: ${wordObj.hz} (${wordObj.mn})`;
+        document.getElementById('sentence-modal').classList.remove('hidden');
+        renderSentenceQuestion();
+    }
+
+    function closeSentencePractice() {
+        playSound('click');
+        document.getElementById('sentence-modal').classList.add('hidden');
+    }
+
+    function renderSentenceQuestion() {
+        const s = spSentences[spCurrentIdx];
+        document.getElementById('sp-progress').innerText = `Câu ${spCurrentIdx + 1}/${spSentences.length}`;
+        document.getElementById('sp-vi').innerText = s.vi;
+        
+        // Cập nhật gợi ý nhưng giấu đi
+        document.getElementById('sp-py').innerText = s.py;
+        document.getElementById('sp-zh-hint').innerText = s.zh;
+        document.getElementById('sp-hint-area').classList.replace('opacity-100', 'opacity-0');
+        
+        document.getElementById('sp-input').value = '';
+        document.getElementById('sp-feedback').innerText = '';
+        document.getElementById('sp-input').focus();
+    }
+
+    function showSentenceHint() {
+        playSound('click');
+        document.getElementById('sp-hint-area').classList.replace('opacity-0', 'opacity-100');
+    }
+
+    function checkSentence() {
+        const input = document.getElementById('sp-input').value.trim().replace(/[.,?!。，？！]/g, "");
+        const target = spSentences[spCurrentIdx].zh.replace(/[.,?!。，？！]/g, "");
+        
+        if(input === target) {
+            playSound('correct');
+            updateCoins(2);
+            document.getElementById('sp-feedback').innerText = "CHÍNH XÁC! (+2 COIN)";
+            document.getElementById('sp-feedback').className = "mt-6 text-sm font-bold uppercase tracking-[0.2em] h-6 text-center text-green-400";
+            
+            setTimeout(() => {
+                spCurrentIdx++;
+                if (spCurrentIdx >= spSentences.length) {
+                    alert("Chúc mừng! Bạn đã hoàn thành các bài tập đặt câu của từ này!");
+                    closeSentencePractice();
+                } else {
+                    renderSentenceQuestion();
+                }
+            }, 1000);
+        } else {
+            playSound('wrong');
+            document.getElementById('sp-feedback').innerText = "SAI RỒI! HÃY BẤM GỢI Ý!";
+            document.getElementById('sp-feedback').className = "mt-6 text-sm font-bold uppercase tracking-[0.2em] h-6 text-center text-red-400";
+        }
+    }
+
     function renderGrammarList() { document.getElementById('grammar-list').innerHTML = grammarRules.map(r => `<div class="bg-white/5 p-6 border-l-2 border-indigo-500"> <h3 class="text-lg font-light text-white mb-2">${r.title}</h3> <code class="block bg-black/20 p-2 text-pink-300 mb-2 font-mono text-xs">${r.structure}</code> <p class="text-xs text-gray-400 italic">Ví dụ: ${r.ex}</p> </div>`).join(''); }
 
     // --- 12. BÀI KIỂM TRA ---
@@ -1051,7 +1857,7 @@
     function playMedia(src, type, name, idx, listType, thumb) { playSound('click'); currentList = listType; currentIndex = idx; document.getElementById('now-playing').innerText = name; const yt = document.getElementById('player'); const mp4 = document.getElementById('mp4-player'); if(player && player.stopVideo) player.stopVideo(); mp4.pause(); if(type === 'mp4') { yt.classList.add('hidden'); mp4.classList.remove('hidden'); mp4.src = src; mp4.play(); } else { mp4.classList.add('hidden'); yt.classList.remove('hidden'); player.loadVideoById(src); } }
     function checkAutoPlay() { if(document.getElementById(`toggle-${currentList}`).checked) { const listData = currentList === 'vpop' ? displayedVPop : cPop; const nextIdx = (currentIndex + 1) % listData.length; const nextSong = listData[nextIdx]; playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb); } }
 
-    // --- INIT APP ---
+    // --- INIT APP KHI TẤT CẢ HÀM ĐÃ ĐƯỢC TẠO ---
     window.onload = () => { 
         renderMusic(); 
         renderLibrary(); 
