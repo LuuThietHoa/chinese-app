@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.55 Complete Dictionary</title>
+    <title>Skyreign Hub | V40.56 Ultimate Clean Code</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -66,7 +66,7 @@
 <audio id="sfx-wrong" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3" preload="auto"></audio>
 <audio id="bgm-game" src="pp.mp4" loop preload="auto"></audio>
 
-<div id="settings-modal" class="fixed inset-0 z-[1001] hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+<div id="settings-modal" class="fixed inset-0 z-[1001] hidden flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
     <div class="glass-card p-8 w-full max-w-md border border-white/20 relative shadow-[0_0_50px_rgba(0,0,0,0.8)]">
         <button onclick="closeSettings()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">✖</button>
         <h2 class="text-2xl font-bold uppercase tracking-widest text-center mb-6 text-indigo-300 drop-shadow-md">Cài Đặt Game</h2>
@@ -105,39 +105,42 @@
     </div>
 </div>
 
-<div id="tuido-modal" class="fixed inset-0 z-[2000] hidden bg-black/80 backdrop-blur-sm transition-opacity duration-300 overflow-auto">
+<div id="tuido-modal" class="fixed inset-0 z-[2000] hidden bg-black/80 backdrop-blur-sm transition-opacity duration-300 overflow-auto flex items-center justify-center">
     <button onclick="closeTuido()" class="fixed top-6 right-10 text-white/50 hover:text-red-500 text-6xl drop-shadow-md z-[2001] transition transform hover:scale-110">&times;</button>
-    <div class="w-full min-h-full flex items-center justify-center p-10 relative">
-        <div id="inventory-container" class="relative flex-shrink-0" style="width: 1124px; height: 628px;">
-            <img src="open1.png" class="absolute inset-0 w-full h-full object-fill drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] fade-in pointer-events-none select-none" draggable="false" alt="Túi Đồ Open">
+    
+    <div id="inventory-container" class="relative flex-shrink-0" style="width: 1124px; height: 628px; max-width: none;">
+        <img src="open1.png" class="absolute inset-0 w-full h-full object-fill drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] fade-in pointer-events-none select-none" draggable="false" alt="Túi Đồ Open">
+        
+        <div id="inventory-slots-area" class="absolute inset-0 pointer-events-none">
+            <div id="slot-1" class="absolute flex items-center justify-center" style="top: 141px; left: 167px; width: 50px; height: 50px;"></div>
+            <div id="slot-2" class="absolute flex items-center justify-center" style="top: 141px; left: 255px; width: 50px; height: 50px;"></div>
+            <div id="slot-3" class="absolute flex items-center justify-center" style="top: 141px; left: 341px; width: 50px; height: 50px;"></div>
+            <div id="slot-4" class="absolute flex items-center justify-center" style="top: 143px; left: 427px; width: 50px; height: 50px;"></div>
+            <div id="slot-5" class="absolute flex items-center justify-center" style="top: 143px; left: 512px; width: 50px; height: 50px;"></div>
             
-            <div id="inventory-slots-area" class="absolute inset-0 pointer-events-none">
-                <div id="slot-1" class="absolute flex items-center justify-center" style="top: 141px; left: 167px; width: 50px; height: 50px;"></div>
-                <div id="slot-2" class="absolute flex items-center justify-center" style="top: 141px; left: 255px; width: 50px; height: 50px;"></div>
-                <div id="slot-3" class="absolute flex items-center justify-center" style="top: 141px; left: 341px; width: 50px; height: 50px;"></div>
-                <div id="slot-4" class="absolute flex items-center justify-center" style="top: 143px; left: 427px; width: 50px; height: 50px;"></div>
-                <div id="slot-5" class="absolute flex items-center justify-center" style="top: 143px; left: 512px; width: 50px; height: 50px;"></div>
-                <div id="slot-6" class="absolute flex items-center justify-center" style="top: 231px; left: 167px; width: 50px; height: 50px;"></div>
-                <div id="slot-7" class="absolute flex items-center justify-center" style="top: 230px; left: 255px; width: 50px; height: 50px;"></div>
-                <div id="slot-8" class="absolute flex items-center justify-center" style="top: 229px; left: 341px; width: 51px; height: 52px;"></div>
-                <div id="slot-9" class="absolute flex items-center justify-center" style="top: 231px; left: 427px; width: 50px; height: 50px;"></div>
-                <div id="slot-10" class="absolute flex items-center justify-center" style="top: 232px; left: 513px; width: 50px; height: 50px;"></div>
-                <div id="slot-11" class="absolute flex items-center justify-center" style="top: 318px; left: 168px; width: 50px; height: 50px;"></div>
-                <div id="slot-12" class="absolute flex items-center justify-center" style="top: 318px; left: 256px; width: 50px; height: 50px;"></div>
-                <div id="slot-13" class="absolute flex items-center justify-center" style="top: 318px; left: 339px; width: 50px; height: 50px;"></div>
-                <div id="slot-14" class="absolute flex items-center justify-center" style="top: 320px; left: 426px; width: 50px; height: 50px;"></div>
-                <div id="slot-15" class="absolute flex items-center justify-center" style="top: 319px; left: 513px; width: 50px; height: 50px;"></div>
-                <div id="slot-16" class="absolute flex items-center justify-center" style="top: 411px; left: 167px; width: 50px; height: 50px;"></div>
-                <div id="slot-17" class="absolute flex items-center justify-center" style="top: 409px; left: 254px; width: 50px; height: 50px;"></div>
-                <div id="slot-18" class="absolute flex items-center justify-center" style="top: 410px; left: 340px; width: 50px; height: 50px;"></div>
-                <div id="slot-19" class="absolute flex items-center justify-center" style="top: 411px; left: 427px; width: 50px; height: 50px;"></div>
-                <div id="slot-20" class="absolute flex items-center justify-center" style="top: 410px; left: 513px; width: 50px; height: 50px;"></div>
-                <div id="slot-21" class="absolute flex items-center justify-center" style="top: 497px; left: 167px; width: 50px; height: 50px;"></div>
-                <div id="slot-22" class="absolute flex items-center justify-center" style="top: 497px; left: 255px; width: 50px; height: 50px;"></div>
-                <div id="slot-23" class="absolute flex items-center justify-center" style="top: 498px; left: 341px; width: 50px; height: 50px;"></div>
-                <div id="slot-24" class="absolute flex items-center justify-center" style="top: 500px; left: 426px; width: 50px; height: 50px;"></div>
-                <div id="slot-25" class="absolute flex items-center justify-center" style="top: 496px; left: 512px; width: 50px; height: 50px;"></div>
-            </div>
+            <div id="slot-6" class="absolute flex items-center justify-center" style="top: 231px; left: 167px; width: 50px; height: 50px;"></div>
+            <div id="slot-7" class="absolute flex items-center justify-center" style="top: 230px; left: 255px; width: 50px; height: 50px;"></div>
+            <div id="slot-8" class="absolute flex items-center justify-center" style="top: 229px; left: 341px; width: 51px; height: 52px;"></div>
+            <div id="slot-9" class="absolute flex items-center justify-center" style="top: 231px; left: 427px; width: 50px; height: 50px;"></div>
+            <div id="slot-10" class="absolute flex items-center justify-center" style="top: 232px; left: 513px; width: 50px; height: 50px;"></div>
+            
+            <div id="slot-11" class="absolute flex items-center justify-center" style="top: 318px; left: 168px; width: 50px; height: 50px;"></div>
+            <div id="slot-12" class="absolute flex items-center justify-center" style="top: 318px; left: 256px; width: 50px; height: 50px;"></div>
+            <div id="slot-13" class="absolute flex items-center justify-center" style="top: 318px; left: 339px; width: 50px; height: 50px;"></div>
+            <div id="slot-14" class="absolute flex items-center justify-center" style="top: 320px; left: 426px; width: 50px; height: 50px;"></div>
+            <div id="slot-15" class="absolute flex items-center justify-center" style="top: 319px; left: 513px; width: 50px; height: 50px;"></div>
+            
+            <div id="slot-16" class="absolute flex items-center justify-center" style="top: 411px; left: 167px; width: 50px; height: 50px;"></div>
+            <div id="slot-17" class="absolute flex items-center justify-center" style="top: 409px; left: 254px; width: 50px; height: 50px;"></div>
+            <div id="slot-18" class="absolute flex items-center justify-center" style="top: 410px; left: 340px; width: 50px; height: 50px;"></div>
+            <div id="slot-19" class="absolute flex items-center justify-center" style="top: 411px; left: 427px; width: 50px; height: 50px;"></div>
+            <div id="slot-20" class="absolute flex items-center justify-center" style="top: 410px; left: 513px; width: 50px; height: 50px;"></div>
+            
+            <div id="slot-21" class="absolute flex items-center justify-center" style="top: 497px; left: 167px; width: 50px; height: 50px;"></div>
+            <div id="slot-22" class="absolute flex items-center justify-center" style="top: 497px; left: 255px; width: 50px; height: 50px;"></div>
+            <div id="slot-23" class="absolute flex items-center justify-center" style="top: 498px; left: 341px; width: 50px; height: 50px;"></div>
+            <div id="slot-24" class="absolute flex items-center justify-center" style="top: 500px; left: 426px; width: 50px; height: 50px;"></div>
+            <div id="slot-25" class="absolute flex items-center justify-center" style="top: 496px; left: 512px; width: 50px; height: 50px;"></div>
         </div>
     </div>
 </div>
@@ -191,7 +194,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.53 ABSOLUTE FINAL</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.56 CLEAN UI & GACHA</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -667,7 +670,7 @@
 </div>
 
 <script>
-    // --- 1. DỮ LIỆU GỐC 237 TỪ VỰNG NGỮ PHÁP (GIỮ NGUYÊN) ---
+    // --- 1. DATA TỪ VỰNG VÀ NGỮ PHÁP GỐC ---
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" }, { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" }, { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" }, { hz: "先生", py: "xiānsheng", mn: "ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô" },
         { hz: "零", py: "líng", mn: "số 0" }, { hz: "一", py: "yī", mn: "số 1" }, { hz: "二", py: "èr", mn: "số 2" }, { hz: "三", py: "sān", mn: "số 3" }, { hz: "四", py: "sì", mn: "số 4" }, { hz: "五", py: "wǔ", mn: "số 5" }, { hz: "六", py: "liù", mn: "số 6" }, { hz: "七", py: "qī", mn: "số 7" }, { hz: "八", py: "bā", mn: "số 8" }, { hz: "九", py: "jiǔ", mn: "số 9" }, { hz: "十", py: "shí", mn: "số 10" }, { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" }, { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" }, { hz: "号", py: "hào", mn: "ngày" }, { hz: "星期", py: "xīngqī", mn: "tuần" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" }, { hz: "时候", py: "shíhou", mn: "khi lúc" },
@@ -681,7 +684,7 @@
         { hz: "电影院", py: "diànyǐngyuàn", mn: "rạp chiếu phim" }, { hz: "东", py: "dōng", mn: "hướng đông" }, { hz: "动", py: "dòng", mn: "cử động" }, { hz: "动作", py: "dòngzuò", mn: "động tác" }, { hz: "读书", py: "dúshū", mn: "học bài" }, 
         { hz: "饿", py: "è", mn: "đói" }, { hz: "房间", py: "fángjiān", mn: "căn phòng" }, { hz: "房子", py: "fángzi", mn: "căn nhà" }, { hz: "放", py: "fàng", mn: "đặt/để" }, { hz: "放假", py: "fàngjià", mn: "nghỉ lễ" }, 
         { hz: "放学", py: "fàngxué", mn: "tan học" }, { hz: "飞", py: "fēi", mn: "bay" }, { hz: "飞机", py: "fēijī", mn: "máy bay" }, { hz: "风", py: "fēng", mn: "gió" }, { hz: "干", py: "gān", mn: "khô/cạn" }, 
-        { hz: "干净", py: "gānjìng", mn: "sạch sẽ" }, { hz: "干", py: "gàn", mn: "làm" }, { hz: "干什么", py: "gàn shénme", mn: "làm gì thế" }, { hz: "高", py: "gāo", mn: "cao" }, { hz: "告诉", py: "gàosu", mn: "nói/bày tỏ" }, 
+        { hz: "干净", py: "gānjìng", mn: "sạch绩" }, { hz: "干", py: "gàn", mn: "làm" }, { hz: "干什么", py: "gàn shénme", mn: "làm gì thế" }, { hz: "高", py: "gāo", mn: "cao" }, { hz: "告诉", py: "gàosu", mn: "nói/bày tỏ" }, 
         { hz: "哥哥", py: "gēge", mn: "anh trai" }, { hz: "歌", py: "gē", mn: "bài hát" }, { hz: "跟", py: "gēn", mn: "cùng/với" }, { hz: "工人", py: "gōngrén", mn: "công nhân" }, { hz: "工作", py: "gōngzuò", mn: "công việc" }, 
         { hz: "关", py: "guān", mn: "đóng/tắt" }, { hz: "关上", py: "guān shàng", mn: "đóng lại" }, { hz: "贵", py: "guì", mn: "đắt/mắc" }, { hz: "国", py: "guó", mn: "nước/quốc gia" }, { hz: "国外", py: "guó wài", mn: "nước ngoài" }, 
         { hz: "过", py: "guò", mn: "đi qua" }, { hz: "孩子", py: "hái zi", mn: "trẻ em" }, { hz: "汉语", py: "Hàn yǔ", mn: "tiếng Hán" }, { hz: "汉字", py: "Hàn zì", mn: "chữ Hán" }, { hz: "好玩儿", py: "hǎowánr", mn: "thú vị" }, 
@@ -695,7 +698,7 @@
         { hz: "开始", py: "kāishǐ", mn: "bắt đầu" }, { hz: "考试", py: "kǎoshì", mn: "thi cử" }
     ];
 
-    // RAW DATA 50 CÂU ĐỂ CẤY VÀO VOCAB DATA GỐC
+    // GÁN DỮ LIỆU ĐẶT CÂU (CHO 50 TỪ ĐẦU) VÀO VOCAB DATA GỐC
     const rawVocabText = `
 #1 我 (wǒ) – tôi
 我是学生。 (Wǒ shì xuésheng.) – Tôi là học sinh.
@@ -1515,6 +1518,25 @@
             document.getElementById('sp-feedback').className = "mt-6 text-sm font-bold uppercase tracking-[0.2em] h-6 text-center text-red-400";
         }
     }
+
+    // --- CÁC TAB KHÁC NHƯ CŨ (KHÔNG LẶP LẠI) ---
+    function renderGrammarList() { document.getElementById('grammar-list').innerHTML = grammarRules.map(r => `<div class="bg-white/5 p-6 border-l-2 border-indigo-500"> <h3 class="text-lg font-light text-white mb-2">${r.title}</h3> <code class="block bg-black/20 p-2 text-pink-300 mb-2 font-mono text-xs">${r.structure}</code> <p class="text-xs text-gray-400 italic">Ví dụ: ${r.ex}</p> </div>`).join(''); }
+
+    function switchTestMode(mode) { playSound('click'); document.getElementById('test-grammar').classList.add('hidden'); document.getElementById('test-fill').classList.add('hidden'); document.getElementById('test-speed').classList.add('hidden'); document.getElementById(`test-${mode}`).classList.remove('hidden'); if(mode === 'grammar') startGrammarTest(); if(mode === 'fill') generateFillTest(); if(mode === 'speed') resetSpeedTest(); }
+    function startGrammarTest() { document.getElementById('tg-step1').classList.remove('hidden'); document.getElementById('tg-step2').classList.add('hidden'); document.getElementById('tg-step3').classList.add('hidden'); document.getElementById('tg-step4').classList.add('hidden'); document.getElementById('tg-sub-input').value = ""; document.getElementById('tg-noun-input').value = ""; document.getElementById('tg-make-sentence').value = ""; document.getElementById('tg-feedback').innerText = ""; currentTestRule = grammarRules[Math.floor(Math.random() * grammarRules.length)]; const subs = ["我","你","他","爸爸","妈妈"]; const nouns = ["学生","老师","医生","好人"]; const S = subs[Math.floor(Math.random() * subs.length)]; const N = nouns[Math.floor(Math.random() * nouns.length)]; if(currentTestRule.id === "g1") currentTestSentence = S + "是" + N; if(currentTestRule.id === "g2") currentTestSentence = S + "不是" + N; if(currentTestRule.id === "g3") currentTestSentence = S + "是" + N + "吗？"; if(currentTestRule.id === "g4") currentTestSentence = "我们"; document.getElementById('tg-question').innerText = currentTestSentence; let opts = [...grammarRules].sort(() => Math.random() - 0.5).slice(0, 3); if(!opts.includes(currentTestRule)) opts[0] = currentTestRule; opts = opts.sort(() => Math.random() - 0.5); document.getElementById('tg-options').innerHTML = opts.map(r => `<button onclick="checkStructure('${r.id}')" class="p-3 bg-white/5 border border-white/20 rounded text-xs hover:bg-white hover:text-black transition text-left">${r.structure}</button>`).join(''); }
+    function checkStructure(id) { if(id === currentTestRule.id) { playSound('correct'); document.getElementById('tg-step1').classList.add('hidden'); document.getElementById('tg-step2').classList.remove('hidden'); document.getElementById('tg-feedback').innerText = "Đúng cấu trúc!"; } else { playSound('wrong'); alert("Sai rồi! Hãy nhìn kỹ câu hỏi."); } }
+    function checkSubject() { const val = document.getElementById('tg-sub-input').value.trim(); if(currentTestSentence.includes(val) && val.length > 0) { playSound('correct'); document.getElementById('tg-step2').classList.add('hidden'); document.getElementById('tg-step3').classList.remove('hidden'); } else { playSound('wrong'); alert("Chưa đúng chủ ngữ!"); } }
+    function checkNoun() { const val = document.getElementById('tg-noun-input').value.trim(); if(currentTestSentence.includes(val) && val.length > 0) { playSound('correct'); document.getElementById('tg-step3').classList.add('hidden'); document.getElementById('tg-step4').classList.remove('hidden'); } else { playSound('wrong'); alert("Chưa đúng danh từ!"); } }
+    function checkAISentence() { const val = document.getElementById('tg-make-sentence').value.trim(); const feedback = document.getElementById('tg-feedback'); const match = val.match(currentTestRule.regex); const isChinese = /[\u4e00-\u9fa5]/.test(val); if(match && isChinese) { playSound('correct'); updateCoins(1); feedback.innerText = "TUYỆT VỜI! (+1 COIN)"; feedback.classList.replace("text-red-400", "text-green-400"); setTimeout(startGrammarTest, 2000); } else { playSound('wrong'); feedback.innerText = "Sai cấu trúc hoặc không phải tiếng Trung!"; feedback.classList.add("text-red-400"); } }
+    function generateFillTest() { const subjects = ["我", "你", "他", "她", "老师", "学生", "同学", "朋友", "先生", "小姐", "爸爸", "妈妈", "哥哥", "弟弟", "工人"]; const verbs = ["喜欢", "想", "去", "吃", "喝", "看", "买", "做", "学", "打", "告诉", "教", "认识", "觉得", "记"]; const nouns = ["苹果", "茶", "水", "饭", "菜", "咖啡", "衣服", "书", "电脑", "电视", "包子", "鸡蛋", "钱", "汉语", "汉字"]; const places = ["学校", "家", "饭店", "商店", "北京", "中国", "车站", "机场", "国外", "大学", "房间", "教室"]; const adjectives = ["好", "多", "少", "大", "小", "冷", "热", "高兴", "漂亮", "忙", "累", "贵", "健康", "旧"]; const S = subjects[Math.floor(Math.random() * subjects.length)]; const type = Math.floor(Math.random() * 3); let dialogue = ""; let hideTarget = ""; let fakeOpts = []; if (type === 0) { const V = verbs[Math.floor(Math.random() * 5)]; const N = nouns[Math.floor(Math.random() * nouns.length)]; hideTarget = Math.random() > 0.5 ? V : N; dialogue = `A: ${S === '我' ? '你' : '我'}${V}什么？<br>B: ${S}${V === hideTarget ? '____' : V}${N === hideTarget ? '____' : N}。`; fakeOpts = ["什么", "吗", "不", "很", "太"]; } else if (type === 1) { const P = places[Math.floor(Math.random() * places.length)]; hideTarget = P; dialogue = `A: ${S === '我' ? '你' : '我'}去哪儿？<br>B: ${S}去____。`; fakeOpts = ["去", "来", "在", "哪儿", "怎么"]; } else { const N2 = nouns[Math.floor(Math.random() * nouns.length)]; const Adj = adjectives[Math.floor(Math.random() * adjectives.length)]; hideTarget = Math.random() > 0.5 ? N2 : Adj; dialogue = `A: ${N2 === hideTarget ? '____' : N2}怎么样？<br>B: ${N2 === hideTarget ? '____' : N2}很${Adj === hideTarget ? '____' : Adj}。`; fakeOpts = ["很", "太", "不", "多", "少"]; } document.getElementById('tf-dialogue').innerHTML = dialogue; let opts = fakeOpts.sort(() => Math.random() - 0.5).slice(0, 4); if(!opts.includes(hideTarget)) opts[0] = hideTarget; opts = opts.sort(() => Math.random() - 0.5); document.getElementById('tf-options').innerHTML = opts.map(o => `<button onclick="checkFill('${o}', '${hideTarget}')" class="px-4 py-2 border border-white/20 rounded hover:bg-white hover:text-black font-bold">${o}</button>`).join(''); document.getElementById('tf-msg').innerText = ""; }
+    function checkFill(ans, correct) { if(ans === correct) { playSound('correct'); updateCoins(1); document.getElementById('tf-msg').innerText = "CHÍNH XÁC! (+1 COIN)"; document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-green-400"; setTimeout(generateFillTest, 1000); } else { playSound('wrong'); document.getElementById('tf-msg').innerText = "SAI RỒI!"; document.getElementById('tf-msg').className = "text-xs font-bold uppercase h-6 mb-4 text-red-400"; } }
+
+    let tsTimer; let tsTimeLeft; let tsData = []; let tsCurrentIdx = 0; let tsScore = 0; let tsLevel = 1;
+    function resetSpeedTest() { clearInterval(tsTimer); document.getElementById('ts-setup').classList.remove('hidden'); document.getElementById('ts-play').classList.add('hidden'); document.getElementById('ts-result').classList.add('hidden'); document.getElementById('ts-max-hint').innerText = vocabData.length; document.getElementById('ts-end').value = vocabData.length; }
+    function startSpeedTest() { playSound('click'); const start = parseInt(document.getElementById('ts-start').value) || 1; const end = parseInt(document.getElementById('ts-end').value) || vocabData.length; tsTimeLeft = (parseInt(document.getElementById('ts-time').value) || 1) * 60; tsLevel = parseInt(document.getElementById('ts-level').value); if(start < 1 || end > vocabData.length || start > end) { alert(`Phạm vi từ không hợp lệ! Vui lòng nhập từ 1 đến ${vocabData.length}`); return; } tsData = vocabData.slice(start - 1, end).sort(() => Math.random() - 0.5); tsCurrentIdx = 0; tsScore = 0; document.getElementById('ts-setup').classList.add('hidden'); document.getElementById('ts-play').classList.remove('hidden'); document.getElementById('ts-play').classList.add('flex'); document.getElementById('ts-total-display').innerText = tsData.length; document.getElementById('ts-score-display').innerText = 0; document.getElementById('ts-play-msg').innerText = ""; updateTsWord(); tsTimer = setInterval(() => { tsTimeLeft--; let m = Math.floor(tsTimeLeft / 60).toString().padStart(2, '0'); let s = (tsTimeLeft % 60).toString().padStart(2, '0'); document.getElementById('ts-timer-display').innerText = `${m}:${s}`; if(tsTimeLeft <= 0) endSpeedTest(); }, 1000); }
+    function updateTsWord() { if(tsCurrentIdx >= tsData.length) { endSpeedTest(); return; } let item = tsData[tsCurrentIdx]; let q = ""; if(tsLevel === 1) q = item.hz; if(tsLevel === 2) q = item.mn.toUpperCase(); if(tsLevel === 3) q = item.mn.toUpperCase(); document.getElementById('ts-current-word').innerText = q; document.getElementById('ts-input').value = ""; document.getElementById('ts-input').focus(); }
+    function checkSpeedVocab() { let item = tsData[tsCurrentIdx]; let v = document.getElementById('ts-input').value.toLowerCase().trim(); let msgEl = document.getElementById('ts-play-msg'); let ok = false; if(tsLevel === 1 && v === item.mn.toLowerCase()) ok = true; if(tsLevel === 2 && v === item.py.toLowerCase()) ok = true; if(tsLevel === 3 && v === item.hz) ok = true; if(ok) { playSound('correct'); tsScore++; updateCoins(1); tsCurrentIdx++; document.getElementById('ts-score-display').innerText = tsScore; msgEl.innerText = ""; updateTsWord(); } else { playSound('wrong'); document.getElementById('ts-input').value = ""; msgEl.innerText = "SAI RỒI! THỬ LẠI!"; } }
+    function endSpeedTest() { clearInterval(tsTimer); document.getElementById('ts-play').classList.add('hidden'); document.getElementById('ts-play').classList.remove('flex'); document.getElementById('ts-result').classList.remove('hidden'); document.getElementById('ts-final-score').innerText = `${tsScore} / ${tsData.length}`; }
 
     // --- INIT APP KHI TẤT CẢ HÀM ĐÃ ĐƯỢC TẠO ---
     window.onload = () => { 
