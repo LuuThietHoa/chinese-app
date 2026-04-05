@@ -180,7 +180,7 @@
             <h3 id="sp-title" class="text-2xl text-amber-300 font-bold mb-2 uppercase tracking-widest">Luyện Câu</h3>
             <div id="sp-progress" class="text-xs text-gray-400 mb-8 font-mono bg-white/10 px-3 py-1 rounded">Câu 1/12</div>
             
-            <div id="sp-vi" class="text-3xl font-light text-white mb-4 text-center leading-relaxed">Tôi là học sinh.</div>
+            <div id="sp-vi" class="text-3xl font-light text-white mb-4 text-center leading-relaxed transition-all">Tôi là học sinh.</div>
             
             <div id="sp-hint-area" class="flex flex-col items-center justify-center mb-8 h-16 transition-all duration-300 opacity-0">
                 <div id="sp-py" class="text-sm text-indigo-300 font-mono mb-1 tracking-widest">Wǒ shì xuésheng.</div>
@@ -190,7 +190,7 @@
             <input type="text" id="sp-input" class="w-full max-w-lg bg-transparent border-b-2 border-indigo-500 py-3 text-center text-4xl outline-none mb-8 text-white transition focus:border-amber-300" placeholder="Gõ chữ Hán..." onkeypress="if(event.key==='Enter') checkSentence()">
             
             <div class="flex gap-4 w-full max-w-lg">
-                <button onclick="checkSentence()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded uppercase tracking-widest transition shadow-[0_0_15px_rgba(79,70,229,0.4)]">Kiểm Tra</button>
+                <button onclick="checkSentence()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-4 rounded uppercase tracking-widest transition shadow-[0_0_15px_rgba(79,70,229,0.4)]">Xác Nhận</button>
                 <button onclick="showSentenceHint()" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-4 px-8 rounded uppercase tracking-widest transition border border-gray-400">Gợi Ý</button>
             </div>
             
@@ -678,7 +678,7 @@
 </div>
 
 <script>
-    // --- 1. DỮ LIỆU GỐC TỪ V40.53 VÀ V40.57 ---
+    // --- 1. DATA TỔNG HỢP (Chỉ khai báo 1 lần duy nhất) ---
     const vocabData = [
         { hz: "我", py: "wǒ", mn: "tôi" }, { hz: "你", py: "nǐ", mn: "bạn" }, { hz: "他", py: "tā", mn: "anh ấy" }, { hz: "她", py: "tā", mn: "cô ấy" }, { hz: "我们", py: "wǒmen", mn: "chúng tôi" }, { hz: "谁", py: "shéi", mn: "ai" }, { hz: "爸爸", py: "bàba", mn: "bố" }, { hz: "妈妈", py: "māma", mn: "mẹ" }, { hz: "儿子", py: "érzi", mn: "con trai" }, { hz: "女儿", py: "nǚ'ér", mn: "con gái" }, { hz: "老师", py: "lǎoshī", mn: "giáo viên" }, { hz: "学生", py: "xuésheng", mn: "học sinh" }, { hz: "同学", py: "tóngxué", mn: "bạn cùng lớp" }, { hz: "朋友", py: "péngyou", mn: "bạn bè" }, { hz: "人", py: "rén", mn: "người" }, { hz: "先生", py: "xiānsheng", mn: "ông" }, { hz: "小姐", py: "xiǎojiě", mn: "cô" },
         { hz: "零", py: "líng", mn: "số 0" }, { hz: "一", py: "yī", mn: "số 1" }, { hz: "二", py: "èr", mn: "số 2" }, { hz: "三", py: "sān", mn: "số 3" }, { hz: "四", py: "sì", mn: "số 4" }, { hz: "五", py: "wǔ", mn: "số 5" }, { hz: "六", py: "liù", mn: "số 6" }, { hz: "七", py: "qī", mn: "số 7" }, { hz: "八", py: "bā", mn: "số 8" }, { hz: "九", py: "jiǔ", mn: "số 9" }, { hz: "十", py: "shí", mn: "số 10" }, { hz: "现在", py: "xiànzài", mn: "bây giờ" }, { hz: "点", py: "diǎn", mn: "giờ" }, { hz: "分", py: "fēn", mn: "phút" }, { hz: "今天", py: "jīntiān", mn: "hôm nay" }, { hz: "明天", py: "míngtiān", mn: "ngày mai" }, { hz: "昨天", py: "zuótiān", mn: "hôm qua" }, { hz: "年", py: "nián", mn: "năm" }, { hz: "月", py: "yuè", mn: "tháng" }, { hz: "日", py: "rì", mn: "ngày" }, { hz: "号", py: "hào", mn: "ngày" }, { hz: "星期", py: "xīngqī", mn: "tuần" }, { hz: "上午", py: "shàngwǔ", mn: "buổi sáng" }, { hz: "中午", py: "zhōngwǔ", mn: "buổi trưa" }, { hz: "下午", py: "xiàwǔ", mn: "buổi chiều" }, { hz: "时候", py: "shíhou", mn: "khi lúc" },
@@ -706,7 +706,12 @@
         { hz: "开始", py: "kāishǐ", mn: "bắt đầu" }, { hz: "考试", py: "kǎoshì", mn: "thi cử" }
     ];
 
-    // RAW DATA 50 CÂU ĐỂ CẤY VÀO VOCAB DATA (Tính năng mới của V40.57)
+    const namesData = [ { vi: "Lưu Thiết Hoa", hz: "刘铁华", py: "Liú Tiěhuá" }, { vi: "Hà Mỹ Mỹ", hz: "何美美", py: "Hé Měiměi" }, { vi: "Bùi Lê Ngọc Linh", hz: "裴黎玉玲", py: "Péi Lí Yùlíng" }, { vi: "Lưu Thiết Vinh", hz: "刘铁荣", py: "Liú Tiěróng" }, { vi: "A Mỹ Linh", hz: "阿美玲", py: "Ā Měilíng" }, { vi: "Hà Gia Bảo", hz: "何家宝", py: "Hé Jiābǎo" }, { vi: "Diệp Thanh Thanh", hz: "叶青青", py: "Yè Qīngqīng" }, { vi: "Lê Bá Trần Hoàng", hz: "黎伯陈黄", py: "Lí Bó Chénhuáng" }, { vi: "Nguyễn Thị Phương Nguyên", hz: "阮氏芳原", py: "Ruǎn Shì Fāngyuán" } ];
+    const grammarRules = [ { id: "g1", title: "S + 是 + N", structure: "S + 是 + N (Là)", ex: "我是学生", regex: /(.+)是(.+)/ }, { id: "g2", title: "S + 不 + 是 + N", structure: "S + 不 + 是 + N (Phủ định)", ex: "我不是老师", regex: /(.+)不是(.+)/ }, { id: "g3", title: "S + 是 + N + 吗?", structure: "S + 是 + N + 吗? (Nghi vấn)", ex: "你是中国人吗？", regex: /(.+)是(.+)吗[?？]?/ }, { id: "g4", title: "N + 们", structure: "N + 们 (Số nhiều)", ex: "我们", regex: /(.+)们/ } ];
+    const readingData = [ { id: 1, zh: "你好！我叫刘铁花。我是学生。我家有五口人：爸爸、妈妈、哥哥、女儿和我。", key: "xin chào tôi tên lưu thiết hoa tôi là học sinh nhà tôi có năm người bố mẹ anh trai con gái và tôi", vi_display: "Xin chào! Tôi tên Lưu Thiết Hoa. Tôi là học sinh. Nhà tôi có 5 người: Bố, mẹ, anh trai, con gái và tôi." }, { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }, { id: 3, zh: "弟弟很喜欢吃包子。他每天早上都吃两个白包子。吃完包子，他去学校上课。", key: "em trai rất thích ăn bánh bao cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng ăn xong bánh bao cậu ấy đi trường học đi học", vi_display: "Em trai rất thích ăn bánh bao. Cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng. Ăn xong bánh bao, cậu ấy đi trường học." }, { id: 4, zh: "后天我们要去国外旅行。爸爸已经买好了机票。我们在机场等飞机。", key: "ngày hôm sau chúng tôi phải đi nước ngoài du lịch bố đã mua xong vé máy bay chúng tôi ở sân bay đợi máy bay", vi_display: "Ngày mốt chúng tôi sẽ đi du lịch nước ngoài. Bố đã mua xong vé máy bay. Chúng tôi đang đợi máy bay ở sân bay." } ];
+    const vPop = [ {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false}, {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false}, {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false}, {name:"hieuthuhai - ngủ một mình ft. negav",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Không Thể Say l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true}, {name:"Exit Sign - HIEUTHUHAI ft. marzuz",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true}, {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true} ];
+    const cPop = [ {name:"Mang Chủng",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"}, {name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"}, {name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"}, {name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"} ];
+
     const rawVocabText = `
 #1 我 (wǒ) – tôi
 我是学生。 (Wǒ shì xuésheng.) – Tôi là học sinh.
@@ -1408,7 +1413,7 @@
 吃饱了吗？ (Chī bǎo le ma?) – Ăn no chưa?
 `;
 
-    // Xử lý nạp 50 câu cho từ vựng
+    // Nạp dữ liệu câu vào vocabData
     let curWordIdx = -1;
     rawVocabText.trim().split('\n').forEach(line => {
         line = line.trim();
@@ -1563,7 +1568,7 @@
     function openThuvienHoa() { playSound('click'); document.getElementById('thuvien-modal').classList.remove('hidden'); }
     function closeThuvienHoa() { playSound('click'); document.getElementById('thuvien-modal').classList.add('hidden'); }
 
-    // --- LOGIC MỞ RƯƠNG (GACHA TÂN THỦ) ---
+    // --- LOGIC MỞ RƯƠNG (GACHA TÂN THỦ LẦN 1) ---
     const chestItems = [
         { id: 'hoacuchoami.png', name: 'Hoa Cúc Họa Mi' },
         { id: 'hoaduacan.png', name: 'Hoa Dừa Cạn' },
@@ -1573,6 +1578,7 @@
     ];
     let currentChestIdx = 0;
     
+    // AN TOÀN TRÁNH JS CRASH DO DỮ LIỆU CŨ LỖI
     let inventory = [];
     try {
         let savedInv = localStorage.getItem('skyInventory_v2');
@@ -1603,7 +1609,9 @@
     function viewNextChestItem() {
         playSound('click');
         currentChestIdx++;
-        if (currentChestIdx >= chestItems.length) currentChestIdx = 0;
+        if (currentChestIdx >= chestItems.length) {
+            currentChestIdx = 0;
+        }
         showChestItem();
     }
 
@@ -1653,7 +1661,7 @@
         }
     }
 
-    // --- 5. TIẾN ĐỘ CHUNG ---
+    // --- 5. TIẾN ĐỘ ---
     let listenProgress = 0; const listenMax = 50; let namesProgress = 0; const namesMax = 10;
     let voiceProgress = 0; const voiceMax = 20; let readingProgress = 0; const readingMax = 10;
 
@@ -1732,7 +1740,7 @@
     function toggleReadingRef() { playSound('click'); const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
     function checkReading() { if(document.getElementById('r-input').value.trim().length > 5) { playSound('correct'); updateCoins(1); if(readingProgress < readingMax) readingProgress++; document.getElementById('reading-progress').innerText = `Tiến độ: ${readingProgress}/${readingMax}`; document.getElementById('r-msg').innerText = "OK (+1 Xu)"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-green-400"; } else { playSound('wrong'); document.getElementById('r-msg').innerText = "DỊCH QUÁ NGẮN!"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-red-400"; } }
 
-    // --- 11. THƯ VIỆN & LUYỆN CÂU (TÍNH NĂNG MỚI ĐÃ SỬA) ---
+    // --- 11. THƯ VIỆN & LUYỆN CÂU (TÍNH NĂNG MỚI) ---
     function renderLibrary() { 
         document.getElementById('lib-count').innerText = vocabData.length; 
         const html = vocabData.map((v, i) => `
