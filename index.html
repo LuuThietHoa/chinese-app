@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Skyreign Hub | V40.57 Complete Edition</title>
+    <title>Skyreign Hub | V40.58 Memory Test Edition</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500;700&family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -202,7 +202,7 @@
 <div id="main-header" class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 pointer-events-none transition-opacity duration-300">
     <div class="pointer-events-auto">
         <h1 class="text-xl font-bold tracking-[0.3em] uppercase drop-shadow-md">Skyreign</h1>
-        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.57 FINAL COMBO UI</span>
+        <span class="text-[9px] text-gray-500 tracking-[0.5em] block mt-1">V40.58 MEMORY TEST EDITION</span>
     </div>
     <div class="pointer-events-auto flex items-center gap-3 bg-white/5 backdrop-blur px-5 py-2 rounded-sm border border-white/10">
         <span class="text-yellow-400 text-xs">BALANCE</span>
@@ -1408,13 +1408,6 @@
 吃饱了吗？ (Chī bǎo le ma?) – Ăn no chưa?
 `;
 
-    // Khởi tạo các mảng dữ liệu bị khuyết
-    const namesData = [ { vi: "Lưu Thiết Hoa", hz: "刘铁华", py: "Liú Tiěhuá" }, { vi: "Hà Mỹ Mỹ", hz: "何美美", py: "Hé Měiměi" }, { vi: "Bùi Lê Ngọc Linh", hz: "裴黎玉玲", py: "Péi Lí Yùlíng" }, { vi: "Lưu Thiết Vinh", hz: "刘铁荣", py: "Liú Tiěróng" }, { vi: "A Mỹ Linh", hz: "阿美玲", py: "Ā Měilíng" }, { vi: "Hà Gia Bảo", hz: "何家宝", py: "Hé Jiābǎo" }, { vi: "Diệp Thanh Thanh", hz: "叶青青", py: "Yè Qīngqīng" }, { vi: "Lê Bá Trần Hoàng", hz: "黎伯陈黄", py: "Lí Bó Chénhuáng" }, { vi: "Nguyễn Thị Phương Nguyên", hz: "阮氏芳原", py: "Ruǎn Shì Fāngyuán" } ];
-    const grammarRules = [ { id: "g1", title: "S + 是 + N", structure: "S + 是 + N (Là)", ex: "我是学生", regex: /(.+)是(.+)/ }, { id: "g2", title: "S + 不 + 是 + N", structure: "S + 不 + 是 + N (Phủ định)", ex: "我不是老师", regex: /(.+)不是(.+)/ }, { id: "g3", title: "S + 是 + N + 吗?", structure: "S + 是 + N + 吗? (Nghi vấn)", ex: "你是中国人吗？", regex: /(.+)是(.+)吗[?？]?/ }, { id: "g4", title: "N + 们", structure: "N + 们 (Số nhiều)", ex: "我们", regex: /(.+)们/ } ];
-    const readingData = [ { id: 1, zh: "你好！我叫刘铁花。我是学生。我家有五口人：爸爸、妈妈、哥哥、女儿和我。", key: "xin chào tôi tên lưu thiết hoa tôi là học sinh nhà tôi có năm người bố mẹ anh trai con gái và tôi", vi_display: "Xin chào! Tôi tên Lưu Thiết Hoa. Tôi là học sinh. Nhà tôi có 5 người: Bố, mẹ, anh trai, con gái và tôi." }, { id: 2, zh: "今天星期六。现在上午九点，我在家看书。中午十二点，我去饭店吃饭。", key: "hôm nay là thứ bảy bây giờ là chín giờ sáng tôi ở nhà đọc sách mười hai giờ trưa tôi đi nhà hàng ăn cơm", vi_display: "Hôm nay là thứ bảy. Bây giờ là 9 giờ sáng, tôi ở nhà đọc sách. 12 giờ trưa, tôi đi nhà hàng ăn cơm." }, { id: 3, zh: "弟弟很喜欢吃包子。他每天早上都吃两个白包子。吃完包子，他去学校上课。", key: "em trai rất thích ăn bánh bao cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng ăn xong bánh bao cậu ấy đi trường học đi học", vi_display: "Em trai rất thích ăn bánh bao. Cậu ấy mỗi sáng đều ăn hai cái bánh bao trắng. Ăn xong bánh bao, cậu ấy đi trường học." }, { id: 4, zh: "后天我们要去国外旅行。爸爸已经买好了机票。我们在机场等飞机。", key: "ngày hôm sau chúng tôi phải đi nước ngoài du lịch bố đã mua xong vé máy bay chúng tôi ở sân bay đợi máy bay", vi_display: "Ngày mốt chúng tôi sẽ đi du lịch nước ngoài. Bố đã mua xong vé máy bay. Chúng tôi đang đợi máy bay ở sân bay." } ];
-    const vPop = [ {name:"HÔN LỄ CỦA EM",type:"mp4",id:"https://files.catbox.moe/k95k62.mp4",thumb:"https://img.youtube.com/vi/8hklE0ibrP0/mqdefault.jpg", isHieu: false}, {name:"Hà Nội",type:"mp4",id:"https://files.catbox.moe/1ygyge.mp4",thumb:"https://img.youtube.com/vi/OerAX-zKyvg/mqdefault.jpg", isHieu: false}, {name:"Hôn Vào Đây Đi",type:"mp4",id:"https://files.catbox.moe/kos9gw.mp4",thumb:"https://img.youtube.com/vi/vs-hsW6I63I/mqdefault.jpg", isHieu: false}, {name:"hieuthuhai - ngủ một mình ft. negav",type:"mp4",id:"https://files.catbox.moe/zg28gm.mp4",thumb:"https://img.youtube.com/vi/STjzkjnLlZ4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Vệ Tinh ft. Hoàng Tôn",type:"mp4",id:"https://files.catbox.moe/sckw8x.mp4",thumb:"https://img.youtube.com/vi/TTwlhJzXHo4/mqdefault.jpg", isHieu: true}, {name:"HIEUTHUHAI - Không Thể Say l Official Video",type:"mp4",id:"https://files.catbox.moe/aq51u4.mp4",thumb:"https://img.youtube.com/vi/i0nd3NPJ4MI/mqdefault.jpg", isHieu: true}, {name:"Exit Sign - HIEUTHUHAI ft. marzuz",type:"mp4",id:"https://files.catbox.moe/wdt5qt.mp4",thumb:"https://img.youtube.com/vi/TiLlTrHWEEQ/mqdefault.jpg", isHieu: true}, {name:"[MV LYRICS] NGÁO NGƠ - HIEUTHUHAI, Atus, Jsol, Erik",type:"mp4",id:"https://files.catbox.moe/4uq2rb.mp4",thumb:"https://img.youtube.com/vi/9X14DitMPIU/mqdefault.jpg", isHieu: true} ];
-    const cPop = [ {name:"Mang Chủng",type:"mp4",id:"https://files.catbox.moe/g2tdte.mp4",thumb:"https://img.youtube.com/vi/vgbrIy08e2w/mqdefault.jpg"}, {name:"Tâm Lặng Như Nước",type:"mp4",id:"https://files.catbox.moe/p42gvs.mp4",thumb:"https://img.youtube.com/vi/ae9JqrRNWLk/mqdefault.jpg"}, {name:"Từ Cửu Môn Hồi Ức",type:"mp4",id:"https://files.catbox.moe/cqqpwx.mp4",thumb:"https://img.youtube.com/vi/IE7uUnMClsw/hqdefault.jpg"}, {name:"Tam Bái Hồng Trần Lương",type:"mp4",id:"https://files.catbox.moe/f3yf9a.mp4",thumb:"https://img.youtube.com/vi/esWdcDSSrvE/hqdefault.jpg"} ];
-
     // Xử lý nạp 50 câu cho từ vựng
     let curWordIdx = -1;
     rawVocabText.trim().split('\n').forEach(line => {
@@ -1687,7 +1680,7 @@
     function nextVoiceWord() { playSound('click'); voiceIdx = Math.floor(Math.random() * vocabData.length); document.getElementById('voice-target').innerText = vocabData[voiceIdx].hz; document.getElementById('voice-py').innerText = vocabData[voiceIdx].py; document.getElementById('voice-mn').innerText = vocabData[voiceIdx].mn; document.getElementById('voice-feedback').innerHTML = ""; }
     function startListening() { if (!SpeechRecognition) { alert("Trình duyệt của bạn không hỗ trợ Nhận diện giọng nói. Hãy dùng Chrome!"); return; } playSound('click'); recognition.start(); }
 
-    // --- 9. NGHE HIỂU (CHỐNG CÂU VÔ LÝ) ---
+    // --- 9. NGHE HIỂU ---
     let currentListenHz = ""; let currentListenVi = "";
     function generateListenSentence() {
         playSound('click');
@@ -1739,7 +1732,7 @@
     function toggleReadingRef() { playSound('click'); const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
     function checkReading() { if(document.getElementById('r-input').value.trim().length > 5) { playSound('correct'); updateCoins(1); if(readingProgress < readingMax) readingProgress++; document.getElementById('reading-progress').innerText = `Tiến độ: ${readingProgress}/${readingMax}`; document.getElementById('r-msg').innerText = "OK (+1 Xu)"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-green-400"; } else { playSound('wrong'); document.getElementById('r-msg').innerText = "DỊCH QUÁ NGẮN!"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-red-400"; } }
 
-    // --- 11. THƯ VIỆN & NGỮ PHÁP (Có tính năng Đặt Câu mới từ V40.57) ---
+    // --- 11. THƯ VIỆN & LUYỆN CÂU (TÍNH NĂNG MỚI ĐÃ SỬA) ---
     function renderLibrary() { 
         document.getElementById('lib-count').innerText = vocabData.length; 
         const html = vocabData.map((v, i) => `
@@ -1753,8 +1746,8 @@
             
             ${v.sentences && v.sentences.length > 0 ? `
             <div class="flex gap-2 mt-4 pt-4 border-t border-white/10">
-                <button onclick="openSentencePractice(${i}, 'order')" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white text-[9px] py-2 rounded uppercase font-bold tracking-wider transition">Học Đặt Câu</button>
-                <button onclick="openSentencePractice(${i}, 'random')" class="flex-1 bg-green-600 hover:bg-green-500 text-white text-[9px] py-2 rounded uppercase font-bold tracking-wider transition">Đoán Chữ</button>
+                <button onclick="openSentencePractice(${i}, 'learn')" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white text-[9px] py-2 rounded uppercase font-bold tracking-wider transition">Học Đặt Câu</button>
+                <button onclick="openSentencePractice(${i}, 'test')" class="flex-1 bg-green-600 hover:bg-green-500 text-white text-[9px] py-2 rounded uppercase font-bold tracking-wider transition">Kiểm Tra</button>
             </div>
             ` : ''}
         </div>`).join(''); 
@@ -1763,8 +1756,7 @@
 
     function renderGrammarList() { document.getElementById('grammar-list').innerHTML = grammarRules.map(r => `<div class="bg-white/5 p-6 border-l-2 border-indigo-500"> <h3 class="text-lg font-light text-white mb-2">${r.title}</h3> <code class="block bg-black/20 p-2 text-pink-300 mb-2 font-mono text-xs">${r.structure}</code> <p class="text-xs text-gray-400 italic">Ví dụ: ${r.ex}</p> </div>`).join(''); }
 
-    // --- LOGIC LUYỆN ĐẶT CÂU (TÍNH NĂNG MỚI V40.57) ---
-    let spWordIdx = 0; let spMode = 'order'; let spSentences = []; let spCurrentIdx = 0;
+    let spWordIdx = 0; let spMode = 'learn'; let spSentences = []; let spCurrentIdx = 0;
 
     function openSentencePractice(wordIdx, mode) {
         playSound('click');
@@ -1772,11 +1764,10 @@
         const wordObj = vocabData[wordIdx];
         if(!wordObj.sentences || wordObj.sentences.length === 0) { alert("Từ này chưa có dữ liệu câu luyện tập!"); return; }
         
-        spSentences = [...wordObj.sentences];
-        if (mode === 'random') spSentences = spSentences.sort(() => Math.random() - 0.5);
+        spSentences = [...wordObj.sentences]; // LUÔN GIỮ ĐÚNG THỨ TỰ CHO CẢ 2 MODE
         spCurrentIdx = 0;
         
-        document.getElementById('sp-title').innerText = `Luyện Tập: ${wordObj.hz} (${wordObj.mn})`;
+        document.getElementById('sp-title').innerText = mode === 'test' ? `Kiểm Tra Thuộc Lòng: ${wordObj.hz}` : `Luyện Tập: ${wordObj.hz} (${wordObj.mn})`;
         document.getElementById('sentence-modal').classList.remove('hidden');
         renderSentenceQuestion();
     }
@@ -1789,7 +1780,14 @@
     function renderSentenceQuestion() {
         const s = spSentences[spCurrentIdx];
         document.getElementById('sp-progress').innerText = `Câu ${spCurrentIdx + 1}/${spSentences.length}`;
-        document.getElementById('sp-vi').innerText = s.vi;
+        
+        if (spMode === 'test') {
+            document.getElementById('sp-vi').innerText = `(Nhớ lại và gõ câu số ${spCurrentIdx + 1})`;
+            document.getElementById('sp-vi').classList.add('text-gray-500', 'text-2xl', 'italic');
+        } else {
+            document.getElementById('sp-vi').innerText = s.vi;
+            document.getElementById('sp-vi').classList.remove('text-gray-500', 'text-2xl', 'italic');
+        }
         
         document.getElementById('sp-py').innerText = s.py;
         document.getElementById('sp-zh-hint').innerText = s.zh;
@@ -1802,6 +1800,10 @@
 
     function showSentenceHint() {
         playSound('click');
+        if (spMode === 'test') {
+            document.getElementById('sp-vi').innerText = spSentences[spCurrentIdx].vi;
+            document.getElementById('sp-vi').classList.remove('text-gray-500', 'text-2xl', 'italic');
+        }
         document.getElementById('sp-hint-area').classList.replace('opacity-0', 'opacity-100');
     }
 
@@ -1809,13 +1811,16 @@
         const input = document.getElementById('sp-input').value.trim().replace(/[.,?!。，？！]/g, "");
         const target = spSentences[spCurrentIdx].zh.replace(/[.,?!。，？！]/g, "");
         if(input === target) {
-            playSound('correct'); updateCoins(2);
-            document.getElementById('sp-feedback').innerText = "CHÍNH XÁC! (+2 COIN)";
+            const coinReward = spMode === 'test' ? 3 : 2; // Thưởng 3 xu nếu là kiểm tra
+            playSound('correct'); updateCoins(coinReward);
+            
+            document.getElementById('sp-feedback').innerText = `CHÍNH XÁC! (+${coinReward} COIN)`;
             document.getElementById('sp-feedback').className = "mt-6 text-sm font-bold uppercase tracking-[0.2em] h-6 text-center text-green-400";
+            
             setTimeout(() => {
                 spCurrentIdx++;
                 if (spCurrentIdx >= spSentences.length) {
-                    alert("Chúc mừng! Bạn đã hoàn thành các bài tập đặt câu của từ này!");
+                    alert(spMode === 'test' ? "Tuyệt vời! Bạn đã thuộc lòng tất cả các câu!" : "Chúc mừng! Bạn đã hoàn thành các bài tập đặt câu của từ này!");
                     closeSentencePractice();
                 } else renderSentenceQuestion();
             }, 1000);
@@ -1828,7 +1833,7 @@
 
 
     // --- 12. BÀI KIỂM TRA ---
-    let currentTestRule, currentTestSentence; // Khai báo biến toàn cục cho bài test
+    let currentTestRule, currentTestSentence; 
     function switchTestMode(mode) { playSound('click'); document.getElementById('test-grammar').classList.add('hidden'); document.getElementById('test-fill').classList.add('hidden'); document.getElementById('test-speed').classList.add('hidden'); document.getElementById(`test-${mode}`).classList.remove('hidden'); if(mode === 'grammar') startGrammarTest(); if(mode === 'fill') generateFillTest(); if(mode === 'speed') resetSpeedTest(); }
     function startGrammarTest() { document.getElementById('tg-step1').classList.remove('hidden'); document.getElementById('tg-step2').classList.add('hidden'); document.getElementById('tg-step3').classList.add('hidden'); document.getElementById('tg-step4').classList.add('hidden'); document.getElementById('tg-sub-input').value = ""; document.getElementById('tg-noun-input').value = ""; document.getElementById('tg-make-sentence').value = ""; document.getElementById('tg-feedback').innerText = ""; currentTestRule = grammarRules[Math.floor(Math.random() * grammarRules.length)]; const subs = ["我","你","他","爸爸","妈妈"]; const nouns = ["学生","老师","医生","好人"]; const S = subs[Math.floor(Math.random() * subs.length)]; const N = nouns[Math.floor(Math.random() * nouns.length)]; if(currentTestRule.id === "g1") currentTestSentence = S + "是" + N; if(currentTestRule.id === "g2") currentTestSentence = S + "不是" + N; if(currentTestRule.id === "g3") currentTestSentence = S + "是" + N + "吗？"; if(currentTestRule.id === "g4") currentTestSentence = "我们"; document.getElementById('tg-question').innerText = currentTestSentence; let opts = [...grammarRules].sort(() => Math.random() - 0.5).slice(0, 3); if(!opts.includes(currentTestRule)) opts[0] = currentTestRule; opts = opts.sort(() => Math.random() - 0.5); document.getElementById('tg-options').innerHTML = opts.map(r => `<button onclick="checkStructure('${r.id}')" class="p-3 bg-white/5 border border-white/20 rounded text-xs hover:bg-white hover:text-black transition text-left">${r.structure}</button>`).join(''); }
     function checkStructure(id) { if(id === currentTestRule.id) { playSound('correct'); document.getElementById('tg-step1').classList.add('hidden'); document.getElementById('tg-step2').classList.remove('hidden'); document.getElementById('tg-feedback').innerText = "Đúng cấu trúc!"; } else { playSound('wrong'); alert("Sai rồi! Hãy nhìn kỹ câu hỏi."); } }
