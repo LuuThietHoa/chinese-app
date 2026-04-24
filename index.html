@@ -315,7 +315,16 @@
         <div class="glass-card p-8 w-full max-w-5xl">
             <div class="flex justify-between items-end mb-6 border-b border-white/10 pb-4">
                 <h2 class="text-2xl font-light uppercase tracking-widest text-white">Thư Viện Từ Vựng & Đặt Câu</h2>
-                <div class="text-[10px] bg-indigo-900 text-indigo-300 px-3 py-1 uppercase tracking-widest rounded">Tổng: <span id="lib-count" class="font-bold text-white">0</span> Từ</div>
+                <div class="flex items-center gap-3">
+                    <div class="text-[10px] bg-indigo-900 text-indigo-300 px-3 py-1.5 uppercase tracking-widest rounded flex items-center">
+                        Tổng: <span id="lib-count" class="font-bold text-white mx-1">0</span> Từ
+                    </div>
+                    <div class="flex items-center gap-1 bg-white/5 border border-white/10 rounded px-2 py-1">
+                        <span class="text-[9px] text-gray-400 uppercase">Tới #</span>
+                        <input type="number" id="lib-jump-input" class="w-12 bg-transparent text-white text-[10px] outline-none text-center font-bold border-b border-white/20" onkeypress="if(event.key==='Enter') jumpToVocabLib()" placeholder="...">
+                        <button onclick="jumpToVocabLib()" class="text-[9px] font-bold bg-indigo-600 hover:bg-indigo-500 text-white px-2 py-0.5 rounded transition">GO</button>
+                    </div>
+                </div>
             </div>
             <div id="lib-list" class="lib-grid max-h-[60vh] overflow-y-auto pr-2 no-scrollbar"></div>
         </div>
@@ -392,14 +401,14 @@
                 <span class="text-[10px] text-gray-400 uppercase tracking-widest">Từ</span>
                 <input type="number" id="v-start-input" value="1" class="w-12 bg-transparent border-b border-white/20 text-center outline-none text-sm text-white font-bold pb-1">
                 <span class="text-[10px] text-gray-400 uppercase tracking-widest">đến</span>
-                <input type="number" id="v-end-input" value="237" class="w-12 bg-transparent border-b border-white/20 text-center outline-none text-sm text-white font-bold pb-1">
+                <input type="number" id="v-end-input" value="298" class="w-12 bg-transparent border-b border-white/20 text-center outline-none text-sm text-white font-bold pb-1">
                 <button onclick="applyVocabRange()" class="text-[9px] border border-indigo-500 text-indigo-300 px-3 py-1 uppercase rounded hover:bg-indigo-500 hover:text-white transition">SET</button>
             </div>
             <div class="flex justify-between w-full mb-4">
                 <button onclick="changeVocabMode()" id="v-mode-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Mode: Hán ➔ Việt</button>
                 <button onclick="toggleVocabRandom()" id="v-random-btn" class="text-[9px] border border-white/20 px-3 py-1 uppercase tracking-widest hover:bg-white hover:text-black transition rounded-sm">Học: THỨ TỰ</button>
             </div>
-            <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">Khoảng: 1-237 | Đang học: #1</p>
+            <p id="v-progress" class="text-xs text-gray-500 font-mono mb-2 tracking-widest uppercase">Khoảng: 1-298 | Đang học: #1</p>
             <div id="v-question" class="text-7xl font-light text-center mb-10 tracking-tighter">...</div>
             <input type="text" id="v-input" placeholder="Nhập đáp án..." class="w-full bg-transparent border-b border-white/20 py-3 text-center text-2xl outline-none mb-8" onkeypress="if(event.key==='Enter') checkVocab()">
             <div class="flex gap-2">
@@ -467,9 +476,9 @@
                             <span class="text-xs text-gray-400">Từ</span>
                             <input type="number" id="ts-start" value="1" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
                             <span class="text-xs text-gray-400">đến</span>
-                            <input type="number" id="ts-end" value="237" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
+                            <input type="number" id="ts-end" value="298" class="w-16 bg-transparent border-b border-white/20 text-center py-1 outline-none text-xl">
                         </div>
-                        <p class="text-[9px] text-gray-500 italic">(Tổng kho có <span id="ts-max-hint">237</span> từ)</p>
+                        <p class="text-[9px] text-gray-500 italic">(Tổng kho có <span id="ts-max-hint">298</span> từ)</p>
                     </div>
                     <div class="w-full text-center">
                         <p class="text-[10px] text-indigo-400 uppercase tracking-widest mb-2">Cấp Độ</p>
@@ -703,7 +712,71 @@
         { hz: "教", py: "jiāo", mn: "dạy" }, { hz: "脚", py: "jiǎo", mn: "chân" }, { hz: "叫", py: "jiào", mn: "gọi tên" }, { hz: "教室", py: "jiàoshì", mn: "lớp học" }, { hz: "接待", py: "jiēdài", mn: "tiếp đón" }, 
         { hz: "接", py: "jiē", mn: "đón/nhận" }, { hz: "近", py: "jìn", mn: "gần" }, { hz: "进", py: "jìn", mn: "vào" }, { hz: "进来", py: "jìnlái", mn: "vào đây" }, { hz: "进去", py: "jìnqù", mn: "vào đó" }, 
         { hz: "久", py: "jiǔ", mn: "lâu" }, { hz: "旧", py: "jiù", mn: "cũ" }, { hz: "就", py: "jiù", mn: "thì/liền" }, { hz: "觉得", py: "juéde", mn: "cảm thấy" }, { hz: "咖啡", py: "kāfēi", mn: "cà phê" }, 
-        { hz: "开始", py: "kāishǐ", mn: "bắt đầu" }, { hz: "考试", py: "kǎoshì", mn: "thi cử" }
+        { hz: "开始", py: "kāishǐ", mn: "bắt đầu" }, { hz: "考试", py: "kǎoshì", mn: "thi cử" },
+        // 61 Từ mới thêm vào
+        { hz: "好听", py: "hǎotīng", mn: "Hay, nghe vui tai" },
+        { hz: "回家 / 回来", py: "huíjiā / huílái", mn: "Về nhà / Trở về" },
+        { hz: "家里 / 家人", py: "jiālǐ / jiārén", mn: "Trong nhà / Người nhà" },
+        { hz: "间", py: "jiān", mn: "Gian, phòng (lượng từ)" },
+        { hz: "见", py: "jiàn", mn: "Thấy, gặp" },
+        { hz: "见面", py: "jiànmiàn", mn: "Gặp mặt" },
+        { hz: "教", py: "jiāo", mn: "Dạy" },
+        { hz: "教学楼", py: "jiàoxuéloú", mn: "Tòa nhà học tập, giảng đường" },
+        { hz: "姐姐", py: "jiějie", mn: "Chị gái" },
+        { hz: "介绍", py: "jièshào", mn: "Giới thiệu" },
+        { hz: "今年", py: "jīnnián", mn: "Năm nay" },
+        { hz: "进", py: "jìn", mn: "Vào" },
+        { hz: "进来 / 进去", py: "jìnlái / jìnqù", mn: "Vào đây / Vào kia" },
+        { hz: "就", py: "jiù", mn: "Chính là, ngay, liền" },
+        { hz: "觉得", py: "juéde", mn: "Cảm thấy, thấy rằng" },
+        { hz: "开", py: "kāi", mn: "Mở, lái, nở" },
+        { hz: "开车 / 开会 / 开玩笑", py: "kāichē / kāihuì / kāiwánxiào", mn: "Lái xe / Họp / Nói đùa" },
+        { hz: "看病 / 看到 / 看见", py: "kànbìng / kàndào / kànjiàn", mn: "Khám bệnh / Thấy được / Nhìn thấy" },
+        { hz: "考", py: "kǎo", mn: "Thi, kiểm tra" },
+        { hz: "考试", py: "kǎoshì", mn: "Kỳ thi, thi cử" },
+        { hz: "渴", py: "kě", mn: "Khát" },
+        { hz: "课", py: "kè", mn: "Bài học, môn học" },
+        { hz: "课本 / 课文", py: "kèběn / kèwén", mn: "Sách giáo khoa / Bài đọc" },
+        { hz: "口", py: "kǒu", mn: "Miệng, nhân khẩu (lượng từ)" },
+        { hz: "快", py: "kuài", mn: "Nhanh" },
+        { hz: "块", py: "kuài", mn: "Cục, miếng, đồng (đơn vị tiền)" },
+        { hz: "老 / 老人", py: "lǎo / lǎorén", mn: "Già / Người già" },
+        { hz: "里 / 里边", py: "lǐ / lǐbian", mn: "Trong / Bên trong" },
+        { hz: "楼", py: "lóu", mn: "Tầng, lầu, tòa nhà" },
+        { hz: "楼上 / 楼下", py: "lóushàng / lóuxià", mn: "Tầng trên / Tầng dưới" },
+        { hz: "路", py: "lù", mn: "Đường, con đường" },
+        { hz: "路口 / 路上", py: "lùkǒu / lùshang", mn: "Giao lộ / Trên đường" },
+        { hz: "马路 / 马上", py: "mǎlù / mǎshàng", mn: "Đường cái / Ngay lập tức" },
+        { hz: "慢", py: "màn", mn: "Chậm" },
+        { hz: "毛", py: "máo", mn: "Lông, hào (đơn vị tiền)" },
+        { hz: "没关系 / 没什么 / 没事儿 / 没有", py: "méiguānxi / méishénme / méishìr / méiyoǔ", mn: "Không sao / Không có gì / Không có việc gì / Không có" },
+        { hz: "门", py: "mén", mn: "Cửa" },
+        { hz: "门口 / 门票", py: "ménkǒu / ménpiào", mn: "Cổng / Vé vào cửa" },
+        { hz: "米饭", py: "mǐfàn", mn: "Cơm" },
+        { hz: "面包", py: "miànbāo", mn: "Bánh mì" },
+        { hz: "面条儿", py: "miàntiáor", mn: "Mì sợi" },
+        { hz: "名字", py: "míngzi", mn: "Tên" },
+        { hz: "明白 / 明年", py: "míngbai / míngnián", mn: "Hiểu / Sang năm" },
+        { hz: "拿", py: "ná", mn: "Cầm, lấy" },
+        { hz: "哪里 / 哪儿 / 哪些", py: "nǎlǐ / nǎr / nǎxiē", mn: "Đâu / Đâu / Những nào" },
+        { hz: "那", py: "nà", mn: "Kia, đó" },
+        { hz: "那边 / 那儿 / 那些", py: "nàbiān / nàr / nàxiē", mn: "Bên kia / Chỗ kia / Những kia" },
+        { hz: "奶奶", py: "nǎinai", mn: "Bà nội" },
+        { hz: "男", py: "nán", mn: "Nam, đàn ông" },
+        { hz: "男孩儿 / 男朋友 / 男人 / 男生", py: "nánháir / nánpéngyou / nánrén / nánshēng", mn: "Bé trai / Bạn trai / Đàn ông / Nam sinh" },
+        { hz: "南 / 南边", py: "nán / nánbiān", mn: "Phía Nam / Bên phía Nam" },
+        { hz: "难", py: "nán", mn: "Khó" },
+        { hz: "年级", py: "niánjí", mn: "Lớp, khối lớp" },
+        { hz: "牛奶", py: "niúnǎi", mn: "Sữa bò" },
+        { hz: "女", py: "nǚ", mn: "Nữ, phụ nữ" },
+        { hz: "女孩儿 / 女朋友 / 女人 / 女生", py: "nǚháir / nǚpéngyou / nǚrén / nǚshēng", mn: "Bé gái / Bạn gái / Phụ nữ / Nữ sinh" },
+        { hz: "旁边", py: "pángbiān", mn: "Bên cạnh" },
+        { hz: "跑", py: "pǎo", mn: "Chạy" },
+        { hz: "起", py: "qǐ", mn: "Dậy, bắt đầu" },
+        { hz: "起床 / 起来", py: "qǐchuáng / qǐlái", mn: "Ngủ dậy / Đứng dậy" },
+        { hz: "汽车", py: "qìchē", mn: "Xe ô tô" },
+        { hz: "前", py: "qián", mn: "Trước" },
+        { hz: "前边 / 前天", py: "qiánbiān / qiántiān", mn: "Phía trước / Hôm kia" }
     ];
 
     const namesData = [ { vi: "Lưu Thiết Hoa", hz: "刘铁华", py: "Liú Tiěhuá" }, { vi: "Hà Mỹ Mỹ", hz: "何美美", py: "Hé Měiměi" }, { vi: "Bùi Lê Ngọc Linh", hz: "裴黎玉玲", py: "Péi Lí Yùlíng" }, { vi: "Lưu Thiết Vinh", hz: "刘铁荣", py: "Liú Tiěróng" }, { vi: "A Mỹ Linh", hz: "阿美玲", py: "Ā Měilíng" }, { vi: "Hà Gia Bảo", hz: "何家宝", py: "Hé Jiābǎo" }, { vi: "Diệp Thanh Thanh", hz: "叶青青", py: "Yè Qīngqīng" }, { vi: "Lê Bá Trần Hoàng", hz: "黎伯陈黄", py: "Lí Bó Chénhuáng" }, { vi: "Nguyễn Thị Phương Nguyên", hz: "阮氏芳原", py: "Ruǎn Shì Fāngyuán" } ];
@@ -726,6 +799,14 @@
 我和朋友一起吃饭。 (Wǒ hé péngyou yìqǐ chīfàn.) – Tôi ăn cùng bạn bè.
 我是越南人。 (Wǒ shì Yuènán rén.) – Tôi là người Việt Nam.
 我要喝水。 (Wǒ yào hē shuǐ.) – Tôi muốn uống nước.
+我今年二十五岁。 (Wǒ jīnnián èr shí wǔ suì.) – Năm nay tôi 25 tuổi.
+我每天早上喝咖啡。 (Wǒ měi tiān zǎoshang hē kāfēi.) – Mỗi sáng tôi uống cà phê.
+我周末喜欢睡觉。 (Wǒ zhōumò xǐhuan shuìjiào.) – Cuối tuần tôi thích ngủ.
+我想学好中文。 (Wǒ xiǎng xué hǎo Zhōngwén.) – Tôi muốn học tốt tiếng Trung.
+我家有四口人。 (Wǒ jiā yǒu sì kǒu rén.) – Nhà tôi có 4 người.
+我下午五点下班。 (Wǒ xiàwǔ wǔ diǎn xiàbān.) – Tôi chiều năm giờ tan làm.
+我很喜欢我的工作。 (Wǒ hěn xǐhuan wǒ de gōngzuò.) – Tôi rất thích công việc của tôi.
+我晚上九点回家。 (Wǒ wǎnshang jiǔ diǎn huí jiā.) – Tối tôi chín giờ về nhà.
 
 #2 你 (nǐ) – bạn (ngôi thứ hai)
 你好！ (Nǐ hǎo!) – Chào bạn!
@@ -1740,11 +1821,11 @@
     function toggleReadingRef() { playSound('click'); const el = document.getElementById('r-text'); el.innerText = el.innerText===readingData[rIdx].zh ? readingData[rIdx].vi_display : readingData[rIdx].zh; }
     function checkReading() { if(document.getElementById('r-input').value.trim().length > 5) { playSound('correct'); updateCoins(1); if(readingProgress < readingMax) readingProgress++; document.getElementById('reading-progress').innerText = `Tiến độ: ${readingProgress}/${readingMax}`; document.getElementById('r-msg').innerText = "OK (+1 Xu)"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-green-400"; } else { playSound('wrong'); document.getElementById('r-msg').innerText = "DỊCH QUÁ NGẮN!"; document.getElementById('r-msg').className = "text-center text-[10px] mt-4 font-bold uppercase tracking-widest h-4 text-red-400"; } }
 
-    // --- 11. THƯ VIỆN & LUYỆN CÂU (TÍNH NĂNG MỚI) ---
+    // --- 11. THƯ VIỆN & LUYỆN CÂU ---
     function renderLibrary() { 
         document.getElementById('lib-count').innerText = vocabData.length; 
         const html = vocabData.map((v, i) => `
-        <div class="bg-white/5 p-4 rounded border border-white/10 flex flex-col justify-between hover:bg-white/10 transition"> 
+        <div id="lib-item-${i + 1}" class="bg-white/5 p-4 rounded border border-white/10 flex flex-col justify-between hover:bg-white/10 transition duration-300"> 
             <div class="flex justify-between items-center mb-1"> 
                 <span class="text-xs text-gray-500 font-mono">#${i+1}</span> 
                 <span class="text-2xl font-bold text-white">${v.hz}</span> 
@@ -1762,6 +1843,23 @@
         document.getElementById('lib-list').innerHTML = html; 
     }
 
+    function jumpToVocabLib() {
+        playSound('click');
+        const val = parseInt(document.getElementById('lib-jump-input').value);
+        if (val && val > 0 && val <= vocabData.length) {
+            const targetEl = document.getElementById('lib-item-' + val);
+            if (targetEl) {
+                targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                targetEl.classList.add('bg-indigo-900/40', 'border-indigo-400');
+                setTimeout(() => {
+                    targetEl.classList.remove('bg-indigo-900/40', 'border-indigo-400');
+                }, 1500);
+            }
+        } else {
+            playSound('wrong');
+        }
+    }
+
     function renderGrammarList() { document.getElementById('grammar-list').innerHTML = grammarRules.map(r => `<div class="bg-white/5 p-6 border-l-2 border-indigo-500"> <h3 class="text-lg font-light text-white mb-2">${r.title}</h3> <code class="block bg-black/20 p-2 text-pink-300 mb-2 font-mono text-xs">${r.structure}</code> <p class="text-xs text-gray-400 italic">Ví dụ: ${r.ex}</p> </div>`).join(''); }
 
     let spWordIdx = 0; let spMode = 'learn'; let spSentences = []; let spCurrentIdx = 0;
@@ -1772,7 +1870,7 @@
         const wordObj = vocabData[wordIdx];
         if(!wordObj.sentences || wordObj.sentences.length === 0) { alert("Từ này chưa có dữ liệu câu luyện tập!"); return; }
         
-        spSentences = [...wordObj.sentences]; // LUÔN GIỮ ĐÚNG THỨ TỰ CHO CẢ 2 MODE
+        spSentences = [...wordObj.sentences]; 
         spCurrentIdx = 0;
         
         document.getElementById('sp-title').innerText = mode === 'test' ? `Kiểm Tra Thuộc Lòng: ${wordObj.hz}` : `Luyện Tập: ${wordObj.hz} (${wordObj.mn})`;
@@ -1819,7 +1917,7 @@
         const input = document.getElementById('sp-input').value.trim().replace(/[.,?!。，？！]/g, "");
         const target = spSentences[spCurrentIdx].zh.replace(/[.,?!。，？！]/g, "");
         if(input === target) {
-            const coinReward = spMode === 'test' ? 3 : 2; // Thưởng 3 xu nếu là kiểm tra
+            const coinReward = spMode === 'test' ? 3 : 2; 
             playSound('correct'); updateCoins(coinReward);
             
             document.getElementById('sp-feedback').innerText = `CHÍNH XÁC! (+${coinReward} COIN)`;
@@ -1853,76 +1951,4 @@
 
     let tsTimer; let tsTimeLeft; let tsData = []; let tsCurrentIdx = 0; let tsScore = 0; let tsLevel = 1;
     function resetSpeedTest() { clearInterval(tsTimer); document.getElementById('ts-setup').classList.remove('hidden'); document.getElementById('ts-play').classList.add('hidden'); document.getElementById('ts-result').classList.add('hidden'); document.getElementById('ts-max-hint').innerText = vocabData.length; document.getElementById('ts-end').value = vocabData.length; }
-    function startSpeedTest() { playSound('click'); const start = parseInt(document.getElementById('ts-start').value) || 1; const end = parseInt(document.getElementById('ts-end').value) || vocabData.length; tsTimeLeft = (parseInt(document.getElementById('ts-time').value) || 1) * 60; tsLevel = parseInt(document.getElementById('ts-level').value); if(start < 1 || end > vocabData.length || start > end) { alert(`Phạm vi từ không hợp lệ! Vui lòng nhập từ 1 đến ${vocabData.length}`); return; } tsData = vocabData.slice(start - 1, end).sort(() => Math.random() - 0.5); tsCurrentIdx = 0; tsScore = 0; document.getElementById('ts-setup').classList.add('hidden'); document.getElementById('ts-play').classList.remove('hidden'); document.getElementById('ts-play').classList.add('flex'); document.getElementById('ts-total-display').innerText = tsData.length; document.getElementById('ts-score-display').innerText = 0; document.getElementById('ts-play-msg').innerText = ""; updateTsWord(); tsTimer = setInterval(() => { tsTimeLeft--; let m = Math.floor(tsTimeLeft / 60).toString().padStart(2, '0'); let s = (tsTimeLeft % 60).toString().padStart(2, '0'); document.getElementById('ts-timer-display').innerText = `${m}:${s}`; if(tsTimeLeft <= 0) endSpeedTest(); }, 1000); }
-    function updateTsWord() { if(tsCurrentIdx >= tsData.length) { endSpeedTest(); return; } let item = tsData[tsCurrentIdx]; let q = ""; if(tsLevel === 1) q = item.hz; if(tsLevel === 2) q = item.mn.toUpperCase(); if(tsLevel === 3) q = item.mn.toUpperCase(); document.getElementById('ts-current-word').innerText = q; document.getElementById('ts-input').value = ""; document.getElementById('ts-input').focus(); }
-    function checkSpeedVocab() { let item = tsData[tsCurrentIdx]; let v = document.getElementById('ts-input').value.toLowerCase().trim(); let msgEl = document.getElementById('ts-play-msg'); let ok = false; if(tsLevel === 1 && v === item.mn.toLowerCase()) ok = true; if(tsLevel === 2 && v === item.py.toLowerCase()) ok = true; if(tsLevel === 3 && v === item.hz) ok = true; if(ok) { playSound('correct'); tsScore++; updateCoins(1); tsCurrentIdx++; document.getElementById('ts-score-display').innerText = tsScore; msgEl.innerText = ""; updateTsWord(); } else { playSound('wrong'); document.getElementById('ts-input').value = ""; msgEl.innerText = "SAI RỒI! THỬ LẠI!"; } }
-    function endSpeedTest() { clearInterval(tsTimer); document.getElementById('ts-play').classList.add('hidden'); document.getElementById('ts-play').classList.remove('flex'); document.getElementById('ts-result').classList.remove('hidden'); document.getElementById('ts-final-score').innerText = `${tsScore} / ${tsData.length}`; }
-
-    // --- 13. LỊCH LÀM VIỆC ---
-    const workDays = ["Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ Nhật"]; let workStep = 0; let currentWeek = 1; let scheduleData = []; let isDoubleShift = false; 
-    function changeWeek() { currentWeek = parseInt(document.getElementById('week-selector').value); document.getElementById('display-week-num').innerText = "TUẦN " + currentWeek; loadWorkSchedule(); }
-    function loadWorkSchedule() { const key = `skyWork_W${currentWeek}`; const saved = localStorage.getItem(key); document.getElementById('btn-cancel-edit').classList.add('hidden'); if (saved) { scheduleData = JSON.parse(saved); renderScheduleResult(); } else { resetWorkSchedule(); } }
-    function clearAllSchedules() { playSound('click'); if(confirm("Bạn có chắc chắn muốn xóa TOÀN BỘ lịch?")) { localStorage.removeItem('skyWork_W1'); localStorage.removeItem('skyWork_W2'); localStorage.removeItem('skyWork_W3'); localStorage.removeItem('skyWork_W4'); currentWeek = 1; document.getElementById('week-selector').value = 1; document.getElementById('display-week-num').innerText = "TUẦN 1"; resetWorkSchedule(); } }
-    function setVal(id, val) { document.getElementById(id).value = val; }
-    function toggleDoubleShift() { playSound('click'); isDoubleShift = !isDoubleShift; const section2 = document.getElementById('section-ca-2'); const btn = document.getElementById('btn-toggle-double'); if(isDoubleShift) { section2.classList.remove('hidden'); section2.classList.add('fade-in'); btn.classList.add('bg-indigo-500', 'text-white'); btn.innerText = "- Bỏ chế độ 2 Ca"; } else { section2.classList.add('hidden'); btn.classList.remove('bg-indigo-500', 'text-white'); btn.innerText = "+ Làm 2 Ca / Full"; setVal('w-pos-2', ''); setVal('w-time-2', ''); } }
-    function resetWorkSchedule(startDate = '') { workStep = 0; scheduleData = []; document.getElementById('work-wizard').classList.remove('hidden'); document.getElementById('work-result-container').classList.add('hidden'); setVal('w-date', startDate); setVal('w-pos',''); setVal('w-time',''); if(isDoubleShift) toggleDoubleShift(); updateWizardUI(); }
-    function editCurrentSchedule() { playSound('click'); let firstDate = ''; if(scheduleData.length > 0) firstDate = scheduleData[0].date; resetWorkSchedule(firstDate); document.getElementById('btn-cancel-edit').classList.remove('hidden'); }
-    function cancelEdit() { playSound('click'); loadWorkSchedule(); }
-    function createNextWeek() { playSound('click'); let lastDateOfWeek = ''; if(scheduleData.length > 0) { lastDateOfWeek = scheduleData[scheduleData.length - 1].date; } let nextStartDate = ''; if(lastDateOfWeek && lastDateOfWeek.includes('/')) { let [d, m] = lastDateOfWeek.split('/').map(Number); let dateObj = new Date(2026, m - 1, d); dateObj.setDate(dateObj.getDate() + 1); nextStartDate = `${dateObj.getDate()}/${dateObj.getMonth() + 1}`; } currentWeek++; const selector = document.getElementById('week-selector'); if(currentWeek > 4) currentWeek = 1; selector.value = currentWeek; document.getElementById('display-week-num').innerText = "TUẦN " + currentWeek; resetWorkSchedule(nextStartDate); }
-    function updateWizardUI() { document.getElementById('w-day-title').innerText = workDays[workStep]; document.getElementById('w-step-num').innerText = workStep + 1; if(workStep > 0 && scheduleData.length > 0) { const prevDate = scheduleData[workStep-1].date; const parts = prevDate.split('/'); if(parts.length === 2) { let d = parseInt(parts[0]); let m = parseInt(parts[1]); let dateObj = new Date(2026, m - 1, d); dateObj.setDate(dateObj.getDate() + 1); document.getElementById('w-date').value = `${dateObj.getDate()}/${dateObj.getMonth() + 1}`; } } }
-    function nextWorkStep() { playSound('click'); const date = document.getElementById('w-date').value || "N/A"; const pos = document.getElementById('w-pos').value || "N/A"; const time = document.getElementById('w-time').value || "N/A"; let pos2 = ""; let time2 = ""; if(isDoubleShift) { pos2 = document.getElementById('w-pos-2').value || ""; time2 = document.getElementById('w-time-2').value || ""; } scheduleData.push({ day: workDays[workStep], date, pos, time, pos2, time2, hasCa2: isDoubleShift }); workStep++; if(workStep >= 7) { localStorage.setItem(`skyWork_W${currentWeek}`, JSON.stringify(scheduleData)); renderScheduleResult(); } else { setVal('w-pos',''); setVal('w-time',''); if(isDoubleShift) toggleDoubleShift(); updateWizardUI(); } }
-    function calcHours(timeStr) { if(!timeStr || !timeStr.includes('-')) return 0; const cleanStr = timeStr.replace(/\s/g, ''); const t = cleanStr.replace(/h/g, '.').replace(/:/g, '.').split('-'); let duration = 0; if(t.length === 2) { const start = parseFloat(t[0]); const end = parseFloat(t[1]); duration = end - start; } const longShifts = ["07h00-15h30", "08h30-15h30", "15h30-22h30", "08h30-13h00", "17h00-22h30"]; for(let s of longShifts) { if(cleanStr.includes(s)) { duration -= 0.5; break; } } return duration > 0 ? duration : 0; }
-    function renderScheduleResult() { document.getElementById('work-wizard').classList.add('hidden'); document.getElementById('work-result-container').classList.remove('hidden'); const tbody = document.getElementById('work-tbody'); let totalH = 0; tbody.innerHTML = scheduleData.map(d => { let h1 = (d.pos !== 'OFF') ? calcHours(d.time) : 0; let h2 = (d.hasCa2 && d.pos2) ? calcHours(d.time2) : 0; let dayTotal = h1 + h2; totalH += dayTotal; let displayPos = `<span class="font-bold">${d.pos}</span>`; let displayTime = d.time; if(d.hasCa2 && d.pos2) { displayPos += `<br><span class="text-indigo-300 text-[10px]">+ ${d.pos2}</span>`; displayTime += `<br><span class="text-indigo-300 text-[10px]">${d.time2}</span>`; } return `<tr class="${d.pos === 'OFF' ? 'text-red-400' : ''}"> <td class="font-bold text-gray-400">${d.day}</td> <td>${d.date}</td> <td class="uppercase font-bold tracking-widest text-xs">${displayPos}</td> <td>${displayTime}</td> <td>${d.pos === 'OFF' ? '-' : (dayTotal > 0 ? dayTotal.toFixed(1) + 'h' : '?')}</td> </tr>`; }).join(''); document.getElementById('total-hours').innerText = totalH.toFixed(1) + "h"; document.getElementById('total-salary').innerText = (totalH * 25000).toLocaleString('vi-VN') + " VNĐ"; }
-    function downloadSchedule() { playSound('click'); html2canvas(document.getElementById('work-capture-area'), { backgroundColor: "#0f172a", scale: 2 }).then(canvas => { const link = document.createElement('a'); link.download = `LichLamViec_Tuan${currentWeek}.png`; link.href = canvas.toDataURL(); link.click(); }); }
-
-    // --- 14. MUSIC APP ---
-    let currentList = 'vpop'; let currentIndex = 0; let isHieuMode = false; let displayedVPop = [];
-    function renderMusicVPop() { displayedVPop = isHieuMode ? vPop.filter(s => s.isHieu) : vPop; const tpl = (s, idx) => { const safeName = s.name.replace(/'/g, "\\'"); return `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${safeName}', ${idx}, 'vpop', '${s.thumb}')"> <img src="${s.thumb}" class="flex-shrink-0"> <div class="flex-1 overflow-hidden"> <h4 class="text-[10px] font-bold uppercase text-white tracking-widest truncate" title="${s.name}">${s.name}</h4> <span class="text-[8px] text-gray-500">${s.type==='mp4'?'NO ADS':'YOUTUBE'}</span> </div> </div>`; }; document.getElementById('v-list').innerHTML = displayedVPop.map((s,i) => tpl(s, i)).join(''); }
-    function renderMusicCPop() { const tpl = (s, idx) => { const safeName = s.name.replace(/'/g, "\\'"); return `<div class="song-item" onclick="playMedia('${s.id}', '${s.type}', '${safeName}', ${idx}, 'cpop', '${s.thumb}')"> <img src="${s.thumb}" class="flex-shrink-0"> <div class="flex-1 overflow-hidden"> <h4 class="text-[10px] font-bold uppercase text-white tracking-widest truncate" title="${s.name}">${s.name}</h4> <span class="text-[8px] text-gray-500">${s.type==='mp4'?'NO ADS':'YOUTUBE'}</span> </div> </div>`; }; document.getElementById('c-list').innerHTML = cPop.map((s,i) => tpl(s, i)).join(''); }
-    function renderMusic() { renderMusicVPop(); renderMusicCPop(); }
-    function toggleHieuThuHai() { playSound('click'); isHieuMode = !isHieuMode; const btn = document.getElementById('hieu-btn'); const vListEl = document.getElementById('v-list'); if(isHieuMode) { btn.classList.add('scale-110', 'opacity-100', 'drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]'); btn.classList.remove('opacity-50'); } else { btn.classList.remove('scale-110', 'opacity-100', 'drop-shadow-[0_0_15px_rgba(255,255,255,0.8)]'); btn.classList.add('opacity-50'); } vListEl.style.opacity = '0'; setTimeout(() => { renderMusicVPop(); vListEl.style.opacity = '1'; }, 300); }
-    var tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api"; var firstScriptTag = document.getElementsByTagName('script')[0]; firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    var player; function onYouTubeIframeAPIReady() { player = new YT.Player('player', { height: '100%', width: '100%', videoId: '', events: { 'onStateChange': onPlayerStateChange } }); }
-    function onPlayerStateChange(event) { if (event.data === YT.PlayerState.ENDED) checkAutoPlay(); }
-    document.getElementById('mp4-player').addEventListener('ended', checkAutoPlay);
-    function playMedia(src, type, name, idx, listType, thumb) { playSound('click'); currentList = listType; currentIndex = idx; document.getElementById('now-playing').innerText = name; const yt = document.getElementById('player'); const mp4 = document.getElementById('mp4-player'); if(player && player.stopVideo) player.stopVideo(); mp4.pause(); if(type === 'mp4') { yt.classList.add('hidden'); mp4.classList.remove('hidden'); mp4.src = src; mp4.play(); } else { mp4.classList.add('hidden'); yt.classList.remove('hidden'); player.loadVideoById(src); } }
-    function checkAutoPlay() { if(document.getElementById(`toggle-${currentList}`).checked) { const listData = currentList === 'vpop' ? displayedVPop : cPop; const nextIdx = (currentIndex + 1) % listData.length; const nextSong = listData[nextIdx]; playMedia(nextSong.id, nextSong.type, nextSong.name, nextIdx, currentList, nextSong.thumb); } }
-
-    // --- INIT APP ---
-    window.onload = () => { 
-        renderMusic(); 
-        renderLibrary(); 
-        renderGrammarList(); 
-        renderInventory(); 
-        
-        const nameClass = `font-tutien text-3xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
-        const resClass = `font-tutien text-xl drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
-        const nuocClass = `font-tutien text-lg drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${selectedColorClass} pointer-events-none select-none`;
-        
-        document.getElementById('player-name-hud').innerText = savedName;
-        document.getElementById('player-name-hud').className = nameClass;
-        document.getElementById('val-bac').className = resClass;
-        document.getElementById('val-vang').className = resClass;
-        document.getElementById('val-nuoc-display').className = nuocClass;
-
-        applyVocabRange();
-        nextNames(true); 
-        nextParagraph(); 
-        loadWorkSchedule(); 
-        generateListenSentence();
-
-        document.getElementById('listen-progress').innerText = `Tiến độ: ${listenProgress}/${listenMax}`;
-        document.getElementById('names-progress').innerText = `Tiến độ: ${namesProgress}/${namesMax}`;
-        document.getElementById('voice-progress').innerText = `Tiến độ: ${voiceProgress}/${voiceMax}`;
-        document.getElementById('reading-progress').innerText = `Tiến độ: ${readingProgress}/${readingMax}`;
-        
-        setInterval(updateStamina, 1000);
-        updateStamina();
-        
-        switchTab('home'); 
-        setTimeout(startSequentialPreload, 3000);
-    };
-
-</script>
-</body>
-</html>
+    function startSpeedTest() { playSound('click'); const start = parseInt(document.getElementById('ts-start').value) || 1; const end = parseInt(document.getElementById('ts-end').value) || vocabData.length; tsTimeLeft = (parseInt(document.getElementById('ts-time').value) || 1) * 60; tsLevel = parseInt(document.getElementById('ts-level').value); if(start < 1 || end > vocabData.length || start > end) { alert(`Phạm vi từ không hợp lệ! Vui lòng nhập từ 1 đến ${vocabData.length}`); return; } tsData = vocabData.slice(start - 1, end).sort(() => Math.random() - 0.5); tsCurrentIdx = 0; tsScore = 0; document.getElementById('ts-setup').classList.add('hidden'); document.getElementById('ts-play').classList.remove('hidden'); document.getElementById('ts-play').classList.add('flex'); document.getElementById('ts-total-display').innerText = tsData.length; document.getElementById('ts-score-display').innerText = 0; document.getElementById('ts-play-msg').innerText = ""; updateTsWord(); tsTimer =
