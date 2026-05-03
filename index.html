@@ -43,10 +43,10 @@
 </head>
 <body>
 
-<audio id="sfx-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="auto"></audio>
-<audio id="sfx-correct" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" preload="auto"></audio>
-<audio id="sfx-wrong" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3" preload="auto"></audio>
-<audio id="bgm-game" src="pp.mp4" loop preload="auto"></audio>
+<audio id="sfx-click" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.mp3" preload="metadata"></audio>
+<audio id="sfx-correct" src="https://assets.mixkit.co/active_storage/sfx/2018/2018-preview.mp3" preload="metadata"></audio>
+<audio id="sfx-wrong" src="https://assets.mixkit.co/active_storage/sfx/2003/2003-preview.mp3" preload="metadata"></audio>
+<audio id="bgm-game" src="pp.mp4" loop preload="metadata"></audio>
 
 <div id="settings-modal" class="fixed inset-0 z-[1001] hidden bg-black/60 backdrop-blur-sm">
     <div class="flex items-center justify-center w-full h-full p-4 relative">
@@ -859,7 +859,7 @@
 今天是五月五号。 (Jīntiān shì wǔ yuè wǔ hào.) – Hôm nay ngày 5 tháng 5.
 我五岁的时候... (Wǒ wǔ suì de shíhou...) – Khi tôi năm tuổi...
 星期五我休息。 (Xīngqī wǔ wǒ xiūxi.) – Thứ Sáu tôi nghỉ.
-五个人一起玩。 (Wǔ gè rén yìqǐ wán.) – Năm người chơi cùng.
+五个人一起玩。 (Wǒmen gè rén yìqǐ wán.) – Năm người chơi cùng.
 我要五分钟。 (Wǒ yào wǔ fēnzhōng.) – Tôi cần năm phút.
 五月有三十一天。 (Wǔ yuè yǒu sān shí yī tiān.) – Tháng Năm có 31 ngày.
 明天五点见面。 (Míngtiān wǔ diǎn jiànmiàn.) – Ngày mai gặp lúc năm giờ.
@@ -1300,15 +1300,7 @@
         if (id === 'test' && document.getElementById('test-grammar').classList.contains('hidden')) switchTestMode('grammar'); 
     }
 
-    function startSequentialPreload() {
-        const mp4Songs = [...vPop, ...cPop].filter(s => s.type === 'mp4').map(s => s.id);
-        let currentIndex = 0;
-        function loadNextVideo() {
-            if (currentIndex >= mp4Songs.length) return;
-            fetch(mp4Songs[currentIndex], { mode: 'no-cors' }).then(() => { currentIndex++; loadNextVideo(); }).catch(() => { currentIndex++; loadNextVideo(); });
-        }
-        loadNextVideo();
-    }
+    // Đã gỡ bỏ hàm startSequentialPreload ở đây
 
     let stamina = parseInt(localStorage.getItem('skyStamina')) || 0;
     if(isNaN(stamina)) stamina = 0;
@@ -1635,7 +1627,7 @@
         updateStamina();
         
         switchTab('home'); 
-        setTimeout(startSequentialPreload, 3000);
+        // Đã xóa phần gọi hàm startSequentialPreload ở đây
     };
 </script>
 </body>
